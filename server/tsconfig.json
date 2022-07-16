@@ -1,0 +1,9 @@
+{
+  "extends": "fastify-tsconfig",
+  "compilerOptions": {
+    "outDir": "dist",
+    "lib": ["DOM"],
+    "strictNullChecks": true
+  },
+  "include": ["src/**/*.ts", "environment.d.ts"]
+}
