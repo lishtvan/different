@@ -1,3 +1,5 @@
+import { ThemeProvider } from "@emotion/react";
+import { createTheme } from "@mui/material";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
@@ -8,6 +10,17 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import tailwindStylesUrl from "./styles/tailwind.css";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: "#757ce8",
+      main: "#11a683",
+      dark: "#0f9575",
+      contrastText: "#fff",
+    },
+  },
+});
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -27,7 +40,9 @@ export default function App() {
         <Links />
       </head>
       <body className="container mx-auto px-4">
-        <Outlet />
+        <ThemeProvider theme={theme}>
+          <Outlet />
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

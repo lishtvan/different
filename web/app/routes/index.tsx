@@ -1,19 +1,7 @@
-import { createTheme, ThemeProvider } from "@mui/material";
 import { useLoaderData } from "@remix-run/react";
 import Filters from "~/components/Filters";
 import Header from "~/components/Header";
 import { getAuthorizedStatus } from "~/utils/getAuthorizedStatus";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#757ce8",
-      main: "#3f50b5",
-      dark: "#002884",
-      contrastText: "#fff",
-    },
-  },
-});
 
 export const loader = async ({ request }: { request: Request }) => {
   const isAuthorized = getAuthorizedStatus(request);
@@ -24,7 +12,7 @@ export default function Index() {
   const { isAuthorized } = useLoaderData();
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Header isAuthorized={isAuthorized} />
       <div className="mt-2 flex h-5/6">
         <Filters />
@@ -46,6 +34,6 @@ export default function Index() {
           </div>
         </div>
       </div>
-    </ThemeProvider>
+    </>
   );
 }
