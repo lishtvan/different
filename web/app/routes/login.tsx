@@ -11,7 +11,7 @@ export const loader = async ({ request }: { request: Request }) => {
   const response = await fetchInstance({
     request,
     method: "GET",
-    route: "/checkAuthorization",
+    route: "/check/auth",
   });
   if (response.status !== 401) return redirect("/");
   return API_DOMAIN;

@@ -27,6 +27,6 @@ export const fetchInstance: FetchInstance = async ({
     headers: Object.assign(request.headers, headers),
     ...(body && { body: JSON.stringify(body) }),
   });
-  if (response.status === 401 && route !== '/checkAuthorization') return redirect("/login");
+  if (response.status === 401 && route !== '/auth/check') return redirect("/login");
   return response;
 };

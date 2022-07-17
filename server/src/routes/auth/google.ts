@@ -18,7 +18,7 @@ const googleAuth: FastifyPluginAsync = async (fastify) => {
       },
     }).then((res) => res.json());
 
-    const { token, accountId } = await fastify.session.start(
+    const { token, accountId, isProfileCreated } = await fastify.session.start(
       googleUserInfo,
       req.raw.socket.remoteAddress || ''
     );
@@ -26,7 +26,7 @@ const googleAuth: FastifyPluginAsync = async (fastify) => {
     reply
       .setCookie('token', token, COOKIE_OPTIONS)
       .setCookie('accountId', accountId, COOKIE_OPTIONS)
-      .redirect('http://localhost:3000');
+      .redirect(`${process.env.WEB_DOMAIN}${isProfileCreated ? '' : '/create'}`);
   });
 };
 

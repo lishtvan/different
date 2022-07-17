@@ -13,6 +13,7 @@ declare global {
       S3_BUCKET_NAME: string;
       API_KEY: string;
       NODE_ENV: string;
+      WEB_DOMAIN: string;
     }
   }
 }

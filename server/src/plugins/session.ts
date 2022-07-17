@@ -32,7 +32,11 @@ export default fp(async (fastify) => {
         accountId = createdAccount.id;
       }
 
-      return { token, accountId: accountId.toString() };
+      return {
+        token,
+        accountId: accountId.toString(),
+        isProfileCreated: Boolean(account),
+      };
     },
     destroy: async (token) => {
       await fastify.prisma.session.delete({

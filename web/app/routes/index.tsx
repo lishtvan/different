@@ -1,21 +1,8 @@
 import { createTheme, ThemeProvider } from "@mui/material";
+import { useLoaderData } from "@remix-run/react";
 import Filters from "~/components/Filters";
 import Header from "~/components/Header";
-
-// export const loader = async ({ request }: { request: Request }) => {
-//   const response = await fetchInstance({
-//     request,
-//     method: "POST",
-//     route: "/image/get",
-//     headers: new Headers({
-//       "Content-Type": "application/json",
-//     }),
-//     body: {
-//       imageKey: "lj4s9eZrQsS11aMyBbggGw-0photo.jpg",
-//     },
-//   });
-//   return response;
-// };
+import { getAuthorizedStatus } from "~/utils/getAuthorizedStatus";
 
 const theme = createTheme({
   palette: {
@@ -28,10 +15,17 @@ const theme = createTheme({
   },
 });
 
+export const loader = async ({ request }: { request: Request }) => {
+  const isAuthorized = getAuthorizedStatus(request);
+  return { isAuthorized };
+};
+
 export default function Index() {
+  const { isAuthorized } = useLoaderData();
+
   return (
     <ThemeProvider theme={theme}>
-      <Header />
+      <Header isAuthorized={isAuthorized} />
       <div className="mt-2 flex h-5/6">
         <Filters />
         <div className="w-4/5 ml-7 flex justify-between">
