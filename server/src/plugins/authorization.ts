@@ -6,14 +6,18 @@ export default fp(async (fastify) => {
 
   fastify.addHook('preHandler', async (req, reply) => {
     const { routerPath, cookies } = req;
-    const { token } = cookies;
+    const { token, accountId } = cookies;
 
     const isPublicRoute = publicRoutes.includes(routerPath);
     if (isPublicRoute) return;
 
-    if (!token) throw fastify.httpErrors.unauthorized();
+    if (!token || !accountId) throw fastify.httpErrors.unauthorized();
 
-    const session = await fastify.prisma.session.findUnique({ where: { token } });
+    // test account
+    const session = await fastify.prisma.session.findFirst({
+      where: { token, accountId: Number(accountId) },
+    });
+
     if (!session) throw fastify.httpErrors.unauthorized();
 
     reply

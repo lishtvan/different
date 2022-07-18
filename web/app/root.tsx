@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -8,8 +9,14 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
+  useSearchParams,
 } from "@remix-run/react";
+import Header from "./components/Header";
+import Login from "./components/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
+import { fetchInstance } from "./utils/fetchInstance";
+import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 
 const theme = createTheme({
   palette: {
@@ -28,11 +35,35 @@ export const links: LinksFunction = () => [
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Different",
   viewport: "width=device-width,initial-scale=1",
 });
 
+export const loader = async ({ request }: { request: Request }) => {
+  const isAuthorized = getAuthorizedStatus(request);
+
+  return { isAuthorized };
+};
+
+export const action = async ({ request }: { request: Request }) => {
+  const { API_DOMAIN } = process.env;
+  const cookie = request.headers.get("Cookie");
+  if (!cookie) return API_DOMAIN;
+  const tokenRow = cookie.split("; ").find((row) => row.startsWith("token"));
+  if (!tokenRow) return API_DOMAIN;
+  const response = await fetchInstance({
+    request,
+    method: "GET",
+    route: "/check/auth",
+  });
+  if (response.status !== 401) return redirect("/");
+  return API_DOMAIN;
+};
+
 export default function App() {
+  const { isAuthorized } = useLoaderData();
+  const [searchParams] = useSearchParams();
+
   return (
     <html lang="en">
       <head>
@@ -41,7 +72,9 @@ export default function App() {
       </head>
       <body className="container mx-auto px-4">
         <ThemeProvider theme={theme}>
+          <Header isAuthorized={isAuthorized} />
           <Outlet />
+          {searchParams.get("login") && <Login />}
         </ThemeProvider>
         <ScrollRestoration />
         <Scripts />

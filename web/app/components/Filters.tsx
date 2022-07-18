@@ -39,7 +39,7 @@ const Gender = () => {
 
   return (
     <>
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} sx={{ borderRadius: "0.75rem" }}>
         <ListItemText primary="Gender" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
@@ -107,7 +107,7 @@ const Designer = () => {
 
   return (
     <>
-      <ListItemButton onClick={handleClick} sx={{ borderRadius: '0.75rem' }}>
+      <ListItemButton onClick={handleClick} sx={{ borderRadius: "0.75rem" }}>
         <ListItemText primary="Designer" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
