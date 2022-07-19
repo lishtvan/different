@@ -17,7 +17,7 @@ export default fp(async (fastify) => {
     const session = await fastify.prisma.session.findFirst({
       where: { token, accountId: Number(accountId) },
     });
-
+    console.log(session);
     if (!session) throw fastify.httpErrors.unauthorized();
 
     reply

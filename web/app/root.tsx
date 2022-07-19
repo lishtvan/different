@@ -54,9 +54,9 @@ export const action = async ({ request }: { request: Request }) => {
   const response = await fetchInstance({
     request,
     method: "GET",
-    route: "/check/auth",
+    route: "/auth/check",
   });
-  if (response.status !== 401) return redirect("/");
+  if (response.status !== 401) return redirect("/home");
   return API_DOMAIN;
 };
 
