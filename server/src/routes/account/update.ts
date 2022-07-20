@@ -4,10 +4,10 @@ import { MultipartFile } from '@fastify/multipart';
 import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
-  tags: ['Profile'],
+  tags: ['Account'],
+  description: 'Dont forget to delete old avatar from s3. See route /image/delete',
   body: {
     type: 'object',
-    required: ['nickname'],
     properties: {
       avatar: { $ref: 'file' },
       nickname: {
@@ -15,12 +15,6 @@ const schema = {
         required: ['value'],
         properties: {
           value: { type: 'string', minLength: 2, maxLength: 30 },
-        },
-      },
-      socials: {
-        type: 'object',
-        properties: {
-          value: { type: 'string', maxLength: 50 },
         },
       },
       bio: {
@@ -35,30 +29,21 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const createProfile: FastifyPluginAsync = async (fastify) => {
-  fastify.post<Schema>('/create', { schema }, async (req, reply) => {
+const updateAccount: FastifyPluginAsync = async (fastify) => {
+  fastify.post<Schema>('/update', { schema }, async (req, reply) => {
     const avatar = req.body.avatar as unknown as MultipartFile;
-    const { nickname, bio, socials } = req.body;
+    const { nickname, bio } = req.body;
 
     try {
-      await fastify.prisma.session.update({
+      await fastify.prisma.account.update({
         where: {
-          token: req.cookies.token,
+          id: Number(req.cookies.accountId),
         },
         data: {
-          account: {
-            update: {
-              Profile: {
-                create: {
-                  // REFACTOR
-                  avatarKey: avatar.filename,
-                  nickname: nickname.value,
-                  bio: bio?.value,
-                  socials: socials?.value,
-                },
-              },
-            },
-          },
+          // REFACTOR
+          avatarKey: avatar.filename,
+          nickname: nickname?.value,
+          bio: bio?.value,
         },
       });
     } catch (e) {
@@ -74,4 +59,4 @@ const createProfile: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default createProfile;
+export default updateAccount;

@@ -1,6 +1,7 @@
-import { Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { Link, useSearchParams } from "@remix-run/react";
 import type { FC } from "react";
+import ProfileImage from "./../assets/profile.png";
 
 interface Props {
   isAuthorized: boolean;
@@ -18,10 +19,14 @@ const Header: FC<Props> = ({ isAuthorized }) => {
         >
           Different
         </Link>
-        <Link className="mr-2" to="/sell">
+        <Link className="mr-5" to="/sell">
           <Button variant="contained">SELL</Button>
         </Link>
-        {!isAuthorized && (
+        {isAuthorized ? (
+          <Link to="/profile" className="mt-1">
+            <Avatar src={ProfileImage} />
+          </Link>
+        ) : (
           <Button
             onClick={() =>
               setSearchParams(`?${searchParams.toString()}&login=true`)

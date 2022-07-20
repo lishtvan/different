@@ -35,7 +35,6 @@ export default fp(async (fastify) => {
       return {
         token,
         accountId: accountId.toString(),
-        isProfileCreated: Boolean(account),
       };
     },
     destroy: async (token) => {

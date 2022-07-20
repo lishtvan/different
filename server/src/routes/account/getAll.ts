@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
-  tags: ['Profile'],
+  tags: ['Account'],
   body: {
     type: 'object',
     properties: {
@@ -28,18 +28,18 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const getAllProfiles: FastifyPluginAsync = async (fastify) => {
+const getAllAccounts: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/getAll', { schema }, async (req, reply) => {
     const { cursor } = req.body;
 
-    const profiles = await fastify.prisma.profile.findMany({
+    const accounts = await fastify.prisma.account.findMany({
       take: 12,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
     });
 
-    return reply.send(profiles);
+    return reply.send(accounts);
   });
 };
 
-export default getAllProfiles;
+export default getAllAccounts;

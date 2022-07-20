@@ -11,9 +11,11 @@ model Account {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   email     String    @unique
-  name      String?
+  name      String
+  nickname  String?   @unique @db.VarChar(20)
+  bio       String?
+  avatarKey String?
   Sessions  Session[]
-  Profile   Profile?
   Sale      Sale[]
 }
 
@@ -23,16 +25,6 @@ model Session {
   ip        String
   account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   accountId Int
-}
-
-model Profile {
-  id        Int     @id @default(autoincrement())
-  nickname  String  @unique @db.VarChar(20)
-  bio       String?
-  socials   String?
-  avatarKey String?
-  Account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  accountId Int     @unique
 }
 
 model Sale {

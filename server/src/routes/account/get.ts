@@ -2,10 +2,9 @@ import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
-  tags: ['Profile'],
+  tags: ['Account'],
   body: {
     type: 'object',
-    required: ['accountId'],
     properties: {
       accountId: { type: 'number' },
     },
@@ -22,22 +21,21 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const getProfile: FastifyPluginAsync = async (fastify) => {
+const getAccount: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/get', { schema }, async (req, reply) => {
     const { accountId } = req.body;
 
-    const profile = await fastify.prisma.profile.findFirst({
-      where: { accountId },
+    const account = await fastify.prisma.account.findUnique({
+      where: { id: Number(accountId || req.cookies.accountId) },
       select: {
-        socials: true,
         nickname: true,
         bio: true,
         avatarKey: true,
       },
     });
 
-    return reply.send(profile);
+    return reply.send(account);
   });
 };
 
-export default getProfile;
+export default getAccount;
