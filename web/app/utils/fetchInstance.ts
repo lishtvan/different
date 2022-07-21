@@ -7,8 +7,7 @@ interface FetchInstance {
     method: "GET" | "POST" | "PUT" | "DELETE";
     body?: {
       [key: string]: unknown;
-    };
-    headers?: Headers;
+    } | null;
     domain?: string;
     authorization?: boolean;
   }): Promise<Response>;
@@ -27,19 +26,20 @@ export const fetchInstance: FetchInstance = async ({
   route,
   body,
   method,
-  headers,
   domain = process.env.API_DOMAIN,
 }) => {
+  if (body) request.headers.append("Content-type", "application/json");
+
   const response = await fetch(`${domain}${route}`, {
     method,
-    headers: Object.assign(request.headers, headers),
+    headers: request.headers,
     ...(body && { body: JSON.stringify(body) }),
   });
 
   if (response.status === 401 && route !== "/auth/check") {
     const origin = getOriginUrl(request);
 
-    return redirect(`/${origin || 'home'}?login=true`);
+    return redirect(`/${origin}?login=true`);
   }
   return response;
 };

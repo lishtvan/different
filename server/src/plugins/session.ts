@@ -8,19 +8,19 @@ export default fp(async (fastify) => {
     start: async (userInfo, ip) => {
       const token = fastify.generateToken(TOKEN_SECRET, TOKEN_CHARACTERS);
 
-      const account = await fastify.prisma.account.findUnique({
+      const user = await fastify.prisma.user.findUnique({
         where: { email: userInfo.email },
       });
 
-      let accountId;
+      let userId;
 
-      if (account) {
+      if (user) {
         await fastify.prisma.session.create({
-          data: { token, ip, accountId: account.id },
+          data: { token, ip, userId: user.id },
         });
-        accountId = account.id;
+        userId = user.id;
       } else {
-        const createdAccount = await fastify.prisma.account.create({
+        const createdUser = await fastify.prisma.user.create({
           data: {
             email: userInfo.email,
             name: userInfo.name,
@@ -29,12 +29,12 @@ export default fp(async (fastify) => {
             },
           },
         });
-        accountId = createdAccount.id;
+        userId = createdUser.id;
       }
 
       return {
         token,
-        accountId: accountId.toString(),
+        userId: userId.toString(),
       };
     },
     destroy: async (token) => {

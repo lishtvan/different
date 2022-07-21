@@ -5,9 +5,9 @@ const schema = {
   tags: ['Sale'],
   body: {
     type: 'object',
-    required: ['name', 'accountId', 'size', 'condition', 'description', 'imageKeys'],
+    required: ['name', 'userId', 'size', 'condition', 'description', 'imageKeys'],
     properties: {
-      accountId: { type: 'number' },
+      userId: { type: 'number' },
       imageKeys: {
         type: 'array',
         minItems: 3,
@@ -29,7 +29,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const createSale: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
-    const { name, size, description, accountId, condition, imageKeys, trackNumber } =
+    const { name, size, description, userId, condition, imageKeys, trackNumber } =
       req.body;
 
     await fastify.prisma.sale.create({
@@ -37,7 +37,7 @@ const createSale: FastifyPluginAsync = async (fastify) => {
         name,
         size,
         description,
-        accountId,
+        userId,
         condition,
         imageKeys,
         trackNumber,

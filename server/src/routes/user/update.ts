@@ -4,7 +4,7 @@ import { MultipartFile } from '@fastify/multipart';
 import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
-  tags: ['Account'],
+  tags: ['User'],
   description: 'Dont forget to delete old avatar from s3. See route /image/delete',
   body: {
     type: 'object',
@@ -29,15 +29,15 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const updateAccount: FastifyPluginAsync = async (fastify) => {
+const updateUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/update', { schema }, async (req, reply) => {
     const avatar = req.body.avatar as unknown as MultipartFile;
     const { nickname, bio } = req.body;
 
     try {
-      await fastify.prisma.account.update({
+      await fastify.prisma.user.update({
         where: {
-          id: Number(req.cookies.accountId),
+          id: Number(req.cookies.userId),
         },
         data: {
           // REFACTOR
@@ -59,4 +59,4 @@ const updateAccount: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default updateAccount;
+export default updateUser;

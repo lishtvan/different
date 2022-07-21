@@ -7,7 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Account {
+model User {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   email     String    @unique
@@ -16,15 +16,15 @@ model Account {
   bio       String?
   avatarKey String?
   Sessions  Session[]
-  Sale      Sale[]
+  Sales      Sale[]
 }
 
 model Session {
-  id        Int     @id @default(autoincrement())
-  token     String  @unique
-  ip        String
-  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  accountId Int
+  id     Int    @id @default(autoincrement())
+  token  String @unique
+  ip     String
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId Int
 }
 
 model Sale {
@@ -36,6 +36,6 @@ model Sale {
   name        String
   condition   String
   trackNumber String?
-  Account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  accountId   Int
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      Int
 }

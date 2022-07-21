@@ -1,3 +1,33 @@
-import { redirect } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import Filters from "~/components/Filters";
 
-export const loader = async () => redirect("/home");
+export default function Index() {
+  return (
+    <>
+      <div className="mt-2 flex h-5/6">
+        <Filters />
+        <Link to="/user/3">
+          <div className="w-4/5 ml-7 flex justify-between">
+            <div className="w-56 h-fit">
+              <img
+                src={
+                  "https://gentlyusedbucket.s3.eu-central-1.amazonaws.com/Hwg2HZKzRoyGXprTxhv69w-3EE5AC22E27AC4B7D9EDB00D2AB99F27E.webp"
+                }
+                width={224}
+                height={254}
+                alt="item"
+              />
+              <div className="px-2">
+                <div className="text-xs font-bold mt-3">BAPE</div>
+                <div className="text-xs mt-3">
+                  Bape bapesta hoodie black&grey
+                </div>
+                <div className="text-xs font-bold mt-3">250$</div>
+              </div>
+            </div>
+          </div>
+        </Link>
+      </div>
+    </>
+  );
+}

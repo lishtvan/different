@@ -1,6 +1,10 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   Links,
@@ -15,6 +19,7 @@ import {
 import Header from "./components/Header";
 import Login from "./components/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
+import { getCookieValue } from "./utils/cookie";
 import { fetchInstance } from "./utils/fetchInstance";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 
@@ -39,10 +44,11 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-export const loader = async ({ request }: { request: Request }) => {
-  const isAuthorized = getAuthorizedStatus(request);
+export const loader: LoaderFunction = async ({ request }) => {
+  const isAuthorized = await getAuthorizedStatus(request);
+  const userId = getCookieValue("userId", request);
 
-  return { isAuthorized };
+  return { isAuthorized, userId };
 };
 
 export const action = async ({ request }: { request: Request }) => {
@@ -56,12 +62,12 @@ export const action = async ({ request }: { request: Request }) => {
     method: "GET",
     route: "/auth/check",
   });
-  if (response.status !== 401) return redirect("/home");
+  if (response.status !== 401) return redirect("/");
   return API_DOMAIN;
 };
 
 export default function App() {
-  const { isAuthorized } = useLoaderData();
+  const { isAuthorized, userId } = useLoaderData();
   const [searchParams] = useSearchParams();
 
   return (
@@ -72,7 +78,7 @@ export default function App() {
       </head>
       <body className="container mx-auto px-4">
         <ThemeProvider theme={theme}>
-          <Header isAuthorized={isAuthorized} />
+          <Header isAuthorized={isAuthorized} userId={userId} />
           <Outlet />
           {searchParams.get("login") && <Login />}
         </ThemeProvider>

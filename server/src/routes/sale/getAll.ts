@@ -5,9 +5,9 @@ const schema = {
   tags: ['Sale'],
   body: {
     type: 'object',
-    required: ['accountId'],
+    required: ['userId'],
     properties: {
-      accountId: { type: 'number' },
+      userId: { type: 'number' },
       cursor: { type: 'number' },
     },
   } as const,
@@ -33,11 +33,11 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const getAllSales: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/getAll', { schema }, async (req, reply) => {
-    const { accountId, cursor } = req.body;
+    const { userId, cursor } = req.body;
 
     const sales = await fastify.prisma.sale.findMany({
       where: {
-        accountId,
+        userId,
       },
       take: 12,
       skip: cursor ? 1 : 0,

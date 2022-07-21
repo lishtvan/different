@@ -1,14 +1,14 @@
 import { FastifyPluginAsync } from 'fastify';
 
 const schema = {
-  tags: ['Account'],
+  tags: ['User'],
 };
 
-const deleteAccount: FastifyPluginAsync = async (fastify) => {
+const deleteUser: FastifyPluginAsync = async (fastify) => {
   fastify.post('/delete', { schema }, async (req, reply) => {
-    const { avatarKey } = await fastify.prisma.account.delete({
+    const { avatarKey } = await fastify.prisma.user.delete({
       where: {
-        id: Number(req.cookies.accountId),
+        id: Number(req.cookies.userId),
       },
       select: {
         avatarKey: true,
@@ -21,4 +21,4 @@ const deleteAccount: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default deleteAccount;
+export default deleteUser;

@@ -25,7 +25,7 @@ const healthCheck: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/', { schema }, async (req) => {
     const { email } = req.body;
 
-    const user = await fastify.prisma.account.findUnique({
+    const user = await fastify.prisma.user.findUnique({
       where: { email },
     });
 
