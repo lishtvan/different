@@ -1,10 +1,20 @@
 import { Avatar, Button } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLoaderData,
+  useLocation,
+} from "@remix-run/react";
+import { activeNavLinkStyle, notActiveNavLinkStyle } from "~/constants/styles";
+import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "./../../assets/profile.jpeg";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
+  const userId = getCookieValue("userId", request);
+
   const response = await fetchInstance({
     request,
     method: "POST",
@@ -13,41 +23,83 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     },
     route: "/user/get",
   });
-  return response;
+
+  const res = await response.json();
+
+  return {
+    ...res,
+    isOwnAccount: userId === params.userId,
+  };
 };
 
 const UserRoute = () => {
-  const { name, nickname, avatar } = useLoaderData();
+  const { name, nickname, avatarKey, isOwnAccount, bio } = useLoaderData();
+  const location = useLocation();
+
   return (
     <div className="mt-4">
       <div className="flex justify-center items-center">
         <Avatar
-          src={avatar || ProfileImage}
+          src={
+            (avatarKey && `https://gentlyusedbucket.s3.amazonaws.com/${avatarKey}`) ||
+            ProfileImage
+          }
           sx={{ height: "160px", width: "160px" }}
         />
         <div className="ml-14">
           <div className="mt-2 flex justify-between">
             <div className="text-3xl font-normal">{nickname || name}</div>
-            <div className="mt-1 ml-10">
-              <Button variant="contained" sx={{ marginRight: "10px" }}>
-                Follow
-              </Button>
-              <Button variant="contained" sx={{ marginRight: "10px" }}>
-                Message
-              </Button>
-              <Button variant="contained">Edit</Button>
+            <div className="ml-10">
+              {!isOwnAccount ? (
+                <>
+                  <Button variant="contained" sx={{ marginRight: "10px" }}>
+                    Leave review
+                  </Button>
+                  <Button variant="contained" sx={{ marginRight: "10px" }}>
+                    Message
+                  </Button>
+                </>
+              ) : (
+                <Link to="/user/edit">
+                  <Button variant="outlined" sx={{ color: "black" }}>
+                    Edit
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
           <div className="my-5 flex">
-            <div className="text-lg">578 listings</div>
-            <div className="text-lg ml-7">468 followers</div>
-            <div className="text-lg ml-7">221 sold</div>
+            <NavLink
+              to={""}
+              style={() =>
+                !location.pathname.endsWith("reviews")
+                  ? activeNavLinkStyle
+                  : notActiveNavLinkStyle
+              }
+            >
+              <div className="text-lg">
+                <b>578</b> listings
+              </div>
+            </NavLink>
+            <NavLink
+              to={"reviews"}
+              style={({ isActive }) =>
+                isActive ? activeNavLinkStyle : notActiveNavLinkStyle
+              }
+            >
+              <div className="text-lg ml-7">
+                <b>468</b> reviews
+              </div>
+            </NavLink>
+
+            <div className="text-lg ml-7">
+              <b>221</b> sold
+            </div>
           </div>
-          <div className="max-w-lg">
-            Новые шмотки носят только телки
-          </div>
+          <div className="max-w-lg">{bio}</div>
         </div>
       </div>
+      <Outlet />
     </div>
   );
 };

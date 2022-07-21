@@ -6,7 +6,7 @@ export default function Index() {
     <>
       <div className="mt-2 flex h-5/6">
         <Filters />
-        <Link to="/user/3">
+        <Link to="/user/1">
           <div className="w-4/5 ml-7 flex justify-between">
             <div className="w-56 h-fit">
               <img
