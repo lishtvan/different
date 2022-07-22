@@ -12,7 +12,7 @@ const Header: FC<Props> = ({ isAuthorized, userId }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <header className="bg-white py-5">
+    <header className="bg-white py-3 sticky top-0 z-50">
       <div className="flex justify-between items-center">
         <Link
           to="/"

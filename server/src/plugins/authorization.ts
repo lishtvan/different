@@ -2,7 +2,12 @@ import fp from 'fastify-plugin';
 import { COOKIE_OPTIONS } from '../constants/auth';
 
 export default fp(async (fastify) => {
-  const publicRoutes = ['/auth/google', '/auth/google/callback', '/user/get'];
+  const publicRoutes = [
+    '/auth/google',
+    '/auth/google/callback',
+    '/user/get',
+    '/image/upload',
+  ];
 
   fastify.addHook('preHandler', async (req, reply) => {
     const { routerPath, cookies } = req;

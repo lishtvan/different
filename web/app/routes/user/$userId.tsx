@@ -7,6 +7,7 @@ import {
   useLoaderData,
   useLocation,
 } from "@remix-run/react";
+import { S3_URL } from "~/constants/s3";
 import { activeNavLinkStyle, notActiveNavLinkStyle } from "~/constants/styles";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
@@ -40,10 +41,7 @@ const UserRoute = () => {
     <div className="mt-4">
       <div className="flex justify-center items-center">
         <Avatar
-          src={
-            (avatarKey && `https://gentlyusedbucket.s3.amazonaws.com/${avatarKey}`) ||
-            ProfileImage
-          }
+          src={(avatarKey && `${S3_URL}/${avatarKey}`) || ProfileImage}
           sx={{ height: "160px", width: "160px" }}
         />
         <div className="ml-14">
