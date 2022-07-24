@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.profile {
+  overflow: hidden;
+  height: 160px;
+  width: 160px;
+  margin: 0 auto;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.profile__upload {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 40px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.profile__button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.profile:hover .profile__upload {
+  transform: translatey(0);
+}

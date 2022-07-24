@@ -1,6 +1,7 @@
 import { join } from 'path';
 import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload';
 import { FastifyPluginAsync } from 'fastify';
+import ajvErrors from 'ajv-errors';
 
 export type AppOptions = Partial<AutoloadPluginOptions>;
 
@@ -31,5 +32,9 @@ exports.options = {
   trustProxy: true,
   logger: {
     transport: process.env.NODE_ENV !== 'production' ? pinoPretty : undefined,
+  },
+  ajv: {
+    customOptions: { allErrors: true, jsonPointers: true },
+    plugins: [ajvErrors],
   },
 };

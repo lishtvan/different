@@ -30,6 +30,7 @@
     "@fastify/sensible": "5.1.0",
     "@fastify/swagger": "^7.4.1",
     "@prisma/client": "^4.1.0",
+    "ajv-errors": "^3.0.0",
     "aws-sdk": "^2.1177.0",
     "fastify": "^4.2.1",
     "fastify-cli": "^4.3.0",

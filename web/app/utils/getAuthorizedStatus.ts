@@ -5,10 +5,10 @@ export const getAuthorizedStatus = async (request: Request) => {
   if (!cookie) return false;
   const tokenRow = cookie.split("; ").find((row) => row.startsWith("token"));
   if (!tokenRow) return false;
-  const response = await fetchInstance({
+  const user = await fetchInstance({
     request,
     method: "GET",
     route: "/auth/check",
   });
-  return response.status !== 401;
+  return user;
 };

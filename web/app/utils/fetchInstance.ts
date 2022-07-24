@@ -5,9 +5,8 @@ interface FetchInstance {
     request: Request;
     route: string;
     method: "GET" | "POST" | "PUT" | "DELETE";
-    body?: {
-      [key: string]: unknown;
-    } | null;
+    body?: BodyInit;
+    contentType?: "multipart/form-data" | "application/json";
     domain?: string;
     authorization?: boolean;
   }): Promise<Response>;
@@ -25,21 +24,37 @@ export const fetchInstance: FetchInstance = async ({
   request,
   route,
   body,
+  contentType,
   method,
   domain = process.env.API_DOMAIN,
 }) => {
-  if (body) request.headers.append("Content-type", "application/json");
+  const headers = new Headers();
+  const cookie = request.headers.get("cookie");
+  if (cookie) headers.append("Cookie", cookie);
+  if (!contentType) headers.append("Content-type", "application/json");
 
-  const response = await fetch(`${domain}${route}`, {
-    method,
-    headers: request.headers,
-    ...(body && { body: JSON.stringify(body) }),
-  });
+  if (method === "POST") {
+    const response = await fetch(`${domain}${route}`, {
+      method,
+      headers,
+      body,
+    });
+    if (response.status === 401 && route !== "/auth/check") {
+      const origin = getOriginUrl(request);
 
-  if (response.status === 401 && route !== "/auth/check") {
-    const origin = getOriginUrl(request);
+      return redirect(`/${origin}?login=true`);
+    }
+    return response;
+  } else {
+    const response = await fetch(`${domain}${route}`, {
+      method,
+      headers,
+    });
+    if (response.status === 401 && route !== "/auth/check") {
+      const origin = getOriginUrl(request);
 
-    return redirect(`/${origin}?login=true`);
+      return redirect(`/${origin}?login=true`);
+    }
+    return response;
   }
-  return response;
 };

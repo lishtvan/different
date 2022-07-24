@@ -1,26 +1,27 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { FastifyPluginAsync } from 'fastify';
-import { MultipartFile } from '@fastify/multipart';
 import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
   tags: ['User'],
-  description: 'Dont forget to delete old avatar from s3. See route /image/delete',
   body: {
     type: 'object',
     properties: {
-      avatar: { $ref: 'file' },
+      avatarKey: { type: 'string' },
       nickname: {
-        type: 'object',
-        required: ['value'],
-        properties: {
-          value: { type: 'string', minLength: 2, maxLength: 30 },
+        type: 'string',
+        minLength: 2,
+        maxLength: 20,
+        errorMessage: {
+          minLength: 'Nickname length must not be shorter than 2 characters ',
+          maxLength: 'Nickname length must not be longer than 20 characters ',
         },
       },
       bio: {
-        type: 'object',
-        properties: {
-          value: { type: 'string', maxLength: 300 },
+        type: 'string',
+        maxLength: 150,
+        errorMessage: {
+          maxLength: 'Nickname length must not be longer than 150 characters ',
         },
       },
     },
@@ -31,29 +32,26 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const updateUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/update', { schema }, async (req, reply) => {
-    const avatar = req.body.avatar as unknown as MultipartFile;
-    const { nickname, bio } = req.body;
-
+    const { nickname, bio, avatarKey } = req.body;
     try {
       await fastify.prisma.user.update({
         where: {
           id: Number(req.cookies.userId),
         },
         data: {
-          // REFACTOR
-          avatarKey: avatar.filename,
-          nickname: nickname?.value,
-          bio: bio?.value,
+          nickname,
+          avatarKey,
+          bio,
         },
       });
     } catch (e) {
       if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
-        throw fastify.httpErrors.badRequest('User with such nickname already exists');
+        throw fastify.httpErrors.badRequest(
+          'body/nickname User with such nickname already exists'
+        );
       }
       throw e;
     }
-
-    if (avatar) await fastify.s3.upload(avatar);
 
     return reply.send();
   });

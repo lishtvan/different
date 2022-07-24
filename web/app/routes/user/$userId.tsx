@@ -19,16 +19,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const response = await fetchInstance({
     request,
     method: "POST",
-    body: {
+    body: JSON.stringify({
       userId: params.userId,
-    },
+    }),
     route: "/user/get",
   });
 
-  const res = await response.json();
+  const user = await response.json();
 
   return {
-    ...res,
+    ...user,
     isOwnAccount: userId === params.userId,
   };
 };
@@ -94,7 +94,7 @@ const UserRoute = () => {
               <b>221</b> sold
             </div>
           </div>
-          <div className="max-w-lg">{bio}</div>
+          <div className="max-w-xs break-words">{bio}</div>
         </div>
       </div>
       <Outlet />

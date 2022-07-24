@@ -1,1 +1,1 @@
-export const S3_URL = "https://gentlyusedbucket.s3.amazonaws.com";
+export const S3_URL = "https://different-s3-bucket.s3.amazonaws.com";

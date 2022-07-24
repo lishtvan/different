@@ -5,9 +5,9 @@ const schema = {
   tags: ['Image'],
   body: {
     type: 'object',
-    required: ['imageUrl'],
+    required: ['imageKey'],
     properties: {
-      imageUrl: {
+      imageKey: {
         type: 'string',
       },
     },
@@ -18,8 +18,8 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const deleteImage: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/delete', { schema }, async (req, reply) => {
-    const { imageUrl } = req.body;
-    await fastify.s3.deleteImage(imageUrl);
+    const { imageKey } = req.body;
+    await fastify.s3.deleteImage(imageKey);
 
     return reply.send();
   });

@@ -19,7 +19,6 @@ import {
 import Header from "./components/Header";
 import Login from "./components/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
-import { getCookieValue } from "./utils/cookie";
 import { fetchInstance } from "./utils/fetchInstance";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 
@@ -45,10 +44,8 @@ export const meta: MetaFunction = () => ({
 });
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const isAuthorized = await getAuthorizedStatus(request);
-  const userId = getCookieValue("userId", request);
-
-  return { isAuthorized, userId };
+  const user = await getAuthorizedStatus(request);
+  return user;
 };
 
 export const action = async ({ request }: { request: Request }) => {
@@ -67,7 +64,7 @@ export const action = async ({ request }: { request: Request }) => {
 };
 
 export default function App() {
-  const { isAuthorized, userId } = useLoaderData();
+  const user = useLoaderData();
   const [searchParams] = useSearchParams();
 
   return (
@@ -78,7 +75,7 @@ export default function App() {
       </head>
       <body className="container mx-auto px-4">
         <ThemeProvider theme={theme}>
-          <Header isAuthorized={isAuthorized} userId={userId} />
+          <Header user={user} />
           <Outlet />
           {searchParams.get("login") && <Login />}
         </ThemeProvider>

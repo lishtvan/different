@@ -16,7 +16,7 @@ export default fp(async (fastify) => {
   fastify.decorate<S3Plugin>('s3', {
     upload: async (file) => {
       const buffer = await file.toBuffer();
-      const compressed = await sharp(buffer).webp().toBuffer();
+      const compressed = await sharp(buffer).resize(160, 160).webp().toBuffer();
       const id = fastify.id();
       const extension = path.extname(file.filename);
 

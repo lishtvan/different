@@ -28,7 +28,8 @@ const uploadImage: FastifyPluginAsync = async (fastify) => {
     const { image } = req.body as { image: MultipartFile };
 
     const location = await fastify.s3.upload(image);
-    return reply.send({ imageKey: location });
+    const imageKey = location.split('/').pop();
+    return reply.send({ imageKey });
   });
 };
 
