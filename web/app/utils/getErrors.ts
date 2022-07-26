@@ -9,7 +9,6 @@ const getError = (message: string) => {
 export const getErrors = (message: string) => {
   const errors: Record<string, unknown> = {};
   if (message.includes(",")) {
-    console.log("includes");
     const messages = message.split(" ,");
     for (const message of messages) {
       const { formattedMessage, field } = getError(message);

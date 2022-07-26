@@ -21,7 +21,14 @@ const schema = {
         type: 'string',
         maxLength: 150,
         errorMessage: {
-          maxLength: 'Nickname length must not be longer than 150 characters ',
+          maxLength: 'Bio length must not be longer than 150 characters ',
+        },
+      },
+      location: {
+        type: 'string',
+        maxLength: 40,
+        errorMessage: {
+          maxLength: 'Location length must not be longer than 40 characters ',
         },
       },
     },
@@ -32,7 +39,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const updateUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/update', { schema }, async (req, reply) => {
-    const { nickname, bio, avatarKey } = req.body;
+    const { nickname, bio, avatarKey, location } = req.body;
     try {
       await fastify.prisma.user.update({
         where: {
@@ -42,6 +49,7 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
           nickname,
           avatarKey,
           bio,
+          location,
         },
       });
     } catch (e) {

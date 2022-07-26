@@ -15,8 +15,9 @@ model User {
   nickname  String?   @unique @db.VarChar(20)
   bio       String?
   avatarKey String?
+  location  String?
   Sessions  Session[]
-  Sales      Sale[]
+  Sales     Sale[]
 }
 
 model Session {

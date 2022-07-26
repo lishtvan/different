@@ -17,6 +17,7 @@ const schema = {
       nickname: { type: 'string' },
       name: { type: 'string', nullable: true },
       avatarKey: { type: 'string', nullable: true },
+      location: { type: 'string', nullable: true },
     },
   },
 };
@@ -34,6 +35,7 @@ const getUser: FastifyPluginAsync = async (fastify) => {
         bio: true,
         avatarKey: true,
         name: true,
+        location: true,
       },
     });
 

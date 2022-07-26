@@ -7,6 +7,7 @@ import {
   useLoaderData,
   useLocation,
 } from "@remix-run/react";
+import { LocationOnOutlined } from "@mui/icons-material";
 import { S3_URL } from "~/constants/s3";
 import { activeNavLinkStyle, notActiveNavLinkStyle } from "~/constants/styles";
 import { getCookieValue } from "~/utils/cookie";
@@ -34,8 +35,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const UserRoute = () => {
-  const { name, nickname, avatarKey, isOwnAccount, bio } = useLoaderData();
-  const location = useLocation();
+  const { name, nickname, avatarKey, isOwnAccount, bio, location } =
+    useLoaderData();
+  const { pathname } = useLocation();
 
   return (
     <div className="mt-4">
@@ -66,11 +68,11 @@ const UserRoute = () => {
               )}
             </div>
           </div>
-          <div className="my-5 flex">
+          <div className="my-3 flex">
             <NavLink
               to={""}
               style={() =>
-                !location.pathname.endsWith("reviews")
+                !pathname.endsWith("reviews")
                   ? activeNavLinkStyle
                   : notActiveNavLinkStyle
               }
@@ -94,7 +96,15 @@ const UserRoute = () => {
               <b>221</b> sold
             </div>
           </div>
-          <div className="max-w-xs break-words">{bio}</div>
+          <div className=" max-w-md break-words">{bio}</div>
+          {location && (
+            <div className="mt-3 flex">
+              <div>
+                <LocationOnOutlined />
+              </div>
+              <div className="text-lg ml-2">{location}</div>
+            </div>
+          )}
         </div>
       </div>
       <Outlet />

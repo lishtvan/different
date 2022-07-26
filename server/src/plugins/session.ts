@@ -23,7 +23,7 @@ export default fp(async (fastify) => {
         const createdUser = await fastify.prisma.user.create({
           data: {
             email: userInfo.email,
-            name: userInfo.name,
+            name: userInfo.name || 'Different User',
             Sessions: {
               create: { token, ip },
             },

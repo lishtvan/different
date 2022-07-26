@@ -1,4 +1,10 @@
-import { Button, IconButton, TextField, Tooltip } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { PhotoCamera, Delete } from "@mui/icons-material";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import {
@@ -36,173 +42,203 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = getCookieValue("userId", request);
-  const uploadHandler = unstable_createMemoryUploadHandler({
-    maxPartSize: 500_000,
-  });
-  const formData = await unstable_parseMultipartFormData(
-    request,
-    uploadHandler
-  );
-  const body = Object.fromEntries(formData);
+  const contentType = request.headers.get("Content-type");
 
-  const { _action, avatarKeyToDelete, bio, nickname } = body;
+  if (contentType === "application/x-www-form-urlencoded") {
+    const formData = await request.formData();
+    const body = Object.fromEntries(formData);
+    const { bio, nickname, location, _action } = body;
 
-  if (_action === "deleteImage") {
-    await fetchInstance({
-      request,
-      route: "/user/update",
-      method: "POST",
-      body: JSON.stringify({
-        avatarKey: null,
-      }),
-    });
-    await fetchInstance({
-      request,
-      route: "/image/delete",
-      method: "POST",
-      body: JSON.stringify({
-        imageKey: avatarKeyToDelete,
-      }),
-    });
-    return null;
-  }
-  if (_action === "save") {
-    const { imageKey } = await fetchInstance({
-      request,
-      route: "/image/upload",
-      method: "POST",
-      contentType: "multipart/form-data",
-      body: formData,
-    }).then((res) => res.json());
-    const response = await fetchInstance({
-      request,
-      route: "/user/update",
-      method: "POST",
-      body: JSON.stringify({
-        bio,
-        avatarKey: imageKey,
-        nickname,
-      }),
-    });
-    if (response.status === 400) {
-      const { message } = await response.json();
-      const errors = getErrors(message);
-      return { errors };
+    let errors: Record<string, unknown> = {};
+    if (nickname.toString().length < 2) errors.nickname = "Too short";
+    if (nickname.toString().length > 20) errors.nickname = "Too long";
+    if (bio.toString().length > 150) errors.bio = "Too long";
+    if (location.toString().length > 40) errors.location = "Too long";
+
+    if (_action === "save") {
+      const response = await fetchInstance({
+        request,
+        route: "/user/update",
+        method: "POST",
+        body: JSON.stringify({ bio, nickname, location }),
+      });
+      if (response.status === 400) {
+        const { message } = await response.json();
+        errors = getErrors(message);
+        return { errors };
+      }
+      return redirect(`/user/${userId}`);
     }
-    return redirect(`/user/${userId}`);
+    return { errors };
+  } else {
+    const uploadHandler = unstable_createMemoryUploadHandler({
+      maxPartSize: 500_000,
+    });
+    const formData = await unstable_parseMultipartFormData(
+      request,
+      uploadHandler
+    );
+
+    const { deleteImage, avatarKeyToDelete } = Object.fromEntries(formData);
+
+    if (deleteImage) {
+      await Promise.all([
+        fetchInstance({
+          request,
+          route: "/user/update",
+          method: "POST",
+          body: JSON.stringify({ avatarKey: null }),
+        }),
+        fetchInstance({
+          request,
+          route: "/image/delete",
+          method: "POST",
+          body: JSON.stringify({ imageKey: avatarKeyToDelete }),
+        }),
+      ]);
+      return null;
+    } else {
+      const { imageKey } = await fetchInstance({
+        request,
+        route: "/image/upload",
+        method: "POST",
+        formData: true,
+        body: formData,
+      }).then((res) => res.json());
+
+      await fetchInstance({
+        request,
+        route: "/user/update",
+        method: "POST",
+        body: JSON.stringify({ avatarKey: imageKey }),
+      });
+
+      return { imageKey };
+    }
   }
-  const { imageKey } = await fetchInstance({
-    request,
-    route: "/image/upload",
-    method: "POST",
-    contentType: "multipart/form-data",
-    body: formData,
-  }).then((res) => res.json());
-  await fetchInstance({
-    request,
-    route: "/user/update",
-    method: "POST",
-    body: JSON.stringify({
-      bio,
-      avatarKey: imageKey,
-      nickname,
-    }),
-  });
-  return { imageKey };
 };
 
 const UserEditRoute = () => {
-  const { name, nickname, avatarKey, bio } = useLoaderData();
+  const { name, nickname, avatarKey, bio, location } = useLoaderData();
   const data = useActionData();
   const submit = useSubmit();
-  const { location, state, type, submission } = useTransition();
-  console.log({ location, state, type, submission });
+  const { submission } = useTransition();
 
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
     submit(e.currentTarget, { replace: true });
   };
 
   return (
-    <Form
-      method="post"
-      className="flex mt-6 mx-auto justify-center items-center flex-col w-96"
-      action=""
-      encType="multipart/form-data"
-      onChange={handleChange}
-    >
-      <div className="flex relative justify-center items-center w-full">
-        <label className="profile" htmlFor="button-file">
-          <img
-            src={
-              (data?.imageKey && `${S3_URL}/${data?.imageKey}`) ||
-              (avatarKey && `${S3_URL}/${avatarKey}`) ||
-              ProfileImage
-            }
-            alt="avatar"
-          />
-          <div className="profile__upload">
-            <button className="profile__button">
-              <PhotoCamera className="text-white" />
-            </button>
-          </div>
-          <input
-            name="image"
-            id="button-file"
-            accept="image/*"
-            type="file"
-            hidden
-          />
-        </label>
-
-        <div className="absolute ml-56">
-          <input hidden name="avatarKeyToDelete" defaultValue={avatarKey} />
-          <Tooltip title="Delete">
-            <IconButton
-              type="submit"
-              name="_action"
-              value="deleteImage"
-              size="large"
-              color="inherit"
-              aria-label="delete"
-            >
-              <Delete />
-            </IconButton>
-          </Tooltip>
-        </div>
-      </div>
-      <TextField
-        error={Boolean(data?.errors?.nickname)}
-        label={data?.errors?.nickname}
-        placeholder="Nickname"
-        name="nickname"
-        sx={{ marginTop: "15px", width: "100%" }}
-        defaultValue={nickname || name}
-      />
-      <TextField
-        error={Boolean(data?.errors?.bio)}
-        label={data?.errors?.bio}
-        rows={3}
-        multiline
-        name="bio"
-        defaultValue={bio}
-        sx={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
-        placeholder="Bio"
-      />
-      <TextField
-        placeholder="Location"
-        name="location"
-        sx={{ marginBottom: "15px", width: "100%" }}
-      />
-      <Button
-        type="submit"
-        name="_action"
-        value="save"
-        sx={{ marginTop: "20px", marginBottom: "20px", width: "100%" }}
-        variant="contained"
+    <div>
+      <Form
+        method="post"
+        className="flex mt-6 mx-auto justify-center items-center flex-col w-96"
+        encType="multipart/form-data"
+        onChange={handleChange}
       >
-        {submission ? "Saving..." : "Save"}
-      </Button>
-    </Form>
+        <div className="flex relative justify-center items-center w-full">
+          <label className="profile" htmlFor="button-file">
+            {submission?.encType === "multipart/form-data" ? (
+              <CircularProgress color="primary" />
+            ) : (
+              <>
+                <img
+                  src={
+                    (data?.imageKey && `${S3_URL}/${data?.imageKey}`) ||
+                    (avatarKey && `${S3_URL}/${avatarKey}`) ||
+                    ProfileImage
+                  }
+                  alt="avatar"
+                />
+                <div className="profile__upload">
+                  <button className="profile__button">
+                    <PhotoCamera className="text-white" />
+                  </button>
+                </div>
+                <input
+                  name="image"
+                  id="button-file"
+                  accept="image/*"
+                  type="file"
+                  hidden
+                />
+              </>
+            )}
+          </label>
+          {avatarKey && (
+            <div className="absolute ml-56">
+              <input hidden name="avatarKeyToDelete" defaultValue={avatarKey} />
+              <Tooltip title="Delete">
+                <IconButton
+                  type="submit"
+                  name="deleteImage"
+                  value="deleteImage"
+                  size="large"
+                  color="inherit"
+                  aria-label="delete"
+                >
+                  <Delete />
+                </IconButton>
+              </Tooltip>
+            </div>
+          )}
+        </div>
+      </Form>
+      <Form
+        method="post"
+        className="flex mt-6 mx-auto justify-center items-center flex-col w-96"
+        onChange={handleChange}
+      >
+        <TextField
+          placeholder="Nickname"
+          name="nickname"
+          sx={{ width: "100%" }}
+          error={Boolean(data?.errors?.nickname)}
+          label={data?.errors?.nickname}
+          inputProps={{
+            maxLength: 21,
+          }}
+          defaultValue={nickname || name}
+        />
+        <TextField
+          error={Boolean(data?.errors?.bio)}
+          label={data?.errors?.bio}
+          rows={3}
+          multiline
+          inputProps={{
+            maxLength: 151,
+          }}
+          name="bio"
+          defaultValue={bio}
+          sx={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
+          placeholder="Bio"
+        />
+        <TextField
+          placeholder="Location"
+          name="location"
+          sx={{ marginBottom: "15px", width: "100%" }}
+          error={Boolean(data?.errors?.location)}
+          label={data?.errors?.location}
+          inputProps={{
+            maxLength: 41,
+          }}
+          defaultValue={location}
+        />
+        <Button
+          type="submit"
+          disabled={submission?.encType === "multipart/form-data"}
+          name="_action"
+          value="save"
+          sx={{ marginTop: "20px", marginBottom: "20px", width: "100%" }}
+          variant="contained"
+        >
+          {submission?.encType === "multipart/form-data" ||
+          submission?.formData.get("_action") === "save"
+            ? "Saving..."
+            : "Save"}
+        </Button>
+      </Form>
+    </div>
   );
 };
 

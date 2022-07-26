@@ -6,7 +6,7 @@ interface FetchInstance {
     route: string;
     method: "GET" | "POST" | "PUT" | "DELETE";
     body?: BodyInit;
-    contentType?: "multipart/form-data" | "application/json";
+    formData?: boolean;
     domain?: string;
     authorization?: boolean;
   }): Promise<Response>;
@@ -24,14 +24,14 @@ export const fetchInstance: FetchInstance = async ({
   request,
   route,
   body,
-  contentType,
+  formData = false,
   method,
   domain = process.env.API_DOMAIN,
 }) => {
   const headers = new Headers();
   const cookie = request.headers.get("cookie");
   if (cookie) headers.append("Cookie", cookie);
-  if (!contentType) headers.append("Content-type", "application/json");
+  if (!formData) headers.append("Content-type", "application/json");
 
   if (method === "POST") {
     const response = await fetch(`${domain}${route}`, {
@@ -39,17 +39,13 @@ export const fetchInstance: FetchInstance = async ({
       headers,
       body,
     });
-    if (response.status === 401 && route !== "/auth/check") {
+    if (response.status === 401) {
       const origin = getOriginUrl(request);
-
       return redirect(`/${origin}?login=true`);
     }
     return response;
   } else {
-    const response = await fetch(`${domain}${route}`, {
-      method,
-      headers,
-    });
+    const response = await fetch(`${domain}${route}`, { method, headers });
     if (response.status === 401 && route !== "/auth/check") {
       const origin = getOriginUrl(request);
 
