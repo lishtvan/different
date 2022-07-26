@@ -73,7 +73,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="container mx-auto px-4">
+      <body className="container mx-auto px-4 overflow-y-scroll">
         <ThemeProvider theme={theme}>
           <Header user={user} />
           <Outlet />

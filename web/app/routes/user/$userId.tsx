@@ -20,9 +20,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const response = await fetchInstance({
     request,
     method: "POST",
-    body: JSON.stringify({
-      userId: params.userId,
-    }),
+    body: { userId: params.userId },
     route: "/user/get",
   });
 

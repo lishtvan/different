@@ -32,9 +32,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const response = await fetchInstance({
     request,
     method: "POST",
-    body: JSON.stringify({
-      userId,
-    }),
+    body: { userId },
     route: "/user/get",
   });
   return response;
@@ -60,7 +58,7 @@ export const action: ActionFunction = async ({ request }) => {
         request,
         route: "/user/update",
         method: "POST",
-        body: JSON.stringify({ bio, nickname, location }),
+        body: { bio, nickname, location },
       });
       if (response.status === 400) {
         const { message } = await response.json();
@@ -87,13 +85,13 @@ export const action: ActionFunction = async ({ request }) => {
           request,
           route: "/user/update",
           method: "POST",
-          body: JSON.stringify({ avatarKey: null }),
+          body: { avatarKey: null },
         }),
         fetchInstance({
           request,
           route: "/image/delete",
           method: "POST",
-          body: JSON.stringify({ imageKey: avatarKeyToDelete }),
+          body: { imageKey: avatarKeyToDelete },
         }),
       ]);
       return null;
@@ -110,7 +108,7 @@ export const action: ActionFunction = async ({ request }) => {
         request,
         route: "/user/update",
         method: "POST",
-        body: JSON.stringify({ avatarKey: imageKey }),
+        body: { avatarKey: imageKey },
       });
 
       return { imageKey };

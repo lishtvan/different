@@ -5,7 +5,12 @@ interface FetchInstance {
     request: Request;
     route: string;
     method: "GET" | "POST" | "PUT" | "DELETE";
-    body?: BodyInit;
+    body?:
+      | {
+          [key: string]: unknown;
+        }
+      | null
+      | FormData;
     formData?: boolean;
     domain?: string;
     authorization?: boolean;
@@ -31,26 +36,28 @@ export const fetchInstance: FetchInstance = async ({
   const headers = new Headers();
   const cookie = request.headers.get("cookie");
   if (cookie) headers.append("Cookie", cookie);
-  if (!formData) headers.append("Content-type", "application/json");
 
-  if (method === "POST") {
-    const response = await fetch(`${domain}${route}`, {
+  let response;
+  if (body) {
+    let formattedBody;
+    if (!formData) {
+      headers.append("Content-type", "application/json");
+      formattedBody = JSON.stringify(body);
+    } else if (body instanceof FormData) {
+      formattedBody = body;
+    } else formattedBody = null;
+
+    response = await fetch(`${domain}${route}`, {
       method,
       headers,
-      body,
+      body: formattedBody,
     });
-    if (response.status === 401) {
-      const origin = getOriginUrl(request);
-      return redirect(`/${origin}?login=true`);
-    }
-    return response;
-  } else {
-    const response = await fetch(`${domain}${route}`, { method, headers });
-    if (response.status === 401 && route !== "/auth/check") {
-      const origin = getOriginUrl(request);
+  } else response = await fetch(`${domain}${route}`, { method, headers });
 
-      return redirect(`/${origin}?login=true`);
-    }
-    return response;
+  if (response.status === 401 && route !== "/auth/check") {
+    const origin = getOriginUrl(request);
+
+    return redirect(`/${origin}?login=true`);
   }
+  return response;
 };
