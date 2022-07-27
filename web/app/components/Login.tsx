@@ -1,28 +1,58 @@
 import { Button, Dialog, DialogTitle, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { useFetcher, useNavigate } from "@remix-run/react";
+import { useFetcher, useLocation, useNavigate } from "@remix-run/react";
 import GoogleIcon from "./../assets/google.svg";
 import AppleIcon from "./../assets/apple.svg";
 import FacebookIcon from "./../assets/facebook.svg";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
   const fetcher = useFetcher();
+  const [checkAuth, setCheckAuth] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     if (fetcher.type === "init") {
-      fetcher.submit({}, { method: "post", action: "/" });
+      fetcher.submit(
+        { route: location.pathname },
+        { method: "post", action: "/" }
+      );
     }
-  }, [fetcher]);
+  }, [fetcher, location.pathname]);
 
-  const redirect = (provider: string) => {
-    const API_DOMAIN = fetcher.data;
-    if (API_DOMAIN) window.location.href = `${API_DOMAIN}/auth/${provider}`;
-  };
+  useEffect(() => {
+    if (!checkAuth) return;
+    const interval = setInterval(() => {
+      fetcher.submit(
+        { route: location.pathname },
+        { method: "post", action: "/" }
+      );
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [checkAuth, fetcher, location.pathname]);
 
   const onClose = () => {
     navigate(-1);
+  };
+
+  const redirect = (provider: string) => {
+    const API_DOMAIN = fetcher.data;
+    const width = 680;
+    const height = 680;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2.5;
+
+    const windowFeatures = `left=${left},top=${top},width=${width},height=${height}`;
+    if (API_DOMAIN) {
+      window.open(
+        `${API_DOMAIN}/auth/${provider}`,
+        "authorize",
+        windowFeatures
+      );
+    }
+    setCheckAuth(true);
   };
 
   return (

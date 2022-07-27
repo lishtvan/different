@@ -59,7 +59,13 @@ export const action = async ({ request }: { request: Request }) => {
     method: "GET",
     route: "/auth/check",
   });
-  if (response.status !== 401) return redirect("/");
+  console.log(response.status);
+  if (response.status !== 401) {
+    const formData = await request.formData();
+    const route = formData.get("route")?.toString();
+
+    return redirect(route!);
+  }
   return API_DOMAIN;
 };
 
@@ -73,7 +79,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="container mx-auto px-4 overflow-y-scroll">
+      <body className="container mx-auto px-4">
         <ThemeProvider theme={theme}>
           <Header user={user} />
           <Outlet />
