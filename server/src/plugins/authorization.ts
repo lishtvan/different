@@ -4,9 +4,10 @@ import { COOKIE_OPTIONS } from '../constants/auth';
 export default fp(async (fastify) => {
   const publicRoutes = [
     '/auth/google',
+    '/auth/facebook',
     '/auth/google/callback',
+    '/auth/facebook/callback',
     '/user/get',
-    '/image/upload',
   ];
 
   fastify.addHook('preHandler', async (req, reply) => {

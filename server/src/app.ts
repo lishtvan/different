@@ -34,7 +34,7 @@ exports.options = {
     transport: process.env.NODE_ENV !== 'production' ? pinoPretty : undefined,
   },
   ajv: {
-    customOptions: { allErrors: true, jsonPointers: true },
+    customOptions: { allErrors: true },
     plugins: [ajvErrors],
   },
 };
