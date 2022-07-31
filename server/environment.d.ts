@@ -3,9 +3,9 @@ declare global {
     interface ProcessEnv {
       DOMAIN: string;
       DATABASE_URL: string;
-      CLIENT_ID: string;
       GOOGLE_CLIENT_SECRET: string;
       FACEBOOK_CLIENT_SECRET: string;
+      TWITTER_CLIENT_SECRET: string;
       PORT: string;
       TOKEN_SECRET: string;
       TOKEN_CHARACTERS: string;

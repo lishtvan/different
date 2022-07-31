@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import type {
+  ActionFunction,
   LinksFunction,
   LoaderFunction,
   MetaFunction,
@@ -25,7 +26,6 @@ import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#757ce8",
       main: "#11a683",
       dark: "#0f9575",
       contrastText: "#fff",
@@ -48,7 +48,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return user;
 };
 
-export const action = async ({ request }: { request: Request }) => {
+export const action: ActionFunction = async ({ request }) => {
   const { API_DOMAIN } = process.env;
   const cookie = request.headers.get("Cookie");
   if (!cookie) return API_DOMAIN;
@@ -59,7 +59,7 @@ export const action = async ({ request }: { request: Request }) => {
     method: "GET",
     route: "/auth/check",
   });
-  console.log(response.status);
+
   if (response.status !== 401) {
     const formData = await request.formData();
     const route = formData.get("route")?.toString();

@@ -9,7 +9,7 @@ export default fp(async (fastify) => {
       const token = fastify.generateToken(TOKEN_SECRET, TOKEN_CHARACTERS);
 
       const user = await fastify.prisma.user.findUnique({
-        where: { email: userInfo.email },
+        where: { providerId: userInfo.providerId },
       });
 
       let userId;
@@ -22,7 +22,7 @@ export default fp(async (fastify) => {
       } else {
         const createdUser = await fastify.prisma.user.create({
           data: {
-            email: userInfo.email,
+            providerId: userInfo.providerId,
             name: userInfo.name || 'Different User',
             Sessions: {
               create: { token, ip },

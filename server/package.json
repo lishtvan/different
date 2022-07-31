@@ -37,6 +37,7 @@
     "fastify-plugin": "^4.0.0",
     "hyperid": "^3.0.1",
     "sharp": "^0.30.7",
+    "twitter-api-sdk": "^1.1.0",
     "weak-napi": "^2.0.2"
   },
   "devDependencies": {

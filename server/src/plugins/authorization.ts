@@ -7,6 +7,8 @@ export default fp(async (fastify) => {
     '/auth/facebook',
     '/auth/google/callback',
     '/auth/facebook/callback',
+    '/auth/twitter',
+    '/auth/twitter/callback',
     '/user/get',
   ];
 

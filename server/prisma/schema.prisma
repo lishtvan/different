@@ -8,16 +8,16 @@ generator client {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  email     String    @unique
-  name      String
-  nickname  String?   @unique @db.VarChar(20)
-  bio       String?
-  avatarKey String?
-  location  String?
-  Sessions  Session[]
-  Sales     Sale[]
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  providerId String    @unique
+  name       String
+  nickname   String?   @unique @db.VarChar(20)
+  bio        String?
+  avatarKey  String?
+  location   String?
+  Sessions   Session[]
+  Sales      Sale[]
 }
 
 model Session {

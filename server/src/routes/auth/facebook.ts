@@ -10,7 +10,7 @@ const facebookAuth: FastifyPluginAsync = async (fastify) => {
     const oauthToken =
       await fastify.facebookOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
 
-    const facebookUserInfo = await fetch(
+    const { name, id } = await fetch(
       `https://graph.facebook.com/v6.0/me?fields=name,email&access_token=${oauthToken.access_token}`,
       {
         method: 'GET',
@@ -18,10 +18,9 @@ const facebookAuth: FastifyPluginAsync = async (fastify) => {
     ).then((res) => res.json());
 
     const { token, userId } = await fastify.session.start(
-      facebookUserInfo,
+      { name, providerId: id },
       req.raw.socket.remoteAddress || ''
     );
-    console.log({ token, userId });
 
     reply
       .setCookie('token', token, COOKIE_OPTIONS)

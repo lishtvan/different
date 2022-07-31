@@ -2,8 +2,8 @@ import { Button, Dialog, DialogTitle, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useFetcher, useLocation, useNavigate } from "@remix-run/react";
 import GoogleIcon from "./../assets/google.svg";
-import AppleIcon from "./../assets/apple.svg";
 import FacebookIcon from "./../assets/facebook.svg";
+import TwitterIcon from "./../assets/twitter.svg";
 import { useEffect, useState } from "react";
 
 const Login = () => {
@@ -79,15 +79,17 @@ const Login = () => {
           </Button>
           <Button
             color="inherit"
-            onClick={() => redirect("apple")}
+            onClick={() => redirect("twitter")}
             sx={{
               display: "flex",
+              paddingTop: "10px",
+              paddingBottom: "10px",
               marginTop: "10px",
               justifyContent: "center",
             }}
           >
-            <img width={44} height={44} src={AppleIcon} alt="apple" />
-            <div className="w-1/2">Apple</div>
+            <img width={44} height={44} src={TwitterIcon} alt="twitter" />
+            <div className="w-1/2">Twitter</div>
           </Button>
           <Button
             onClick={() => redirect("facebook")}
