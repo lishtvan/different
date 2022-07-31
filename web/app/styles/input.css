@@ -37,3 +37,9 @@
 .profile:hover .profile__upload {
   transform: translatey(0);
 }
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    background: #7f7f7f;
+  }
+}

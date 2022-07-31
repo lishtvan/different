@@ -59,7 +59,7 @@ const Login = () => {
     <Dialog
       open={true}
       onClose={onClose}
-      className="flex justify-center items-center"
+      className="flex justify-center items-center mx-auto"
     >
       <DialogTitle sx={{ marginLeft: "auto" }}>
         <IconButton onClick={onClose}>

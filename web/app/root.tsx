@@ -31,6 +31,16 @@ const theme = createTheme({
       contrastText: "#fff",
     },
   },
+  components: {
+    MuiList: {
+      styleOverrides: {
+        root: {
+          paddingTop: "0px",
+          paddingBottom: "0px",
+        },
+      },
+    },
+  },
 });
 
 export const links: LinksFunction = () => [
@@ -74,7 +84,12 @@ export default function App() {
   const [searchParams] = useSearchParams();
 
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`overflow-y-scroll ${
+        searchParams.get("login") && "scrollbar"
+      }`}
+    >
       <head>
         <Meta />
         <Links />
