@@ -1,17 +1,12 @@
 import { MenuItem, Select } from "@mui/material";
-import type { FC } from "react";
 import { useState } from "react";
 import type { Section } from "~/constants/categories";
 import { CATEGORIES } from "~/constants/categories";
 
-interface Props {
-  selectCategory: (category: string) => void;
-  selectedCategory: string;
-}
-
-const SelectCategory: FC<Props> = ({ selectCategory, selectedCategory }) => {
+const SelectCategory = () => {
   const [currentSection, setCurrentSection] = useState("");
   const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleClose = () => {
     setOpen(false);
@@ -22,7 +17,7 @@ const SelectCategory: FC<Props> = ({ selectCategory, selectedCategory }) => {
   };
 
   const hanldeCategoryClick = (category: string) => {
-    selectCategory(category);
+    setSelectedCategory(category);
     handleClose();
   };
 
@@ -30,6 +25,8 @@ const SelectCategory: FC<Props> = ({ selectCategory, selectedCategory }) => {
     <Select
       className="w-full"
       displayEmpty
+      name="category"
+      value={selectedCategory}
       open={open}
       onClose={handleClose}
       onOpen={handleOpen}
