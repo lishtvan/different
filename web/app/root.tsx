@@ -26,8 +26,8 @@ import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#11a683",
-      dark: "#0f9575",
+      main: "#19a293",
+      dark: "#168c94",
       contrastText: "#fff",
     },
   },

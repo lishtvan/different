@@ -1,9 +1,10 @@
 export const notActiveNavLinkStyle = {
   textDecoration: "underline",
+  textDecorationThickness: "3px",
   textUnderlineOffset: "3px",
 };
 
 export const activeNavLinkStyle = {
   ...notActiveNavLinkStyle,
-  textDecorationColor: "#11a683",
+  textDecorationColor: "#17a293",
 };
