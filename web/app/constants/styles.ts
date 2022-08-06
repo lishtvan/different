@@ -1,3 +1,5 @@
+export const MAIN_COLOR = "#168c94";
+export const DARK_COLOR = "#167994";
 export const notActiveNavLinkStyle = {
   textDecoration: "underline",
   textDecorationThickness: "3px",
@@ -6,5 +8,5 @@ export const notActiveNavLinkStyle = {
 
 export const activeNavLinkStyle = {
   ...notActiveNavLinkStyle,
-  textDecorationColor: "#17a293",
+  textDecorationColor: MAIN_COLOR,
 };

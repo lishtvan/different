@@ -19,6 +19,7 @@ import {
 } from "@remix-run/react";
 import Header from "./components/Header";
 import Login from "./components/Login";
+import { MAIN_COLOR, DARK_COLOR } from "./constants/styles";
 import tailwindStylesUrl from "./styles/tailwind.css";
 import { fetchInstance } from "./utils/fetchInstance";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
@@ -26,8 +27,8 @@ import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#19a293",
-      dark: "#168c94",
+      main: MAIN_COLOR,
+      dark: DARK_COLOR,
       contrastText: "#fff",
     },
   },

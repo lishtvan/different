@@ -11,6 +11,7 @@ import { Form, Link, useSearchParams } from "@remix-run/react";
 import type { FC } from "react";
 import { useState } from "react";
 import { S3_URL } from "~/constants/s3";
+import { MAIN_COLOR } from "~/constants/styles";
 import ProfileImage from "./../assets/profile.jpeg";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -84,7 +85,9 @@ const Header: FC<Props> = ({ user }) => {
             }
           >
             <Link to={`/user/${user.id}`} className="mt-1 ">
-              <div className=" rounded-full border-4 border-white hover:border-[#11a683]">
+              <div
+                className={`rounded-full border-4 border-white hover:border-[${MAIN_COLOR}]`}
+              >
                 <Avatar
                   className="border-2 border-white"
                   src={
