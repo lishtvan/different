@@ -71,16 +71,13 @@ const UserIdIndexRoute = () => {
     <div className="px-32 py-14">
       <div className="w-full flex flex-wrap justify-between">
         {items.map((item, index) => (
-          <Link
-            to="/sell/2"
-            key={index}
-          >
+          <Link to="/sell/2" key={index}>
             <div
-              className="h-fit mt-6 w-80 border rounded border-transparent hover:border-[#11a683]"
+              className="h-fit mt-6 w-80 border rounded-md border-transparent hover:border-main"
               key={index}
             >
               <img
-                className="max-w-full w-full h-96 rounded"
+                className="max-w-full w-full h-96 rounded-t-md"
                 src={`${item.imageKey}`}
                 alt="item"
               />

@@ -70,3 +70,5 @@ export const SIZES = {
   ],
   Accessories: ["ONE SIZE"],
 };
+
+// TODO: change bottoms

@@ -13,7 +13,7 @@ const Designer: FC<Props> = ({ error }) => (
     <Autocomplete
       className="w-full"
       options={DESIGNERS}
-      noOptionsText="If you haven't found a designer for your item, select 'Not Widespread' and put your designer's name in the title, we review listings with this mark and add new designers as soon as possible"
+      noOptionsText="If you haven't found a designer for your item, select 'Not Widespread' and put your designer's name in the title, we review listings with this mark and add new designers as soon as possible. You can also select Merch or Custom if thats your case"
       renderInput={(params) => (
         <TextField
           {...params}
