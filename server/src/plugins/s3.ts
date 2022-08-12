@@ -2,7 +2,6 @@ import fp from 'fastify-plugin';
 import S3 = require('aws-sdk/clients/s3');
 import sharp = require('sharp');
 import { S3Plugin } from '../types/s3';
-import path = require('path');
 
 export default fp(async (fastify) => {
   const { S3_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } = process.env;
@@ -16,13 +15,12 @@ export default fp(async (fastify) => {
   fastify.decorate<S3Plugin>('s3', {
     upload: async (file) => {
       const buffer = await file.toBuffer();
-      const compressed = await sharp(buffer).resize(160, 160).webp().toBuffer();
+      const compressed = await sharp(buffer).jpeg().toBuffer();
       const id = fastify.id();
-      const extension = path.extname(file.filename);
 
       const params = {
         Bucket,
-        Key: `${id}${extension}`,
+        Key: id,
         Body: compressed,
         ContentEncoding: 'base64',
         ContentType: 'image/jpeg',

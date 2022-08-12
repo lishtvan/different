@@ -8,12 +8,12 @@ interface Props {
 
 const ItemTitle: FC<Props> = ({ error }) => (
   <>
-    <FieldTitle title="Item title" required={true} />
+    <FieldTitle title="Title" required={true} />
     {error && <p className="ml-2 mb-1 text-[#d32f2f]">{error}</p>}
     <TextField
       name="title"
       error={Boolean(error)}
-      placeholder="Enter item title up to 80 characters"
+      placeholder="Enter title up to 80 characters"
       inputProps={{
         maxLength: 80,
       }}

@@ -70,7 +70,7 @@ export const action: ActionFunction = async ({ request }) => {
     return { errors };
   } else {
     const uploadHandler = unstable_createMemoryUploadHandler({
-      maxPartSize: 500_000,
+      maxPartSize: 1000_000,
     });
     const formData = await unstable_parseMultipartFormData(
       request,
@@ -142,11 +142,13 @@ const UserEditRoute = () => {
               <>
                 <img
                   src={
+                    // TODO: rewrite to imageUrl
                     (data?.imageKey && `${S3_URL}/${data?.imageKey}`) ||
                     (avatarKey && `${S3_URL}/${avatarKey}`) ||
                     ProfileImage
                   }
                   alt="avatar"
+                  loading="lazy"
                 />
                 <div className="profile__upload">
                   <button className="profile__button">

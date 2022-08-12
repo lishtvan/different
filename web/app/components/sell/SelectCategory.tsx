@@ -66,7 +66,7 @@ const SelectCategory: FC<Props> = ({ sizeError, categoryError }) => {
         renderValue={
           selectedCategory !== ""
             ? () => <div>{selectedCategory}</div>
-            : () => <div className="text-[#aaa]">Choose item category</div>
+            : () => <div className="text-[#aaa]">Choose category</div>
         }
       >
         <div className="w-2/5">
@@ -123,7 +123,7 @@ const SelectCategory: FC<Props> = ({ sizeError, categoryError }) => {
             ) : (
               <div className="text-[#aaa]">
                 {sizePlaceholder
-                  ? "Select item size"
+                  ? "Select size"
                   : "Please select category first"}
               </div>
             ),

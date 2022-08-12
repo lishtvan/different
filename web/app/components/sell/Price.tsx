@@ -17,7 +17,7 @@ const Price: FC<Props> = ({ error }) => {
       <FieldTitle title="Price" required={true} />
       {error && <p className="ml-2 mb-1 text-[#d32f2f]">{error}</p>}
       <OutlinedInput
-        placeholder="Enter item price"
+        placeholder="Enter price"
         className="w-full"
         type="number"
         error={Boolean(error)}

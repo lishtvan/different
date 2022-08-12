@@ -1,124 +1,138 @@
-import { IconButton, ImageList, ImageListItem } from "@mui/material";
-import type { DragEvent } from "react";
-import { useState } from "react";
-import { Close, ErrorOutline, ZoomIn } from "@mui/icons-material";
+import { IconButton, ImageList, ImageListItem, Tooltip } from "@mui/material";
+import type { DragEvent, FormEvent } from "react";
+import { useState, useEffect } from "react";
+import { AddAPhoto, Close, ErrorOutline, Search } from "@mui/icons-material";
+import { Form, useActionData, useSubmit } from "@remix-run/react";
+import { S3_URL } from "~/constants/s3";
 
-const itemData = [
-  {
-    img: "https://static5.depositphotos.com/1008855/444/i/450/depositphotos_4446869-stock-photo-white-flower-background.jpg",
-    id: 1,
-    cols: 3,
-    rows: 3,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    id: 2,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-    id: 3,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    id: 4,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-    id: 5,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    id: 6,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-    id: 7,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-    id: 8,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-    id: 9,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-    id: 10,
-  },
+const initialImageList = [
+  { id: 0, imageKey: null },
+  { id: 1, imageKey: null },
+  { id: 2, imageKey: null },
+  { id: 3, imageKey: null },
+  { id: 4, imageKey: null },
+  { id: 5, imageKey: null },
+  { id: 6, imageKey: null },
+  { id: 7, imageKey: null },
+  { id: 8, imageKey: null },
+  { id: 9, imageKey: null },
 ];
 
-function srcset(image: string, size: number, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
-  };
+interface Image {
+  imageKey: string | null;
+  id: number;
 }
 
 const Photos = () => {
-  const [cardList, setCardList] = useState(itemData);
-  const [currentCard, setCurrentCard] = useState<null | {
-    img: string;
-    id: number;
-  }>(null);
+  const submit = useSubmit();
+  const actionData = useActionData();
+  const [cardList, setCardList] = useState<Image[]>(initialImageList);
+  const [currentCard, setCurrentCard] = useState<null | Image>(null);
 
-  const dragStartHandler = (card: { img: string; id: number }) => {
+  useEffect(() => {
+    if (!actionData?.imageKey) return;
+    const { imageId, imageKey } = actionData;
+    const newCards = [...cardList];
+    newCards[actionData.imageId] = {
+      id: imageId,
+      imageKey,
+    };
+    setCardList(newCards);
+  }, [actionData]);
+
+  const dragStartHandler = (card: Image) => {
     setCurrentCard(card);
   };
 
-  const dropHandler = (
-    e: DragEvent<HTMLDivElement>,
-    card: {
-      img: string;
-      id: number;
-    }
-  ) => {
+  const dropHandler = (e: DragEvent<HTMLDivElement>, card: Image) => {
     e.preventDefault();
     if (!currentCard) return;
     setCardList(
       cardList.map((c) => {
-        if (c.id === card.id) return { ...c, img: currentCard.img };
-        if (c.id === currentCard.id) return { ...c, img: card.img };
+        if (c.id === card.id) return { ...c, imageKey: currentCard.imageKey };
+        if (c.id === currentCard.id) return { ...c, imageKey: card.imageKey };
         return c;
       })
     );
   };
 
+  const handleChange = (e: FormEvent<HTMLFormElement>) => {
+    submit(e.currentTarget, { replace: true });
+  };
+
   return (
     <div className="w-full flex justify-center">
-      <ImageList sx={{ width: 774 }} variant="quilted" cols={6} rowHeight={129}>
+      <ImageList sx={{ width: 774 }} variant="quilted" cols={6} rowHeight={140}>
         {cardList.map((item) => (
-          <ImageListItem key={item.id} cols={item.cols} rows={item.rows}>
-            <div
-              className="h-full cursor-grab relative"
-              draggable={true}
-              onDragStart={() => dragStartHandler(item)}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => dropHandler(e, item)}
-            >
-              <div className="absolute top-1 right-0 flex">
-                <IconButton size="small" className="text-white mr-2 bg-main">
-                  <ErrorOutline />
-                </IconButton>
-                <IconButton size="small" className="text-white bg-main">
-                  <Close />
-                </IconButton>
+          <ImageListItem
+            key={item.id}
+            cols={item.id === 0 ? 3 : undefined}
+            rows={item.id === 0 ? 3 : undefined}
+          >
+            {item.imageKey ? (
+              <div
+                className="h-full relative"
+                draggable={true}
+                onDragStart={() => dragStartHandler(item)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => dropHandler(e, item)}
+              >
+                <div className="absolute top-1 right-1 flex">
+                  <Tooltip title="Mark as deffect">
+                    <IconButton
+                      size="small"
+                      className="text-white backdrop-brightness-50 bg-white/30 mr-1"
+                    >
+                      <ErrorOutline />
+                    </IconButton>
+                  </Tooltip>
+                  <IconButton
+                    size="small"
+                    className="text-white backdrop-brightness-50 bg-white/30"
+                  >
+                    <Close />
+                  </IconButton>
+                </div>
+                <div className="absolute top-1 left-3">
+                  <IconButton
+                    size="small"
+                    className="text-white backdrop-brightness-50 bg-white/30"
+                  >
+                    <Search />
+                  </IconButton>
+                </div>
+                <img
+                  src={item.imageKey}
+                  alt={"Item"}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
               </div>
-              <div className="absolute top-1 left-2">
-                <IconButton size="small" className="text-white bg-main">
-                  <ZoomIn />
-                </IconButton>
-              </div>
-              <img
-                // TODO: Test with backend size
-                {...srcset(item.img, 100, item.rows, item.cols)}
-                alt={"Item"}
+            ) : (
+              <Form
+                method="post"
+                encType="multipart/form-data"
                 className="h-full"
-                loading="lazy"
-              />
-            </div>
+                onChange={handleChange}
+              >
+                <label
+                  htmlFor={item.id.toString()}
+                  className="h-full flex items-center justify-center rounded-md bg-[#f2f2f2] hover:bg-[#ebebeb]"
+                >
+                  <div>
+                    <AddAPhoto className="w-9 h-9" />
+                  </div>
+                  <input hidden readOnly name="imageId" value={item.id} />
+                  <input
+                    name={"image"}
+                    id={item.id.toString()}
+                    accept="image/*"
+                    type="file"
+                    hidden
+                  />
+                </label>
+              </Form>
+            )}
           </ImageListItem>
         ))}
       </ImageList>

@@ -1,5 +1,9 @@
 import { Button } from "@mui/material";
 import type { ActionFunction } from "@remix-run/node";
+import {
+  unstable_createMemoryUploadHandler,
+  unstable_parseMultipartFormData,
+} from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { ClientOnly } from "remix-utils";
 import {
@@ -20,28 +24,50 @@ import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
 
 export const action: ActionFunction = async ({ request }) => {
-  const form = await request.formData();
-  const shipping = form.getAll("shipping");
-  const formEntries = Object.fromEntries(form);
-  const body = getBody(formEntries);
-  if (body.size === "false") delete body.size;
+  const contentType = request.headers.get("Content-type");
 
-  const response = await fetchInstance({
-    request,
-    route: "/listing/create",
-    method: "POST",
-    body: {
-      ...body,
-      shipping,
-    },
-  });
-  if (response.status === 400) {
-    const { message } = await response.json();
+  if (contentType === "application/x-www-form-urlencoded") {
+    const form = await request.formData();
+    const shipping = form.getAll("shipping");
+    const formEntries = Object.fromEntries(form);
+    const body = getBody(formEntries);
+    if (body.size === "false") delete body.size;
 
-    const errors = getErrors(message);
-    return { errors };
+    const response = await fetchInstance({
+      request,
+      route: "/listing/create",
+      method: "POST",
+      body: {
+        ...body,
+        shipping,
+      },
+    });
+    if (response.status === 400) {
+      const { message } = await response.json();
+
+      const errors = getErrors(message);
+      return { errors };
+    }
+    return response;
   }
-  return response;
+  const uploadHandler = unstable_createMemoryUploadHandler({
+    maxPartSize: 1000_000,
+  });
+  const formData = await unstable_parseMultipartFormData(
+    request,
+    uploadHandler
+  );
+  const imageId = formData.get("imageId");
+
+  const { imageKey } = await fetchInstance({
+    request,
+    route: "/image/upload",
+    method: "POST",
+    formData: true,
+    body: formData,
+  }).then((res) => res.json());
+  console.log(imageKey);
+  return { imageKey, imageId: Number(imageId) };
 };
 
 const SellRoute = () => {
@@ -93,20 +119,21 @@ const SellRoute = () => {
             </div>
           </div>
         </div>
-        <div className="flex mt-6 flex-col justify-center items-center">
-          <div className="w-[774px] mb-6 flex justify-start">
-            <FieldTitle title="Item Photos" required={true} />
-          </div>
-          <Photos />
-          <Button
-            variant="contained"
-            className=" mx-auto w-72 mt-12"
-            type="submit"
-          >
-            Create
-          </Button>
-        </div>
       </Form>
+
+      <div className="flex mt-6 flex-col justify-center items-center">
+        <div className="w-[774px] mb-6 flex justify-start">
+          <FieldTitle title="Photos" required={true} />
+        </div>
+        <Photos />
+        <Button
+          variant="contained"
+          className=" mx-auto w-72 mt-12"
+          type="submit"
+        >
+          Create
+        </Button>
+      </div>
     </div>
   );
 };
