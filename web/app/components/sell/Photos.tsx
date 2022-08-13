@@ -1,9 +1,15 @@
-import { IconButton, ImageList, ImageListItem, Tooltip } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  ImageList,
+  ImageListItem,
+} from "@mui/material";
 import type { DragEvent, FormEvent } from "react";
 import { useState, useEffect } from "react";
-import { AddAPhoto, Close, ErrorOutline, Search } from "@mui/icons-material";
-import { Form, useActionData, useSubmit } from "@remix-run/react";
-import { S3_URL } from "~/constants/s3";
+import { AddAPhoto, Close, Search } from "@mui/icons-material";
+import { useFetcher } from "@remix-run/react";
+
+import { Gallery, Item } from "react-photoswipe-gallery";
 
 const initialImageList = [
   { id: 0, imageKey: null },
@@ -18,33 +24,42 @@ const initialImageList = [
   { id: 9, imageKey: null },
 ];
 
-interface Image {
+interface ItemImage {
   imageKey: string | null;
   id: number;
+  height?: number;
+  width?: number;
 }
 
 const Photos = () => {
-  const submit = useSubmit();
-  const actionData = useActionData();
-  const [cardList, setCardList] = useState<Image[]>(initialImageList);
-  const [currentCard, setCurrentCard] = useState<null | Image>(null);
+  const [cardList, setCardList] = useState<ItemImage[]>(initialImageList);
+  const [currentCard, setCurrentCard] = useState<null | ItemImage>(null);
+  const fetcher = useFetcher();
+  const [imageLoading, setImageLoading] = useState<number | boolean>(false);
+  const imageLoadingId = Number(fetcher.submission?.formData.get("imageId"));
 
   useEffect(() => {
-    if (!actionData?.imageKey) return;
-    const { imageId, imageKey } = actionData;
+    if (!fetcher.data?.imageKey) return;
+    const { imageId, imageKey } = fetcher.data;
+    setImageLoading(imageId);
     const newCards = [...cardList];
-    newCards[actionData.imageId] = {
-      id: imageId,
-      imageKey,
+    const img = new Image();
+    img.src = imageKey;
+    img.onload = () => {
+      newCards[imageId] = {
+        id: imageId,
+        imageKey,
+        height: img.height,
+        width: img.width,
+      };
+      setCardList(newCards);
+      setImageLoading(false);
     };
-    setCardList(newCards);
-  }, [actionData]);
+  }, [fetcher.data]);
 
-  const dragStartHandler = (card: Image) => {
-    setCurrentCard(card);
-  };
+  const dragStartHandler = (card: ItemImage) => setCurrentCard(card);
 
-  const dropHandler = (e: DragEvent<HTMLDivElement>, card: Image) => {
+  const dropHandler = (e: DragEvent<HTMLDivElement>, card: ItemImage) => {
     e.preventDefault();
     if (!currentCard) return;
     setCardList(
@@ -56,86 +71,110 @@ const Photos = () => {
     );
   };
 
+  const handleDeleteImage = (imageId: number) => {
+    const newCards = [...cardList];
+    newCards[imageId] = { id: imageId, imageKey: null };
+    setCardList(newCards);
+  };
+
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
-    submit(e.currentTarget, { replace: true });
+    fetcher.submit(e.currentTarget, { replace: true });
   };
 
   return (
     <div className="w-full flex justify-center">
-      <ImageList sx={{ width: 774 }} variant="quilted" cols={6} rowHeight={140}>
-        {cardList.map((item) => (
-          <ImageListItem
-            key={item.id}
-            cols={item.id === 0 ? 3 : undefined}
-            rows={item.id === 0 ? 3 : undefined}
-          >
-            {item.imageKey ? (
-              <div
-                className="h-full relative"
-                draggable={true}
-                onDragStart={() => dragStartHandler(item)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => dropHandler(e, item)}
-              >
-                <div className="absolute top-1 right-1 flex">
-                  <Tooltip title="Mark as deffect">
-                    <IconButton
-                      size="small"
-                      className="text-white backdrop-brightness-50 bg-white/30 mr-1"
-                    >
-                      <ErrorOutline />
-                    </IconButton>
-                  </Tooltip>
-                  <IconButton
-                    size="small"
-                    className="text-white backdrop-brightness-50 bg-white/30"
-                  >
-                    <Close />
-                  </IconButton>
-                </div>
-                <div className="absolute top-1 left-3">
-                  <IconButton
-                    size="small"
-                    className="text-white backdrop-brightness-50 bg-white/30"
-                  >
-                    <Search />
-                  </IconButton>
-                </div>
-                <img
-                  src={item.imageKey}
-                  alt={"Item"}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            ) : (
-              <Form
-                method="post"
-                encType="multipart/form-data"
-                className="h-full"
-                onChange={handleChange}
-              >
-                <label
-                  htmlFor={item.id.toString()}
-                  className="h-full flex items-center justify-center rounded-md bg-[#f2f2f2] hover:bg-[#ebebeb]"
+      <Gallery>
+        <ImageList
+          sx={{ width: 774 }}
+          variant="quilted"
+          cols={6}
+          rowHeight={140}
+        >
+          {cardList.map((item) => (
+            <ImageListItem
+              key={item.id}
+              cols={item.id === 0 ? 3 : undefined}
+              rows={item.id === 0 ? 3 : undefined}
+            >
+              {item.imageKey ? (
+                <div
+                  className="h-full relative cursor-grab"
+                  draggable={true}
+                  onDragStart={() => dragStartHandler(item)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => dropHandler(e, item)}
                 >
-                  <div>
-                    <AddAPhoto className="w-9 h-9" />
+                  <div className="absolute top-1 right-1 flex">
+                    <IconButton
+                      onClick={() => handleDeleteImage(item.id)}
+                      size="small"
+                      className="text-white backdrop-brightness-50 bg-white/30"
+                    >
+                      <Close />
+                    </IconButton>
                   </div>
-                  <input hidden readOnly name="imageId" value={item.id} />
-                  <input
-                    name={"image"}
-                    id={item.id.toString()}
-                    accept="image/*"
-                    type="file"
-                    hidden
-                  />
-                </label>
-              </Form>
-            )}
-          </ImageListItem>
-        ))}
-      </ImageList>
+                  <Item
+                    original={item.imageKey}
+                    width={item.width}
+                    height={item.height}
+                  >
+                    {({ ref, open }) => (
+                      <>
+                        <div className="absolute top-1 left-3">
+                          <IconButton
+                            size="small"
+                            onClick={open}
+                            className="text-white backdrop-brightness-50 bg-white/30"
+                          >
+                            <Search />
+                          </IconButton>
+                        </div>
+                        <img
+                          // @ts-ignore
+                          ref={ref}
+                          // @ts-ignore
+                          src={item.imageKey}
+                          alt={"Item"}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </>
+                    )}
+                  </Item>
+                </div>
+              ) : imageLoadingId === item.id || imageLoading === item.id ? (
+                <div className="h-full w-full flex items-center justify-center">
+                  <CircularProgress color="primary" />
+                </div>
+              ) : (
+                <fetcher.Form
+                  method="post"
+                  encType="multipart/form-data"
+                  className="h-full"
+                  onChange={handleChange}
+                >
+                  <label
+                    htmlFor={item.id.toString()}
+                    className="h-full flex items-center justify-center rounded-md bg-[#f2f2f2] hover:bg-[#ebebeb]"
+                  >
+                    <div>
+                      <AddAPhoto className="w-9 h-9" />
+                    </div>
+                    <input hidden readOnly name="imageId" value={item.id} />
+                    <input
+                      name={"image"}
+                      id={item.id.toString()}
+                      accept="image/*"
+                      type="file"
+                      hidden
+                    />
+                  </label>
+                </fetcher.Form>
+              )}
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </Gallery>
     </div>
   );
 };

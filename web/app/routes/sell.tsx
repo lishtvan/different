@@ -66,7 +66,6 @@ export const action: ActionFunction = async ({ request }) => {
     formData: true,
     body: formData,
   }).then((res) => res.json());
-  console.log(imageKey);
   return { imageKey, imageId: Number(imageId) };
 };
 
