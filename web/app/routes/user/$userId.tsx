@@ -8,7 +8,6 @@ import {
   useLocation,
 } from "@remix-run/react";
 import { LocationOnOutlined } from "@mui/icons-material";
-import { S3_URL } from "~/constants/s3";
 import { activeNavLinkStyle, notActiveNavLinkStyle } from "~/constants/styles";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
@@ -41,7 +40,7 @@ const UserRoute = () => {
     <div className="mt-4">
       <div className="flex justify-center items-center">
         <Avatar
-          src={(avatarKey && `${S3_URL}/${avatarKey}`) || ProfileImage}
+          src={avatarKey || ProfileImage}
           sx={{ height: "160px", width: "160px" }}
         />
         <div className="ml-14">

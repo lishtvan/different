@@ -3,7 +3,7 @@ export const DARK_COLOR = "#167994";
 export const notActiveNavLinkStyle = {
   textDecoration: "underline",
   textDecorationThickness: "3px",
-  textUnderlineOffset: "3px",
+  textUnderlineOffset: "4px",
 };
 
 export const activeNavLinkStyle = {

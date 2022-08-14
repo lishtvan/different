@@ -19,7 +19,6 @@ import {
   useSubmit,
   useTransition,
 } from "@remix-run/react";
-import { S3_URL } from "~/constants/s3";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "./../../assets/profile.jpeg";
@@ -143,12 +142,9 @@ const UserEditRoute = () => {
                 <img
                   src={
                     // TODO: rewrite to imageUrl
-                    (data?.imageKey && `${S3_URL}/${data?.imageKey}`) ||
-                    (avatarKey && `${S3_URL}/${avatarKey}`) ||
-                    ProfileImage
+                    data?.imageKey || avatarKey || ProfileImage
                   }
                   alt="avatar"
-                  loading="lazy"
                 />
                 <div className="profile__upload">
                   <button className="profile__button">

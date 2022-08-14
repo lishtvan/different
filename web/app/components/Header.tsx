@@ -10,7 +10,6 @@ import {
 import { Form, Link, useSearchParams } from "@remix-run/react";
 import type { FC } from "react";
 import { useState } from "react";
-import { S3_URL } from "~/constants/s3";
 import ProfileImage from "./../assets/profile.jpeg";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -87,10 +86,7 @@ const Header: FC<Props> = ({ user }) => {
               <div className="rounded-full border-4 border-white hover:border-main">
                 <Avatar
                   className="border-2 border-white"
-                  src={
-                    (user.avatarKey && `${S3_URL}/${user.avatarKey}`) ||
-                    ProfileImage
-                  }
+                  src={user.avatarKey || ProfileImage}
                   sx={{ width: 50, height: 50 }}
                 />
               </div>
