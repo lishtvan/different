@@ -50,6 +50,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
     return response;
   }
+
   const uploadHandler = unstable_createMemoryUploadHandler({
     maxPartSize: 1000_000,
   });
@@ -57,6 +58,17 @@ export const action: ActionFunction = async ({ request }) => {
     request,
     uploadHandler
   );
+  const images = formData.get("images");
+  if (images) {
+    const imageKeys = await fetchInstance({
+      request,
+      route: "/image/uploadMany",
+      method: "POST",
+      formData: true,
+      body: formData,
+    }).then((res) => res.json());
+    return { imageKeys };
+  }
   const imageId = formData.get("imageId");
 
   const { imageKey } = await fetchInstance({
