@@ -1,5 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useState } from "react";
+import { TAGS } from "~/constants/listing";
 import FieldTitle from "./FieldTitle";
 
 const Tags = () => {
@@ -12,7 +13,7 @@ const Tags = () => {
       <Autocomplete
         className="w-full"
         multiple
-        options={tags.length === 3 ? [] : ["#vintage", "#nature", "#music"]}
+        options={tags.length === 3 ? [] : TAGS}
         freeSolo={tags.length < 3}
         disableCloseOnSelect
         blurOnSelect={tags.length === 2}

@@ -519,8 +519,7 @@ export const DESIGNERS = [
 
 export const TAGS = [
   "#Music Band",
-  "Music",
-  "Merch",
+  "#Merch",
   "#Nature",
   "#Animals",
   "#Movie",
@@ -547,10 +546,147 @@ export const TAGS = [
   "#Pockets",
   "#Minimalism",
   "#Collaboration",
-  "Anime",
+  "#Anime",
   "#Celebrity",
   "#Hip-hop",
   "#Drill",
   "#Hypebeast",
+  "#Music",
 ];
-// TODO: Move constants
+
+export const SIZES = {
+  Tops: [
+    "US XXS / EU 40",
+    "US XS / EU 42",
+    "US S / EU 44-46",
+    "US M / EU 48-50",
+    "US L / EU 52-54",
+    "US XL / EU 56",
+    "US XXL / EU 58",
+  ],
+  Bottoms: [
+    "US 28-29/ EU 44/ XS",
+    "US 30-31/ EU 46/ S",
+    "US 32-33/ EU 48/ M",
+    "US 34-35/ EU 50/ L",
+    "US 36-37/ EU 52/ XL",
+    "US 38-39/ EU 54/ XXL",
+    "US 40-41/ EU 56/ 3XL",
+  ],
+  Outerwear: [
+    "US XXS / EU 40",
+    "US XS / EU 42",
+    "US S / EU 44-46",
+    "US M / EU 48-50",
+    "US L / EU 52-54",
+    "US XL / EU 56",
+    "US XXL / EU 58",
+  ],
+  Footwear: [
+    "US 5 / EU 37",
+    "US 5.5 / EU 38",
+    "US 6 / EU 39",
+    "US 6.5 / EU 39-40",
+    "US 7 / EU 40",
+    "US 7.5 / EU 40-41",
+    "US 8 / EU 41",
+    "US 8.5 / EU 41-42",
+    "US 9 / EU 42",
+    "US 9.5 / EU 42-43",
+    "US 10 / EU 43",
+    "US 10.5 / EU 43-44",
+    "US 11 / EU 44",
+    "US 11.5 / EU 44-45",
+    "US 12 / EU 45",
+    "US 12.5 / EU 45-46",
+    "US 13 / EU 46",
+    "US 14 / EU 47",
+    "US 15 / EU 48 ",
+  ],
+  Tailoring: [
+    "34S",
+    "34R",
+    "36S",
+    "36R",
+    "38S",
+    "38R",
+    "38L",
+    "40S",
+    "40R",
+    "40L",
+    "42S",
+    "42R",
+    "42L",
+    "44S",
+    "44R",
+    "44L",
+    "46S",
+    "46R",
+    "46L",
+  ],
+  Accessories: ["ONE SIZE"],
+};
+
+export type Section =
+  | "Tops"
+  | "Bottoms"
+  | "Outerwear"
+  | "Footwear"
+  | "Tailoring"
+  | "Accessories";
+
+type Categories = Record<Section, string[]>;
+
+export const CATEGORIES: Categories = {
+  Tops: [
+    "T-shirts",
+    "Long sleeve t-shirts",
+    "Polo shirts",
+    "Shirts button up",
+    "Sweaters",
+    "Hoodies",
+    "Sweatshirts",
+  ],
+  Bottoms: [
+    "Pants",
+    "Cargo pants",
+    "Jeans",
+    "Shorts",
+    "Cropped pants",
+    "Track pants",
+    "Overalls",
+  ],
+  Outerwear: [
+    "Jackets",
+    "Windbreakers",
+    "Bomber jackets",
+    "Leather jackets",
+    "Parkas",
+    "Denim jackets",
+    "Coats",
+    "Trenches",
+    "Vests",
+  ],
+  Footwear: [
+    "Sneakers",
+    "Cotton sneakers",
+    "Casual shoes",
+    "Boots",
+    "Sandals",
+    "Slip-ons",
+    "Flip-flops",
+  ],
+  Tailoring: ["Suits", "Blazers", "Suit pants", "Suit vests"],
+  Accessories: [
+    "Bags",
+    "Belts",
+    "Wallets",
+    "Glasses",
+    "Hats",
+    "Casual hats",
+    "Gloves",
+    "Scarfs",
+    "Ties",
+    "Jewelry",
+  ],
+};

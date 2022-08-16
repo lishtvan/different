@@ -1,11 +1,10 @@
 import { MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
-import type { Section } from "~/constants/categories";
-import { CATEGORIES } from "~/constants/categories";
-import { SIZES } from "~/constants/sizes";
 import FieldTitle from "./FieldTitle";
 
 import type { FC } from "react";
+import type { Section} from "~/constants/listing";
+import { CATEGORIES, SIZES } from "~/constants/listing";
 
 interface Props {
   sizeError: string;

@@ -1,5 +1,5 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { DESIGNERS } from "~/constants/designers";
+import { DESIGNERS } from "~/constants/listing";
 import FieldTitle from "./FieldTitle";
 import type { FC } from "react";
 

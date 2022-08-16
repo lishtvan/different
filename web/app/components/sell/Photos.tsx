@@ -157,7 +157,7 @@ const Photos = () => {
       <Form
         method="post"
         encType="multipart/form-data"
-        className="flex w-full items-center"
+        className="flex items-center"
         onChange={handleChange}
       >
         <p className="mr-auto">
