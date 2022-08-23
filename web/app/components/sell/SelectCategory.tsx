@@ -1,17 +1,13 @@
 import { MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
 import FieldTitle from "./FieldTitle";
-
-import type { FC } from "react";
 import type { Section } from "~/constants/listing";
 import { CATEGORIES, SIZES } from "~/constants/listing";
+import { useActionData } from "@remix-run/react";
 
-interface Props {
-  sizeError: string;
-  categoryError: string;
-}
+const SelectCategory = () => {
+  const actionData = useActionData();
 
-const SelectCategory: FC<Props> = ({ sizeError, categoryError }) => {
   const [currentSection, setCurrentSection] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -52,7 +48,7 @@ const SelectCategory: FC<Props> = ({ sizeError, categoryError }) => {
           onClose={handleClose}
           onOpen={handleOpen}
           variant="outlined"
-          error={Boolean(categoryError)}
+          error={Boolean(actionData?.errors?.category)}
           MenuProps={{
             MenuListProps: {
               sx: {
@@ -93,8 +89,10 @@ const SelectCategory: FC<Props> = ({ sizeError, categoryError }) => {
             } else return null;
           })}
         </Select>
-        {categoryError && (
-          <p className="ml-2 mt-1 text-[#d32f2f]">{categoryError}</p>
+        {actionData?.errors?.category && (
+          <p className="ml-2 mt-1 text-[#d32f2f]">
+            {actionData.errors.category}
+          </p>
         )}
       </div>
       <div>
@@ -104,13 +102,13 @@ const SelectCategory: FC<Props> = ({ sizeError, categoryError }) => {
           disabled={!selectedSection}
           name="size"
           value={size}
-          error={Boolean(sizeError)}
+          error={Boolean(actionData?.errors?.size)}
           onChange={(e) => setSize(e.target.value)}
           SelectProps={{
             classes: {
               icon: "border-none",
             },
-            sx: sizeError
+            sx: actionData?.errors?.size
               ? {
                   "& .Mui-disabled": {
                     border: "1px solid red",
@@ -141,7 +139,9 @@ const SelectCategory: FC<Props> = ({ sizeError, categoryError }) => {
             <div></div>
           )}
         </TextField>
-        {sizeError && <p className="ml-2 mt-1 text-[#d32f2f]">{sizeError}</p>}
+        {actionData?.errors?.size && (
+          <p className="ml-2 mt-1 text-[#d32f2f]">{actionData.errors.size}</p>
+        )}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import {
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
+import { useEffect } from "react";
 import { ClientOnly } from "remix-utils";
 import {
   CardNumber,
@@ -28,7 +29,6 @@ export const action: ActionFunction = async ({ request }) => {
   if (contentType === "application/x-www-form-urlencoded") {
     const form = await request.formData();
     const body = getBody(form);
-
     const response = await fetchInstance({
       request,
       route: "/listing/create",
@@ -45,7 +45,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   const uploadHandler = unstable_createMemoryUploadHandler({
-    maxPartSize: 1000_000,
+    maxPartSize: 5000_000,
   });
   const formData = await unstable_parseMultipartFormData(
     request,
@@ -75,7 +75,28 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const SellRoute = () => {
-  const data = useActionData();
+  const actionData = useActionData();
+
+  useEffect(() => {
+    if (!actionData?.errors) return;
+    const { title, designer, size, imageUrls, category } = actionData.errors;
+    if (title || designer || category || size) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+      return;
+    }
+    if (imageUrls) {
+      console.log("helllllo");
+      window.scrollTo({
+        top: 300,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [actionData]);
 
   return (
     <div className="flex mt-6 mb-36 mx-auto justify-center items-center flex-col xl:w-2/3">
@@ -84,24 +105,21 @@ const SellRoute = () => {
         method="post"
         className="mt-6 grid grid-cols-2 gap-x-8 gap-y-6 w-full"
       >
-        <ItemTitle error={data?.errors?.title} />
-        <Designer error={data?.errors?.designer} />
-        <SelectCategory
-          sizeError={data?.errors?.size}
-          categoryError={data?.errors?.category}
-        />
+        <ItemTitle />
+        <Designer />
+        <SelectCategory />
         <Photos />
         <Description />
         <div className="col-start-1 col-end-3 grid grid-cols-2 gap-8">
-          <Condition error={data?.errors?.condition} />
+          <Condition />
           <Tags />
         </div>
-        <Shipping error={data?.errors?.shipping} />
+        <Shipping />
         <div>
           <ClientOnly fallback={<p>Loading...</p>}>
-            {() => <CardNumber error={data?.errors?.cardNumber} />}
+            {() => <CardNumber />}
           </ClientOnly>
-          <Price error={data?.errors?.price} />
+          <Price />
         </div>
         <Button
           variant="contained"

@@ -2,13 +2,10 @@ import { InputAdornment, TextField } from "@mui/material";
 import FieldTitle from "./FieldTitle";
 import { usePaymentInputs } from "react-payment-inputs";
 import images from "react-payment-inputs/images";
-import type { FC } from "react";
+import { useActionData } from "@remix-run/react";
 
-interface Props {
-  error: string;
-}
-
-const CardNumber: FC<Props> = ({ error }) => {
+const CardNumber = () => {
+  const actionData = useActionData();
   const { getCardNumberProps, getCardImageProps, meta } = usePaymentInputs();
 
   return (
@@ -19,7 +16,10 @@ const CardNumber: FC<Props> = ({ error }) => {
         type="tel"
         name="cardNumber"
         inputProps={getCardNumberProps({})}
-        error={(meta.isTouched && Boolean(meta.error)) || Boolean(error)}
+        error={
+          (meta.isTouched && Boolean(meta.error)) ||
+          Boolean(actionData?.errors?.cardNumber)
+        }
         label={(meta.isTouched && meta.error) || undefined}
         InputProps={{
           endAdornment: (
@@ -30,7 +30,9 @@ const CardNumber: FC<Props> = ({ error }) => {
           ),
         }}
       />
-      {error && <p className="ml-2 mt-1 text-[#d32f2f]">{error}</p>}
+      {actionData?.errors?.cardNumber && (
+        <p className="ml-2 mt-1 text-[#d32f2f]">{actionData.errors.cardNumber}</p>
+      )}
     </div>
   );
 };

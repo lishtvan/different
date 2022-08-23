@@ -14,7 +14,7 @@ import {
   Search,
   Delete,
 } from "@mui/icons-material";
-import { Form, useFetcher } from "@remix-run/react";
+import { Form, useActionData, useFetcher } from "@remix-run/react";
 
 import { Gallery, Item } from "react-photoswipe-gallery";
 import FieldTitle from "./FieldTitle";
@@ -43,6 +43,7 @@ const Photos = () => {
   const [cardList, setCardList] = useState<ItemImage[]>(initialImageList);
   const [currentCard, setCurrentCard] = useState<null | ItemImage>(null);
   const fetcher = useFetcher();
+  const actionData = useActionData();
   const [imageLoading, setImageLoading] = useState<number | boolean>(false);
   const imageLoadingId = Number(fetcher.submission?.formData.get("imageId"));
   const imagesLoading = fetcher.submission?.formData.get("images");
@@ -156,7 +157,11 @@ const Photos = () => {
   return (
     <div className="col-start-1 col-end-3">
       <FieldTitle required={true} title="Photos" />
-      <p className="ml-2 mt-1 text-[#d32f2f]">At least one photo is required</p>
+      {actionData?.errors?.imageUrls && (
+        <p className="ml-2 mt-1 text-[#d32f2f]">
+          {actionData.errors.imageUrls}
+        </p>
+      )}
       <Form
         method="post"
         encType="multipart/form-data"
@@ -224,6 +229,12 @@ const Photos = () => {
                         <Close />
                       </IconButton>
                     </div>
+                    <input
+                      hidden
+                      name="imageUrls"
+                      readOnly
+                      value={item.imageKey}
+                    />
                     <Item
                       original={item.imageKey}
                       width={item.width}

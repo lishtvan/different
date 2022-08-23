@@ -8,9 +8,9 @@ export const getBody = (form: FormData) => {
     }
     if (!Array.isArray(object[key])) {
       object[key] = [object[key]];
-      const arrayField = object[key] as Array<unknown>;
-      arrayField.push(value);
     }
+    const arrayField = object[key] as Array<unknown>;
+    arrayField.push(value);
   });
   return object;
 };
