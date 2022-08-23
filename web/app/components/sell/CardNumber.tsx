@@ -12,9 +12,8 @@ const CardNumber: FC<Props> = ({ error }) => {
   const { getCardNumberProps, getCardImageProps, meta } = usePaymentInputs();
 
   return (
-    <>
+    <div>
       <FieldTitle title="Card number" required={true} />
-      {error && <p className="ml-2 mb-1 text-[#d32f2f]">{error}</p>}
       <TextField
         fullWidth
         type="tel"
@@ -31,7 +30,8 @@ const CardNumber: FC<Props> = ({ error }) => {
           ),
         }}
       />
-    </>
+      {error && <p className="ml-2 mt-1 text-[#d32f2f]">{error}</p>}
+    </div>
   );
 };
 

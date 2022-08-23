@@ -7,9 +7,8 @@ interface Props {
   error: string;
 }
 const Designer: FC<Props> = ({ error }) => (
-  <>
+  <div>
     <FieldTitle title="Designer" required={true} />
-    {error && <p className="ml-2 mb-1 text-[#d32f2f]">{error}</p>}
     <Autocomplete
       className="w-full"
       options={DESIGNERS}
@@ -23,7 +22,8 @@ const Designer: FC<Props> = ({ error }) => (
         />
       )}
     />
-  </>
+    {error && <p className="ml-2 mt-1 text-[#d32f2f]">{error}</p>}
+  </div>
 );
 
 export default Designer;

@@ -7,7 +7,7 @@ const Tags = () => {
   const [tags, setTags] = useState<string[]>([]);
 
   return (
-    <>
+    <div>
       <FieldTitle title="Tags" required={false} />
       <input hidden name="tags" readOnly value={tags} />
       <Autocomplete
@@ -45,7 +45,7 @@ const Tags = () => {
           />
         )}
       />
-    </>
+    </div>
   );
 };
 

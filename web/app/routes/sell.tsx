@@ -11,7 +11,6 @@ import {
   Condition,
   Description,
   Designer,
-  FieldTitle,
   ItemTitle,
   Photos,
   Price,
@@ -28,19 +27,13 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (contentType === "application/x-www-form-urlencoded") {
     const form = await request.formData();
-    const shipping = form.getAll("shipping");
-    const formEntries = Object.fromEntries(form);
-    const body = getBody(formEntries);
-    if (body.size === "false") delete body.size;
+    const body = getBody(form);
 
     const response = await fetchInstance({
       request,
       route: "/listing/create",
       method: "POST",
-      body: {
-        ...body,
-        shipping,
-      },
+      body,
     });
     if (response.status === 400) {
       const { message } = await response.json();
@@ -85,66 +78,39 @@ const SellRoute = () => {
   const data = useActionData();
 
   return (
-    <div className="flex mt-6 mb-36 justify-center items-center flex-col">
+    <div className="flex mt-6 mb-36 mx-auto justify-center items-center flex-col xl:w-2/3">
       <div className="text-3xl font-semibold">Create a new listing</div>
-      <Form method="post" className="w-full">
-        <div className="flex flex-col items-center mx-auto">
-          <div className="mt-6 flex">
-            <div className="w-[375px]">
-              <ItemTitle error={data?.errors?.title} />
-              <div className="mt-6">
-                <Designer error={data?.errors?.designer} />
-              </div>
-            </div>
-            <div className="w-[375px] ml-6">
-              <SelectCategory
-                sizeError={data?.errors?.size}
-                categoryError={data?.errors?.category}
-              />
-            </div>
-          </div>
-          <div className="w-[774px] mt-6">
-            <Description />
-          </div>
-          <div className="flex">
-            <div className="mt-6 w-[375px]">
-              <Condition error={data?.errors?.condition} />
-            </div>
-            <div className="mt-6 w-[375px] ml-6">
-              <Tags />
-            </div>
-          </div>
-          <div className="flex">
-            <div className="mt-6 w-[375px]">
-              <Shipping error={data?.errors?.shipping} />
-            </div>
-            <div className="w-[375px] ml-6">
-              <div className="mt-6">
-                <ClientOnly fallback={<p>Loading...</p>}>
-                  {() => <CardNumber error={data?.errors?.cardNumber} />}
-                </ClientOnly>
-              </div>
-              <div className="mt-6">
-                <Price error={data?.errors?.price} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </Form>
-
-      <div className="flex mt-6 flex-col justify-center items-center">
-        <div className="w-[774px] mb-6 flex justify-start">
-          <FieldTitle title="Photos" required={true} />
-        </div>
+      <Form
+        method="post"
+        className="mt-6 grid grid-cols-2 gap-x-8 gap-y-6 w-full"
+      >
+        <ItemTitle error={data?.errors?.title} />
+        <Designer error={data?.errors?.designer} />
+        <SelectCategory
+          sizeError={data?.errors?.size}
+          categoryError={data?.errors?.category}
+        />
         <Photos />
+        <Description />
+        <div className="col-start-1 col-end-3 grid grid-cols-2 gap-8">
+          <Condition error={data?.errors?.condition} />
+          <Tags />
+        </div>
+        <Shipping error={data?.errors?.shipping} />
+        <div>
+          <ClientOnly fallback={<p>Loading...</p>}>
+            {() => <CardNumber error={data?.errors?.cardNumber} />}
+          </ClientOnly>
+          <Price error={data?.errors?.price} />
+        </div>
         <Button
           variant="contained"
-          className=" mx-auto w-72 mt-12"
+          className="col-start-1 col-end-3 mx-auto w-1/3 mt-12"
           type="submit"
         >
           Create
         </Button>
-      </div>
+      </Form>
     </div>
   );
 };

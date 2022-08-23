@@ -9,7 +9,7 @@ interface Props {
 }
 
 const Shipping: FC<Props> = ({ error }) => (
-  <>
+  <div>
     <FieldTitle title="Shipping" required={true} />
     {error && <p className="ml-2 mb-1 text-[#d32f2f]">{error}</p>}
     <div className="flex flex-col ml-2 mt-6">
@@ -41,7 +41,7 @@ const Shipping: FC<Props> = ({ error }) => (
         }
       />
     </div>
-  </>
+  </div>
 );
 
 export default Shipping;

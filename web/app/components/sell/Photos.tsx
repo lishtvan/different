@@ -17,6 +17,7 @@ import {
 import { Form, useFetcher } from "@remix-run/react";
 
 import { Gallery, Item } from "react-photoswipe-gallery";
+import FieldTitle from "./FieldTitle";
 
 interface ItemImage {
   imageKey: string | null;
@@ -153,14 +154,16 @@ const Photos = () => {
   };
 
   return (
-    <>
+    <div className="col-start-1 col-end-3">
+      <FieldTitle required={true} title="Photos" />
+      <p className="ml-2 mt-1 text-[#d32f2f]">At least one photo is required</p>
       <Form
         method="post"
         encType="multipart/form-data"
         className="flex items-center"
         onChange={handleChange}
       >
-        <p className="mr-auto">
+        <p className="ml-2 mr-auto">
           Note: You can change order of images by grabbing them.
         </p>
         <Button
@@ -193,7 +196,7 @@ const Photos = () => {
       <div className="w-full mt-3 flex justify-center">
         <Gallery>
           <ImageList
-            sx={{ width: 774 }}
+            className="w-full"
             variant="quilted"
             cols={6}
             rowHeight={140}
@@ -288,7 +291,7 @@ const Photos = () => {
           </ImageList>
         </Gallery>
       </div>
-    </>
+    </div>
   );
 };
 

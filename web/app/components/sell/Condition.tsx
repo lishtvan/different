@@ -7,9 +7,8 @@ interface Props {
 }
 
 const Condition: FC<Props> = ({ error }) => (
-  <>
+  <div>
     <FieldTitle title="Condition" required={true} />
-    {error && <p className="ml-2 mb-1 text-[#d32f2f]">{error}</p>}
     <TextField
       select
       error={Boolean(error)}
@@ -31,7 +30,8 @@ const Condition: FC<Props> = ({ error }) => (
       <MenuItem value={"Used"}>Used</MenuItem>
       <MenuItem value={"Very worn"}>Very worn</MenuItem>
     </TextField>
-  </>
+    {error && <p className="ml-2 mt-1 text-[#d32f2f]">{error}</p>}
+  </div>
 );
 
 export default Condition;

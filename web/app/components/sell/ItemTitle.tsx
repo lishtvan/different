@@ -7,9 +7,8 @@ interface Props {
 }
 
 const ItemTitle: FC<Props> = ({ error }) => (
-  <>
+  <div>
     <FieldTitle title="Title" required={true} />
-    {error && <p className="ml-2 mb-1 text-[#d32f2f]">{error}</p>}
     <TextField
       name="title"
       error={Boolean(error)}
@@ -19,7 +18,8 @@ const ItemTitle: FC<Props> = ({ error }) => (
       }}
       className="w-full"
     />
-  </>
+    {error && <p className="ml-2 mt-1 text-[#d32f2f]">{error}</p>}
+  </div>
 );
 
 export default ItemTitle;

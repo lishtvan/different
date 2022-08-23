@@ -14,7 +14,6 @@ const schema = {
       'cardNumber',
       'shipping',
       'category',
-      'currency',
     ],
     errorMessage: {
       required: {
@@ -26,7 +25,6 @@ const schema = {
         cardNumber: '/cardNumber Card number is required ',
         shipping: '/shipping Shipping is required ',
         category: '/category Category is required ',
-        currency: '/currency Currency is required ',
       },
     },
     properties: {
@@ -65,7 +63,6 @@ const schema = {
           maximum: 'Contact us to sell such expensive item ',
         },
       },
-      currency: { type: 'string' },
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
     },
@@ -87,7 +84,6 @@ const createSale: FastifyPluginAsync = async (fastify) => {
       cardNumber,
       shipping,
       category,
-      currency,
     } = req.body;
     console.log({
       title,
@@ -100,7 +96,6 @@ const createSale: FastifyPluginAsync = async (fastify) => {
       cardNumber,
       shipping,
       category,
-      currency,
     });
     return reply.send({
       title,
