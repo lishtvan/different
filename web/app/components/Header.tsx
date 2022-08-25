@@ -1,28 +1,7 @@
-import type { TooltipProps } from "@mui/material";
-import {
-  Avatar,
-  Button,
-  MenuItem,
-  styled,
-  Tooltip,
-  tooltipClasses,
-} from "@mui/material";
-import { Form, Link, useSearchParams } from "@remix-run/react";
+import { Avatar, Button } from "@mui/material";
+import { Link, useSearchParams } from "@remix-run/react";
 import type { FC } from "react";
-import { useState } from "react";
 import ProfileImage from "./../assets/profile.jpeg";
-
-const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: "rgba(0, 0, 0, 0.87)",
-    boxShadow: theme.shadows[1],
-    fontSize: 11,
-    margin: 0,
-  },
-}));
 
 interface Props {
   user: {
@@ -33,7 +12,6 @@ interface Props {
 // TODO: fix tooltip
 const Header: FC<Props> = ({ user }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [showTooltip, setShowTooltip] = useState(false);
 
   return (
     <header className="bg-white py-3 sticky top-0 z-50">
@@ -45,53 +23,16 @@ const Header: FC<Props> = ({ user }) => {
           <Button variant="contained">SELL</Button>
         </Link>
         {user ? (
-          <LightTooltip
-            placement="bottom"
-            open={showTooltip}
-            onOpen={() => setShowTooltip(true)}
-            onClose={() => setShowTooltip(false)}
-            sx={{ marginTop: "-20px" }}
-            title={
-              <>
-                <Link
-                  to={`/user/${user.id}`}
-                  onClick={() => setShowTooltip(false)}
-                >
-                  <MenuItem>
-                    <div className="text-lg">Profile</div>
-                  </MenuItem>
-                </Link>
-                <Link
-                  to={`/user/edit`}
-                  onClick={() => setShowTooltip(false)}
-                  className="text-lg"
-                >
-                  <MenuItem>
-                    <div className="text-lg">Edit</div>
-                  </MenuItem>
-                </Link>
-                <Form action="/logout" method="post">
-                  <button
-                    type="submit"
-                    onClick={() => setShowTooltip(false)}
-                    className="text-lg"
-                  >
-                    <MenuItem>Log out</MenuItem>
-                  </button>
-                </Form>
-              </>
-            }
-          >
-            <Link to={`/user/${user.id}`}>
-              <div className="rounded-full border-4 border-white hover:border-main">
-                <Avatar
-                  className="border-2 border-white"
-                  src={user.avatarKey || ProfileImage}
-                  sx={{ width: 50, height: 50 }}
-                />
-              </div>
-            </Link>
-          </LightTooltip>
+          <Link to={`/user/${user.id}`}>
+            <div className="rounded-full border-4 border-white hover:border-main">
+              {/* retest with big size */}
+              <Avatar
+                className="border-2 border-white"
+                src={user.avatarKey || ProfileImage}
+                sx={{ width: 50, height: 50 }}
+              />
+            </div>
+          </Link>
         ) : (
           <Button
             onClick={() =>
