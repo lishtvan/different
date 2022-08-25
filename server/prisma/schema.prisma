@@ -17,7 +17,7 @@ model User {
   avatarKey  String?
   location   String?
   Sessions   Session[]
-  Sales      Sale[]
+  Listings   Listing[]
 }
 
 model Session {
@@ -28,15 +28,20 @@ model Session {
   userId Int
 }
 
-model Sale {
+model Listing {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
-  imageKeys   String[]
-  description String
+  price       Int
+  cardNumber  Int
+  title       String
   size        String
-  name        String
+  designer    String
   condition   String
-  trackNumber String?
+  category    String
+  description String?
+  tags        String?
+  shipping    String[]
+  imageUrls   String[]
   User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId      Int
 }

@@ -2,40 +2,45 @@ import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
-  tags: ['Sale'],
+  tags: ['Listing'],
   body: {
     type: 'object',
-    required: ['saleId'],
+    required: ['listingId'],
     properties: {
-      saleId: { type: 'number' },
+      listingId: { type: 'number' },
     },
   } as const,
   response: {
     '2xx': {
-      name: { type: 'string' },
+      title: { type: 'string' },
+      designer: { type: 'string' },
       description: { type: 'string' },
+      tags: { type: 'string' },
       condition: { type: 'string' },
+      category: { type: 'string' },
       size: { type: 'string' },
-      imageKeys: { type: 'array', items: { type: 'string' } },
-      trackNumber: { type: 'string', nullable: true },
+      shipping: { type: 'array', items: { type: 'string' } },
+      imageUrls: { type: 'array', items: { type: 'string' } },
+      price: { type: 'number' },
+      cardNumber: { type: 'number' },
     },
   },
 };
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const getSale: FastifyPluginAsync = async (fastify) => {
+const getListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/get', { schema }, async (req, reply) => {
-    const { saleId } = req.body;
+    const { listingId } = req.body;
 
-    const sale = await fastify.prisma.sale.findFirst({
+    const listing = await fastify.prisma.listing.findFirst({
       where: {
-        id: saleId,
+        id: listingId,
       },
     });
 
-    return reply.send(sale);
+    return reply.send(listing);
   });
 };
 
-export default getSale;
+export default getListing;

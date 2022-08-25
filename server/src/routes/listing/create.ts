@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
-  tags: ['Sale'],
+  tags: ['Listing'],
   body: {
     type: 'object',
     required: [
@@ -13,6 +13,7 @@ const schema = {
       'price',
       'cardNumber',
       'shipping',
+      'imageUrls',
       'category',
     ],
     errorMessage: {
@@ -25,6 +26,7 @@ const schema = {
         cardNumber: '/cardNumber Card number is required ',
         shipping: '/shipping Shipping is required ',
         category: '/category Category is required ',
+        imageUrls: '/imageUrls At least one photo is required ',
       },
     },
     properties: {
@@ -54,6 +56,14 @@ const schema = {
           minItems: 'At least one delivery service must be selected ',
         },
       },
+      imageUrls: {
+        type: 'array',
+        minItems: 1,
+        items: { type: 'string' },
+        errorMessage: {
+          minItems: 'At least one photo is required ',
+        },
+      },
       price: {
         type: 'number',
         maximum: 300000,
@@ -63,7 +73,7 @@ const schema = {
           maximum: 'Contact us to sell such expensive item ',
         },
       },
-      cardNumber: { type: 'string' },
+      cardNumber: { type: 'number' },
       designer: { type: 'string' },
     },
   } as const,
@@ -71,7 +81,7 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const createSale: FastifyPluginAsync = async (fastify) => {
+const createListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
     const {
       title,
@@ -84,46 +94,28 @@ const createSale: FastifyPluginAsync = async (fastify) => {
       cardNumber,
       shipping,
       category,
+      imageUrls,
     } = req.body;
-    console.log({
-      title,
-      size,
-      designer,
-      description,
-      condition,
-      tags,
-      price,
-      cardNumber,
-      shipping,
-      category,
-    });
-    return reply.send({
-      title,
-      size,
-      designer,
-      description,
-      condition,
-      tags,
-      price,
-      cardNumber,
-      shipping,
-      category,
+
+    await fastify.prisma.listing.create({
+      data: {
+        title,
+        size,
+        designer,
+        description,
+        condition,
+        tags,
+        price,
+        cardNumber,
+        shipping,
+        category,
+        imageUrls,
+        userId: Number(req.cookies.userId),
+      },
     });
 
-    // await fastify.prisma.sale.create({
-    //   data: {
-    //     name,
-    //     size,
-    //     description,
-    //     userId,
-    //     condition,
-    //     imageKeys,
-    //     trackNumber,
-    //   },
-    // });
-
-    // return reply.send();
+    return reply.send();
   });
 };
 
-export default createSale;
+export default createListing;

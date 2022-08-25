@@ -10,6 +10,7 @@ export default fp(async (fastify) => {
     '/auth/twitter',
     '/auth/twitter/callback',
     '/user/get',
+    '/listing/get',
   ];
 
   fastify.addHook('preHandler', async (req, reply) => {
