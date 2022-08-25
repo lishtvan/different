@@ -14,7 +14,7 @@ const googleAuth: FastifyPluginAsync = async (fastify) => {
     const { id, name } = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
       method: 'GET',
       headers: {
-        authorization: 'Bearer' + oauthToken.access_token,
+        authorization: 'Bearer' + oauthToken.token.access_token,
       },
     }).then((res) => res.json());
 

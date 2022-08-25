@@ -11,7 +11,7 @@ const facebookAuth: FastifyPluginAsync = async (fastify) => {
       await fastify.facebookOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
 
     const { name, id } = await fetch(
-      `https://graph.facebook.com/v6.0/me?fields=name,email&access_token=${oauthToken.access_token}`,
+      `https://graph.facebook.com/v6.0/me?fields=name,email&access_token=${oauthToken.token.access_token}`,
       {
         method: 'GET',
       }

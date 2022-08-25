@@ -32,7 +32,7 @@ model Listing {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   price       Int
-  cardNumber  Int
+  cardNumber  String
   title       String
   size        String
   designer    String

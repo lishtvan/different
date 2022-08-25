@@ -31,7 +31,9 @@ const CardNumber = () => {
         }}
       />
       {actionData?.errors?.cardNumber && (
-        <p className="ml-2 mt-1 text-[#d32f2f]">{actionData.errors.cardNumber}</p>
+        <p className="ml-2 mt-1 text-[#d32f2f]">
+          {actionData.errors.cardNumber}
+        </p>
       )}
     </div>
   );

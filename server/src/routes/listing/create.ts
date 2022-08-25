@@ -67,13 +67,13 @@ const schema = {
       price: {
         type: 'number',
         maximum: 300000,
-        minimum: 5,
+        minimum: 6,
         errorMessage: {
-          minimum: 'Must be greater than 5  ',
+          minimum: 'Must be greater than 5 ',
           maximum: 'Contact us to sell such expensive item ',
         },
       },
-      cardNumber: { type: 'number' },
+      cardNumber: { type: 'string' },
       designer: { type: 'string' },
     },
   } as const,
@@ -96,7 +96,6 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       category,
       imageUrls,
     } = req.body;
-
     await fastify.prisma.listing.create({
       data: {
         title,
