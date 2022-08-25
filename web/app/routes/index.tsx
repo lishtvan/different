@@ -73,23 +73,22 @@ export default function Index() {
   return (
     <div className="mt-2 flex h-5/6">
       <Filters />
-
-      <div className=" mb-8 ml-4 w-full grid grid-cols-4 gap-x-[1.125rem] gap-y-4">
+      <div className="lg:grid-cols-4 md:grid-cols-3 grid-cols-2 mb-8 ml-4 w-full grid gap-x-[1.125rem] gap-y-4">
         {items.map((item, index) => (
           <Link to="/sell/2" key={index}>
             <div className="h-fit border rounded-md" key={index}>
               <img
-                className="w-full h-64 rounded-t-md object-cover"
+                className="w-full aspect-[9.4/10] rounded-t-md object-cover"
                 src={`${item.imageKey}`}
                 loading="lazy"
                 alt="item"
               />
               <div className="px-2 w-full max-w-full">
-                <div className="mt-3 flex justify-between">
-                  <div className="text-sm font-bold whitespace-nowrap overflow-hidden max-w-[170px] text-ellipsis flex-shrink-0">
+                <div className="mt-3 flex overflow-hidden justify-between">
+                  <div className="text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0 max-w-[170px] md:max-w-[130px] 2xl:max-w-full lg:max-w-[140px] xl:max-w-[178px]">
                     {item.designer}
                   </div>
-                  <div className="text-sm">XXL</div>
+                  <div className="text-sm">M</div>
                 </div>
                 <Tooltip
                   disableInteractive
