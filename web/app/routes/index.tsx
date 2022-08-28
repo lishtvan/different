@@ -85,7 +85,7 @@ export default function Index() {
               />
               <div className="px-2 w-full max-w-full">
                 <div className="mt-3 flex overflow-hidden justify-between">
-                  <div className="text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0 max-w-[170px] md:max-w-[130px] 2xl:max-w-full lg:max-w-[140px] xl:max-w-[178px]">
+                  <div className="text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0 max-w-[170px] md:max-w-[130px] 2xl:max-w-full lg:max-w-[140px] xl:max-w-[190px]">
                     {item.designer}
                   </div>
                   <div className="text-sm">M</div>

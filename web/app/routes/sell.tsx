@@ -89,7 +89,6 @@ const SellRoute = () => {
       return;
     }
     if (imageUrls) {
-      console.log("helllllo");
       window.scrollTo({
         top: 300,
         left: 0,
