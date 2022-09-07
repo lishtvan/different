@@ -17,7 +17,7 @@ const Header: FC<Props> = ({ user }) => {
     <header className="bg-white py-3 sticky top-0 z-50">
       <div className="flex justify-between items-center">
         <Link to="/" className="flex-grow text-3xl font-black decoration-solid">
-          Different
+          DIFFERENT
         </Link>
         <Link className="mr-5" to="/sell">
           <Button variant="contained">SELL</Button>
