@@ -514,6 +514,9 @@ export const DESIGNERS = [
   "Zilli",
   "Merch",
   "Custom",
+  "Readymade",
+  "Etudes",
+  "Ienki Ienki",
   "Not Widespread *",
 ];
 
