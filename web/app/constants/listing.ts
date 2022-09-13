@@ -693,3 +693,11 @@ export const CATEGORIES: Categories = {
     "Jewelry",
   ],
 };
+
+export const conditions = [
+  "New with tags",
+  "Several times worn",
+  "Gently used",
+  "Used",
+  "Very worn",
+];
