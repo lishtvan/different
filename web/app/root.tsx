@@ -17,6 +17,8 @@ import {
   useLoaderData,
   useSearchParams,
 } from "@remix-run/react";
+import { InstantSearch } from "react-instantsearch-dom";
+import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import Header from "./components/Header";
 import Login from "./components/Login";
 import { MAIN_COLOR, DARK_COLOR } from "./constants/styles";
@@ -94,6 +96,22 @@ export const action: ActionFunction = async ({ request }) => {
   return API_DOMAIN;
 };
 
+const typesenseInstantsearchAdapter = new TypesenseInstantsearchAdapter({
+  server: {
+    nodes: [
+      {
+        host: "localhost",
+        port: 8108,
+        protocol: "http",
+      },
+    ],
+    apiKey: "xyz",
+  },
+  additionalSearchParameters: {
+    query_by: "title,designer,tags",
+  },
+});
+
 export default function App() {
   const user = useLoaderData();
   const [searchParams] = useSearchParams();
@@ -111,9 +129,14 @@ export default function App() {
       </head>
       <body className="container mx-auto px-4">
         <ThemeProvider theme={theme}>
-          <Header user={user} />
-          <Outlet />
-          {searchParams.get("login") && <Login />}
+          <InstantSearch
+            indexName="listings"
+            searchClient={typesenseInstantsearchAdapter.searchClient}
+          >
+            <Header user={user} />
+            <Outlet />
+            {searchParams.get("login") && <Login />}
+          </InstantSearch>
         </ThemeProvider>
         <ScrollRestoration />
         <Scripts />

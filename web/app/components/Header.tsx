@@ -13,6 +13,7 @@ import { Form, Link, useNavigate, useSearchParams } from "@remix-run/react";
 import type { FC } from "react";
 import { useState } from "react";
 import ProfileImage from "./../assets/profile.jpeg";
+import { SearchBox } from "react-instantsearch-dom";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -32,7 +33,7 @@ interface Props {
     avatarKey: string;
   };
 }
-// TODO: fix tooltip
+
 const Header: FC<Props> = ({ user }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTooltip, setShowTooltip] = useState(false);
@@ -45,11 +46,12 @@ const Header: FC<Props> = ({ user }) => {
 
   return (
     <header className="bg-white py-3 sticky top-0 z-50">
-      <div className="flex justify-between items-center">
-        <Link to="/" className="flex-grow text-3xl font-black decoration-solid">
+      <div className="flex  items-center">
+        <Link to="/" className="text-3xl font-black decoration-solid">
           DIFFERENT
         </Link>
-        <Link className="mr-5" to="/sell">
+        <SearchBox />
+        <Link className="mr-5 ml-auto" to="/sell">
           <Button variant="contained">SELL</Button>
         </Link>
         {user ? (

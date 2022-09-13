@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import type { ActionFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
@@ -19,6 +20,7 @@ import {
   Shipping,
   Tags,
 } from "~/components/sell";
+import { LISTINGS_COLLECTION_NAME, typesense } from "~/typesense/typesense";
 import { fetchInstance } from "~/utils/fetchInstance";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
@@ -29,11 +31,17 @@ export const action: ActionFunction = async ({ request }) => {
   if (contentType === "application/x-www-form-urlencoded") {
     const form = await request.formData();
     const body = getBody(form);
+    // @ts-ignore
+    const tags = body.tags.split(",");
+    console.log(tags);
     const response = await fetchInstance({
       request,
       route: "/listing/create",
       method: "POST",
-      body,
+      body: {
+        ...body,
+        tags,
+      },
     });
     if (response.status === 400) {
       const { message } = await response.json();
@@ -41,7 +49,13 @@ export const action: ActionFunction = async ({ request }) => {
       const errors = getErrors(message);
       return { errors };
     }
-    return response;
+    const listing = await response.json();
+    await typesense
+      .collections(LISTINGS_COLLECTION_NAME)
+      .documents()
+      .create({ ...listing, id: listing.id.toString() });
+
+    return redirect("/");
   }
 
   const uploadHandler = unstable_createMemoryUploadHandler({

@@ -30,7 +30,14 @@ const schema = {
       },
     },
     properties: {
-      tags: { type: 'string' },
+      tags: {
+        type: 'array',
+        maxItems: 3,
+        items: { type: 'string' },
+        errorMessage: {
+          minItems: 'You can select maximum 3 tags ',
+        },
+      },
       title: {
         type: 'string',
         maxLength: 80,
@@ -96,7 +103,18 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       category,
       imageUrls,
     } = req.body;
-    await fastify.prisma.listing.create({
+    const listing = await fastify.prisma.listing.create({
+      select: {
+        id: true,
+        title: true,
+        size: true,
+        designer: true,
+        condition: true,
+        tags: true,
+        category: true,
+        price: true,
+        imageUrls: true,
+      },
       data: {
         title,
         size,
@@ -105,15 +123,15 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         tags,
         category,
         price,
+        imageUrls,
         description,
         shipping,
-        imageUrls,
         cardNumber,
         userId: Number(req.cookies.userId),
       },
     });
 
-    return reply.send();
+    return reply.send(listing);
   });
 };
 

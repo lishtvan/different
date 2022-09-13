@@ -1,21 +1,21 @@
 // loadData.js
 const Typesense = require("typesense");
-const LISTINGS_COLLECTION_NAME = "listings";
+export const LISTINGS_COLLECTION_NAME = "listings";
 
-export default async () => {
-  const TYPESENSE_CONFIG = {
-    nodes: [
-      {
-        host: "127.0.0.1",
-        port: 8108,
-        protocol: "http",
-      },
-    ],
-    apiKey: "xyz",
-  };
+const TYPESENSE_CONFIG = {
+  nodes: [
+    {
+      host: "127.0.0.1",
+      port: 8108,
+      protocol: "http",
+    },
+  ],
+  apiKey: "xyz",
+};
 
-  const typesense = new Typesense.Client(TYPESENSE_CONFIG);
+export const typesense = new Typesense.Client(TYPESENSE_CONFIG);
 
+export const createCollection = async () => {
   const schema = {
     name: "listings",
     fields: [
@@ -37,8 +37,43 @@ export default async () => {
         facet: false,
         index: true,
         name: "tags",
+        optional: true,
+        type: "string[]",
+      },
+      {
+        facet: false,
+        index: true,
+        name: "size",
         optional: false,
         type: "string",
+      },
+      {
+        facet: false,
+        index: true,
+        name: "price",
+        optional: false,
+        type: "int32", // TODO: check type
+      },
+      {
+        facet: false,
+        index: true,
+        name: "condition",
+        optional: false,
+        type: "string",
+      },
+      {
+        facet: false,
+        index: true,
+        name: "category",
+        optional: false,
+        type: "string",
+      },
+      {
+        facet: false,
+        index: false,
+        name: "imageUrls",
+        optional: true,
+        type: "string[]",
       },
     ],
   };
