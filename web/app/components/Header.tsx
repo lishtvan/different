@@ -1,4 +1,6 @@
 import type { TooltipProps } from "@mui/material";
+import { IconButton, InputAdornment } from "@mui/material";
+import { TextField } from "@mui/material";
 import { ListItemIcon } from "@mui/material";
 import {
   Avatar,
@@ -13,7 +15,8 @@ import { Form, Link, useNavigate, useSearchParams } from "@remix-run/react";
 import type { FC } from "react";
 import { useState } from "react";
 import ProfileImage from "./../assets/profile.jpeg";
-import { SearchBox } from "react-instantsearch-dom";
+import { useSearchBox } from "react-instantsearch-hooks-web";
+import SearchIcon from "@mui/icons-material/Search";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -38,6 +41,7 @@ const Header: FC<Props> = ({ user }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
+  const { refine } = useSearchBox();
 
   const onMenuItemClick = (path: string) => {
     navigate(path);
@@ -46,11 +50,26 @@ const Header: FC<Props> = ({ user }) => {
 
   return (
     <header className="bg-white py-3 sticky top-0 z-50">
-      <div className="flex  items-center">
+      <div className="flex items-center">
         <Link to="/" className="text-3xl font-black decoration-solid">
           DIFFERENT
         </Link>
-        <SearchBox />
+        <TextField
+          className="ml-14"
+          sx={{ width: "505px" }}
+          placeholder="Search"
+          inputProps={{ "aria-label": "search" }}
+          onChange={(e) => refine(e.currentTarget.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton>
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
         <Link className="mr-5 ml-auto" to="/sell">
           <Button variant="contained">SELL</Button>
         </Link>

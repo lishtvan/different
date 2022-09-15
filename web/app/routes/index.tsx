@@ -1,7 +1,8 @@
 import { Tooltip } from "@mui/material";
 import { Link } from "@remix-run/react";
-import { connectHits } from "react-instantsearch-dom";
+import { useHits } from "react-instantsearch-hooks-web";
 import Filters from "~/components/Filters";
+import { SHORT_SIZES } from "~/constants/listing";
 
 const Hit = ({ hit }: { hit: any }) => {
   return (
@@ -13,12 +14,15 @@ const Hit = ({ hit }: { hit: any }) => {
           loading="lazy"
           alt="item"
         />
-        <div className="px-2 w-full max-w-full">
+        <div className="px-2">
           <div className="mt-3 flex overflow-hidden justify-between">
-            <div className="text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis flex-shrink-0 max-w-[170px] md:max-w-[130px] 2xl:max-w-full lg:max-w-[140px] xl:max-w-[190px]">
+            <div className="text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px] md:max-w-[130px] 2xl:max-w-full lg:max-w-[135px] xl:max-w-[185px]">
               {hit.designer}
             </div>
-            <div className="text-sm">{hit.size}</div>
+            <div className="text-sm whitespace-nowrap text-ellipsis overflow-hidden">
+              {/* @ts-ignore */}
+              {SHORT_SIZES[hit.size]}
+            </div>
           </div>
           <Tooltip
             disableInteractive
@@ -28,14 +32,16 @@ const Hit = ({ hit }: { hit: any }) => {
               {hit.title}
             </div>
           </Tooltip>
-          <div className="text-sm font-bold my-2">{hit.price}₴</div>
+          <div className="text-sm font-bold my-2">{hit.price} ₴</div>
         </div>
       </div>
     </Link>
   );
 };
 
-const Listings = ({ hits }: { hits: any }) => {
+const Listings = () => {
+  const { hits } = useHits();
+
   return (
     <div className="lg:grid-cols-4 md:grid-cols-3 grid-cols-2 mb-8 ml-4 w-full grid gap-x-[1.125rem] gap-y-4">
       {hits.map((hit: any) => (
@@ -45,13 +51,11 @@ const Listings = ({ hits }: { hits: any }) => {
   );
 };
 
-const CustomHits = connectHits(Listings);
-
 export default function Index() {
   return (
     <div className="mt-2 flex h-5/6">
       <Filters />
-      <CustomHits />
+      <Listings />
     </div>
   );
 }

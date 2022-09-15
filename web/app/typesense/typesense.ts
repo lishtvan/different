@@ -52,7 +52,7 @@ export const createCollection = async () => {
         index: true,
         name: "price",
         optional: false,
-        type: "int32", // TODO: check type
+        type: "int32",
       },
       {
         facet: false,

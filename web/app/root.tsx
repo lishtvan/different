@@ -17,7 +17,8 @@ import {
   useLoaderData,
   useSearchParams,
 } from "@remix-run/react";
-import { InstantSearch } from "react-instantsearch-dom";
+import { InstantSearch } from "react-instantsearch-hooks-web";
+
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import Header from "./components/Header";
 import Login from "./components/Login";
@@ -108,7 +109,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantsearchAdapter({
     apiKey: "xyz",
   },
   additionalSearchParameters: {
-    query_by: "title,designer,tags",
+    query_by: "title,designer",
   },
 });
 
