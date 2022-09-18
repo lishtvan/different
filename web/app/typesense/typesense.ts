@@ -27,7 +27,7 @@ export const createCollection = async () => {
         type: "string",
       },
       {
-        facet: false,
+        facet: true,
         index: true,
         name: "designer",
         optional: false,
@@ -96,15 +96,29 @@ export const createCollection = async () => {
     let documents = [
       {
         id: "1",
-        title: "Gucci bag",
+        title: "Gucci glasses",
         designer: "Gucci",
-        tags: "#vintage, #luxary",
+        tags: ["#music"],
+        category: "glasses",
+        imageUrls: [
+          "https://different-s3-bucket.s3.amazonaws.com/o3d57h3SRnK0ifT2SjnGxA-3",
+        ],
+        condition: "Used",
+        price: 500,
+        size: "ONE SIZE",
       },
       {
         id: "2",
         title: "Prada glasses",
         designer: "Prada",
-        tags: "#music",
+        tags: ["#music"],
+        category: "glasses",
+        imageUrls: [
+          "https://different-s3-bucket.s3.amazonaws.com/o3d57h3SRnK0ifT2SjnGxA-3",
+        ],
+        condition: "Used",
+        price: 500,
+        size: "ONE SIZE",
       },
     ];
     await typesense

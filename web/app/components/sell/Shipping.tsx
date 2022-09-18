@@ -15,7 +15,7 @@ const Shipping = () => {
       <div className="flex flex-col ml-2 mt-6">
         <FormControlLabel
           control={
-            <Checkbox defaultChecked name="shipping" value="novaPoshta" />
+            <Checkbox name="shipping" value="novaPoshta" />
           }
           label={
             <div className="ml-1">
@@ -31,7 +31,7 @@ const Shipping = () => {
         <FormControlLabel
           className="mt-4"
           control={
-            <Checkbox defaultChecked name="shipping" value="ukrPoshta" />
+            <Checkbox name="shipping" value="ukrPoshta" />
           }
           label={
             <div className="ml-2.5">

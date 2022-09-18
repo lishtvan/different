@@ -16,7 +16,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import ProfileImage from "./../assets/profile.jpeg";
 import { useSearchBox } from "react-instantsearch-hooks-web";
-import SearchIcon from "@mui/icons-material/Search";
+import { Search } from "@mui/icons-material";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -64,7 +64,7 @@ const Header: FC<Props> = ({ user }) => {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton>
-                  <SearchIcon />
+                  <Search />
                 </IconButton>
               </InputAdornment>
             ),
