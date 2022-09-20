@@ -17,6 +17,7 @@ import { useState } from "react";
 import ProfileImage from "./../assets/profile.jpeg";
 import { useSearchBox } from "react-instantsearch-hooks-web";
 import { Search } from "@mui/icons-material";
+import logo from "./../assets/logo.jpg";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -49,13 +50,14 @@ const Header: FC<Props> = ({ user }) => {
   };
 
   return (
-    <header className="bg-white py-3 sticky top-0 z-50">
+    <header className="bg-white py-1 sticky top-0 z-50">
       <div className="flex items-center">
-        <Link to="/" className="text-3xl font-black decoration-solid">
-          DIFFERENT
+        <Link to="/" className="flex items-center mr-2">
+          <img src={logo} width={96} height={96} alt="logo" />
+          <div className="text-3xl font-black decoration-solid">DIFFERENT</div>
         </Link>
         <TextField
-          className="ml-14"
+          className="ml-16"
           sx={{ width: "505px" }}
           placeholder="Search"
           inputProps={{ "aria-label": "search" }}
@@ -119,7 +121,7 @@ const Header: FC<Props> = ({ user }) => {
             }
           >
             <Link to={`/user/${user.id}`}>
-              <div className="rounded-full border-4 border-white hover:border-main">
+              <div className="rounded-full border-4 mr-3 border-white hover:border-main">
                 <Avatar
                   className="border-2 border-white"
                   src={user.avatarKey || ProfileImage}

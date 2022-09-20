@@ -3,7 +3,7 @@ import Listings from "~/components/index/listings/Listings";
 
 const IndexRoute = () => {
   return (
-    <div className="mt-2 flex h-5/6">
+    <div className="flex">
       <Filters />
       <Listings />
     </div>

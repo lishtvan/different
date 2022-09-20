@@ -53,4 +53,9 @@
   .scrollbar::-webkit-scrollbar {
     background: #7f7f7f;
   }
+  .scrollbar-white::-webkit-scrollbar {
+    background: #ffffff;
+    display: hidden;
+    width: 0px;
+  }
 }

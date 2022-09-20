@@ -128,7 +128,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="container mx-auto px-4">
+      <body className="px-4">
         <ThemeProvider theme={theme}>
           <InstantSearch
             indexName="listings"
