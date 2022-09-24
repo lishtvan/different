@@ -2,7 +2,6 @@ import {
   Checkbox,
   Collapse,
   FormControlLabel,
-  IconButton,
   InputAdornment,
   List,
   ListItem,
@@ -53,9 +52,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton>
-                        <Search />
-                      </IconButton>
+                      <Search />
                     </InputAdornment>
                   ),
                 }}
