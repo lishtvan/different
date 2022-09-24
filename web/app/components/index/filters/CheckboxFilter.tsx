@@ -31,7 +31,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
 
   return (
     <>
-      <ListItemButton onClick={handleClick} sx={{ borderRadius: "0.75rem" }}>
+      <ListItemButton onClick={handleClick}>
         <ListItemText className="capitalize" primary={attribute} />
         {open ? (
           <ExpandLess className="mr-1" />

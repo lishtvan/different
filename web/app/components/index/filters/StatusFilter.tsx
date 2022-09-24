@@ -6,7 +6,7 @@ const StatusFilter = () => {
   const [showSold, setShowSold] = useState(false);
 
   return (
-    <div className="flex justify-center items-center mt-3">
+    <div className="fixed bottom-2 left-3 w-[20.5rem] flex justify-center items-center">
       {showSold ? (
         <>
           <Button
