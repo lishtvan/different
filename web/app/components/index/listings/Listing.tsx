@@ -1,11 +1,17 @@
 import { Tooltip } from "@mui/material";
 import { Link } from "@remix-run/react";
+import type { FC } from "react";
 import { SHORT_SIZES } from "~/constants/listing";
+import type { TListing } from "~/types/listing";
 
-const Listing = ({ listing }: { listing: any }) => {
+interface Props {
+  listing: TListing;
+}
+
+const Listing: FC<Props> = ({ listing }) => {
   return (
-    <Link to="/sell/2">
-      <div className="h-fit border rounded-md">
+    <Link to="/sell/2" className="h-fit border rounded-md">
+      <div>
         <img
           className="w-full aspect-[9.4/10] rounded-t-md object-cover"
           src={`${listing.imageUrls[0]}`}
@@ -14,11 +20,10 @@ const Listing = ({ listing }: { listing: any }) => {
         />
         <div className="px-2">
           <div className="mt-3 flex overflow-hidden justify-between">
-            <div className="text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis max-w-[170px] md:max-w-[130px] 2xl:max-w-full lg:max-w-[135px] xl:max-w-[185px]">
+            <div className="text-sm font-bold whitespace-nowrap overflow-hidden text-ellipsis">
               {listing.designer}
             </div>
-            <div className="text-sm whitespace-nowrap text-ellipsis overflow-hidden">
-              {/* @ts-ignore */}
+            <div className="text-sm whitespace-nowrap ml-1">
               {SHORT_SIZES[listing.size]}
             </div>
           </div>
