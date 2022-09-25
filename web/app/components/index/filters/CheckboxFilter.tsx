@@ -64,7 +64,14 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
             <ListItem key={item.label} className="px-1" disablePadding>
               <FormControlLabel
                 className="w-full px-1 m-0 hover:bg-[#f2f2f5] rounded-xl"
-                control={<Checkbox onClick={() => refine(item.value)} />}
+                control={
+                  <Checkbox
+                    checked={item.isRefined}
+                    onClick={() => {
+                      refine(item.value);
+                    }}
+                  />
+                }
                 label={
                   <div className="flex items-center">
                     <div className="whitespace-nowrap text-ellipsis">
