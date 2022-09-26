@@ -1,5 +1,6 @@
 import CategoryFilter from "./CategoryFilter";
 import CheckboxFilter from "./CheckboxFilter";
+import PriceFilter from "./PriceFilter";
 import StatusFilter from "./StatusFilter";
 
 const Filters = () => {
@@ -11,7 +12,7 @@ const Filters = () => {
         <CheckboxFilter enableSearch={false} attribute="size" />
         <CheckboxFilter enableSearch={false} attribute="condition" />
         <CheckboxFilter enableSearch={false} attribute="tags" />
-        <CheckboxFilter enableSearch={false} attribute="price" />
+        <PriceFilter />
       </div>
       <StatusFilter />
     </div>

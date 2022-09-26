@@ -33,7 +33,7 @@ export const action: ActionFunction = async ({ request }) => {
     const body = getBody(form);
     // @ts-ignore
     const tags = body.tags.split(",");
-    console.log(tags);
+
     const response = await fetchInstance({
       request,
       route: "/listing/create",

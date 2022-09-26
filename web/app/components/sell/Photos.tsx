@@ -89,7 +89,6 @@ const Photos = () => {
         };
         assignImage();
       });
-      console.log(newCards);
       setCardList(newCards);
     };
     asyncEffect();
