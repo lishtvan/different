@@ -31,8 +31,10 @@ export const action: ActionFunction = async ({ request }) => {
   if (contentType === "application/x-www-form-urlencoded") {
     const form = await request.formData();
     const body = getBody(form);
+
+    let formattedTags = [];
     // @ts-ignore
-    const tags = body.tags.split(",");
+    if (body.tags) formattedTags = body.tags.split(",");
 
     const response = await fetchInstance({
       request,
@@ -40,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
       method: "POST",
       body: {
         ...body,
-        tags,
+        tags: formattedTags,
       },
     });
     if (response.status === 400) {
