@@ -1,6 +1,4 @@
 import type { TooltipProps } from "@mui/material";
-import { IconButton, InputAdornment } from "@mui/material";
-import { TextField } from "@mui/material";
 import { ListItemIcon } from "@mui/material";
 import {
   Avatar,
@@ -11,13 +9,17 @@ import {
   tooltipClasses,
 } from "@mui/material";
 import { Person, Edit, Logout } from "@mui/icons-material";
-import { Form, Link, useNavigate, useSearchParams } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useNavigate,
+  useSearchParams,
+} from "@remix-run/react";
 import type { FC } from "react";
 import { useState } from "react";
 import ProfileImage from "./../assets/profile.jpeg";
-import { useSearchBox } from "react-instantsearch-hooks-web";
-import { Search } from "@mui/icons-material";
 import logo from "./../assets/logo.jpg";
+import MainSearch from "./index/Search";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -42,7 +44,6 @@ const Header: FC<Props> = ({ user }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
-  const { refine } = useSearchBox();
 
   const onMenuItemClick = (path: string) => {
     navigate(path);
@@ -60,22 +61,8 @@ const Header: FC<Props> = ({ user }) => {
           <div className="text-3xl font-black decoration-solid">DIFFERENT</div>
         </Link>
         <div className="flex justify-between items-center w-full">
-          <TextField
-            className="ml-4 w-[100%] sm:w-[48.5%]"
-            placeholder="Search"
-            inputProps={{ "aria-label": "search" }}
-            onChange={(e) => refine(e.currentTarget.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton>
-                    <Search />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <div className="hidden items-center sm:flex">
+          <MainSearch />
+          <div className="hidden items-center sm:flex ml-auto">
             <Link className="mr-5" to="/sell">
               <Button variant="contained">SELL</Button>
             </Link>
