@@ -12,11 +12,6 @@ import type { ChangeEvent} from "react";
 import {useState } from "react";
 import { useRange } from "react-instantsearch-hooks-web";
 
-interface PriceRange {
-  min: number;
-  max: number;
-}
-
 const PriceFilter = () => {
   const [open, setOpen] = useState(false);
 
@@ -26,7 +21,7 @@ const PriceFilter = () => {
     max: 99999,
   });
 
-  const [priceRange, setPriceRange] = useState<PriceRange>({
+  const [priceRange, setPriceRange] = useState({
     min: 1,
     max: 99999,
   });
