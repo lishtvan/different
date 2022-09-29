@@ -8,26 +8,40 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import type { ChangeEvent} from "react";
+import {useState } from "react";
 import { useRange } from "react-instantsearch-hooks-web";
 
 interface PriceRange {
-  min?: number;
-  max?: number;
+  min: number;
+  max: number;
 }
 
 const PriceFilter = () => {
   const [open, setOpen] = useState(false);
-  const { range, refine } = useRange({
+
+  const { refine } = useRange({
     attribute: "price",
+    min: 1,
+    max: 99999,
   });
 
-  const [priceRange, setPriceRange] = useState<PriceRange>();
+  const [priceRange, setPriceRange] = useState<PriceRange>({
+    min: 1,
+    max: 99999,
+  });
 
-  useEffect(() => {
-    const { min, max } = range;
-    setPriceRange({ min, max });
-  }, [range.max, range.min]);
+  const onMaxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newMax = Number(e.currentTarget.value);
+    setPriceRange({ min: priceRange.min, max: newMax });
+    if (newMax > priceRange.min) refine([priceRange.min, newMax]);
+  };
+
+  const onMinChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newMin = Number(e.currentTarget.value);
+    setPriceRange({ max: priceRange.max, min: newMin });
+    if (newMin < priceRange.max) refine([newMin, priceRange.max]);
+  };
 
   const handleClick = () => {
     setOpen(!open);
@@ -53,12 +67,9 @@ const PriceFilter = () => {
                 type="number"
                 label="Min"
                 id="min-label"
-                inputProps={{ min: priceRange?.min }}
+                inputProps={{ min: 1 }}
                 startAdornment={<div className="mr-2">₴</div>}
-                onChange={(e) => {
-                  setPriceRange({ ...priceRange, min: Number(e.target.value) });
-                  refine([Number(e.target.value), priceRange?.max]);
-                }}
+                onChange={onMinChange}
                 value={priceRange?.min?.toString()}
               />
             </FormControl>
@@ -68,15 +79,9 @@ const PriceFilter = () => {
                 type="number"
                 label="Max"
                 id="max-label"
-                inputProps={{ max: priceRange?.max }}
+                inputProps={{ max: 99999 }}
                 startAdornment={<div className="mr-2">₴</div>}
-                onChange={(e) => {
-                  setPriceRange({
-                    ...priceRange,
-                    max: Number(e?.target?.value),
-                  });
-                  refine([priceRange?.min, Number(e.target.value)]);
-                }}
+                onChange={onMaxChange}
                 value={priceRange?.max?.toString()}
               />
             </FormControl>

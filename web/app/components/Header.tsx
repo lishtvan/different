@@ -50,7 +50,7 @@ const Header: FC<Props> = ({ user }) => {
   };
 
   return (
-    <header className="py-1 sticky top-0 z-50">
+    <header className="bg-white py-1 sticky top-0 z-50">
       <div className="flex items-center">
         <Link to="/" className="flex items-center mr-2">
           <img src={logo} width={96} height={96} alt="logo" />
