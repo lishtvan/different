@@ -9,17 +9,12 @@ import {
   tooltipClasses,
 } from "@mui/material";
 import { Person, Edit, Logout } from "@mui/icons-material";
-import {
-  Form,
-  Link,
-  useNavigate,
-  useSearchParams,
-} from "@remix-run/react";
+import { Form, Link, useNavigate, useSearchParams } from "@remix-run/react";
 import type { FC } from "react";
 import { useState } from "react";
-import ProfileImage from "./../assets/profile.jpeg";
-import logo from "./../assets/logo.jpg";
-import MainSearch from "./index/Search";
+import ProfileImage from "./../../assets/profile.jpeg";
+import logo from "./../../assets/logo.jpg";
+import MainSearch from "../index/Search";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />

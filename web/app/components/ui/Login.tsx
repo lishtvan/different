@@ -1,9 +1,9 @@
 import { Button, Dialog, DialogTitle, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useFetcher, useLocation, useNavigate } from "@remix-run/react";
-import GoogleIcon from "./../assets/google.svg";
-import FacebookIcon from "./../assets/facebook.svg";
-import TwitterIcon from "./../assets/twitter.svg";
+import GoogleIcon from "./../../assets/google.svg";
+import FacebookIcon from "./../../assets/facebook.svg";
+import TwitterIcon from "./../../assets/twitter.svg";
 import { useEffect, useState } from "react";
 
 const Login = () => {

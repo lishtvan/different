@@ -20,8 +20,8 @@ import {
 import { InstantSearch } from "react-instantsearch-hooks-web";
 
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
-import Header from "./components/Header";
-import Login from "./components/Login";
+import Header from "./components/ui/Header";
+import Login from "./components/ui/Login";
 import { MAIN_COLOR, DARK_COLOR } from "./constants/styles";
 import tailwindStylesUrl from "./styles/tailwind.css";
 import { fetchInstance } from "./utils/fetchInstance";

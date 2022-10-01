@@ -58,4 +58,12 @@
     display: hidden;
     width: 0px;
   }
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #a6a6a6;
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+  .scrollbar-visible::-webkit-scrollbar {
+    width: 7px;
+  }
 }
