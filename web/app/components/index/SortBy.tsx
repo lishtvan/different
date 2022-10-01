@@ -9,7 +9,6 @@ const SortByPrice = () => {
       { label: "Price: High first", value: "listings/sort/price:desc" },
     ],
   });
-  console.log(sort);
 
   return (
     <div className="ml-auto">

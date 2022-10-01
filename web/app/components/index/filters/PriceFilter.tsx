@@ -9,33 +9,32 @@ import {
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import type { ChangeEvent} from "react";
-import {useState } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { useRange } from "react-instantsearch-hooks-web";
 
 const PriceFilter = () => {
   const [open, setOpen] = useState(false);
 
-  const { refine } = useRange({
+  const { refine, start } = useRange({
     attribute: "price",
-    min: 1,
+    min: 0,
     max: 99999,
   });
 
-  const [priceRange, setPriceRange] = useState({
-    min: 1,
-    max: 99999,
-  });
+  useEffect(() => {
+    const [min, max] = start;
+    if (min === -Infinity || max === Infinity) refine([0, 99999]);
+  }, [start]);
 
   const onMaxChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newMax = Number(e.currentTarget.value);
-    setPriceRange({ min: priceRange.min, max: newMax });
-    if (newMax > priceRange.min) refine([priceRange.min, newMax]);
+    refine([start[0], newMax]);
   };
 
   const onMinChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newMin = Number(e.currentTarget.value);
-    setPriceRange({ max: priceRange.max, min: newMin });
-    if (newMin < priceRange.max) refine([newMin, priceRange.max]);
+    refine([newMin, start[1]]);
   };
 
   const handleClick = () => {
@@ -62,10 +61,10 @@ const PriceFilter = () => {
                 type="number"
                 label="Min"
                 id="min-label"
-                inputProps={{ min: 1 }}
+                inputProps={{ min: 0 }}
                 startAdornment={<div className="mr-2">₴</div>}
                 onChange={onMinChange}
-                value={priceRange?.min?.toString()}
+                value={start[0]?.toString()}
               />
             </FormControl>
             <FormControl className="w-1/2 ml-5" variant="outlined">
@@ -77,7 +76,7 @@ const PriceFilter = () => {
                 inputProps={{ max: 99999 }}
                 startAdornment={<div className="mr-2">₴</div>}
                 onChange={onMaxChange}
-                value={priceRange?.max?.toString()}
+                value={start[1]?.toString()}
               />
             </FormControl>
           </div>

@@ -1,6 +1,9 @@
 import { Clear } from "@mui/icons-material";
+import { useClearRefinements } from "react-instantsearch-hooks-web";
 
 const ClearFilters = () => {
+  const clear = useClearRefinements();
+
   return (
     <>
       <div className="text-xl font-bold min-w-fit">4 listings for:</div>
@@ -29,7 +32,10 @@ const ClearFilters = () => {
           </div>
         ))}
       </div>
-      <button className="text-xl min-w-fit underline underline-offset-2 pl-2 px-1 ml-2 mr-4">
+      <button
+        onClick={() => clear.refine()}
+        className="text-xl min-w-fit underline underline-offset-2 pl-2 px-1 ml-2 mr-4"
+      >
         Clear All
       </button>
     </>
