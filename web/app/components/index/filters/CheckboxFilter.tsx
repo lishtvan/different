@@ -74,7 +74,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
                 }
                 label={
                   <div className="flex items-center">
-                    <div className="whitespace-nowrap text-ellipsis">
+                    <div className="break-words">
                       {item.label}
                     </div>
                     <div className="ml-3 px-2 bg-[#ebebeb] rounded-full">
