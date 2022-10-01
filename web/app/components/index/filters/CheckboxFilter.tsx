@@ -29,6 +29,10 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
     setOpen(!open);
   };
 
+  if (attribute === "tags" && items.length === 0) {
+    return null;
+  }
+
   return (
     <>
       <ListItemButton onClick={handleClick}>
@@ -74,9 +78,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
                 }
                 label={
                   <div className="flex items-center">
-                    <div className="break-words">
-                      {item.label}
-                    </div>
+                    <div className="break-words">{item.label}</div>
                     <div className="ml-3 px-2 bg-[#ebebeb] rounded-full">
                       {item.count}
                     </div>
