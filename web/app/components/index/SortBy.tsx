@@ -1,6 +1,16 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useSortBy } from "react-instantsearch-hooks-web";
 
-const SortBy = () => {
+const SortByPrice = () => {
+  const sort = useSortBy({
+    items: [
+      { label: "Default", value: "listings" },
+      { label: "Price: Low first", value: "listings/sort/price:asc" },
+      { label: "Price: High first", value: "listings/sort/price:desc" },
+    ],
+  });
+  console.log(sort);
+
   return (
     <div className="ml-auto">
       <FormControl sx={{ minWidth: 150 }} size="small">
@@ -9,16 +19,17 @@ const SortBy = () => {
           labelId="demo-select-small"
           id="demo-select-small"
           label="Sort by:"
+          onChange={(e) => sort.refine(e.target.value as string)}
         >
-          <MenuItem value="">
-            <em>Default</em>
-          </MenuItem>
-          <MenuItem value={20}>Price: Low first</MenuItem>
-          <MenuItem value={30}>Price: High first</MenuItem>
+          {sort.options?.map((sort) => (
+            <MenuItem key={sort.value} value={sort.value}>
+              {sort.label}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>
   );
 };
 
-export default SortBy;
+export default SortByPrice;
