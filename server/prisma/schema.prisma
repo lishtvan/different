@@ -28,9 +28,14 @@ model Session {
   userId Int
 }
 
+enum ListingStatus {
+  AVAILABLE
+  SOLD
+}
+
 model Listing {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
   price       Int
   cardNumber  String
   title       String
@@ -42,6 +47,7 @@ model Listing {
   tags        String[]
   shipping    String[]
   imageUrls   String[]
-  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  User        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  status      ListingStatus @default(AVAILABLE)
   userId      Int
 }
