@@ -10,8 +10,21 @@ import {
 const ClearFilters = () => {
   const clear = useClearRefinements();
   const { refine, items } = useCurrentRefinements({
-    excludedAttributes: ["price", "query"],
+    excludedAttributes: ["price", "query", "status"],
   });
+
+  const soldFilters = useCurrentRefinements({
+    excludedAttributes: [
+      "price",
+      "query",
+      "designer",
+      "tags",
+      "category",
+      "condition",
+      "size",
+    ],
+  });
+
   const { results } = useHits();
 
   const [refinements, setRefinements] = useState<
@@ -26,10 +39,18 @@ const ClearFilters = () => {
 
   return (
     <>
-      <div className="text-xl font-bold min-w-fit">
-        {results?.nbHits} listings{" "}
-        {refinements.length > 0 ? "for:" : "available"}
-      </div>
+      {soldFilters?.items[0]?.refinements[0]?.label === "AVAILABLE" ? (
+        <div className="text-xl font-bold min-w-fit">
+          {results?.nbHits} {results?.nbHits!! === 1 ? "listing" : "listings"}{" "}
+          {refinements.length > 0 ? "for:" : "available"}
+        </div>
+      ) : (
+        <div className="text-xl font-bold min-w-fit">
+          {results?.nbHits}{" "}
+          {results?.nbHits!! === 1 ? "sold item" : "sold items"}{" "}
+          {refinements.length > 0 && "for:"}
+        </div>
+      )}
       <div className="flex max-w-[60%] border rounded ml-2 flex-wrap max-h-20 overflow-x-hidden overflow-y-scroll scrollbar-visible">
         {refinements?.map((item) => (
           <button

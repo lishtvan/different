@@ -56,6 +56,7 @@ const Header: FC<Props> = ({ user }) => {
           <div className="text-3xl font-black decoration-solid">DIFFERENT</div>
         </Link>
         <div className="flex justify-between items-center w-full">
+         
           <MainSearch />
           <div className="hidden items-center sm:flex ml-auto">
             <Link className="mr-5" to="/sell">

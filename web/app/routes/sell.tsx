@@ -20,7 +20,8 @@ import {
   Shipping,
   Tags,
 } from "~/components/sell";
-import { LISTINGS_COLLECTION_NAME, typesense } from "~/typesense/typesense";
+import { LISTINGS_COLLECTION_NAME } from "~/constants/typesense";
+import { typesense } from "~/typesenseClient";
 import { fetchInstance } from "~/utils/fetchInstance";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";

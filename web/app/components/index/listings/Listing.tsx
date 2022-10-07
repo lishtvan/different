@@ -35,7 +35,13 @@ const Listing: FC<Props> = ({ listing }) => {
               {listing.title}
             </div>
           </Tooltip>
-          <div className="text-sm font-bold my-2">{listing.price} ₴</div>
+          <div
+            className={`text-sm font-bold my-2 ${
+              listing.status === "SOLD" && "text-main"
+            }`}
+          >
+            {listing.price} ₴ {listing.status === "SOLD" && "(Sold price)"}
+          </div>
         </div>
       </div>
     </Link>

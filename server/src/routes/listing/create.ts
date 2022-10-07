@@ -114,10 +114,12 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         category: true,
         price: true,
         imageUrls: true,
+        status: true,
       },
       data: {
         title,
         size,
+        status: 'AVAILABLE',
         designer,
         condition,
         tags,

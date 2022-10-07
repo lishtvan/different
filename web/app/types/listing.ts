@@ -6,4 +6,5 @@ export type TListing = {
   size: keyof typeof SHORT_SIZES;
   title: string;
   price: number;
+  status: "AVAILABLE" | "SOLD";
 };

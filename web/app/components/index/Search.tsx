@@ -24,7 +24,7 @@ const MainSearch = () => {
 
   return (
     <TextField
-      className="ml-4 w-[100%] sm:w-[48.5%]"
+      className="ml-4 w-[100%] sm:w-[48.5%] mr-2"
       placeholder="Search"
       inputProps={{ "aria-label": "search" }}
       onChange={onChange}
