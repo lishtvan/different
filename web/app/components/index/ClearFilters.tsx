@@ -8,7 +8,9 @@ import {
 } from "react-instantsearch-hooks-web";
 
 const ClearFilters = () => {
-  const clear = useClearRefinements();
+  const clear = useClearRefinements({
+    excludedAttributes: ["status"],
+  });
   const { refine, items } = useCurrentRefinements({
     excludedAttributes: ["price", "query", "status"],
   });

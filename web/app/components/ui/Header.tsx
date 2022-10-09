@@ -46,7 +46,7 @@ const Header: FC<Props> = ({ user }) => {
   };
 
   return (
-    <header className="bg-white py-1 sticky top-0 z-50">
+    <header className="bg-white sticky top-0 z-50">
       <div className="flex items-cente flex-col mb-5 sm:flex-row sm:mb-0">
         <Link
           to="/"

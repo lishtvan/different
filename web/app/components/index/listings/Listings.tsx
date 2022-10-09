@@ -1,15 +1,35 @@
-import { useHits } from "react-instantsearch-hooks-web";
+import { useEffect, useRef } from "react";
+import { useInfiniteHits } from "react-instantsearch-hooks-web";
 import type { TListing } from "~/types/listing";
 import ClearFilters from "../ClearFilters";
 import SortBy from "../SortBy";
 import Listing from "./Listing";
 
 const Listings = () => {
-  const { hits } = useHits<TListing>();
+  const { hits, isLastPage, showMore } = useInfiniteHits<TListing>();
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    if (sentinelRef.current !== null) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isLastPage) {
+            showMore();
+          }
+        });
+      });
+
+      observer.observe(sentinelRef.current);
+
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [isLastPage, showMore]);
 
   return (
     <div className="w-full mb-8 ml-0 sm:ml-4">
-      <div className="py-2 mb-2 items-center hidden md:flex sticky top-[4.5rem] bg-white">
+      <div className="py-2 mb-2 items-center hidden md:flex sticky top-16 bg-white">
         <ClearFilters />
         <SortBy />
       </div>
@@ -17,6 +37,7 @@ const Listings = () => {
         {hits.map((listing) => (
           <Listing listing={listing} key={listing.objectID} />
         ))}
+        <div ref={sentinelRef} />
       </div>
     </div>
   );
