@@ -1,5 +1,4 @@
 import { ThemeProvider } from "@emotion/react";
-import { createTheme } from "@mui/material";
 import type {
   ActionFunction,
   LinksFunction,
@@ -18,57 +17,26 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import { InstantSearch } from "react-instantsearch-hooks-web";
-
-import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import Header from "./components/ui/Header";
 import Login from "./components/ui/Login";
-import { MAIN_COLOR, DARK_COLOR } from "./constants/styles";
 import tailwindStylesUrl from "./styles/tailwind.css";
+import { theme } from "./styles/theme";
+import { typesenseInstantsearchAdapter } from "./typesense";
 import { fetchInstance } from "./utils/fetchInstance";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: MAIN_COLOR,
-      dark: DARK_COLOR,
-      contrastText: "#fff",
-    },
-  },
-  components: {
-    MuiList: {
-      styleOverrides: {
-        root: {
-          paddingTop: "0px",
-          paddingBottom: "0px",
-        },
-      },
-    },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          borderRadius: "10px",
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: "10px",
-        },
-      },
-    },
-  },
-});
+import logo from "./assets/logo.jpg";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
+  { rel: "icon", href: "favicon.ico" },
 ];
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Different",
-  viewport: "width=device-width,initial-scale=1",
+  icon: logo,
+  descriptiom: "Second-hand marketplace",
+  viewport: "width=device-width,initial-scale=1,viewport-fit=cover",
 });
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -97,33 +65,12 @@ export const action: ActionFunction = async ({ request }) => {
   return API_DOMAIN;
 };
 
-const typesenseInstantsearchAdapter = new TypesenseInstantsearchAdapter({
-  server: {
-    nodes: [
-      {
-        host: "localhost",
-        port: 8108,
-        protocol: "http",
-      },
-    ],
-    apiKey: "xyz",
-  },
-  additionalSearchParameters: {
-    query_by: "title,designer",
-  },
-});
-
 export default function App() {
   const user = useLoaderData();
   const [searchParams] = useSearchParams();
 
   return (
-    <html
-      lang="en"
-      className={`overflow-y-scroll ${
-        searchParams.get("login") && "scrollbar"
-      }`}
-    >
+    <html lang="en">
       <head>
         <Meta />
         <Links />

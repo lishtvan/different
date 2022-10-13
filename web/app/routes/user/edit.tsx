@@ -27,6 +27,7 @@ import type { FormEvent } from "react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = getCookieValue("userId", request);
+  if (!userId) return redirect("/");
 
   const response = await fetchInstance({
     request,
@@ -34,7 +35,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     body: { userId },
     route: "/user/get",
   });
-  return response;
+  const user = await response.json();
+
+  // // TODO: fix not found
+  if (user.statusCode === 404) return redirect("/");
+
+  return user;
 };
 
 export const action: ActionFunction = async ({ request }) => {

@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   unstable_createMemoryUploadHandler,
@@ -21,7 +21,7 @@ import {
   Tags,
 } from "~/components/sell";
 import { LISTINGS_COLLECTION_NAME } from "~/constants/typesense";
-import { typesense } from "~/typesenseClient";
+import { typesenseClient } from "~/typesense";
 import { fetchInstance } from "~/utils/fetchInstance";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
@@ -53,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
       return { errors };
     }
     const listing = await response.json();
-    await typesense
+    await typesenseClient
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
       .create({ ...listing, id: listing.id.toString() });
@@ -89,6 +89,15 @@ export const action: ActionFunction = async ({ request }) => {
     body: formData,
   }).then((res) => res.json());
   return { imageKey, imageId: Number(imageId) };
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const response = await fetchInstance({
+    request,
+    route: "/",
+    method: "GET",
+  });
+  return response;
 };
 
 const SellRoute = () => {

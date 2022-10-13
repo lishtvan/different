@@ -1,5 +1,6 @@
 import { Avatar, Button } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import {
   Link,
   NavLink,
@@ -24,6 +25,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   });
 
   const user = await response.json();
+  // TODO: fix not found
+  if (user.statusCode === 404) return redirect("/");
 
   return {
     ...user,

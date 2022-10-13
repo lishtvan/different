@@ -122,6 +122,7 @@ const Header: FC<Props> = ({ user }) => {
                 onClick={() =>
                   setSearchParams(`?${searchParams.toString()}&login=true`)
                 }
+                className="whitespace-nowrap"
                 variant="contained"
               >
                 SIGN IN

@@ -12,7 +12,6 @@ const schema = {
   } as const,
   response: {
     '2xx': {
-      socials: { type: 'string', nullable: true },
       bio: { type: 'string', nullable: true },
       nickname: { type: 'string' },
       name: { type: 'string', nullable: true },
@@ -38,6 +37,8 @@ const getUser: FastifyPluginAsync = async (fastify) => {
         location: true,
       },
     });
+
+    if (!user) throw fastify.httpErrors.notFound();
 
     return reply.send(user);
   });
