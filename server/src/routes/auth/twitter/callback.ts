@@ -1,8 +1,12 @@
 import { FastifyPluginAsync } from 'fastify';
 import { COOKIE_OPTIONS } from '../../../constants/auth';
 
+const schema = {
+  tags: ['Auth'],
+};
+
 const twitterCallback: FastifyPluginAsync = async (fastify) => {
-  fastify.get('/callback', async (req, reply) => {
+  fastify.get('/callback', { schema }, async (req, reply) => {
     const { code } = req.query as { code: string };
     await fastify.twitterOauth2.requestAccessToken(code);
     const { data } = await fastify.twitterClient.users.findMyUser();

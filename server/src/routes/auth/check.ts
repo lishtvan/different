@@ -1,7 +1,11 @@
 import { FastifyPluginAsync } from 'fastify';
 
-const root: FastifyPluginAsync = async (fastify) => {
-  fastify.get('/check', async (req, res) => {
+const schema = {
+  tags: ['Auth'],
+};
+
+const authCheck: FastifyPluginAsync = async (fastify) => {
+  fastify.get('/check', { schema }, async (req, res) => {
     const user = await fastify.prisma.user.findUnique({
       where: { id: Number(req.cookies.userId) },
       select: {
@@ -13,4 +17,4 @@ const root: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default root;
+export default authCheck;

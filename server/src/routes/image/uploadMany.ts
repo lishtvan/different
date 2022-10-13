@@ -1,8 +1,12 @@
 import { MultipartFile } from '@fastify/multipart';
 import { FastifyPluginAsync } from 'fastify';
 
+const schema = {
+  tags: ['Auth'],
+};
+
 const uploadMany: FastifyPluginAsync = async (fastify) => {
-  fastify.post('/uploadMany', async (req, reply) => {
+  fastify.post('/uploadMany', { schema }, async (req, reply) => {
     // @ts-ignore
     const { images } = req.body;
     if (!Array.isArray(images)) {
