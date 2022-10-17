@@ -14,6 +14,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import ProfileImage from "./../../assets/profile.jpeg";
 import logo from "./../../assets/logo.jpg";
+import logoText from "./../../assets/logoText.jpg";
 import MainSearch from "../index/Search";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -47,16 +48,15 @@ const Header: FC<Props> = ({ user }) => {
 
   return (
     <header className="bg-white sticky top-0 z-50">
-      <div className="flex items-cente flex-col mb-5 sm:flex-row sm:mb-0">
+      <div className="flex items-cente flex-col mb-5 pt-2 sm:flex-row sm:mb-0">
         <Link
           to="/"
           className="flex items-center min-w-[320px] justify-center mb-5 sm:justify-start sm:mb-0"
         >
-          <img src={logo} width={96} height={96} alt="logo" />
-          <div className="text-3xl font-black decoration-solid">DIFFERENT</div>
+          <img src={logo} width={64} height={96} alt="logo" />
+          <img src={logoText} width={220} alt="DIFFERENT" />
         </Link>
         <div className="flex justify-between items-center w-full">
-         
           <MainSearch />
           <div className="hidden items-center sm:flex ml-auto">
             <Link className="mr-5" to="/sell">
@@ -108,7 +108,7 @@ const Header: FC<Props> = ({ user }) => {
                 }
               >
                 <Link to={`/user/${user.id}`}>
-                  <div className="rounded-full border-4 mr-3 border-white hover:border-main">
+                  <div className="rounded-full border-4 border-white hover:border-main">
                     <Avatar
                       className="border-2 border-white"
                       src={user.avatarKey || ProfileImage}

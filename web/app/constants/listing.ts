@@ -352,6 +352,7 @@ export const DESIGNERS = [
   "Onitsuka Tiger",
   "Oakley",
   "Oshkosh",
+  "Osiris",
   "Our Legacy",
   "PPFM",
   "Pacsun",
