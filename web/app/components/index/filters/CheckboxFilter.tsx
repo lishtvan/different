@@ -22,6 +22,7 @@ interface Props {
 const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
   const { refine, searchForItems, items } = useRefinementList({
     attribute,
+    limit: 1000,
   });
   const [open, setOpen] = useState(false);
 
@@ -45,7 +46,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
       </ListItemButton>
 
       <Collapse in={open} timeout="auto">
-        <List component="div" disablePadding>
+        <List component="div" disablePadding className="max-h-96 overflow-y-scroll">
           {enableSearch && (
             <ListItem disablePadding className="mt-2 px-1 mb-2">
               <TextField
