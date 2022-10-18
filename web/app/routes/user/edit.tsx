@@ -90,7 +90,7 @@ export const action: ActionFunction = async ({ request }) => {
           request,
           route: "/user/update",
           method: "POST",
-          body: { avatarKey: null },
+          body: { avatarUrl: null },
         }),
         fetchInstance({
           request,
@@ -113,7 +113,7 @@ export const action: ActionFunction = async ({ request }) => {
         request,
         route: "/user/update",
         method: "POST",
-        body: { avatarKey: imageKey },
+        body: { avatarUrl: imageKey },
       });
 
       return { imageKey };
@@ -122,7 +122,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const UserEditRoute = () => {
-  const { name, nickname, avatarKey, bio, location } = useLoaderData();
+  const { name, nickname, avatarUrl, bio, location } = useLoaderData();
   const data = useActionData();
   const submit = useSubmit();
   const { submission } = useTransition();
@@ -148,9 +148,9 @@ const UserEditRoute = () => {
                 <img
                   src={
                     // TODO: rewrite to imageUrl
-                    data?.imageKey || avatarKey || ProfileImage
+                    data?.imageKey || avatarUrl || ProfileImage
                   }
-                  alt="avatar"
+                  alt="Avatar"
                 />
                 <div className="profile__upload">
                   <button className="profile__button">
@@ -167,9 +167,9 @@ const UserEditRoute = () => {
               </>
             )}
           </label>
-          {avatarKey && (
+          {avatarUrl && (
             <div className="absolute ml-56">
-              <input hidden name="avatarKeyToDelete" defaultValue={avatarKey} />
+              <input hidden name="avatarKeyToDelete" defaultValue={avatarUrl} />
               <Tooltip title="Delete">
                 <IconButton
                   type="submit"

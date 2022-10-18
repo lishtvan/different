@@ -35,7 +35,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const UserRoute = () => {
-  const { name, nickname, avatarKey, isOwnAccount, bio, location } =
+  const { name, nickname, avatarUrl, isOwnAccount, bio, location } =
     useLoaderData();
   const { pathname } = useLocation();
 
@@ -43,7 +43,7 @@ const UserRoute = () => {
     <div className="mt-4">
       <div className="flex justify-center items-center">
         <Avatar
-          src={avatarKey || ProfileImage}
+          src={avatarUrl || ProfileImage}
           sx={{ height: "160px", width: "160px" }}
         />
         <div className="ml-14">

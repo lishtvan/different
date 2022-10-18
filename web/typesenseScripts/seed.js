@@ -605,7 +605,7 @@ const createDataSet = () => {
       tags: [TAGS[Math.floor(Math.random() * TAGS.length)]],
       category: CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)],
       imageUrls: [
-        "https://s3.eu-central-1.amazonaws.com/different.dev/Ws0iVWo7QhKDMuKw9xpVgA-0",
+        "https://s3.eu-central-1.amazonaws.com/different.dev/tRPUfBh1TxSxNI-LSlmbVQ-0",
       ],
       condition: conditions[Math.floor(Math.random() * conditions.length)],
       price: Math.floor(Math.random() * 10000),

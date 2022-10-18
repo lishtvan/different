@@ -21,10 +21,10 @@ import Header from "./components/ui/Header";
 import Login from "./components/ui/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
 import { theme } from "./styles/theme";
-import { typesenseInstantsearchAdapter } from "./typesense";
 import { fetchInstance } from "./utils/fetchInstance";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 import logo from "./assets/logo.jpg";
+import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -41,7 +41,7 @@ export const meta: MetaFunction = () => ({
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getAuthorizedStatus(request);
-  return user;
+  return { user, ENV: process.env };
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -66,8 +66,24 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function App() {
-  const user = useLoaderData();
   const [searchParams] = useSearchParams();
+  const { ENV } = useLoaderData();
+  // TODO: add envs
+  const typesenseInstantsearchAdapter = new TypesenseInstantsearchAdapter({
+    server: {
+      nodes: [
+        {
+          host: "localhost",
+          port: 8108,
+          protocol: "http",
+        },
+      ],
+      apiKey: ENV.TYPESENSE_API_KEY,
+    },
+    additionalSearchParameters: {
+      query_by: "title,designer",
+    },
+  });
 
   return (
     <html lang="en">
@@ -76,12 +92,17 @@ export default function App() {
         <Links />
       </head>
       <body className="px-4">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+          }}
+        />
         <ThemeProvider theme={theme}>
           <InstantSearch
             indexName="listings"
             searchClient={typesenseInstantsearchAdapter.searchClient}
           >
-            <Header user={user} />
+            <Header />
             <Outlet />
             {searchParams.get("login") && <Login />}
           </InstantSearch>

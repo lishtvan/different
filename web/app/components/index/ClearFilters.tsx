@@ -43,14 +43,12 @@ const ClearFilters = () => {
     <>
       {soldFilters?.items[0]?.refinements[0]?.label === "AVAILABLE" ? (
         <div className="text-xl font-bold min-w-fit">
-          {results?.nbHits} {results?.nbHits!! === 1 ? "listing" : "listings"}{" "}
+          {results?.nbHits} listings{" "}
           {refinements.length > 0 ? "for:" : "available"}
         </div>
       ) : (
         <div className="text-xl font-bold min-w-fit">
-          {results?.nbHits}{" "}
-          {results?.nbHits!! === 1 ? "sold item" : "sold items"}{" "}
-          {refinements.length > 0 && "for:"}
+          {results?.nbHits} sold items {refinements.length > 0 && "for:"}
         </div>
       )}
       <div className="flex max-w-[60%] border rounded ml-2 flex-wrap max-h-20 overflow-x-hidden overflow-y-scroll scrollbar-visible">

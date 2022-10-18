@@ -12,6 +12,7 @@ import {
 import { useRefinementList } from "react-instantsearch-hooks-web";
 import { Search, ExpandLess, ExpandMore } from "@mui/icons-material";
 import type { FC } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 
 interface Props {
@@ -20,15 +21,36 @@ interface Props {
 }
 
 const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
-  const { refine, searchForItems, items } = useRefinementList({
-    attribute,
-    limit: 1000,
-  });
+  const { refine, searchForItems, items, toggleShowMore, isShowingMore } =
+    useRefinementList({
+      attribute,
+      limit: 15,
+      showMore: true,
+      showMoreLimit: 522,
+    });
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
     setOpen(!open);
   };
+
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    if (sentinelRef.current !== null) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isShowingMore) {
+            toggleShowMore();
+          }
+        });
+      });
+
+      observer.observe(sentinelRef.current);
+
+      return () => observer.disconnect();
+    }
+  }, [isShowingMore]);
 
   if (attribute === "tags" && items.length === 0) {
     return null;
@@ -46,7 +68,11 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
       </ListItemButton>
 
       <Collapse in={open} timeout="auto">
-        <List component="div" disablePadding className="max-h-96 overflow-y-scroll">
+        <List
+          component="div"
+          disablePadding
+          className="max-h-96 overflow-y-scroll"
+        >
           {enableSearch && (
             <ListItem disablePadding className="mt-2 px-1 mb-2">
               <TextField
@@ -88,6 +114,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
               />
             </ListItem>
           ))}
+          <div ref={sentinelRef} />
         </List>
       </Collapse>
     </>

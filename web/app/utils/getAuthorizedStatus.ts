@@ -9,6 +9,6 @@ export const getAuthorizedStatus = async (request: Request) => {
     request,
     method: "GET",
     route: "/auth/check",
-  });
+  }).then((res) => res.json());
   return user;
 };

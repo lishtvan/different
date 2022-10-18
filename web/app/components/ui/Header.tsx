@@ -1,7 +1,7 @@
 import type { TooltipProps } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { ListItemIcon } from "@mui/material";
 import {
-  Avatar,
   Button,
   MenuItem,
   styled,
@@ -9,8 +9,13 @@ import {
   tooltipClasses,
 } from "@mui/material";
 import { Person, Edit, Logout } from "@mui/icons-material";
-import { Form, Link, useNavigate, useSearchParams } from "@remix-run/react";
-import type { FC } from "react";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useNavigate,
+  useSearchParams,
+} from "@remix-run/react";
 import { useState } from "react";
 import ProfileImage from "./../../assets/profile.jpeg";
 import logo from "./../../assets/logo.jpg";
@@ -29,14 +34,8 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-interface Props {
-  user: {
-    id: string;
-    avatarKey: string;
-  };
-}
-
-const Header: FC<Props> = ({ user }) => {
+const Header = () => {
+  const { user } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
@@ -111,7 +110,7 @@ const Header: FC<Props> = ({ user }) => {
                   <div className="rounded-full border-4 border-white hover:border-main">
                     <Avatar
                       className="border-2 border-white"
-                      src={user.avatarKey || ProfileImage}
+                      src={user.avatarUrl || ProfileImage}
                       sx={{ width: 50, height: 50 }}
                     />
                   </div>
