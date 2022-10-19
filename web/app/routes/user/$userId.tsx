@@ -17,10 +17,11 @@ import ProfileImage from "./../../assets/profile.jpeg";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = getCookieValue("userId", request);
 
+  if (!params.userId || isNaN(Number(params.userId))) return null;
   const response = await fetchInstance({
     request,
     method: "POST",
-    body: { userId: params.userId },
+    body: { userId: Number(params.userId) },
     route: "/user/get",
   });
 

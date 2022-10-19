@@ -37,6 +37,7 @@ const getUser: FastifyPluginAsync = async (fastify) => {
         location: true,
       },
     });
+
     if (!user) throw fastify.httpErrors.notFound();
 
     return reply.send(user);
