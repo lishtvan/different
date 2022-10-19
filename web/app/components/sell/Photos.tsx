@@ -203,7 +203,7 @@ const Photos = () => {
             className="w-full"
             variant="quilted"
             cols={6}
-            rowHeight={140}
+            rowHeight={159}
           >
             {cardList.map((item) => (
               <ImageListItem

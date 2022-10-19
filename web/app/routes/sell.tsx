@@ -128,7 +128,7 @@ const SellRoute = () => {
   }, [actionData]);
 
   return (
-    <div className="flex mt-6 mb-36 mx-auto justify-center items-center flex-col xl:w-2/3">
+    <div className="flex mt-6 mb-36 mx-auto justify-center items-center flex-col lg:w-[950px]">
       <div className="text-3xl font-semibold">Create a new listing</div>
       <Form
         method="post"
