@@ -693,9 +693,9 @@ type Categories = Record<Section, string[]>;
 export const CATEGORIES: Categories = {
   Tops: [
     "T-shirts",
-    "Long sleeve t-shirts",
-    "Polo shirts",
-    "Shirts button up",
+    "Long sleeve",
+    "Polo",
+    "Shirts",
     "Sweaters",
     "Hoodies",
     "Sweatshirts",
@@ -744,7 +744,7 @@ export const CATEGORIES: Categories = {
   ],
 };
 
-export const conditions = [
+export const CONDITIONS = [
   "New with tags",
   "Several times worn",
   "Gently used",

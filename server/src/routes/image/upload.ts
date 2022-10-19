@@ -28,6 +28,7 @@ const uploadImage: FastifyPluginAsync = async (fastify) => {
     const { image } = req.body as { image: MultipartFile };
 
     const imageKey = await fastify.s3.upload(image);
+    // TODO: Rename to imageUrl
     return reply.send({ imageKey });
   });
 };

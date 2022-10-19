@@ -10,7 +10,7 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
       where: { id: Number(req.cookies.userId) },
       select: {
         id: true,
-        avatarKey: true,
+        avatarUrl: true,
       },
     });
     res.send(user);

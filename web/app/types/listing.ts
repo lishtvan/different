@@ -7,4 +7,5 @@ export type TListing = {
   title: string;
   price: number;
   status: "AVAILABLE" | "SOLD";
+  id: string;
 };

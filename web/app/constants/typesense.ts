@@ -1,12 +1,14 @@
 export const LISTINGS_COLLECTION_NAME = "listings";
-
-export const TYPESENSE_CONFIG = {
+export const getTypesenseConfig = () => ({
   nodes: [
     {
-      host: "127.0.0.1",
-      port: 8108,
-      protocol: "http",
+      host:
+        process.env.ENVIRONMENT === "local"
+          ? "127.0.0.1"
+          : "xxx.a1.typesense.net",
+      port: process.env.ENVIRONMENT === "local" ? 8108 : 443,
+      protocol: process.env.ENVIRONMENT === "local" ? "http" : "https",
     },
   ],
-  apiKey: "xyz",
-};
+  apiKey: process.env.TYPESENSE_API_KEY!!,
+});

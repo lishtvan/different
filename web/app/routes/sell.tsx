@@ -20,8 +20,11 @@ import {
   Shipping,
   Tags,
 } from "~/components/sell";
-import { LISTINGS_COLLECTION_NAME } from "~/constants/typesense";
-import { typesenseClient } from "~/typesense";
+import {
+  getTypesenseConfig,
+  LISTINGS_COLLECTION_NAME,
+} from "~/constants/typesense";
+import Typesense from "typesense";
 import { fetchInstance } from "~/utils/fetchInstance";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
@@ -53,7 +56,8 @@ export const action: ActionFunction = async ({ request }) => {
       return { errors };
     }
     const listing = await response.json();
-    await typesenseClient
+
+    await new Typesense.Client(getTypesenseConfig())
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
       .create({ ...listing, id: listing.id.toString() });

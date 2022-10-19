@@ -24,6 +24,10 @@ import { theme } from "./styles/theme";
 import { fetchInstance } from "./utils/fetchInstance";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 import logo from "./assets/logo.jpg";
+import {
+  getTypesenseConfig,
+  LISTINGS_COLLECTION_NAME,
+} from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 
 export const links: LinksFunction = () => [
@@ -41,7 +45,10 @@ export const meta: MetaFunction = () => ({
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getAuthorizedStatus(request);
-  return { user, ENV: process.env };
+  return {
+    user,
+    typesenseConfig: getTypesenseConfig(),
+  };
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -67,19 +74,10 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function App() {
   const [searchParams] = useSearchParams();
-  const { ENV } = useLoaderData();
-  // TODO: add envs
-  const typesenseInstantsearchAdapter = new TypesenseInstantsearchAdapter({
-    server: {
-      nodes: [
-        {
-          host: "localhost",
-          port: 8108,
-          protocol: "http",
-        },
-      ],
-      apiKey: ENV.TYPESENSE_API_KEY,
-    },
+  const { typesenseConfig } = useLoaderData();
+
+  const { searchClient } = new TypesenseInstantsearchAdapter({
+    server: typesenseConfig,
     additionalSearchParameters: {
       query_by: "title,designer",
     },
@@ -92,15 +90,10 @@ export default function App() {
         <Links />
       </head>
       <body className="px-4">
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(ENV)}`,
-          }}
-        />
         <ThemeProvider theme={theme}>
           <InstantSearch
-            indexName="listings"
-            searchClient={typesenseInstantsearchAdapter.searchClient}
+            indexName={LISTINGS_COLLECTION_NAME}
+            searchClient={searchClient}
           >
             <Header />
             <Outlet />

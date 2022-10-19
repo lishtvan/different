@@ -10,7 +10,7 @@ interface Props {
 
 const Listing: FC<Props> = ({ listing }) => {
   return (
-    <Link to="/sell/2" className="h-fit border rounded-md">
+    <Link to={`/listing/${listing.id}`} className="h-fit border rounded-md">
       <div>
         <img
           className="w-full aspect-[9.4/10] rounded-t-md object-cover"

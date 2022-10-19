@@ -1,6 +1,6 @@
 import { MenuItem, TextField } from "@mui/material";
 import { useActionData } from "@remix-run/react";
-import { conditions } from "~/constants/listing";
+import { CONDITIONS } from "~/constants/listing";
 import FieldTitle from "./FieldTitle";
 
 const Condition = () => {
@@ -23,7 +23,7 @@ const Condition = () => {
         }}
         className="w-full"
       >
-        {conditions.map((condition) => (
+        {CONDITIONS.map((condition) => (
           <MenuItem key={condition} value={condition}>
             {condition}
           </MenuItem>

@@ -15,7 +15,7 @@ const schema = {
       bio: { type: 'string', nullable: true },
       nickname: { type: 'string' },
       name: { type: 'string', nullable: true },
-      avatarKey: { type: 'string', nullable: true },
+      avatarUrl: { type: 'string', nullable: true },
       location: { type: 'string', nullable: true },
     },
   },
@@ -32,12 +32,11 @@ const getUser: FastifyPluginAsync = async (fastify) => {
       select: {
         nickname: true,
         bio: true,
-        avatarKey: true,
+        avatarUrl: true,
         name: true,
         location: true,
       },
     });
-
     if (!user) throw fastify.httpErrors.notFound();
 
     return reply.send(user);

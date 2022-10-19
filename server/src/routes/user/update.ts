@@ -7,7 +7,7 @@ const schema = {
   body: {
     type: 'object',
     properties: {
-      avatarKey: { type: 'string' },
+      avatarUrl: { type: 'string' },
       nickname: {
         type: 'string',
         minLength: 2,
@@ -39,7 +39,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const updateUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/update', { schema }, async (req, reply) => {
-    const { nickname, bio, avatarKey, location } = req.body;
+    const { nickname, bio, avatarUrl, location } = req.body;
     try {
       await fastify.prisma.user.update({
         where: {
@@ -47,7 +47,7 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
         },
         data: {
           nickname,
-          avatarKey,
+          avatarUrl,
           bio,
           location,
         },
