@@ -34,13 +34,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     method: "POST",
     body: { userId: Number(userId) },
     route: "/user/get",
-  });
-  const user = await response.json();
+  }).then((res) => res.json());
 
   // // TODO: fix not found
-  if (user.statusCode === 404) return redirect("/");
+  if (response.statusCode === 404) return redirect("/");
 
-  return user;
+  return response;
 };
 
 export const action: ActionFunction = async ({ request }) => {

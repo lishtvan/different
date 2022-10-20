@@ -1,4 +1,4 @@
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, IconButton } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
@@ -8,7 +8,7 @@ import {
   useLoaderData,
   useLocation,
 } from "@remix-run/react";
-import { LocationOnOutlined } from "@mui/icons-material";
+import { LocationOnOutlined, Settings } from "@mui/icons-material";
 import { activeNavLinkStyle, notActiveNavLinkStyle } from "~/constants/styles";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
@@ -17,15 +17,14 @@ import ProfileImage from "./../../assets/profile.jpeg";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = getCookieValue("userId", request);
 
-  if (!params.userId || isNaN(Number(params.userId))) return null;
-  const response = await fetchInstance({
+  if (!params.userId || isNaN(Number(params.userId))) return redirect("/");
+  const user = await fetchInstance({
     request,
     method: "POST",
     body: { userId: Number(params.userId) },
     route: "/user/get",
-  });
+  }).then((res) => res.json());
 
-  const user = await response.json();
   // TODO: fix not found
   if (user.statusCode === 404) return redirect("/");
 
@@ -53,18 +52,18 @@ const UserRoute = () => {
             <div className="ml-10">
               {!isOwnAccount ? (
                 <>
-                  <Button variant="contained" sx={{ marginRight: "10px" }}>
+                  <Button variant="outlined" sx={{ marginRight: "10px" }}>
                     Leave review
                   </Button>
-                  <Button variant="contained" sx={{ marginRight: "10px" }}>
+                  <Button variant="outlined" sx={{ marginRight: "10px" }}>
                     Message
                   </Button>
                 </>
               ) : (
                 <Link to="/user/edit">
-                  <Button variant="outlined" sx={{ color: "black" }}>
-                    Edit
-                  </Button>
+                  <IconButton>
+                    <Settings className="text-main" />
+                  </IconButton>
                 </Link>
               )}
             </div>
@@ -79,7 +78,7 @@ const UserRoute = () => {
               }
             >
               <div className="text-lg">
-                <b>578</b> listings
+                <b>5</b> listings
               </div>
             </NavLink>
             <NavLink
@@ -89,12 +88,12 @@ const UserRoute = () => {
               }
             >
               <div className="text-lg ml-7">
-                <b>468</b> reviews
+                <b>8</b> reviews
               </div>
             </NavLink>
 
             <div className="text-lg ml-7">
-              <b>221</b> sold
+              <b>1</b> sold
             </div>
           </div>
           <div className=" max-w-md break-words">{bio}</div>

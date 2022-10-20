@@ -8,7 +8,7 @@ import {
   Tooltip,
   tooltipClasses,
 } from "@mui/material";
-import { Person, Edit, Logout } from "@mui/icons-material";
+import { Person, Logout, Settings } from "@mui/icons-material";
 import {
   Form,
   Link,
@@ -85,9 +85,9 @@ const Header = () => {
                       onClick={() => onMenuItemClick("/user/edit")}
                     >
                       <ListItemIcon className="mr-2">
-                        <Edit fontSize="large" />
+                        <Settings fontSize="large" />
                       </ListItemIcon>
-                      <div className="font-normal text-xl">Edit</div>
+                      <div className="font-normal text-xl">Settings</div>
                     </MenuItem>
                     <Form action="/logout" method="post">
                       <button
