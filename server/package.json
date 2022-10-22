@@ -11,8 +11,7 @@
   },
   "scripts": {
     "build:ts": "tsc",
-    "start": "fastify start -p -l info -P dist/app.js --options",
-    "start:prod": "prisma generate && prisma migrate deploy && npm run start",
+    "start": "tsc && fastify start dist/app.js --options --log-level=info --pretty-logs=true",
     "lint": "eslint .",
     "format": "prettier --write .",
     "check:format": "prettier --check .",
@@ -36,10 +35,8 @@
     "fastify-cli": "^5.5.0",
     "fastify-plugin": "^4.3.0",
     "hyperid": "^3.0.1",
-    "react-window": "^1.8.7",
     "sharp": "^0.31.1",
-    "twitter-api-sdk": "^1.2.0",
-    "weak-napi": "^2.0.2"
+    "twitter-api-sdk": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^18.8.5",
