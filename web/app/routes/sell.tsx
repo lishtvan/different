@@ -57,7 +57,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
     const listing = await response.json();
 
-    await new Typesense.Client(getTypesenseConfig())
+    await new Typesense.Client(getTypesenseConfig({ isWriteConfig: true }))
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
       .create({ ...listing, id: listing.id.toString() });

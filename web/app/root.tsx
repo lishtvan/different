@@ -23,7 +23,6 @@ import tailwindStylesUrl from "./styles/tailwind.css";
 import { theme } from "./styles/theme";
 import { fetchInstance } from "./utils/fetchInstance";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
-import logo from "./assets/logo.jpg";
 import {
   getTypesenseConfig,
   LISTINGS_COLLECTION_NAME,
@@ -38,7 +37,6 @@ export const links: LinksFunction = () => [
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Different",
-  icon: logo,
   descriptiom: "Second-hand marketplace",
   viewport: "width=device-width,initial-scale=1,viewport-fit=cover",
 });
@@ -47,7 +45,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const user = await getAuthorizedStatus(request);
   return {
     user,
-    typesenseConfig: getTypesenseConfig(),
+    typesenseConfig: getTypesenseConfig({ isWriteConfig: false }),
   };
 };
 

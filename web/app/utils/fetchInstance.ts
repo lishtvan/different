@@ -17,14 +17,6 @@ interface FetchInstance {
   }): Promise<Response>;
 }
 
-const getOriginUrl = (request: Request) => {
-  const arr = request.url.split(process.env.APP_DOMAIN!!)[1].split("/");
-  if (arr[arr.length - 1] === "") arr.pop();
-  arr.pop();
-  const url = arr.join("");
-  return url;
-};
-
 export const fetchInstance: FetchInstance = async ({
   request,
   route,
@@ -55,9 +47,8 @@ export const fetchInstance: FetchInstance = async ({
   } else response = await fetch(`${domain}${route}`, { method, headers });
 
   if (response.status === 401 && route !== "/auth/check") {
-    const origin = getOriginUrl(request);
 
-    return redirect(`/${origin}?login=true`);
+    return redirect(`/?login=true`);
   }
   return response;
 };

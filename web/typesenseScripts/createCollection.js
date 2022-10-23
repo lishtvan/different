@@ -4,12 +4,12 @@ const Typesense = require("typesense");
 const TYPESENSE_CONFIG = {
   nodes: [
     {
-      host: "127.0.0.1",
-      port: 8108,
-      protocol: "http",
+      host: "o2by0uh958xjn1igp-1.a1.typesense.net",
+      port: 443,
+      protocol: "https",
     },
   ],
-  apiKey: "xyz",
+  apiKey: "2HrzvdCDAAk2kvCsRO8M0s9Gryork7Qv",
 };
 
 const typesense = new Typesense.Client(TYPESENSE_CONFIG);
@@ -91,4 +91,4 @@ const createCollection = async () => {
   }
 };
 
-createCollection()
+createCollection();
