@@ -1,8 +1,4 @@
-import {
-  Collapse,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import { Collapse, ListItemButton, ListItemText } from "@mui/material";
 import { useRefinementList } from "react-instantsearch-hooks-web";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useEffect, useState } from "react";

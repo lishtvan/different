@@ -54,7 +54,7 @@ const PriceFilter = () => {
 
       <Collapse in={open} timeout="auto">
         <List className="px-8" component="div" disablePadding>
-          <div className="flex justify-around my-4">
+          <div className="flex justify-around my-2">
             <FormControl className="w-1/2" variant="outlined">
               <InputLabel htmlFor="min-label">Min</InputLabel>
               <OutlinedInput
