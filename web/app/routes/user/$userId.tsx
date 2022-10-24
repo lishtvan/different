@@ -1,4 +1,4 @@
-import { Avatar, Button, IconButton } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
@@ -61,9 +61,13 @@ const UserRoute = () => {
                 </>
               ) : (
                 <Link to="/user/edit">
-                  <IconButton>
-                    <Settings className="text-main" />
-                  </IconButton>
+                  <Button
+                    variant="outlined"
+                    className="rounded-md"
+                    startIcon={<Settings className="text-main" />}
+                  >
+                    Settings
+                  </Button>
                 </Link>
               )}
             </div>
