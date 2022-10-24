@@ -66,7 +66,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   const uploadHandler = unstable_createMemoryUploadHandler({
-    maxPartSize: 5000_000,
+    maxPartSize: 8000_000,
   });
   const formData = await unstable_parseMultipartFormData(
     request,
