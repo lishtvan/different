@@ -15,7 +15,7 @@ export default fp(async (fastify) => {
       auth: oauthPlugin.GOOGLE_CONFIGURATION,
     },
     startRedirectPath: '/auth/google',
-    callbackUri: `${process.env.DOMAIN}/auth/google/callback`,
+    callbackUri: `${process.env.WEB_DOMAIN}/auth/google`,
     callbackUriParams: {
       access_type: 'offline',
     },
