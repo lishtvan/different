@@ -40,7 +40,7 @@ const Tags = () => {
             }}
             disabled={tags.length === 3}
             placeholder={
-              tags.length ? "" : "Make the search of your item easier."
+              tags.length ? "" : "Make the search of your item easier"
             }
           />
         )}

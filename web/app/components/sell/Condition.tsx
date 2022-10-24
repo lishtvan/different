@@ -18,7 +18,7 @@ const Condition = () => {
             typeof value === "string" ? (
               <div>{value}</div>
             ) : (
-              <div className="text-[#aaa]">Be honest.</div>
+              <div className="text-[#aaa]">Be honest</div>
             ),
         }}
         className="w-full"
