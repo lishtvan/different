@@ -168,7 +168,8 @@ const Photos = () => {
         onChange={handleChange}
       >
         <p className="ml-2 mr-auto">
-          Note: You can change order of images by grabbing them.
+          <span className="text-main mr-1">Note:</span>
+          You can change order of images by grabbing them.
         </p>
         <Button
           variant="outlined"
