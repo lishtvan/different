@@ -24,6 +24,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
   const { refine, searchForItems, items, toggleShowMore, isShowingMore } =
     useRefinementList({
       attribute,
+      sortBy: ["count"],
       limit: 15,
       showMore: true,
       showMoreLimit: 522,
