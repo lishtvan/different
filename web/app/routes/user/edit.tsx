@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { PhotoCamera, Delete } from "@mui/icons-material";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { unstable_parseMultipartFormData } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   Form,
@@ -20,7 +21,7 @@ import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";
-import { parseMultipartFormData, s3UploaderHandler } from "~/s3.server";
+import { s3UploaderHandler } from "~/s3.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = getCookieValue("userId", request);
@@ -81,7 +82,10 @@ export const action: ActionFunction = async ({ request }) => {
       });
       return null;
     } else {
-      const formData = await parseMultipartFormData(request, s3UploaderHandler);
+      const formData = await unstable_parseMultipartFormData(
+        request,
+        s3UploaderHandler
+      );
       const avatarUrl = formData.get("image");
 
       fetchInstance({

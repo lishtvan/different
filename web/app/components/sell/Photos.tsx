@@ -49,33 +49,22 @@ const Photos = () => {
     if (!fetcher.data?.imageKeys) return;
     const { imageKeys } = fetcher.data;
 
-    const images = imageKeys.map((imageKey: string, index: number) => {
-      return {
-        id: imagesLoading.length === 1 ? imagesLoading[0] : index,
-        imageKey,
-      };
+    const newCards: ItemImage[] = [];
+    let counter = 0;
+    cardList.forEach((card) => {
+      if (card.imageKey) {
+        newCards.push(card);
+        return;
+      }
+      const imageKey = imageKeys[counter];
+      if (!imagesLoading.includes(card.id)) {
+        newCards.push({ id: card.id, imageKey: null });
+      } else {
+        newCards.push({ id: card.id, imageKey });
+        counter++;
+      }
     });
 
-    const newCards = [...cardList];
-    const cardsWithoutImageLengh = cardList.filter(
-      (card) => !card.imageKey
-    ).length;
-
-    const slicedImages = images.slice(0, cardsWithoutImageLengh);
-    slicedImages.forEach((image: ItemImage) => {
-      let index = image.id;
-      const assignImage = () => {
-        if (newCards[index].imageKey) {
-          index += 1;
-          assignImage();
-        } else
-          newCards[index] = {
-            ...image,
-            id: index,
-          };
-      };
-      assignImage();
-    });
     setImageLoading([]);
     setCardList(newCards);
   }, [fetcher.data?.imageKeys]);

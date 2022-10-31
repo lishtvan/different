@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { unstable_parseMultipartFormData } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect } from "react";
@@ -24,7 +25,7 @@ import Typesense from "typesense";
 import { fetchInstance } from "~/utils/fetchInstance";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
-import { parseMultipartFormData, s3UploaderHandler } from "~/s3.server";
+import { s3UploaderHandler } from "~/s3.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -63,7 +64,10 @@ export const action: ActionFunction = async ({ request }) => {
     return redirect("/");
   }
 
-  const form = await parseMultipartFormData(request, s3UploaderHandler);
+  const form = await unstable_parseMultipartFormData(
+    request,
+    s3UploaderHandler
+  );
   const imageKeys = form.getAll("images");
   return { imageKeys };
 };

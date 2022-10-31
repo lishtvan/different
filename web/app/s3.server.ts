@@ -1,48 +1,9 @@
-import type { UploadHandler, UploadHandlerPart } from "@remix-run/node";
+import type { UploadHandler } from "@remix-run/node";
 import type { PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { S3Client } from "@aws-sdk/client-s3";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import sharp from "sharp";
 import hyperid from "hyperid";
-import { streamMultipart } from "@web3-storage/multipart-parser";
-import parallel from "@async-generators/parallel";
-
-export const parseMultipartFormData = async (
-  request: Request,
-  uploadHandler: UploadHandler
-): Promise<FormData> => {
-  let contentType = request.headers.get("Content-Type") || "";
-  let [type, boundary] = contentType.split(/\s*;\s*boundary=/);
-
-  if (!request.body || !boundary || type !== "multipart/form-data") {
-    throw new TypeError("Could not parse content as FormData.");
-  }
-
-  let formData = new FormData();
-
-  let parts: AsyncIterable<UploadHandlerPart & { done?: true }> =
-    streamMultipart(request.body, boundary);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  for await (let part of parallel(parts, async (value) => {
-    await new Promise((r) => setTimeout(r, 100));
-    if (value.done) return;
-
-    if (typeof value.filename === "string") {
-      value.filename = value.filename.split(/[/\\]/).pop();
-    }
-
-    const result = await uploadHandler(value);
-    if (typeof result !== "undefined" && result !== null) {
-      formData.append(value.name, result as any);
-    }
-    return value;
-    // eslint-disable-next-line no-empty
-  })) {
-  }
-
-  return formData;
-};
 
 const s3 = new S3Client({
   region: "eu-central-1",
@@ -68,22 +29,24 @@ const compress = (buffer: Buffer) =>
     .withMetadata()
     .toBuffer();
 
-const getImageDimensions = (buffer: Buffer) => sharp(buffer).metadata();
+const getImageKey = async (buffer: Buffer) => {
+  const { width, height } = await sharp(buffer).metadata();
+  const imageKey = `${id()}:w=${width}&h=${height}`;
+  return imageKey;
+};
+
+const S3_URL = "https://s3.eu-central-1.amazonaws.com/different.dev";
 
 const uploadStreamToS3 = async (
   data: AsyncIterable<Uint8Array>,
   key: string,
   contentType: string
 ) => {
-  const S3_URL = "https://s3.eu-central-1.amazonaws.com/different.dev";
-
   const buffer = await convertToBuffer(data);
-  const [{ width, height }, compressedImage] = await Promise.all([
-    getImageDimensions(buffer),
+  const [imageKey, compressedImage] = await Promise.all([
+    getImageKey(buffer),
     compress(buffer),
   ]);
-
-  const imageKey = `${id()}:w=${width}&h=${height}`;
 
   const params: PutObjectCommandInput = {
     Bucket: "different.dev",
@@ -91,9 +54,10 @@ const uploadStreamToS3 = async (
     Body: compressedImage,
     ContentType: contentType,
   };
+  console.log("start", new Date().getSeconds());
+  await s3.send(new PutObjectCommand(params));
+  console.log("end", new Date().getSeconds());
 
-  const res = await s3.send(new PutObjectCommand(params));
-  console.log(res);
   return `${S3_URL}/${imageKey}`;
 };
 
