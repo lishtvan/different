@@ -5,16 +5,10 @@ import {
   ImageList,
   ImageListItem,
 } from "@mui/material";
-import type { DragEvent, FormEvent } from "react";
+import type { ChangeEvent, DragEvent, FormEvent } from "react";
 import { useState, useEffect } from "react";
-import {
-  AddAPhoto,
-  PhotoCamera,
-  Close,
-  Search,
-  Delete,
-} from "@mui/icons-material";
-import { Form, useActionData, useFetcher } from "@remix-run/react";
+import { AddAPhoto, Close, Search, Delete } from "@mui/icons-material";
+import { useActionData, useFetcher } from "@remix-run/react";
 
 import { Gallery, Item } from "react-photoswipe-gallery";
 import FieldTitle from "./FieldTitle";
@@ -22,8 +16,6 @@ import FieldTitle from "./FieldTitle";
 interface ItemImage {
   imageKey: string | null;
   id: number;
-  height?: number;
-  width?: number;
 }
 
 const initialImageList: ItemImage[] = [
@@ -44,74 +36,66 @@ const Photos = () => {
   const [currentCard, setCurrentCard] = useState<null | ItemImage>(null);
   const fetcher = useFetcher();
   const actionData = useActionData();
-  const [imageLoading, setImageLoading] = useState<number | boolean>(false);
-  const imageLoadingId = Number(fetcher.submission?.formData.get("imageId"));
-  const imagesLoading = fetcher.submission?.formData.get("images");
+  const [imagesLoading, setImageLoading] = useState<number[]>([]);
+
+  const getImageDimensions = (imageKey: string, dimension: "h" | "w") => {
+    const stringArr = imageKey.split(":");
+    const resolutionStr = stringArr[stringArr.length - 1];
+    const dimensionValue = new URLSearchParams(resolutionStr).get(dimension);
+    return Number(dimensionValue);
+  };
 
   useEffect(() => {
-    const asyncEffect = async () => {
-      if (!fetcher.data?.imageKeys) return;
-      const { imageKeys } = fetcher.data;
-      const promises = imageKeys.map((imageKey: string, index: number) => {
-        const p = new Promise((resolve) => {
-          const img = new Image();
-          img.src = imageKey;
-          img.onload = () => {
-            resolve({
-              id: index,
-              imageKey,
-              height: img.height,
-              width: img.width,
-            });
+    if (!fetcher.data?.imageKeys) return;
+    const { imageKeys } = fetcher.data;
+
+    const images = imageKeys.map((imageKey: string, index: number) => {
+      return {
+        id: imagesLoading.length === 1 ? imagesLoading[0] : index,
+        imageKey,
+      };
+    });
+
+    const newCards = [...cardList];
+    const cardsWithoutImageLengh = cardList.filter(
+      (card) => !card.imageKey
+    ).length;
+
+    const slicedImages = images.slice(0, cardsWithoutImageLengh);
+    slicedImages.forEach((image: ItemImage) => {
+      let index = image.id;
+      const assignImage = () => {
+        if (newCards[index].imageKey) {
+          index += 1;
+          assignImage();
+        } else
+          newCards[index] = {
+            ...image,
+            id: index,
           };
-        });
-        return p;
-      });
-
-      const images = await Promise.all(promises);
-      const newCards = [...cardList];
-      const cardsWithoutImageLengh = cardList.filter(
-        (card) => !card.imageKey
-      ).length;
-
-      const slicedImages = images.slice(0, cardsWithoutImageLengh);
-      slicedImages.forEach((image) => {
-        let index = image.id;
-        const assignImage = () => {
-          if (newCards[index].imageKey) {
-            index += 1;
-            assignImage();
-          } else
-            newCards[index] = {
-              ...image,
-              id: index,
-            };
-        };
-        assignImage();
-      });
-      setCardList(newCards);
-    };
-    asyncEffect();
+      };
+      assignImage();
+    });
+    setImageLoading([]);
+    setCardList(newCards);
   }, [fetcher.data?.imageKeys]);
 
-  useEffect(() => {
-    if (!fetcher.data?.imageKey) return;
-    const { imageId, imageKey } = fetcher.data;
-    setImageLoading(imageId);
-    const newCards = [...cardList];
-    const img = new Image();
-    img.src = imageKey;
-    img.onload = () => {
-      newCards[imageId] = {
-        id: imageId,
-        imageKey,
-        height: img.height,
-        width: img.width,
-      };
-      setCardList(newCards);
-      setImageLoading(false);
-    };
-  }, [fetcher.data]);
+  const onImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const filesLength = e.target.files?.length;
+    if (filesLength === 1) {
+      setImageLoading([Number(e.target.id)]);
+    } else if (filesLength && filesLength > 1) {
+      const emptyPositionsIds: number[] = [];
+      cardList.forEach((card) => {
+        if (!card.imageKey) emptyPositionsIds.push(card.id);
+      });
+      const filteredEmptyPositions: number[] = [];
+      emptyPositionsIds.forEach((id, index) => {
+        if (index < filesLength) filteredEmptyPositions.push(id);
+      });
+      setImageLoading(filteredEmptyPositions);
+    }
+  };
 
   const dragStartHandler = (card: ItemImage) => setCurrentCard(card);
 
@@ -124,15 +108,11 @@ const Photos = () => {
           return {
             ...c,
             imageKey: currentCard.imageKey,
-            width: currentCard.width,
-            height: currentCard.height,
           };
         if (c.id === currentCard.id)
           return {
             ...c,
             imageKey: card.imageKey,
-            width: card.width,
-            height: card.height,
           };
         return c;
       })
@@ -161,12 +141,7 @@ const Photos = () => {
           {actionData.errors.imageUrls}
         </p>
       )}
-      <Form
-        method="post"
-        encType="multipart/form-data"
-        className="flex items-center"
-        onChange={handleChange}
-      >
+      <div className="flex items-center">
         <p className="ml-2 mr-auto">
           <span className="text-main mr-1">Note:</span>
           You can change order of images by grabbing them.
@@ -174,30 +149,12 @@ const Photos = () => {
         <Button
           variant="outlined"
           endIcon={<Delete />}
-          className="mr-2 text-black"
+          className="text-black"
           onClick={deleteAllHandler}
         >
           Delete all
         </Button>
-        <Button
-          variant="contained"
-          endIcon={!imagesLoading && <PhotoCamera />}
-          component="label"
-        >
-          {imagesLoading ? "Uploading..." : "Upload all"}
-          {imagesLoading && (
-            <CircularProgress className="text-white ml-2 w-6 h-6" />
-          )}
-          <input
-            name="images"
-            hidden
-            accept="image/*"
-            disabled={Boolean(imagesLoading)}
-            multiple
-            type="file"
-          />
-        </Button>
-      </Form>
+      </div>
       <div className="w-full mt-3 flex justify-center">
         <Gallery>
           <ImageList
@@ -237,8 +194,8 @@ const Photos = () => {
                     />
                     <Item
                       original={item.imageKey}
-                      width={item.width}
-                      height={item.height}
+                      width={getImageDimensions(item.imageKey, "w")}
+                      height={getImageDimensions(item.imageKey, "h")}
                     >
                       {({ ref, open }) => (
                         <>
@@ -254,8 +211,7 @@ const Photos = () => {
                           <img
                             // @ts-ignore
                             ref={ref}
-                            // @ts-ignore
-                            src={item.imageKey}
+                            src={item.imageKey!!}
                             alt={"Item"}
                             className="h-full w-full object-cover"
                             loading="lazy"
@@ -264,8 +220,7 @@ const Photos = () => {
                       )}
                     </Item>
                   </div>
-                ) : (imageLoadingId === item.id && !imagesLoading) ||
-                  imageLoading === item.id ? (
+                ) : imagesLoading.includes(item.id) ? (
                   <div className="h-full w-full flex items-center justify-center">
                     <CircularProgress color="primary" />
                   </div>
@@ -285,12 +240,13 @@ const Photos = () => {
                       <div>
                         <AddAPhoto className="w-9 h-9" />
                       </div>
-                      <input hidden readOnly name="imageId" value={item.id} />
                       <input
                         disabled={Boolean(fetcher.submission)}
-                        name={"image"}
+                        name="images"
                         id={item.id.toString()}
                         accept="image/*"
+                        multiple
+                        onChange={onImageUpload}
                         type="file"
                         hidden
                       />

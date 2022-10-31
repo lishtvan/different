@@ -1,10 +1,6 @@
 import { Button } from "@mui/material";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import {
-  unstable_createMemoryUploadHandler,
-  unstable_parseMultipartFormData,
-} from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect } from "react";
 import { ClientOnly } from "remix-utils";
@@ -28,6 +24,7 @@ import Typesense from "typesense";
 import { fetchInstance } from "~/utils/fetchInstance";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
+import { parseMultipartFormData, s3UploaderHandler } from "~/s3.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -56,8 +53,9 @@ export const action: ActionFunction = async ({ request }) => {
       return { errors };
     }
     const listing = await response.json();
-
-    await new Typesense.Client(getTypesenseConfig({ isWriteConfig: true }))
+    const writeConfig = getTypesenseConfig({ isWriteConfig: true });
+    const typesenseClient = new Typesense.Client(writeConfig);
+    await typesenseClient
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
       .create({ ...listing, id: listing.id.toString() });
@@ -65,34 +63,9 @@ export const action: ActionFunction = async ({ request }) => {
     return redirect("/");
   }
 
-  const uploadHandler = unstable_createMemoryUploadHandler({
-    maxPartSize: 8000_000,
-  });
-  const formData = await unstable_parseMultipartFormData(
-    request,
-    uploadHandler
-  );
-  const images = formData.get("images");
-  if (images) {
-    const imageKeys = await fetchInstance({
-      request,
-      route: "/image/uploadMany",
-      method: "POST",
-      formData: true,
-      body: formData,
-    }).then((res) => res.json());
-    return { imageKeys };
-  }
-  const imageId = formData.get("imageId");
-
-  const { imageKey } = await fetchInstance({
-    request,
-    route: "/image/upload",
-    method: "POST",
-    formData: true,
-    body: formData,
-  }).then((res) => res.json());
-  return { imageKey, imageId: Number(imageId) };
+  const form = await parseMultipartFormData(request, s3UploaderHandler);
+  const imageKeys = form.getAll("images");
+  return { imageKeys };
 };
 
 export const loader: LoaderFunction = async ({ request }) => {

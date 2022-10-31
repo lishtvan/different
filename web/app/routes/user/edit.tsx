@@ -7,10 +7,6 @@ import {
 } from "@mui/material";
 import { PhotoCamera, Delete } from "@mui/icons-material";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import {
-  unstable_createMemoryUploadHandler,
-  unstable_parseMultipartFormData,
-} from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   Form,
@@ -24,6 +20,7 @@ import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";
+import { parseMultipartFormData, s3UploaderHandler } from "~/s3.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = getCookieValue("userId", request);
@@ -73,49 +70,27 @@ export const action: ActionFunction = async ({ request }) => {
     }
     return { errors };
   } else {
-    const uploadHandler = unstable_createMemoryUploadHandler({
-      maxPartSize: 1000_000,
-    });
-    const formData = await unstable_parseMultipartFormData(
-      request,
-      uploadHandler
-    );
-
-    const { deleteImage, avatarKeyToDelete } = Object.fromEntries(formData);
+    const deleteImage = (await request.clone().formData()).get("deleteImage");
 
     if (deleteImage) {
-      await Promise.all([
-        fetchInstance({
-          request,
-          route: "/user/update",
-          method: "POST",
-          body: { avatarUrl: null },
-        }),
-        fetchInstance({
-          request,
-          route: "/image/delete",
-          method: "POST",
-          body: { imageKey: avatarKeyToDelete },
-        }),
-      ]);
-      return null;
-    } else {
-      const { imageKey } = await fetchInstance({
-        request,
-        route: "/image/upload",
-        method: "POST",
-        formData: true,
-        body: formData,
-      }).then((res) => res.json());
-
       await fetchInstance({
         request,
         route: "/user/update",
         method: "POST",
-        body: { avatarUrl: imageKey },
+        body: { avatarUrl: null },
       });
+      return null;
+    } else {
+      const formData = await parseMultipartFormData(request, s3UploaderHandler);
+      const avatarUrl = formData.get("image");
 
-      return { imageKey };
+      fetchInstance({
+        request,
+        route: "/user/update",
+        method: "POST",
+        body: { avatarUrl },
+      });
+      return { avatarUrl };
     }
   }
 };
@@ -145,10 +120,7 @@ const UserEditRoute = () => {
             ) : (
               <>
                 <img
-                  src={
-                    // TODO: rewrite to imageUrl
-                    data?.imageKey || avatarUrl || ProfileImage
-                  }
+                  src={data?.avatarUrl || avatarUrl || ProfileImage}
                   alt="Avatar"
                 />
                 <div className="profile__upload">
@@ -168,7 +140,6 @@ const UserEditRoute = () => {
           </label>
           {avatarUrl && (
             <div className="absolute ml-56">
-              <input hidden name="avatarKeyToDelete" defaultValue={avatarUrl} />
               <Tooltip title="Delete">
                 <IconButton
                   type="submit"

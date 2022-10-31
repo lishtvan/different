@@ -6,7 +6,7 @@ const schema = {
 
 const deleteUser: FastifyPluginAsync = async (fastify) => {
   fastify.post('/delete', { schema }, async (req, reply) => {
-    const { avatarUrl } = await fastify.prisma.user.delete({
+    await fastify.prisma.user.delete({
       where: {
         id: Number(req.cookies.userId),
       },
@@ -14,8 +14,6 @@ const deleteUser: FastifyPluginAsync = async (fastify) => {
         avatarUrl: true,
       },
     });
-
-    if (avatarUrl) await fastify.s3.deleteImage(avatarUrl);
 
     return reply.send();
   });
