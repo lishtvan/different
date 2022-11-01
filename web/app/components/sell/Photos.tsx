@@ -48,25 +48,41 @@ const Photos = () => {
   useEffect(() => {
     if (!fetcher.data?.imageKeys) return;
     const { imageKeys } = fetcher.data;
+    let imageIndexCounter = 0;
+    const checkImageUpload = (imageKeys: string[]) => {
+      const imageKey = imageKeys[imageIndexCounter];
+      const image = new Image();
+      image.src = imageKey;
+      image.onload = () => {
+        if (imageIndexCounter + 1 < imageKeys.length) {
+          imageIndexCounter++;
+          checkImageUpload(imageKeys);
+        } else {
+          const newCards: ItemImage[] = [];
+          let counter = 0;
+          cardList.forEach((card) => {
+            if (card.imageKey) {
+              newCards.push(card);
+              return;
+            }
+            const imageKey = imageKeys[counter];
+            if (!imagesLoading.includes(card.id)) {
+              newCards.push({ id: card.id, imageKey: null });
+            } else {
+              newCards.push({ id: card.id, imageKey });
+              counter++;
+            }
+          });
 
-    const newCards: ItemImage[] = [];
-    let counter = 0;
-    cardList.forEach((card) => {
-      if (card.imageKey) {
-        newCards.push(card);
-        return;
-      }
-      const imageKey = imageKeys[counter];
-      if (!imagesLoading.includes(card.id)) {
-        newCards.push({ id: card.id, imageKey: null });
-      } else {
-        newCards.push({ id: card.id, imageKey });
-        counter++;
-      }
-    });
-
-    setImageLoading([]);
-    setCardList(newCards);
+          setImageLoading([]);
+          setCardList(newCards);
+        }
+      };
+      image.onerror = (err) => {
+        setTimeout(() => checkImageUpload(imageKeys), 100);
+      };
+    };
+    checkImageUpload(imageKeys);
   }, [fetcher.data?.imageKeys]);
 
   const onImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -188,7 +204,7 @@ const Photos = () => {
                     >
                       {({ ref, open }) => (
                         <>
-                          <div className="absolute top-1 left-3">
+                          <div className="absolute top-1 left-1">
                             <IconButton
                               size="small"
                               onClick={open}

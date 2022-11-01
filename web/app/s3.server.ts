@@ -54,9 +54,7 @@ const uploadStreamToS3 = async (
     Body: compressedImage,
     ContentType: contentType,
   };
-  console.log("start", new Date().getSeconds());
-  await s3.send(new PutObjectCommand(params));
-  console.log("end", new Date().getSeconds());
+  s3.send(new PutObjectCommand(params));
 
   return `${S3_URL}/${imageKey}`;
 };
@@ -66,6 +64,6 @@ export const s3UploaderHandler: UploadHandler = async ({
   filename,
   contentType,
 }) => {
-  const res = await uploadStreamToS3(data, filename!, contentType);
-  return res;
+  const image = await uploadStreamToS3(data, filename!, contentType);
+  return image;
 };

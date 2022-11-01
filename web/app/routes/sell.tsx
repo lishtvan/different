@@ -64,10 +64,12 @@ export const action: ActionFunction = async ({ request }) => {
     return redirect("/");
   }
 
+  console.log("Full start", new Date().getSeconds());
   const form = await unstable_parseMultipartFormData(
     request,
     s3UploaderHandler
   );
+  console.log("Full end", new Date().getSeconds());
   const imageKeys = form.getAll("images");
   return { imageKeys };
 };
