@@ -48,44 +48,53 @@ const Photos = () => {
   useEffect(() => {
     if (!fetcher.data?.imageKeys) return;
     const { imageKeys } = fetcher.data;
-    let imageIndexCounter = 0;
-    const checkImageUpload = (imageKeys: string[]) => {
-      const imageKey = imageKeys[imageIndexCounter];
-      const image = new Image();
-      image.src = imageKey;
-      image.onload = () => {
-        if (imageIndexCounter + 1 < imageKeys.length) {
-          imageIndexCounter++;
-          checkImageUpload(imageKeys);
-        } else {
-          const newCards: ItemImage[] = [];
-          let counter = 0;
-          cardList.forEach((card) => {
-            if (card.imageKey) {
-              newCards.push(card);
-              return;
-            }
-            const imageKey = imageKeys[counter];
-            if (!imagesLoading.includes(card.id)) {
-              newCards.push({ id: card.id, imageKey: null });
-            } else {
-              newCards.push({ id: card.id, imageKey });
-              counter++;
-            }
-          });
+    const uploadedImages: string[] = [];
+    imageKeys.forEach((imageKey: string) => {
+      const checkImageUpload = (imageKey: string) => {
+        const image = new Image();
+        image.src = imageKey;
+        image.onload = () => {
+          uploadedImages.push(imageKey);
+        };
+        image.onerror = () => {
+          setTimeout(() => {
+            checkImageUpload(imageKey);
+          }, 500);
+        };
+      };
+      checkImageUpload(imageKey);
+    });
 
-          setImageLoading([]);
-          setCardList(newCards);
-        }
-      };
-      image.onerror = (err) => {
-        setTimeout(() => checkImageUpload(imageKeys), 100);
-      };
-    };
-    checkImageUpload(imageKeys);
+    const interval = setInterval(() => {
+      if (uploadedImages.length === imageKeys.length) {
+        clearInterval(interval);
+        const newCards: ItemImage[] = [];
+        let counter = 0;
+        cardList.forEach((card) => {
+          if (card.imageKey) {
+            newCards.push(card);
+            return;
+          }
+          const imageKey = imageKeys[counter];
+          if (!imagesLoading.includes(card.id)) {
+            newCards.push({ id: card.id, imageKey: null });
+          } else {
+            newCards.push({ id: card.id, imageKey });
+            counter++;
+          }
+        });
+
+        setImageLoading([]);
+        setCardList(newCards);
+        console.log("end", new Date().getSeconds());
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [fetcher.data?.imageKeys]);
 
   const onImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log("start", new Date().getSeconds());
     const filesLength = e.target.files?.length;
     if (filesLength === 1) {
       setImageLoading([Number(e.target.id)]);
