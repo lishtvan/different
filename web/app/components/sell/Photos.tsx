@@ -53,6 +53,7 @@ const Photos = () => {
       const checkImageUpload = (imageKey: string) => {
         const image = new Image();
         image.src = imageKey;
+        console.log({ complete: image.complete });
         image.onload = () => {
           uploadedImages.push(imageKey);
         };
@@ -228,7 +229,6 @@ const Photos = () => {
                             src={item.imageKey!!}
                             alt={"Item"}
                             className="h-full w-full object-cover"
-                            loading="lazy"
                           />
                         </>
                       )}
