@@ -8,7 +8,7 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import type { ChangeEvent} from "react";
+import type { ChangeEvent } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRange } from "react-instantsearch-hooks-web";
@@ -73,7 +73,7 @@ const PriceFilter = () => {
                 type="number"
                 label="Max"
                 id="max-label"
-                inputProps={{ max: 99999 }}
+                inputProps={{ max: 99999, min: 0 }}
                 startAdornment={<div className="mr-2">₴</div>}
                 onChange={onMaxChange}
                 value={start[1]?.toString()}
