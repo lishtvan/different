@@ -75,7 +75,7 @@ const SelectCategory = () => {
           {Object.keys(CATEGORIES).map((section) => {
             if (currentSection === section) {
               return (
-                <div className="w-3/5">
+                <div className="w-3/5" key={section}>
                   {CATEGORIES[section as Section].map((category, index) => (
                     <MenuItem
                       key={index}
