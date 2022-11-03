@@ -48,50 +48,25 @@ const Photos = () => {
   useEffect(() => {
     if (!fetcher.data?.imageKeys) return;
     const { imageKeys } = fetcher.data;
-    const uploadedImages: string[] = [];
-    imageKeys.forEach((imageKey: string) => {
-      const checkImageUpload = (imageKey: string) => {
-        const image = new Image();
-        image.src = imageKey;
-        console.log({ complete: image.complete });
-        image.onload = () => {
-          uploadedImages.push(imageKey);
-        };
-        image.onerror = () => {
-          setTimeout(() => {
-            checkImageUpload(imageKey);
-          }, 500);
-        };
-      };
-      checkImageUpload(imageKey);
-    });
 
-    const interval = setInterval(() => {
-      if (uploadedImages.length === imageKeys.length) {
-        clearInterval(interval);
-        const newCards: ItemImage[] = [];
-        let counter = 0;
-        cardList.forEach((card) => {
-          if (card.imageKey) {
-            newCards.push(card);
-            return;
-          }
-          const imageKey = imageKeys[counter];
-          if (!imagesLoading.includes(card.id)) {
-            newCards.push({ id: card.id, imageKey: null });
-          } else {
-            newCards.push({ id: card.id, imageKey });
-            counter++;
-          }
-        });
-
-        setImageLoading([]);
-        setCardList(newCards);
-        console.log("end", new Date().getSeconds());
+    const newCards: ItemImage[] = [];
+    let counter = 0;
+    cardList.forEach((card) => {
+      if (card.imageKey) {
+        newCards.push(card);
+        return;
       }
-    }, 1000);
-
-    return () => clearInterval(interval);
+      const imageKey = imageKeys[counter];
+      if (!imagesLoading.includes(card.id)) {
+        newCards.push({ id: card.id, imageKey: null });
+      } else {
+        newCards.push({ id: card.id, imageKey });
+        counter++;
+      }
+    });
+    setImageLoading([]);
+    setCardList(newCards);
+    console.log("end", new Date().getSeconds());
   }, [fetcher.data?.imageKeys]);
 
   const onImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -229,6 +204,10 @@ const Photos = () => {
                             src={item.imageKey!!}
                             alt={"Item"}
                             className="h-full w-full object-cover"
+                            onError={({ currentTarget }) => {
+                              currentTarget.onerror = null;
+                              currentTarget.src = item.imageKey!!;
+                            }}
                           />
                         </>
                       )}

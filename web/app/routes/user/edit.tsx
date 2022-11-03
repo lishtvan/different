@@ -126,6 +126,10 @@ const UserEditRoute = () => {
                 <img
                   src={data?.avatarUrl || avatarUrl || ProfileImage}
                   alt="Avatar"
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null;
+                    currentTarget.src = data.avatarUrl;
+                  }}
                 />
                 <div className="profile__upload">
                   <button className="profile__button">
