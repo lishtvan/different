@@ -1,11 +1,12 @@
 import {
+  Alert,
   Button,
   CircularProgress,
   IconButton,
   ImageList,
   ImageListItem,
 } from "@mui/material";
-import type { ChangeEvent, DragEvent, FormEvent } from "react";
+import type { DragEvent, FormEvent } from "react";
 import { useState, useEffect } from "react";
 import { AddAPhoto, Close, Search, Delete } from "@mui/icons-material";
 import { useActionData, useFetcher } from "@remix-run/react";
@@ -37,6 +38,7 @@ const Photos = () => {
   const fetcher = useFetcher();
   const actionData = useActionData();
   const [imagesLoading, setImageLoading] = useState<number[]>([]);
+  const [uploadError, setUploadError] = useState<boolean | string>(false);
 
   const getImageDimensions = (imageKey: string, dimension: "h" | "w") => {
     const stringArr = imageKey.split(":");
@@ -69,24 +71,6 @@ const Photos = () => {
     console.log("end", new Date().getSeconds());
   }, [fetcher.data?.imageKeys]);
 
-  const onImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("start", new Date().getSeconds());
-    const filesLength = e.target.files?.length;
-    if (filesLength === 1) {
-      setImageLoading([Number(e.target.id)]);
-    } else if (filesLength && filesLength > 1) {
-      const emptyPositionsIds: number[] = [];
-      cardList.forEach((card) => {
-        if (!card.imageKey) emptyPositionsIds.push(card.id);
-      });
-      const filteredEmptyPositions: number[] = [];
-      emptyPositionsIds.forEach((id, index) => {
-        if (index < filesLength) filteredEmptyPositions.push(id);
-      });
-      setImageLoading(filteredEmptyPositions);
-    }
-  };
-
   const dragStartHandler = (card: ItemImage) => setCurrentCard(card);
 
   const dropHandler = (e: DragEvent<HTMLDivElement>, card: ItemImage) => {
@@ -116,7 +100,39 @@ const Photos = () => {
   };
 
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
+    // @ts-ignore
+    const files = e.target.files;
+    if (!files) return;
+
+    const emptyPositionsIds: number[] = [];
+    cardList.forEach((card) => {
+      if (!card.imageKey) emptyPositionsIds.push(card.id);
+    });
+    if (files.length > emptyPositionsIds.length) {
+      setUploadError("You can upload a maximum of 10 pictures");
+      return;
+    }
+    for (const file of files) {
+      if (file.size > 7_000_000) {
+        setUploadError("The size of the picture should not be more than 7MB");
+        return;
+      }
+    }
+    if (uploadError) setUploadError(false);
+    console.log("start", new Date().getSeconds());
+
     fetcher.submit(e.currentTarget, { replace: true });
+
+    if (files.length === 1) {
+      // @ts-ignore
+      setImageLoading([Number(e.target.id)]);
+    } else if (files.length > 1) {
+      const filteredEmptyPositions: number[] = [];
+      emptyPositionsIds.forEach((id, index) => {
+        if (index < files.length) filteredEmptyPositions.push(id);
+      });
+      setImageLoading(filteredEmptyPositions);
+    }
   };
 
   const deleteAllHandler = () => {
@@ -132,18 +148,29 @@ const Photos = () => {
         </p>
       )}
       <div className="flex items-center">
-        <p className="ml-2 mr-auto">
-          <span className="text-main mr-1">Note:</span>
-          You can change order of images by grabbing them.
-        </p>
-        <Button
-          variant="outlined"
-          endIcon={<Delete />}
-          className="text-black"
-          onClick={deleteAllHandler}
-        >
-          Delete all
-        </Button>
+        {uploadError ? (
+          <Alert
+            severity="error"
+            className="mx-auto rounded-xl w-full font-bold"
+          >
+            {uploadError}
+          </Alert>
+        ) : (
+          <>
+            <p className="ml-2 mr-auto">
+              <span className="text-main mr-1">Note:</span>
+              You can change order of images by grabbing them.
+            </p>
+            <Button
+              variant="outlined"
+              endIcon={<Delete />}
+              className="text-black"
+              onClick={deleteAllHandler}
+            >
+              Delete all
+            </Button>
+          </>
+        )}
       </div>
       <div className="w-full mt-3 flex justify-center">
         <Gallery>
@@ -239,7 +266,6 @@ const Photos = () => {
                         id={item.id.toString()}
                         accept="image/*"
                         multiple
-                        onChange={onImageUpload}
                         type="file"
                         hidden
                       />

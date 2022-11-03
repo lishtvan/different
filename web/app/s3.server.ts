@@ -63,7 +63,4 @@ export const s3UploaderHandler: UploadHandler = async ({
   data,
   filename,
   contentType,
-}) => {
-  const image = await uploadStreamToS3(data, filename!, contentType);
-  return image;
-};
+}) => uploadStreamToS3(data, filename!, contentType);
