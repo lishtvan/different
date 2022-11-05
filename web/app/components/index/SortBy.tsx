@@ -13,11 +13,11 @@ const SortByPrice = () => {
   return (
     <div className="ml-auto">
       <FormControl sx={{ minWidth: 150 }} size="small">
-        <InputLabel id="demo-select-small">Sort by:</InputLabel>
+        <InputLabel id="demo-select-small">Sort by</InputLabel>
         <Select
           labelId="demo-select-small"
           id="demo-select-small"
-          label="Sort by:"
+          label="Sort by"
           onChange={(e) => sort.refine(e.target.value as string)}
         >
           {sort.options?.map((sort) => (

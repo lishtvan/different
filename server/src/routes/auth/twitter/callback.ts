@@ -21,7 +21,7 @@ const twitterCallback: FastifyPluginAsync = async (fastify) => {
     reply
       .setCookie('token', token, COOKIE_OPTIONS)
       .setCookie('userId', userId, COOKIE_OPTIONS)
-      .redirect(`${process.env.WEB_DOMAIN}/auth`);
+      .send();
   });
 };
 

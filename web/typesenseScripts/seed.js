@@ -597,7 +597,7 @@ const conditions = [
 const createDataSet = () => {
   const dataSet = [];
 
-  for (let index = 0; index < 5; index++) {
+  for (let index = 0; index < 10000; index++) {
     const listing = {
       id: index.toString(),
       title: "Gucci glasses",
@@ -605,7 +605,7 @@ const createDataSet = () => {
       tags: [TAGS[Math.floor(Math.random() * TAGS.length)]],
       category: CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)],
       imageUrls: [
-        "https://s3.eu-central-1.amazonaws.com/different.dev/tRPUfBh1TxSxNI-LSlmbVQ-0",
+        "https://s3.eu-central-1.amazonaws.com/different.dev/y1Nh6g7tRAKHyTTnCn-0_w-0000000000:w=1102&h=1004",
       ],
       condition: conditions[Math.floor(Math.random() * conditions.length)],
       price: Math.floor(Math.random() * 10000),

@@ -32,13 +32,13 @@ export default fp(async (fastify) => {
       auth: oauthPlugin.FACEBOOK_CONFIGURATION,
     },
     startRedirectPath: '/auth/facebook',
-    callbackUri: `${process.env.DOMAIN}/auth/facebook/callback`,
+    callbackUri: `${process.env.WEB_DOMAIN}/auth/facebook`,
   });
 
   const twitterOauth2 = new auth.OAuth2User({
     client_id: 'WWxwUFZ3dVVwanR4SGc5dnZWa3Q6MTpjaQ',
     client_secret: process.env.TWITTER_CLIENT_SECRET,
-    callback: `${process.env.DOMAIN}/auth/twitter/callback`,
+    callback: `${process.env.WEB_DOMAIN}/auth/twitter`,
     scopes: ['offline.access', 'tweet.read', 'users.read'],
   });
 

@@ -52,12 +52,12 @@ const ClearFilters = () => {
         </div>
       )}
       {refinements.length > 0 && (
-        <div className="flex max-w-[60%] border rounded ml-2 flex-wrap max-h-20 overflow-x-hidden overflow-y-scroll scrollbar-visible">
+        <div className="flex max-w-[60%] ml-2 flex-wrap max-h-20 overflow-x-hidden overflow-y-scroll scrollbar-visible">
           {refinements.map((item) => (
             <button
               key={item.label}
               onClick={() => refine(item)}
-              className="text-xl border-main hover:bg-[#f2f2f5] rounded text-main border m-1 pl-2 pr-1"
+              className="text-xl border-main hover:bg-[#f2f2f5] rounded-md text-main border m-1 pl-2 pr-1"
             >
               {item.label} <Clear />
             </button>
@@ -68,7 +68,7 @@ const ClearFilters = () => {
       {refinements.length > 2 && (
         <button
           onClick={() => clear.refine()}
-          className="text-xl min-w-fit underline underline-offset-2 pl-2 px-1 ml-2 mr-4"
+          className="text-xl min-w-fit underline underline-offset-2 pl-2 px-1 ml-1 mr-4"
         >
           Clear All
         </button>
