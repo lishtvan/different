@@ -38,7 +38,7 @@ const SubCategoryFilter: FC<SubCategoryFilterProps> = ({
 
   return (
     <div className={`${subcategories.length === 0 ? "hidden" : "block"}`}>
-      <ListItemButton onClick={handleClick} className="pl-8">
+      <ListItemButton onClick={handleClick} className="pl-8 rounded-xl">
         <ListItemText primary={category} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />

@@ -43,7 +43,7 @@ const PriceFilter = () => {
 
   return (
     <>
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} className="rounded-xl">
         <ListItemText primary={"Price"} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />

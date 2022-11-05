@@ -24,7 +24,6 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
   const { refine, searchForItems, items, toggleShowMore, isShowingMore } =
     useRefinementList({
       attribute,
-      sortBy: ["count"],
       limit: 15,
       showMore: true,
       showMoreLimit: 522,
@@ -59,7 +58,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
 
   return (
     <>
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} className="rounded-xl">
         <ListItemText className="capitalize" primary={attribute} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
@@ -72,7 +71,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
         <List
           component="div"
           disablePadding
-          className="max-h-96 overflow-y-scroll"
+          className="max-h-96 overflow-y-scroll scrollbar-white"
         >
           {enableSearch && (
             <ListItem disablePadding className="mt-2 px-1 mb-2">

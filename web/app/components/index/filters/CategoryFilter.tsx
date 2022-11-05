@@ -62,7 +62,7 @@ const CategoryFilter = () => {
 
   return (
     <>
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} className="rounded-xl">
         <ListItemText className="capitalize" primary={"category"} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
