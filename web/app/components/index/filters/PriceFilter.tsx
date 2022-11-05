@@ -7,7 +7,7 @@ import {
   ListItemText,
   OutlinedInput,
 } from "@mui/material";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import type { ChangeEvent } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -46,9 +46,9 @@ const PriceFilter = () => {
       <ListItemButton onClick={handleClick}>
         <ListItemText primary={"Price"} />
         {open ? (
-          <ExpandLess className="mr-1" />
+          <ArrowDropUp className="mr-1.5" />
         ) : (
-          <ExpandMore className=" mr-1.5" />
+          <ArrowDropDown className="mr-1.5" />
         )}
       </ListItemButton>
 

@@ -1,6 +1,6 @@
 import { Collapse, ListItemButton, ListItemText } from "@mui/material";
 import { useRefinementList } from "react-instantsearch-hooks-web";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { CATEGORIES } from "~/constants/listing";
 import SubCategoryFilter from "./SubcategoryFilter";
@@ -65,9 +65,9 @@ const CategoryFilter = () => {
       <ListItemButton onClick={handleClick}>
         <ListItemText className="capitalize" primary={"category"} />
         {open ? (
-          <ExpandLess className="mr-1" />
+          <ArrowDropUp className="mr-1.5" />
         ) : (
-          <ExpandMore className=" mr-1.5" />
+          <ArrowDropDown className="mr-1.5" />
         )}
       </ListItemButton>
 

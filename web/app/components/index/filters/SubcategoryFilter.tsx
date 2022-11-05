@@ -1,6 +1,14 @@
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Checkbox, Collapse, FormControlLabel, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
-import type { FC} from "react";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import {
+  Checkbox,
+  Collapse,
+  FormControlLabel,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
+import type { FC } from "react";
 import { useState } from "react";
 import { useRefinementList } from "react-instantsearch-hooks-web";
 
@@ -33,9 +41,9 @@ const SubCategoryFilter: FC<SubCategoryFilterProps> = ({
       <ListItemButton onClick={handleClick} className="pl-8">
         <ListItemText primary={category} />
         {open ? (
-          <ExpandLess className="mr-1" />
+          <ArrowDropUp className="mr-1.5" />
         ) : (
-          <ExpandMore className=" mr-1.5" />
+          <ArrowDropDown className="mr-1.5" />
         )}
       </ListItemButton>
 

@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useRefinementList } from "react-instantsearch-hooks-web";
-import { Search, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Search, ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import type { FC } from "react";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
@@ -62,9 +62,9 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
       <ListItemButton onClick={handleClick}>
         <ListItemText className="capitalize" primary={attribute} />
         {open ? (
-          <ExpandLess className="mr-1" />
+          <ArrowDropUp className="mr-1.5" />
         ) : (
-          <ExpandMore className=" mr-1.5" />
+          <ArrowDropDown className="mr-1.5" />
         )}
       </ListItemButton>
 
