@@ -18,6 +18,9 @@ const SortByPrice = () => {
           labelId="demo-select-small"
           id="demo-select-small"
           label="Sort by"
+          MenuProps={{
+            disableScrollLock: true,
+          }}
           onChange={(e) => sort.refine(e.target.value as string)}
         >
           {sort.options?.map((sort) => (

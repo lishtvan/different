@@ -14,6 +14,7 @@ const Condition = () => {
         name="condition"
         SelectProps={{
           displayEmpty: true,
+          MenuProps: { disableScrollLock: true },
           renderValue: (value) =>
             typeof value === "string" ? (
               <div>{value}</div>

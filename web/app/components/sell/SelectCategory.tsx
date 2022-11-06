@@ -50,6 +50,7 @@ const SelectCategory = () => {
           variant="outlined"
           error={Boolean(actionData?.errors?.category)}
           MenuProps={{
+            disableScrollLock: true,
             MenuListProps: {
               sx: {
                 display: "flex",
@@ -108,6 +109,7 @@ const SelectCategory = () => {
             classes: {
               icon: "border-none",
             },
+            MenuProps: { disableScrollLock: true },
             sx: actionData?.errors?.size
               ? {
                   "& .Mui-disabled": {
