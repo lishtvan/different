@@ -513,11 +513,11 @@ export const DESIGNERS = [
   "Zegna",
   "Zara",
   "Zilli",
-  "Merch",
-  "Custom",
   "Readymade",
   "Etudes",
   "Ienki Ienki",
+  "Custom",
+  "Vintage",
   "Unknown",
 ];
 
@@ -536,6 +536,7 @@ export const TAGS = [
   "#Skateboarding",
   "#Military",
   "#Drill",
+  "Hip-hop",
   "#Sport",
   "#Nature",
   "#Movie",

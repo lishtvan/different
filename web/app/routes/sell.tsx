@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request }) => {
       .documents()
       .create({ ...listing, id: listing.id.toString() });
 
-    return redirect("/");
+    return redirect(`listing/${listing.id}`);
   }
 
   console.log("Full start", new Date().getSeconds());

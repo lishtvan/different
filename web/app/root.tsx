@@ -31,7 +31,6 @@ import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
-  { rel: "icon", href: "favicon.ico" },
 ];
 
 export const meta: MetaFunction = () => ({

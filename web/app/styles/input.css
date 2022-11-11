@@ -1,8 +1,29 @@
 @import "photoswipe/dist/photoswipe.css";
+@import "react-image-gallery/styles/css/image-gallery.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 70px;
+  width: 100%;
+}
+
+.image-gallery-fullscreen-button {
+  padding: 0;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.image-gallery-thumbnail.active {
+  border-color: #168c94;
+}
+
+.image-gallery-svg:hover {
+  color: #168c94;
+}
 
 .pswp__button--arrow {
   margin-top: -250px;
