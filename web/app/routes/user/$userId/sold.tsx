@@ -1,5 +1,5 @@
 const UserReviewsRoute = () => {
-  return <div>Reviews</div>;
+  return <div>Sold</div>;
 };
 
 export default UserReviewsRoute;

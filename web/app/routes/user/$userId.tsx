@@ -9,7 +9,6 @@ import {
   useLocation,
 } from "@remix-run/react";
 import { LocationOnOutlined, Settings } from "@mui/icons-material";
-import { activeNavLinkStyle, notActiveNavLinkStyle } from "~/constants/styles";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "./../../assets/profile.jpeg";
@@ -17,7 +16,7 @@ import ProfileImage from "./../../assets/profile.jpeg";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = getCookieValue("userId", request);
 
-  if (!params.userId || isNaN(Number(params.userId))) return redirect("/");
+  if (!params.userId) return redirect("/");
   const user = await fetchInstance({
     request,
     method: "POST",
@@ -75,30 +74,28 @@ const UserRoute = () => {
           <div className="my-3 flex">
             <NavLink
               to={""}
-              style={() =>
-                !pathname.endsWith("reviews")
-                  ? activeNavLinkStyle
-                  : notActiveNavLinkStyle
-              }
+              className={`underline underline-offset-[5px] decoration-4 ${
+                !pathname.endsWith("sold")
+                  ? "decoration-main"
+                  : "decoration-black"
+              }`}
             >
               <div className="text-lg">
                 <b>5</b> listings
               </div>
             </NavLink>
             <NavLink
-              to={"reviews"}
-              style={({ isActive }) =>
-                isActive ? activeNavLinkStyle : notActiveNavLinkStyle
-              }
+              to={"sold"}
+              className={`underline underline-offset-[5px] decoration-4 ${
+                pathname.endsWith("sold")
+                  ? "decoration-main"
+                  : "decoration-black"
+              }`}
             >
               <div className="text-lg ml-7">
-                <b>8</b> reviews
+                <b>8</b> sold
               </div>
             </NavLink>
-
-            <div className="text-lg ml-7">
-              <b>1</b> sold
-            </div>
           </div>
           <div className=" max-w-md break-words">{bio}</div>
           {location && (

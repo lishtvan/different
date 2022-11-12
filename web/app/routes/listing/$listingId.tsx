@@ -3,8 +3,6 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ImageGallery from "react-image-gallery";
 import { useMemo } from "react";
-import ukrPoshtaIcon from "./../../assets/ukr-poshta.png";
-import novaposhtaIcon from "./../../assets/nova-poshta.png";
 import { Avatar, Button } from "@mui/material";
 import ProfileImage from "./../../assets/profile.jpeg";
 
@@ -43,12 +41,12 @@ const ListingRoute = () => {
         <div className="text-xl">Category: {listing.category}</div>
         <div className="text-xl">Condition: {listing.condition}</div>
         <div className="text-2xl my-4 font-bold">{listing.price}₴</div>
-        <div className="flex w-fit items-start gap-5 flex-col">
+        <div className="flex w-full items-start gap-5 flex-col">
           <Button variant="contained" className="w-full min-w-fit">
             Purchase
           </Button>
           <Link
-            className="flex items-center gap-4 border-main rounded-md border py-1 px-2"
+            className="flex w-full justify-center items-center gap-4 border-main rounded-md border py-1 px-2"
             to={`/user/${seller.id}`}
           >
             <Avatar

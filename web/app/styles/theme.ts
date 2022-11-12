@@ -1,11 +1,10 @@
 import { createTheme } from "@mui/material";
-import { DARK_COLOR, MAIN_COLOR } from "~/constants/styles";
 
 export const theme = createTheme({
   palette: {
     primary: {
-      main: MAIN_COLOR,
-      dark: DARK_COLOR,
+      main: "#168c94",
+      dark: "#167994",
       contrastText: "#fff",
     },
   },

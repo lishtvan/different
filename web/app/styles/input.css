@@ -8,21 +8,25 @@
 .image-gallery-left-nav .image-gallery-svg,
 .image-gallery-right-nav .image-gallery-svg {
   height: 70px;
-  width: 100%;
+  width: 20px;
 }
 
-.image-gallery-fullscreen-button {
-  padding: 0;
-  padding-right: 10px;
-  padding-bottom: 10px;
+.image-gallery-icon:hover {
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  filter: none;
 }
 
 .image-gallery-thumbnail.active {
-  border-color: #168c94;
+  border-color: white;
 }
 
 .image-gallery-svg:hover {
-  color: #168c94;
+  color: white;
+}
+
+.image-gallery-fullscreen-button {
+  padding: 10px;
 }
 
 .pswp__button--arrow {
