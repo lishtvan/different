@@ -32,26 +32,12 @@ const ListingRoute = () => {
   }, [listing]);
 
   return (
-    <div className="w-full my-3 flex flex-col gap-14 mx-auto justify-center md:flex-row">
-      <div className="w-full  md:w-2/5 md:min-w-2/5">
+    <div className="w-full my-3 flex flex-col gap-6 lg:gap-14 mx-auto justify-center md:flex-row">
+      <div className="w-full md:w-[55%] lg:w-[40%] lg:min-w-[40%]">
         <ImageGallery infinite showPlayButton={false} items={images} />
       </div>
-      <div className="gap-y-3 flex flex-col w-full md:max-w-[30%] md:w-fit">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <div className="text-2xl font-bold">{listing.title}</div>
-          </div>
-          <Link
-            className="flex items-center gap-4 ml-3 border-main rounded-md border py-1 px-2"
-            to={`/user/${seller.id}`}
-          >
-            <Avatar
-              sx={{ width: 50, height: 50 }}
-              src={seller?.avatarUrl || ProfileImage}
-            />
-            <div className="text-xl">{seller?.nickname || seller?.name}</div>
-          </Link>
-        </div>
+      <div className="gap-y-3 flex flex-col w-full md:max-w-[35%]">
+        <div className="text-2xl font-bold mb-3">{listing.title}</div>
         <div className="text-xl">Designer: {listing.designer}</div>
         <div className="text-xl">Size: {listing.size}</div>
         <div className="text-xl">Category: {listing.category}</div>
@@ -68,7 +54,7 @@ const ListingRoute = () => {
             ))}
           </div>
         )}
-        <div className="my-2 flex gap-6">
+        <div className="my-2 flex gap-6 flex-col lg:flex-row">
           {listing?.shipping.includes("novaPoshta") && (
             <img src={novaposhtaIcon} className="w-24" alt="Nova Poshta" />
           )}
@@ -77,7 +63,23 @@ const ListingRoute = () => {
           )}
         </div>
         <div className="text-2xl my-4 font-bold">{listing.price}₴</div>
-        <Button variant="contained">Purchase</Button>
+        <div className="flex w-fit lg:w-full items-start gap-5 flex-col lg:flex-row lg:items-center">
+          <Button variant="contained" className="w-full min-w-fit">
+            Purchase
+          </Button>
+          <Link
+            className="flex items-center gap-4 border-main rounded-md border py-1 px-2"
+            to={`/user/${seller.id}`}
+          >
+            <Avatar
+              sx={{ width: 30, height: 30 }}
+              src={seller?.avatarUrl || ProfileImage}
+            />
+            <div className="text-xl whitespace-nowrap">
+              {seller?.nickname || seller?.name}
+            </div>
+          </Link>
+        </div>
         {listing.description && (
           <div className="my-6">
             <div className="text-xl font-semibold">Description</div>
