@@ -5,6 +5,7 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   Links,
@@ -42,10 +43,13 @@ export const meta: MetaFunction = () => ({
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getAuthorizedStatus(request);
-  return {
-    user,
-    typesenseConfig: getTypesenseConfig({ isWriteConfig: false }),
-  };
+  return json(
+    {
+      user,
+      typesenseConfig: getTypesenseConfig({ isWriteConfig: false }),
+    },
+    { headers: user.headers }
+  );
 };
 
 export const action: ActionFunction = async ({ request }) => {
