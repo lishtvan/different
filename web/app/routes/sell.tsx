@@ -14,7 +14,6 @@ import {
   Photos,
   Price,
   SelectCategory,
-  Shipping,
   Tags,
 } from "~/components/sell";
 import {
@@ -64,12 +63,10 @@ export const action: ActionFunction = async ({ request }) => {
     return redirect(`listing/${listing.id}`);
   }
 
-  console.log("Full start", new Date().getSeconds());
   const form = await unstable_parseMultipartFormData(
     request,
     s3UploaderHandler
   );
-  console.log("Full end", new Date().getSeconds());
   const imageKeys = form.getAll("images");
   return { imageKeys };
 };
@@ -118,17 +115,12 @@ const SellRoute = () => {
         <SelectCategory />
         <Photos />
         <Description />
-        <div className="col-start-1 col-end-3 grid grid-cols-2 gap-8">
-          <Condition />
-          <Tags />
-        </div>
-        <Shipping />
-        <div>
-          <ClientOnly fallback={<p>Loading...</p>}>
-            {() => <CardNumber />}
-          </ClientOnly>
-          <Price />
-        </div>
+        <Condition />
+        <Tags />
+        <Price />
+        <ClientOnly fallback={<p>Loading...</p>}>
+          {() => <CardNumber />}
+        </ClientOnly>
         <Button
           variant="contained"
           className="col-start-1 col-end-3 mx-auto w-1/3 mt-12"

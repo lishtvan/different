@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useEffect } from "react";
-import { json } from "remix-utils";
 import { fetchInstance } from "~/utils/fetchInstance";
 
 export const loader: LoaderFunction = async ({ request }) => {

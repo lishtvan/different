@@ -7,5 +7,4 @@ export { default as Condition } from "./Condition";
 export { default as Tags } from "./Tags";
 export { default as Price } from "./Price";
 export { default as CardNumber } from "./CardNumber";
-export { default as Shipping } from "./Shipping";
 export { default as Photos } from "./Photos";

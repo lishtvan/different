@@ -68,6 +68,7 @@ const Photos = () => {
     });
     setImageLoading([]);
     setCardList(newCards);
+    // TODO: remove
     console.log("end", new Date().getSeconds());
   }, [fetcher.data?.imageKeys]);
 

@@ -1,13 +1,7 @@
 import { Avatar, Button } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import {
-  Link,
-  NavLink,
-  Outlet,
-  useLoaderData,
-  useLocation,
-} from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { LocationOnOutlined, Settings } from "@mui/icons-material";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
@@ -36,7 +30,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const UserRoute = () => {
   const { name, nickname, avatarUrl, isOwnAccount, bio, location } =
     useLoaderData();
-  const { pathname } = useLocation();
 
   return (
     <div className="mt-4">
@@ -72,30 +65,12 @@ const UserRoute = () => {
             </div>
           </div>
           <div className="my-3 flex">
-            <NavLink
-              to={""}
-              className={`underline underline-offset-[5px] decoration-4 ${
-                !pathname.endsWith("sold")
-                  ? "decoration-main"
-                  : "decoration-black"
-              }`}
-            >
-              <div className="text-lg">
-                <b>5</b> listings
-              </div>
-            </NavLink>
-            <NavLink
-              to={"sold"}
-              className={`underline underline-offset-[5px] decoration-4 ${
-                pathname.endsWith("sold")
-                  ? "decoration-main"
-                  : "decoration-black"
-              }`}
-            >
-              <div className="text-lg ml-7">
-                <b>8</b> sold
-              </div>
-            </NavLink>
+            <div className="text-lg">
+              <b>5</b> listings
+            </div>
+            <div className="text-lg ml-7">
+              <b>8</b> sold
+            </div>
           </div>
           <div className=" max-w-md break-words">{bio}</div>
           {location && (

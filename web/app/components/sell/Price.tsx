@@ -6,7 +6,7 @@ const Price = () => {
   const actionData = useActionData();
 
   return (
-    <div className="mt-6">
+    <div>
       <FieldTitle title="Price" required={true} />
       <OutlinedInput
         placeholder="Enter price in UAH"

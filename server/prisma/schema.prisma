@@ -45,7 +45,6 @@ model Listing {
   category    String
   description String?
   tags        String[]
-  shipping    String[]
   imageUrls   String[]
   User        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   status      ListingStatus @default(AVAILABLE)

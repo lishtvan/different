@@ -22,7 +22,6 @@ const schema = {
           condition: { type: 'string' },
           category: { type: 'string' },
           size: { type: 'string' },
-          shipping: { type: 'array', items: { type: 'string' } },
           imageUrls: { type: 'array', items: { type: 'string' } },
           price: { type: 'number' },
         },

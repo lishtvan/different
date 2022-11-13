@@ -12,7 +12,6 @@ const schema = {
       'condition',
       'price',
       'cardNumber',
-      'shipping',
       'imageUrls',
       'category',
     ],
@@ -24,7 +23,6 @@ const schema = {
         condition: '/condition Condition is required ',
         price: '/price Price is required ',
         cardNumber: '/cardNumber Card number is required ',
-        shipping: '/shipping Shipping is required ',
         category: '/category Category is required ',
         imageUrls: '/imageUrls At least one photo is required ',
       },
@@ -55,14 +53,6 @@ const schema = {
       size: { type: 'string' },
       condition: { type: 'string' },
       category: { type: 'string' },
-      shipping: {
-        type: 'array',
-        minItems: 1,
-        items: { type: 'string' },
-        errorMessage: {
-          minItems: 'At least one delivery service must be selected ',
-        },
-      },
       imageUrls: {
         type: 'array',
         minItems: 1,
@@ -99,7 +89,6 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       tags,
       price,
       cardNumber,
-      shipping,
       category,
       imageUrls,
     } = req.body;
@@ -127,7 +116,6 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         price,
         imageUrls,
         description,
-        shipping,
         cardNumber,
         userId: Number(req.cookies.userId),
       },
