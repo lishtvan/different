@@ -1,7 +1,6 @@
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      DOMAIN: string;
       DATABASE_URL: string;
       GOOGLE_CLIENT_SECRET: string;
       FACEBOOK_CLIENT_SECRET: string;

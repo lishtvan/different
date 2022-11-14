@@ -1,7 +1,7 @@
 import { Avatar, Button } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { LocationOnOutlined, Settings } from "@mui/icons-material";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
@@ -83,7 +83,7 @@ const UserRoute = () => {
           )}
         </div>
       </div>
-      <Outlet />
+      <div>profile listings</div>
     </div>
   );
 };

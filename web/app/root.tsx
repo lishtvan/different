@@ -23,12 +23,12 @@ import Login from "./components/ui/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
 import { theme } from "./styles/theme";
 import { fetchInstance } from "./utils/fetchInstance";
-import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 import {
   getTypesenseConfig,
   LISTINGS_COLLECTION_NAME,
 } from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
+import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -42,13 +42,16 @@ export const meta: MetaFunction = () => ({
 });
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await getAuthorizedStatus(request);
+  const typesenseConfig = getTypesenseConfig({ isWriteConfig: false });
+  const response = await getAuthorizedStatus(request);
+  if (!response) return { typesenseConfig, user: null };
+
+  const cookieHeader = response.headers.get("set-cookie");
+  const newHeaders = new Headers();
+  newHeaders.append("set-cookie", cookieHeader!);
   return json(
-    {
-      user,
-      typesenseConfig: getTypesenseConfig({ isWriteConfig: false }),
-    },
-    { headers: user.headers }
+    { user: await response.json(), typesenseConfig },
+    { headers: newHeaders }
   );
 };
 
