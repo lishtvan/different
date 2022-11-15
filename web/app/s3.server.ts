@@ -1,7 +1,6 @@
 import type { UploadHandler } from "@remix-run/node";
 import type { PutObjectCommandInput } from "@aws-sdk/client-s3";
-import { S3Client } from "@aws-sdk/client-s3";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import sharp from "sharp";
 import hyperid from "hyperid";
 
@@ -34,7 +33,6 @@ const getImageKey = async (buffer: Buffer) => {
   const imageKey = `${id()}:w=${width}&h=${height}`;
   return imageKey;
 };
-
 const S3_URL = "https://s3.eu-central-1.amazonaws.com/different.dev";
 
 const uploadStreamToS3 = async (

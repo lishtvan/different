@@ -11,6 +11,7 @@ declare global {
       API_KEY: string;
       NODE_ENV: string;
       WEB_DOMAIN: string;
+      S3_CLEANUP_SECRET: string;
     }
   }
 }
