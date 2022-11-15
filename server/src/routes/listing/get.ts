@@ -44,14 +44,14 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 const getListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/get', { schema }, async (req, reply) => {
     const { listingId } = req.body;
-
-    const listing = await fastify.prisma.listing.findUnique({
+    const listing = await fastify.prisma.listing.findFirst({
       where: {
         id: listingId,
       },
     });
+    if (!listing) throw fastify.httpErrors.notFound();
 
-    const seller = await fastify.prisma.user.findUnique({
+    const seller = await fastify.prisma.user.findFirst({
       where: {
         id: listing?.userId,
       },

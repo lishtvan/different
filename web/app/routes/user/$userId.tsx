@@ -1,30 +1,19 @@
 import { Avatar, Button } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { LocationOnOutlined, Settings } from "@mui/icons-material";
-import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "./../../assets/profile.jpeg";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const userId = getCookieValue("userId", request);
-
-  if (!params.userId) return redirect("/");
-  const user = await fetchInstance({
+  const response = await fetchInstance({
     request,
     method: "POST",
     body: { userId: Number(params.userId) },
     route: "/user/get",
-  }).then((res) => res.json());
+  });
 
-  // TODO: fix not found
-  if (user.statusCode === 404) return redirect("/");
-
-  return {
-    ...user,
-    isOwnAccount: userId === params.userId,
-  };
+  return response;
 };
 
 const UserRoute = () => {

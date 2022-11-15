@@ -17,6 +17,7 @@ const schema = {
       name: { type: 'string', nullable: true },
       avatarUrl: { type: 'string', nullable: true },
       location: { type: 'string', nullable: true },
+      isOwnAccount: { type: 'boolean' },
     },
   },
 };
@@ -40,7 +41,7 @@ const getUser: FastifyPluginAsync = async (fastify) => {
 
     if (!user) throw fastify.httpErrors.notFound();
 
-    return reply.send(user);
+    return reply.send({ isOwnAccount: userId === Number(req.cookies.userId), ...user });
   });
 };
 

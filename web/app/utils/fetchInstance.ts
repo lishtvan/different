@@ -47,8 +47,9 @@ export const fetchInstance: FetchInstance = async ({
   } else response = await fetch(`${domain}${route}`, { method, headers });
 
   if (response.status === 401 && route !== "/auth/check") {
-
     return redirect(`/?login=true`);
   }
+  if (response.status === 404) return redirect(`/notfound`);
+
   return response;
 };
