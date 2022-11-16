@@ -130,10 +130,9 @@ export function CatchBoundary() {
                 Error {caught.status}
               </div>
               <div className="text-2xl mb-3">
-                {caught.status === 404 && "Page not found."}{" "}
                 {caught.status === 404 && (
                   <span>
-                    Go to{" "}
+                    Page not found. Go to{" "}
                     <a
                       href={"/"}
                       className="text-blue-500 underline underline-offset-[5px]"
@@ -142,12 +141,11 @@ export function CatchBoundary() {
                     </a>
                   </span>
                 )}
-                {caught.status === 500 && "Something went wrong on our side."}{" "}
                 {caught.status === 500 && (
                   <>
-                    <br />
                     <span>
-                      Please, contact support:{" "}
+                      Something went wrong on our side. <br /> Please, contact
+                      support:{" "}
                       <a
                         className="text-blue-500 underline underline-offset-[5px]"
                         href="https://t.me/DifferentSupport"
