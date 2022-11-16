@@ -46,10 +46,14 @@ export const fetchInstance: FetchInstance = async ({
     });
   } else response = await fetch(`${domain}${route}`, { method, headers });
 
+  if (response.status < 400) return response;
+
   if (response.status === 401 && route !== "/auth/check") {
     return redirect(`/?login=true`);
   }
-  if (response.status === 404) return redirect(`/notfound`);
+
+  if (response.status === 404) throw new Response("", { status: 404 });
+  if (response.status === 500) throw new Response("", { status: 500 });
 
   return response;
 };

@@ -34,9 +34,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     route: "/user/get",
   }).then((res) => res.json());
 
-  // // TODO: fix not found
-  if (response.statusCode === 404) return redirect("/");
-
   return response;
 };
 

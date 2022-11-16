@@ -14,6 +14,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useCatch,
   useLoaderData,
   useSearchParams,
 } from "@remix-run/react";
@@ -103,6 +104,120 @@ export default function App() {
             <Outlet />
             {searchParams.get("login") && <Login />}
           </InstantSearch>
+        </ThemeProvider>
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  return (
+    <html lang="en">
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body className="px-4">
+        <ThemeProvider theme={theme}>
+          <div className="w-full h-screen flex flex-col justify-center items-center">
+            <div>
+              <div className="bg-red-100 text-lg rounded-xl py-1 px-2 w-fit mb-3">
+                Error {caught.status}
+              </div>
+              <div className="text-2xl mb-3">
+                {caught.status === 404 && "Page not found."}{" "}
+                {caught.status === 404 && (
+                  <span>
+                    Go to{" "}
+                    <a
+                      href={"/"}
+                      className="text-blue-500 underline underline-offset-[5px]"
+                    >
+                      main page
+                    </a>
+                  </span>
+                )}
+                {caught.status === 500 && "Something went wrong on our side."}{" "}
+                {caught.status === 500 && (
+                  <>
+                    <br />
+                    <span>
+                      Please, contact support:{" "}
+                      <a
+                        className="text-blue-500 underline underline-offset-[5px]"
+                        href="https://t.me/DifferentSupport"
+                      >
+                        @DifferentSupport
+                      </a>
+                    </span>
+                    <br />
+                    <span>
+                      Return to{" "}
+                      <a
+                        href={caught.data}
+                        className="text-blue-500 underline underline-offset-[5px]"
+                      >
+                        previous page
+                      </a>
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </ThemeProvider>
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
+  );
+}
+
+export function ErrorBoundary() {
+  return (
+    <html lang="en">
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body className="px-4">
+        <ThemeProvider theme={theme}>
+          <div className="w-full h-screen flex flex-col justify-center items-center">
+            <div>
+              <div className="bg-red-100 text-lg rounded-xl py-1 px-2 w-fit mb-3">
+                Error 500
+              </div>
+              <div className="text-2xl mb-3">
+                Something went wrong on our side.
+                <br />
+                <span>
+                  Please, contact support:{" "}
+                  <a
+                    className="text-blue-500 underline underline-offset-[5px]"
+                    href="https://t.me/DifferentSupport"
+                  >
+                    @DifferentSupport
+                  </a>
+                </span>
+                <br />
+                <span>
+                  Return to{" "}
+                  <a
+                    href={window.location.href}
+                    className="text-blue-500 underline underline-offset-[5px]"
+                  >
+                    previous page
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
         </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
