@@ -25,6 +25,7 @@ import { fetchInstance } from "~/utils/fetchInstance";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
+import { useTranslation } from "react-i18next";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -82,7 +83,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const SellRoute = () => {
   const actionData = useActionData();
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (!actionData?.errors) return;
     const { title, designer, size, imageUrls, category } = actionData.errors;
@@ -105,7 +106,7 @@ const SellRoute = () => {
 
   return (
     <div className="flex mt-6 mb-36 mx-auto justify-center items-center flex-col lg:w-[950px]">
-      <div className="text-3xl font-semibold">Create a new listing</div>
+      <div className="text-3xl font-semibold">{t("Create a new listing")}</div>
       <Form
         method="post"
         className="mt-6 grid grid-cols-2 gap-x-8 gap-y-6 w-full"

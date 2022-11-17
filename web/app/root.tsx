@@ -30,6 +30,9 @@ import {
 } from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
+import i18next from "./i18next.server";
+import { useChangeLanguage } from "remix-i18next";
+import { useTranslation } from "react-i18next";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -42,6 +45,8 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1,viewport-fit=cover",
 });
 
+export const handle = { i18n: "common" };
+
 export const loader: LoaderFunction = async ({ request }) => {
   const typesenseConfig = getTypesenseConfig({ isWriteConfig: false });
   const response = await getAuthorizedStatus(request);
@@ -50,8 +55,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   const cookieHeader = response.headers.get("set-cookie");
   const newHeaders = new Headers();
   newHeaders.append("set-cookie", cookieHeader!);
+  const locale = await i18next.getLocale(request);
+
   return json(
-    { user: await response.json(), typesenseConfig },
+    { user: await response.json(), typesenseConfig, locale },
     { headers: newHeaders }
   );
 };
@@ -80,6 +87,9 @@ export const action: ActionFunction = async ({ request }) => {
 export default function App() {
   const [searchParams] = useSearchParams();
   const { typesenseConfig } = useLoaderData();
+  const { locale } = useLoaderData();
+  const { i18n } = useTranslation();
+  useChangeLanguage(locale);
 
   const { searchClient } = new TypesenseInstantsearchAdapter({
     server: typesenseConfig,
@@ -89,7 +99,7 @@ export default function App() {
   });
 
   return (
-    <html lang="en">
+    <html lang={locale} dir={i18n.dir()}>
       <head>
         <Meta />
         <Links />

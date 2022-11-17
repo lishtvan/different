@@ -60,7 +60,7 @@ const SelectCategory = () => {
           renderValue={
             selectedCategory !== ""
               ? () => <div>{selectedCategory}</div>
-              : () => <div className="text-[#aaa]">Choose category</div>
+              : () => <div className="text-[#aaa]">Select category</div>
           }
         >
           <div className="w-2/5">
@@ -125,7 +125,7 @@ const SelectCategory = () => {
                 <div className="text-[#aaa]">
                   {sizePlaceholder
                     ? "Select size"
-                    : "Please select category first"}
+                    : "Please, select category first"}
                 </div>
               ),
           }}

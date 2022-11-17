@@ -21,6 +21,7 @@ import ProfileImage from "./../../assets/profile.jpeg";
 import logo from "./../../assets/logo.jpg";
 import logoText from "./../../assets/logoText.jpg";
 import MainSearch from "../index/Search";
+import { useTranslation } from "react-i18next";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -39,6 +40,7 @@ const Header = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
+  let { t } = useTranslation();
 
   const onMenuItemClick = (path: string) => {
     navigate(path);
@@ -59,7 +61,7 @@ const Header = () => {
           <MainSearch />
           <div className="hidden items-center sm:flex ml-auto">
             <Link className="mr-5" to="/sell">
-              <Button variant="contained">SELL</Button>
+              <Button variant="contained">{t("sell")}</Button>
             </Link>
             {user ? (
               <LightTooltip

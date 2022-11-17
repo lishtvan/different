@@ -15,7 +15,10 @@ const CardNumber = () => {
         fullWidth
         type="tel"
         name="cardNumber"
-        inputProps={getCardNumberProps({})}
+        inputProps={{
+          ...getCardNumberProps({}),
+          placeholder: "Enter card number",
+        }}
         error={
           (meta.isTouched && Boolean(meta.error)) ||
           Boolean(actionData?.errors?.cardNumber)
