@@ -3,21 +3,23 @@ import FieldTitle from "./FieldTitle";
 import { usePaymentInputs } from "react-payment-inputs";
 import images from "react-payment-inputs/images";
 import { useActionData } from "@remix-run/react";
+import { useTranslation } from "react-i18next";
 
 const CardNumber = () => {
   const actionData = useActionData();
   const { getCardNumberProps, getCardImageProps, meta } = usePaymentInputs();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <FieldTitle title="Card number" required={true} />
+      <FieldTitle title={t("Card number")} required={true} />
       <TextField
         fullWidth
         type="tel"
         name="cardNumber"
         inputProps={{
           ...getCardNumberProps({}),
-          placeholder: "Enter card number",
+          placeholder: t("Enter card number")!,
         }}
         error={
           (meta.isTouched && Boolean(meta.error)) ||
@@ -35,7 +37,7 @@ const CardNumber = () => {
       />
       {actionData?.errors?.cardNumber && (
         <p className="ml-2 mt-1 text-[#d32f2f]">
-          {actionData.errors.cardNumber}
+          {t(actionData.errors.cardNumber)}
         </p>
       )}
     </div>

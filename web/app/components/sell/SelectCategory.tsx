@@ -4,6 +4,7 @@ import FieldTitle from "./FieldTitle";
 import type { Section } from "~/constants/listing";
 import { CATEGORIES, SIZES } from "~/constants/listing";
 import { useActionData } from "@remix-run/react";
+import { useTranslation } from "react-i18next";
 
 const SelectCategory = () => {
   const actionData = useActionData();
@@ -14,6 +15,7 @@ const SelectCategory = () => {
   const [selectedSection, setSelectedSection] = useState("");
   const [sizePlaceholder, setSizePlaceholder] = useState(false);
   const [size, setSize] = useState<string>("");
+  const { t } = useTranslation();
 
   const handleClose = () => {
     setOpen(false);
@@ -38,7 +40,7 @@ const SelectCategory = () => {
   return (
     <div className="col-start-1 col-end-3 grid grid-cols-2 gap-8">
       <div>
-        <FieldTitle title="Category" required={true} />
+        <FieldTitle title={t("Category")} required={true} />
         <Select
           className="w-full"
           displayEmpty
@@ -60,7 +62,7 @@ const SelectCategory = () => {
           renderValue={
             selectedCategory !== ""
               ? () => <div>{selectedCategory}</div>
-              : () => <div className="text-[#aaa]">Select category</div>
+              : () => <div className="text-[#aaa]">{t("Select category")}</div>
           }
         >
           <div className="w-2/5">
@@ -92,12 +94,12 @@ const SelectCategory = () => {
         </Select>
         {actionData?.errors?.category && (
           <p className="ml-2 mt-1 text-[#d32f2f]">
-            {actionData.errors.category}
+            {t(actionData.errors.category)}
           </p>
         )}
       </div>
       <div>
-        <FieldTitle title="Size" required={true} />
+        <FieldTitle title={t("Size")} required={true} />
         <TextField
           select
           disabled={!selectedSection}
@@ -124,8 +126,8 @@ const SelectCategory = () => {
               ) : (
                 <div className="text-[#aaa]">
                   {sizePlaceholder
-                    ? "Select size"
-                    : "Please, select category first"}
+                    ? t("Select size")
+                    : t("Please, select category first")}
                 </div>
               ),
           }}
@@ -142,7 +144,7 @@ const SelectCategory = () => {
           )}
         </TextField>
         {actionData?.errors?.size && (
-          <p className="ml-2 mt-1 text-[#d32f2f]">{actionData.errors.size}</p>
+          <p className="ml-2 mt-1 text-[#d32f2f]">{t(actionData.errors.size)}</p>
         )}
       </div>
     </div>

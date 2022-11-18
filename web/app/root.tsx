@@ -56,7 +56,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const newHeaders = new Headers();
   newHeaders.append("set-cookie", cookieHeader!);
   const locale = await i18next.getLocale(request);
-
   return json(
     { user: await response.json(), typesenseConfig, locale },
     { headers: newHeaders }

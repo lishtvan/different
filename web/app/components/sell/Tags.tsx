@@ -1,14 +1,16 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { TAGS } from "~/constants/listing";
 import FieldTitle from "./FieldTitle";
 
 const Tags = () => {
   const [tags, setTags] = useState<string[]>([]);
+  const { t } = useTranslation();
 
   return (
     <div>
-      <FieldTitle title="Tags" required={false} />
+      <FieldTitle title={t("Tags")} required={false} />
       <input hidden name="tags" readOnly value={tags} />
       <Autocomplete
         className="w-full"
@@ -18,7 +20,7 @@ const Tags = () => {
         disableCloseOnSelect
         blurOnSelect={tags.length === 2}
         value={tags}
-        noOptionsText="You can set maximum 3 tags"
+        noOptionsText={t("You can set maximum 3 tags")}
         onChange={(e, newVal) => {
           const newTags = [...newVal];
           if (newTags.length) {
@@ -40,7 +42,7 @@ const Tags = () => {
             }}
             disabled={tags.length === 3}
             placeholder={
-              tags.length ? "" : "Make the search of your item easier"
+              tags.length ? "" : t("Make the search of your item easier")!
             }
           />
         )}

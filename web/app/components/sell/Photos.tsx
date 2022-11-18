@@ -13,6 +13,7 @@ import { useActionData, useFetcher } from "@remix-run/react";
 
 import { Gallery, Item } from "react-photoswipe-gallery";
 import FieldTitle from "./FieldTitle";
+import { useTranslation } from "react-i18next";
 
 interface ItemImage {
   imageKey: string | null;
@@ -39,6 +40,7 @@ const Photos = () => {
   const actionData = useActionData();
   const [imagesLoading, setImageLoading] = useState<number[]>([]);
   const [uploadError, setUploadError] = useState<boolean | string>(false);
+  const { t } = useTranslation();
 
   const getImageDimensions = (imageKey: string, dimension: "h" | "w") => {
     const stringArr = imageKey.split(":");
@@ -142,10 +144,10 @@ const Photos = () => {
 
   return (
     <div className="col-start-1 col-end-3">
-      <FieldTitle required={true} title="Photos" />
+      <FieldTitle required={true} title={t("Photos")} />
       {actionData?.errors?.imageUrls && (
         <p className="ml-2 mt-1 text-[#d32f2f]">
-          {actionData.errors.imageUrls}
+          {t(actionData.errors.imageUrls)}
         </p>
       )}
       <div className="flex items-center">
@@ -154,13 +156,13 @@ const Photos = () => {
             severity="error"
             className="mx-auto rounded-xl w-full font-bold"
           >
-            {uploadError}
+            {t(uploadError as string)}
           </Alert>
         ) : (
           <>
             <p className="ml-2 mr-auto">
-              <span className="text-main mr-1">Note:</span>
-              You can change order of images by grabbing them.
+              <span className="text-main mr-1">{t("Note")}:</span>
+              {t("You can change order of images by grabbing them")}.
             </p>
             <Button
               variant="outlined"
@@ -168,7 +170,7 @@ const Photos = () => {
               className="text-black"
               onClick={deleteAllHandler}
             >
-              Delete all
+              {t("Delete all")}
             </Button>
           </>
         )}

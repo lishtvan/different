@@ -127,7 +127,7 @@ const SellRoute = () => {
           className="col-start-1 col-end-3 mx-auto w-1/3 mt-12"
           type="submit"
         >
-          Create
+          {t("Create")}
         </Button>
       </Form>
     </div>

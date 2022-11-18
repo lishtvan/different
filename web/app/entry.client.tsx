@@ -22,7 +22,7 @@ i18next
       // Here only enable htmlTag detection, we'll detect the language only
       // server-side with remix-i18next, by using the `<html lang>` attribute
       // we can communicate to the client the language detected server-side
-      order: ["htmlTag"],
+      order: ["header", "cookie"],
       // Because we only use htmlTag, there's no reason to cache the language
       // on the browser, so we disable it
       caches: [],

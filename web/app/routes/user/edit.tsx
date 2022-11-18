@@ -2,6 +2,9 @@ import {
   Button,
   CircularProgress,
   IconButton,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
   TextField,
   Tooltip,
 } from "@mui/material";
@@ -22,6 +25,7 @@ import ProfileImage from "./../../assets/profile.jpeg";
 import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";
 import { s3UploaderHandler } from "~/s3.server";
+import { useTranslation } from "react-i18next";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = getCookieValue("userId", request);
@@ -43,8 +47,10 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (contentType === "application/x-www-form-urlencoded") {
     const formData = await request.formData();
+
     const body = Object.fromEntries(formData);
-    const { bio, nickname, location, _action } = body;
+
+    const { bio, nickname, location, _action, language } = body;
 
     let errors: Record<string, unknown> = {};
     if (nickname.toString().length < 2) errors.nickname = "Too short";
@@ -64,7 +70,9 @@ export const action: ActionFunction = async ({ request }) => {
         errors = getErrors(message);
         return { errors };
       }
-      return redirect(`/user/${userId}`);
+      const newHeaders = new Headers();
+      newHeaders.append("Set-Cookie", `lng=${language}; Path=/; Max-Age=999999999999999`);
+      return redirect(`/user/${userId}`, { headers: newHeaders });
     }
     return { errors };
   } else {
@@ -101,6 +109,7 @@ const UserEditRoute = () => {
   const data = useActionData();
   const submit = useSubmit();
   const { submission } = useTransition();
+  const { i18n } = useTranslation();
 
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
     submit(e.currentTarget, { replace: true });
@@ -201,6 +210,41 @@ const UserEditRoute = () => {
           }}
           defaultValue={location}
         />
+        <TextField
+          select
+          name="language"
+          SelectProps={{
+            displayEmpty: true,
+            MenuProps: { disableScrollLock: true },
+            renderValue: (value) =>
+              typeof value === "string" ? (
+                <div>Language: {value === "en" ? "English" : "Ukrainian"}</div>
+              ) : (
+                <div className="text-[#aaa]">Language</div>
+              ),
+          }}
+          defaultValue={i18n.language}
+          className="w-full"
+        >
+          <MenuItem value={"en"}>
+            <ListItemIcon className="mr-2">
+              <img
+                alt="United States"
+                src="http://purecatamphetamine.github.io/country-flag-icons/3x2/GB.svg"
+              />
+            </ListItemIcon>
+            <ListItemText>English</ListItemText>
+          </MenuItem>
+          <MenuItem value={"uk"}>
+            <ListItemIcon className="mr-2">
+              <img
+                alt="United States"
+                src="http://purecatamphetamine.github.io/country-flag-icons/3x2/UA.svg"
+              />
+            </ListItemIcon>
+            <ListItemText> Ukrainian</ListItemText>
+          </MenuItem>
+        </TextField>
         <Button
           type="submit"
           disabled={submission?.encType === "multipart/form-data"}

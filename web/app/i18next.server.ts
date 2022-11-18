@@ -1,9 +1,31 @@
+import Backend from "i18next-fs-backend";
 import { resolve } from "node:path";
 import { RemixI18Next } from "remix-i18next";
 import i18n from "~/i18n"; // your i18n configuration file
 
-let i18next = new RemixI18Next({
+const i18next = new RemixI18Next({
   detection: {
+    order: ["cookie", "header"],
+    cookie: {
+      isSigned: false,
+      name: "lng",
+      serialize: async () => "",
+      parse: async (cookieHeader) => {
+        if (!cookieHeader) return "";
+        const parsedCookies = cookieHeader
+          .split(";")
+          .map((v) => v.split("="))
+          .reduce((acc, v) => {
+            // @ts-ignore
+            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(
+              v[1].trim()
+            );
+            return acc;
+          }, {});
+        // @ts-ignore
+        return parsedCookies["lng"];
+      },
+    },
     supportedLanguages: i18n.supportedLngs,
     fallbackLanguage: i18n.fallbackLng,
   },
@@ -15,6 +37,8 @@ let i18next = new RemixI18Next({
       loadPath: resolve("./public/locales/{{lng}}/{{ns}}.json"),
     },
   },
+  // @ts-ignore
+  backend: Backend,
 });
 
 export default i18next;
