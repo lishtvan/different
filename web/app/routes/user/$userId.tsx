@@ -31,16 +31,7 @@ const UserRoute = () => {
           <div className="mt-2 flex justify-between">
             <div className="text-3xl font-normal">{nickname || name}</div>
             <div className="ml-10">
-              {!isOwnAccount ? (
-                <>
-                  <Button variant="outlined" sx={{ marginRight: "10px" }}>
-                    Leave review
-                  </Button>
-                  <Button variant="outlined" sx={{ marginRight: "10px" }}>
-                    Message
-                  </Button>
-                </>
-              ) : (
+              {!isOwnAccount && (
                 <Link to="/user/edit">
                   <Button
                     variant="outlined"

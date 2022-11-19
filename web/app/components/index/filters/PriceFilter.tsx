@@ -12,10 +12,11 @@ import type { ChangeEvent } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRange } from "react-instantsearch-hooks-web";
+import { useTranslation } from "react-i18next";
 
 const PriceFilter = () => {
   const [open, setOpen] = useState(false);
-
+  const { t } = useTranslation();
   const { refine, start } = useRange({
     attribute: "price",
     min: 0,
@@ -44,7 +45,7 @@ const PriceFilter = () => {
   return (
     <>
       <ListItemButton onClick={handleClick} className="rounded-xl">
-        <ListItemText primary={"Price"} />
+        <ListItemText primary={t("Price")} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
         ) : (

@@ -20,7 +20,7 @@ const Condition = () => {
           MenuProps: { disableScrollLock: true },
           renderValue: (value) =>
             typeof value === "string" ? (
-              <div>{value}</div>
+              <div>{t(value)}</div>
             ) : (
               <div className="text-[#aaa]">{t("Be honest")}</div>
             ),
@@ -29,7 +29,7 @@ const Condition = () => {
       >
         {CONDITIONS.map((condition) => (
           <MenuItem key={condition} value={condition}>
-            {condition}
+            {t(condition)}
           </MenuItem>
         ))}
       </TextField>

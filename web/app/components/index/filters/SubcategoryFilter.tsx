@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import type { FC } from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useRefinementList } from "react-instantsearch-hooks-web";
 
 interface SubCategoryFilterProps {
@@ -26,6 +27,7 @@ const SubCategoryFilter: FC<SubCategoryFilterProps> = ({
   category,
   subcategories,
 }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const { refine } = useRefinementList({
@@ -39,7 +41,7 @@ const SubCategoryFilter: FC<SubCategoryFilterProps> = ({
   return (
     <div className={`${subcategories.length === 0 ? "hidden" : "block"}`}>
       <ListItemButton onClick={handleClick} className="pl-8 rounded-xl">
-        <ListItemText primary={category} />
+        <ListItemText primary={t(category)} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
         ) : (
@@ -62,7 +64,7 @@ const SubCategoryFilter: FC<SubCategoryFilterProps> = ({
                 label={
                   <div className="flex items-center">
                     <div className="whitespace-nowrap text-ellipsis">
-                      {item.label}
+                      {t(item.label)}
                     </div>
                     <div className="ml-3 px-2 bg-[#ebebeb] rounded-full">
                       {item.count}

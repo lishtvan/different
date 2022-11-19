@@ -14,6 +14,7 @@ import { Search, ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import type { FC } from "react";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   enableSearch: boolean;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
+  const { t } = useTranslation();
   const { refine, searchForItems, items, toggleShowMore, isShowingMore } =
     useRefinementList({
       attribute,
@@ -59,7 +61,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
   return (
     <>
       <ListItemButton onClick={handleClick} className="rounded-xl">
-        <ListItemText className="capitalize" primary={attribute} />
+        <ListItemText primary={t(attribute.charAt(0).toUpperCase() + attribute.slice(1))} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
         ) : (
@@ -76,7 +78,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
           {enableSearch && (
             <ListItem disablePadding className="mt-2 px-1 mb-2">
               <TextField
-                placeholder="Search"
+                placeholder={t("Search")}
                 className="w-full px-2"
                 inputProps={{ "aria-label": "search" }}
                 onChange={(event) => searchForItems(event.currentTarget.value)}
@@ -105,7 +107,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
                 }
                 label={
                   <div className="flex items-center">
-                    <div className="break-words">{item.label}</div>
+                    <div className="break-words">{t(item.label)}</div>
                     <div className="ml-3 px-2 bg-[#ebebeb] rounded-full">
                       {item.count}
                     </div>

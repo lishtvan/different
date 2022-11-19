@@ -61,7 +61,7 @@ const SelectCategory = () => {
           }}
           renderValue={
             selectedCategory !== ""
-              ? () => <div>{selectedCategory}</div>
+              ? () => <div>{t(selectedCategory)}</div>
               : () => <div className="text-[#aaa]">{t("Select category")}</div>
           }
         >
@@ -71,7 +71,7 @@ const SelectCategory = () => {
                 key={index}
                 onMouseOver={() => setCurrentSection(section)}
               >
-                {section}
+                {t(section)}
               </MenuItem>
             ))}
           </div>
@@ -84,7 +84,7 @@ const SelectCategory = () => {
                       key={index}
                       onClick={() => hanldeCategoryClick(category)}
                     >
-                      {category}
+                      {t(category)}
                     </MenuItem>
                   ))}
                 </div>
@@ -144,7 +144,9 @@ const SelectCategory = () => {
           )}
         </TextField>
         {actionData?.errors?.size && (
-          <p className="ml-2 mt-1 text-[#d32f2f]">{t(actionData.errors.size)}</p>
+          <p className="ml-2 mt-1 text-[#d32f2f]">
+            {t(actionData.errors.size)}
+          </p>
         )}
       </div>
     </div>

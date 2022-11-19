@@ -1,6 +1,7 @@
 import { Clear } from "@mui/icons-material";
 import type { CurrentRefinementsConnectorParamsRefinement } from "instantsearch.js/es/connectors/current-refinements/connectCurrentRefinements";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   useClearRefinements,
   useCurrentRefinements,
@@ -14,6 +15,7 @@ const ClearFilters = () => {
   const { refine, items } = useCurrentRefinements({
     excludedAttributes: ["price", "query", "status"],
   });
+  const { t } = useTranslation();
 
   const soldFilters = useCurrentRefinements({
     excludedAttributes: [
@@ -43,12 +45,12 @@ const ClearFilters = () => {
     <>
       {soldFilters?.items[0]?.refinements[0]?.label === "AVAILABLE" ? (
         <div className="text-xl font-bold min-w-fit">
-          {results?.nbHits} listings{" "}
-          {refinements.length > 0 ? "for:" : "available"}
+          {results?.nbHits} {t("listings")}{" "}
+          {refinements.length > 0 ? t("for") : t("available")}
         </div>
       ) : (
         <div className="text-xl font-bold min-w-fit">
-          {results?.nbHits} sold items {refinements.length > 0 && "for:"}
+          {results?.nbHits} {t("sold items")} {refinements.length > 0 && t("for")}
         </div>
       )}
       {refinements.length > 0 && (
@@ -59,7 +61,7 @@ const ClearFilters = () => {
               onClick={() => refine(item)}
               className="text-xl border-main hover:bg-[#f2f2f5] rounded-md text-main border m-1 pl-2 pr-1"
             >
-              {item.label} <Clear />
+              {t(item.label)} <Clear />
             </button>
           ))}
         </div>

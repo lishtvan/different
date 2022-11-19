@@ -4,6 +4,7 @@ import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { CATEGORIES } from "~/constants/listing";
 import SubCategoryFilter from "./SubcategoryFilter";
+import { useTranslation } from "react-i18next";
 
 interface CategoriesFilter<T> {
   Tops: T;
@@ -18,6 +19,7 @@ const CategoryFilter = () => {
   const { items } = useRefinementList({
     attribute: "category",
   });
+  const { t } = useTranslation();
 
   const [categories, setCategories] = useState<CategoriesFilter<typeof items>>({
     Tops: [],
@@ -63,7 +65,7 @@ const CategoryFilter = () => {
   return (
     <>
       <ListItemButton onClick={handleClick} className="rounded-xl">
-        <ListItemText className="capitalize" primary={"category"} />
+        <ListItemText primary={t("Category")} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
         ) : (
