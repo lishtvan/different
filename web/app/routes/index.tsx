@@ -7,7 +7,7 @@ const IndexRoute = () => {
   return (
     <div className="flex">
       <Filters />
-      <div className="w-full mb-8 ml-0 sm:ml-4">
+      <div className="w-full mb-20 ml-0 sm:ml-4">
         <div className="py-2 mb-2 items-center hidden md:flex sticky top-16 bg-white z-40">
           <ClearFilters />
           <SortBy />
