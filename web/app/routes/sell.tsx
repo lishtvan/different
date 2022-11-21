@@ -33,7 +33,6 @@ export const action: ActionFunction = async ({ request }) => {
   if (contentType === "application/x-www-form-urlencoded") {
     const form = await request.formData();
     const body = getBody(form);
-    console.log({ body })
     let formattedTags = [];
     // @ts-ignore
     if (body.tags) formattedTags = body.tags.split(",");
