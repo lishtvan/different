@@ -121,7 +121,7 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    return reply.send(listing);
+    return reply.send({ ...listing, sellerId: req.cookies.userId });
   });
 };
 
