@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ImageGallery from "react-image-gallery";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Avatar, Button, IconButton, Tooltip } from "@mui/material";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { Delete } from "@mui/icons-material";
@@ -12,6 +12,7 @@ import {
   getTypesenseConfig,
   LISTINGS_COLLECTION_NAME,
 } from "~/constants/typesense";
+import PurchaseModal from "~/components/listing/PurchaseModal";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
@@ -45,6 +46,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 const ListingRoute = () => {
   const { listing, seller } = useLoaderData();
+  const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+
   const { tags, images } = useMemo(() => {
     const formattedImages = listing.imageUrls.map((imageUrl: string) => ({
       original: imageUrl,
@@ -54,9 +57,15 @@ const ListingRoute = () => {
     return { images: formattedImages, tags: formattedTags };
   }, [listing]);
 
+  const togglePurchaseModal = useCallback(() => {
+    setIsPurchaseOpen(!isPurchaseOpen);
+  }, [isPurchaseOpen]);
+
+  console.log(isPurchaseOpen);
   return (
     <Form method="post">
       <div className="w-full my-3 flex flex-col gap-6 lg:gap-14 mx-auto justify-center md:flex-row">
+        <PurchaseModal toggle={togglePurchaseModal} isOpen={isPurchaseOpen} />
         <div className="w-full md:w-[55%] lg:w-[40%] lg:min-w-[40%]">
           <ImageGallery infinite showPlayButton={false} items={images} />
         </div>
@@ -82,7 +91,11 @@ const ListingRoute = () => {
           <div className="text-xl">Condition: {listing.condition}</div>
           <div className="text-2xl my-4 font-bold">{listing.price}₴</div>
           <div className="flex w-fit md:w-full items-start gap-5 flex-col">
-            <Button variant="contained" className="w-full min-w-fit">
+            <Button
+              variant="contained"
+              className="w-full min-w-fit"
+              onClick={togglePurchaseModal}
+            >
               Purchase
             </Button>
             <Link

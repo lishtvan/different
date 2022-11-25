@@ -98,7 +98,7 @@ export default function App() {
   });
 
   return (
-    <html lang={locale} dir={i18n.dir()}>
+    <html lang={locale} dir={i18n.dir()} className='overflow-y-scroll'>
       <head>
         <Meta />
         <Links />
