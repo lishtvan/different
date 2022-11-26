@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { Close, Security } from "@mui/icons-material";
 import {
   Autocomplete,
@@ -7,8 +8,10 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
+import MuiPhoneNumber from "material-ui-phone-number-2";
 import type { FC } from "react";
-import { DESIGNERS } from "~/constants/listing";
+import { NOVA_POSHTA_DEPARTMENTS } from "~/constants/novaposhta";
+import { ListboxComponent, StyledPopper } from "../ui/Autocomplete";
 
 interface Props {
   isOpen: boolean;
@@ -30,14 +33,36 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
         </IconButton>
       </DialogTitle>
       <div className="w-[450px] flex justify-start items-center flex-col px-5 gap-y-4">
-        <TextField className="w-full" placeholder="Full name" />
-        <TextField className="w-full" placeholder="Phone number" />
-        <Autocomplete
+        <TextField
           className="w-full"
-          options={DESIGNERS}
+          label="Full name"
+          placeholder="Enter your full name"
+        />
+        <MuiPhoneNumber
+          className="w-full"
+          variant="outlined"
+          label="Phone number"
+          onChange={() => {}}
+          countryCodeEditable={false}
+          onlyCountries={["ua"]}
+          defaultCountry="ua"
+          regions={["europe"]}
+        />
+        <Autocomplete
+          id="virtualize-demo"
+          className="w-full"
+          disableListWrap
+          PopperComponent={StyledPopper}
+          ListboxComponent={ListboxComponent}
+          options={NOVA_POSHTA_DEPARTMENTS}
           renderInput={(params) => (
-            <TextField {...params} placeholder="Nova Poshta department" />
+            <TextField
+              {...params}
+              label="Nova Poshta department"
+              placeholder="Enter Nova Poshta department"
+            />
           )}
+          renderOption={(props, option) => [props, option] as React.ReactNode}
         />
         <Button
           variant="outlined"

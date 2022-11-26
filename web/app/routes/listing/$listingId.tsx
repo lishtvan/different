@@ -61,7 +61,6 @@ const ListingRoute = () => {
     setIsPurchaseOpen(!isPurchaseOpen);
   }, [isPurchaseOpen]);
 
-  console.log(isPurchaseOpen);
   return (
     <Form method="post">
       <div className="w-full my-3 flex flex-col gap-6 lg:gap-14 mx-auto justify-center md:flex-row">
