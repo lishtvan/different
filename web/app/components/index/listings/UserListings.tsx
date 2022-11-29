@@ -1,6 +1,7 @@
 import { useParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import {
+  useClearRefinements,
   useInfiniteHits,
   useRefinementList,
 } from "react-instantsearch-hooks-web";
@@ -10,15 +11,17 @@ import Listing from "./Listing";
 const UserListings = () => {
   const { refine: refineStatus } = useRefinementList({ attribute: "status" });
   const { refine: refineSeller } = useRefinementList({ attribute: "sellerId" });
+  const clear = useClearRefinements();
   const { hits, isLastPage, showMore, results } = useInfiniteHits<TListing>();
   const sentinelRef = useRef(null);
   const { userId } = useParams();
 
   useEffect(() => {
     if (!userId) return;
+    clear.refine();
     refineStatus("AVAILABLE");
     refineSeller(userId);
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     if (sentinelRef.current !== null) {
