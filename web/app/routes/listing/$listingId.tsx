@@ -29,12 +29,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
-  await fetchInstance({
+  const response = await fetchInstance({
     request,
     route: "/listing/delete",
     method: "POST",
     body: { listingId },
   });
+  if (response.headers.get("location")) return null;
   const writeConfig = getTypesenseConfig({ isWriteConfig: true });
   const typesenseClient = new Typesense.Client(writeConfig);
   await typesenseClient

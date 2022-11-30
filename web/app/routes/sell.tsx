@@ -46,6 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
         tags: formattedTags,
       },
     });
+    if (response.headers.get("location")) return null;
     if (response.status === 400) {
       const { message } = await response.json();
 
