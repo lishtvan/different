@@ -17,13 +17,14 @@ import PurchaseModal from "~/components/listing/PurchaseModal";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
 
-  const listingData = await fetchInstance({
+  const response = await fetchInstance({
     request,
     route: "/listing/get",
     method: "POST",
     body: { listingId },
-  });
-  return listingData;
+  }).then((res) => res.json());
+
+  return response;
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -45,7 +46,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 const ListingRoute = () => {
-  const { listing, seller } = useLoaderData();
+  const { listing, seller, isOwnListing } = useLoaderData();
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
 
   const { tags, images } = useMemo(() => {
@@ -71,18 +72,20 @@ const ListingRoute = () => {
         <div className="gap-y-3 flex flex-col w-full md:max-w-[380px]">
           <div className="mb-2 flex justify-between items-center">
             <div className="text-2xl font-bold">{listing.title}</div>
-            <Tooltip title="Delete listing">
-              <IconButton
-                type="submit"
-                name="delete"
-                value="delete"
-                size="large"
-                color="inherit"
-                aria-label="delete"
-              >
-                <Delete />
-              </IconButton>
-            </Tooltip>
+            {isOwnListing && (
+              <Tooltip title="Delete listing">
+                <IconButton
+                  type="submit"
+                  name="delete"
+                  value="delete"
+                  size="large"
+                  color="inherit"
+                  aria-label="delete"
+                >
+                  <Delete />
+                </IconButton>
+              </Tooltip>
+            )}
           </div>
           <div className="text-xl">Designer: {listing.designer}</div>
           <div className="text-xl">Size: {listing.size}</div>

@@ -52,6 +52,7 @@ const OuterElementType = forwardRef<HTMLDivElement>((props, ref) => {
   return <div ref={ref} {...props} {...outerProps} />;
 });
 
+// TODO: rewrite to hook
 export const ListboxComponent = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLElement>

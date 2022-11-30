@@ -5,8 +5,7 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -50,16 +49,30 @@ export const handle = { i18n: "common" };
 export const loader: LoaderFunction = async ({ request }) => {
   const typesenseConfig = getTypesenseConfig({ isWriteConfig: false });
   const response = await getAuthorizedStatus(request);
-  if (!response) return { typesenseConfig, user: null };
+  const locale = await i18next.getLocale(request);
+  const user = await response.json();
+
+  const newHeaders = new Headers();
+  if (user.statusCode === 401) {
+    if (!request.url.includes("auth")) {
+      newHeaders.append(
+        "set-cookie",
+        "token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT, userId=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      );
+      return json(
+        { typesenseConfig, user: null, locale },
+        { headers: newHeaders }
+      );
+    }
+
+    return json({ typesenseConfig, user: null, locale });
+  }
 
   const cookieHeader = response.headers.get("set-cookie");
-  const newHeaders = new Headers();
+
   newHeaders.append("set-cookie", cookieHeader!);
-  const locale = await i18next.getLocale(request);
-  return json(
-    { user: await response.json(), typesenseConfig, locale },
-    { headers: newHeaders }
-  );
+
+  return json({ user, typesenseConfig, locale }, { headers: newHeaders });
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -98,7 +111,7 @@ export default function App() {
   });
 
   return (
-    <html lang={locale} dir={i18n.dir()} className='overflow-y-scroll'>
+    <html lang={locale} dir={i18n.dir()} className="overflow-y-scroll">
       <head>
         <Meta />
         <Links />

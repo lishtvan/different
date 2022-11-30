@@ -35,6 +35,9 @@ const schema = {
           id: { type: 'number' },
         },
       },
+      isOwnListing: {
+        type: 'boolean',
+      },
     },
   },
 };
@@ -57,7 +60,11 @@ const getListing: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    return reply.send({ listing, seller });
+    return reply.send({
+      listing,
+      seller,
+      isOwnListing: listing.userId === Number(req.cookies.userId),
+    });
   });
 };
 

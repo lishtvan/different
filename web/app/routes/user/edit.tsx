@@ -71,7 +71,7 @@ export const action: ActionFunction = async ({ request }) => {
         return { errors };
       }
       const newHeaders = new Headers();
-      newHeaders.append("Set-Cookie", `lng=${language}; Path=/; Max-Age=999999999999999`);
+      newHeaders.append("Set-Cookie", `lng=${language}; Path=/; expires=Thu, 01 Jan 2030 00:00:00 GMT`);
       return redirect(`/user/${userId}`, { headers: newHeaders });
     }
     return { errors };
