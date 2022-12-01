@@ -1,12 +1,21 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useState } from "react";
+import { useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TAGS } from "~/constants/listing";
 import FieldTitle from "./FieldTitle";
 
 const Tags = () => {
+  const loaderData = useLoaderData();
   const [tags, setTags] = useState<string[]>([]);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!loaderData.tags) return;
+    const formattedTags = loaderData.tags.split(",");
+    console.log(formattedTags);
+    setTags(formattedTags);
+  }, [loaderData.tags]);
 
   return (
     <div>

@@ -28,7 +28,7 @@ const Login = () => {
         { route: location.pathname },
         { method: "post", action: "/" }
       );
-    }, 500);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [checkAuth, fetcher, location.pathname]);

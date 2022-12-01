@@ -1,16 +1,19 @@
 import { TextField } from "@mui/material";
-import { useActionData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import FieldTitle from "./FieldTitle";
 
 const ItemTitle = () => {
   const actionData = useActionData();
   const { t } = useTranslation();
+  const loaderData = useLoaderData();
+
   return (
     <div>
       <FieldTitle title={t("Title")} required={true} />
       <TextField
         name="title"
+        defaultValue={loaderData?.title}
         error={Boolean(actionData?.errors?.title)}
         placeholder={t("Enter title up to 80 characters")!}
         inputProps={{

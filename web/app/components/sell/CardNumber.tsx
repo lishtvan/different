@@ -2,13 +2,14 @@ import { InputAdornment, TextField } from "@mui/material";
 import FieldTitle from "./FieldTitle";
 import { usePaymentInputs } from "react-payment-inputs";
 import images from "react-payment-inputs/images";
-import { useActionData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
 const CardNumber = () => {
-  const actionData = useActionData();
-  const { getCardNumberProps, getCardImageProps, meta } = usePaymentInputs();
   const { t } = useTranslation();
+  const actionData = useActionData();
+  const loaderData = useLoaderData();
+  const { getCardNumberProps, getCardImageProps, meta } = usePaymentInputs();
 
   return (
     <div>
@@ -17,6 +18,7 @@ const CardNumber = () => {
         fullWidth
         type="tel"
         name="cardNumber"
+        defaultValue={loaderData?.cardNumber}
         inputProps={{
           ...getCardNumberProps({}),
           placeholder: t("Enter card number")!,

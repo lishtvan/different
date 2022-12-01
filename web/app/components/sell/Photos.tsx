@@ -9,7 +9,7 @@ import {
 import type { DragEvent, FormEvent } from "react";
 import { useState, useEffect } from "react";
 import { AddAPhoto, Close, Search, Delete } from "@mui/icons-material";
-import { useActionData, useFetcher } from "@remix-run/react";
+import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
 
 import { Gallery, Item } from "react-photoswipe-gallery";
 import FieldTitle from "./FieldTitle";
@@ -34,13 +34,14 @@ const initialImageList: ItemImage[] = [
 ];
 
 const Photos = () => {
+  const { t } = useTranslation();
+  const loaderData = useLoaderData();
   const [cardList, setCardList] = useState<ItemImage[]>(initialImageList);
   const [currentCard, setCurrentCard] = useState<null | ItemImage>(null);
   const fetcher = useFetcher();
   const actionData = useActionData();
   const [imagesLoading, setImageLoading] = useState<number[]>([]);
   const [uploadError, setUploadError] = useState<boolean | string>(false);
-  const { t } = useTranslation();
 
   const getImageDimensions = (imageKey: string, dimension: "h" | "w") => {
     const stringArr = imageKey.split(":");
@@ -48,6 +49,16 @@ const Photos = () => {
     const dimensionValue = new URLSearchParams(resolutionStr).get(dimension);
     return Number(dimensionValue);
   };
+
+  useEffect(() => {
+    if (!loaderData?.imageUrls) return;
+    const editImages = [];
+    for (let index = 0; index < 10; index++) {
+      editImages.push({ id: index, imageKey: loaderData.imageUrls[index] || null });
+    }
+    console.log({ editImages });
+    setCardList(editImages);
+  }, [loaderData.imageUrls]);
 
   useEffect(() => {
     if (!fetcher.data?.imageKeys) return;

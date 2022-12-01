@@ -1,18 +1,20 @@
 import { MenuItem, TextField } from "@mui/material";
-import { useActionData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import { CONDITIONS } from "~/constants/listing";
 import FieldTitle from "./FieldTitle";
 
 const Condition = () => {
-  const actionData = useActionData();
   const { t } = useTranslation();
+  const actionData = useActionData();
+  const loaderData = useLoaderData();
 
   return (
     <div>
       <FieldTitle title={t("Condition")} required={true} />
       <TextField
         select
+        defaultValue={loaderData?.condition}
         error={Boolean(actionData?.errors?.condition)}
         name="condition"
         SelectProps={{

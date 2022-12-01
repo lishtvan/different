@@ -1,13 +1,16 @@
 import { MenuItem, Select, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FieldTitle from "./FieldTitle";
 import type { Section } from "~/constants/listing";
 import { CATEGORIES, SIZES } from "~/constants/listing";
-import { useActionData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
 const SelectCategory = () => {
+  const { t } = useTranslation();
+
   const actionData = useActionData();
+  const loaderData = useLoaderData();
 
   const [currentSection, setCurrentSection] = useState("");
   const [open, setOpen] = useState(false);
@@ -15,7 +18,17 @@ const SelectCategory = () => {
   const [selectedSection, setSelectedSection] = useState("");
   const [sizePlaceholder, setSizePlaceholder] = useState(false);
   const [size, setSize] = useState<string>("");
-  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!loaderData?.category) return;
+    setSelectedCategory(loaderData.category);
+    Object.keys(CATEGORIES).forEach((section) => {
+      CATEGORIES[section as Section].forEach((item) => {
+        if (item === loaderData.category) setSelectedSection(section);
+      });
+    });
+    setSize(loaderData.size);
+  }, [loaderData.category]);
 
   const handleClose = () => {
     setOpen(false);

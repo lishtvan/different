@@ -1,9 +1,11 @@
 import { TextField } from "@mui/material";
+import { useLoaderData } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import FieldTitle from "./FieldTitle";
 
 const Description = () => {
   const { t } = useTranslation();
+  const loaderData = useLoaderData();
 
   return (
     <div className="col-start-1 col-end-3">
@@ -12,13 +14,16 @@ const Description = () => {
         rows={3}
         name="description"
         multiline
+        defaultValue={loaderData?.description}
         inputProps={{
           maxLength: 1000,
         }}
         className="w-full"
-        placeholder={t(
-          "Add more information about condition of item, how does it fit, measurements, expierence of wearing, materials, etc. (up to 1000 characters)"
-        )!}
+        placeholder={
+          t(
+            "Add more information about condition of item, how does it fit, measurements, expierence of wearing, materials, etc. (up to 1000 characters)"
+          )!
+        }
       />
     </div>
   );

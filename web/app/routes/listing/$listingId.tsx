@@ -1,12 +1,12 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ImageGallery from "react-image-gallery";
 import { useCallback, useMemo, useState } from "react";
 import { Avatar, Button, IconButton, Tooltip } from "@mui/material";
 import ProfileImage from "./../../assets/profile.jpeg";
-import { Delete } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import Typesense from "typesense";
 import {
   getTypesenseConfig,
@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     route: "/listing/get",
     method: "POST",
     body: { listingId },
-  }).then((res) => res.json());
+  });
 
   return response;
 };
@@ -49,7 +49,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 const ListingRoute = () => {
   const { listing, seller, isOwnListing } = useLoaderData();
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
-
+  const { listingId } = useParams();
+  console.log(listing);
   const { tags, images } = useMemo(() => {
     const formattedImages = listing.imageUrls.map((imageUrl: string) => ({
       original: imageUrl,
@@ -71,21 +72,32 @@ const ListingRoute = () => {
           <ImageGallery infinite showPlayButton={false} items={images} />
         </div>
         <div className="gap-y-3 flex flex-col w-full md:max-w-[380px]">
-          <div className="mb-2 flex justify-between items-center">
-            <div className="text-2xl font-bold">{listing.title}</div>
+          <div className="mb-2 flex justify-between items-start">
+            <div className="text-2xl font-bold pt-[0.55rem]">
+              {listing.title}
+            </div>
             {isOwnListing && (
-              <Tooltip title="Delete listing">
-                <IconButton
-                  type="submit"
-                  name="delete"
-                  value="delete"
-                  size="large"
-                  color="inherit"
-                  aria-label="delete"
-                >
-                  <Delete />
-                </IconButton>
-              </Tooltip>
+              <div className="flex ml-4">
+                <Tooltip title="Delete listing">
+                  <IconButton
+                    type="submit"
+                    name="delete"
+                    value="delete"
+                    size="large"
+                    color="inherit"
+                    aria-label="delete"
+                  >
+                    <Delete />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit listing">
+                  <Link to={`/listing/${listingId}/edit`}>
+                    <IconButton size="large" color="inherit">
+                      <Edit />
+                    </IconButton>
+                  </Link>
+                </Tooltip>
+              </div>
             )}
           </div>
           <div className="text-xl">Designer: {listing.designer}</div>
