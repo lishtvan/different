@@ -27,8 +27,9 @@ import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
 import { getCookieValue } from "~/utils/cookie";
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, params }) => {
   const contentType = request.headers.get("Content-type");
+  const { listingId } = params;
 
   if (contentType === "application/x-www-form-urlencoded") {
     const form = await request.formData();
@@ -39,11 +40,12 @@ export const action: ActionFunction = async ({ request }) => {
 
     const response = await fetchInstance({
       request,
-      route: "/listing/create",
+      route: "/listing/update",
       method: "POST",
       body: {
         ...body,
         tags: formattedTags,
+        listingId: Number(listingId),
       },
     });
     if (response.headers.get("location")) return null;
@@ -61,7 +63,7 @@ export const action: ActionFunction = async ({ request }) => {
       .documents()
       .update({ ...listing, id: listing.id.toString() });
 
-    return redirect(`listing/${listing.id}`);
+    return redirect(`/listing/${listing.id}`);
   }
 
   const form = await unstable_parseMultipartFormData(
@@ -117,6 +119,7 @@ const EditListingRoute = () => {
       <Form
         method="post"
         className="mt-6 grid grid-cols-2 gap-x-8 gap-y-6 w-full"
+        onSubmit={() => window.scrollTo({ top: 0, left: 0 })}
       >
         <ItemTitle />
         <Designer />

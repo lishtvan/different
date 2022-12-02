@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request }) => {
       .documents()
       .create({ ...listing, id: listing.id.toString() });
 
-    return redirect(`listing/${listing.id}`);
+    return redirect(`/listing/${listing.id}`);
   }
 
   const form = await unstable_parseMultipartFormData(
@@ -110,6 +110,7 @@ const SellRoute = () => {
       <Form
         method="post"
         className="mt-6 grid grid-cols-2 gap-x-8 gap-y-6 w-full"
+        onSubmit={() => window.scrollTo({ top: 0, left: 0 })}
       >
         <ItemTitle />
         <Designer />

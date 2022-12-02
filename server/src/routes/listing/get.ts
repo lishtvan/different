@@ -24,6 +24,7 @@ const schema = {
           size: { type: 'string' },
           imageUrls: { type: 'array', items: { type: 'string' } },
           price: { type: 'number' },
+          cardNumber: { type: 'string' },
         },
       },
       seller: {

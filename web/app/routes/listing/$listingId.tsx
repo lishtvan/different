@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     route: "/listing/get",
     method: "POST",
     body: { listingId },
-  });
+  }).then((res) => res.json());
 
   return response;
 };
@@ -50,13 +50,13 @@ const ListingRoute = () => {
   const { listing, seller, isOwnListing } = useLoaderData();
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const { listingId } = useParams();
-  console.log(listing);
+
   const { tags, images } = useMemo(() => {
-    const formattedImages = listing.imageUrls.map((imageUrl: string) => ({
+    const formattedImages = listing?.imageUrls.map((imageUrl: string) => ({
       original: imageUrl,
       thumbnail: imageUrl,
     }));
-    const formattedTags = listing.tags.split(",");
+    const formattedTags = listing?.tags.split(",");
     return { images: formattedImages, tags: formattedTags };
   }, [listing]);
 
@@ -74,10 +74,17 @@ const ListingRoute = () => {
         <div className="gap-y-3 flex flex-col w-full md:max-w-[380px]">
           <div className="mb-2 flex justify-between items-start">
             <div className="text-2xl font-bold pt-[0.55rem]">
-              {listing.title}
+              {listing?.title}
             </div>
             {isOwnListing && (
               <div className="flex ml-4">
+                <Tooltip title="Edit listing">
+                  <Link to={`/listing/${listingId}/edit`}>
+                    <IconButton size="large" color="inherit">
+                      <Edit />
+                    </IconButton>
+                  </Link>
+                </Tooltip>
                 <Tooltip title="Delete listing">
                   <IconButton
                     type="submit"
@@ -90,21 +97,14 @@ const ListingRoute = () => {
                     <Delete />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title="Edit listing">
-                  <Link to={`/listing/${listingId}/edit`}>
-                    <IconButton size="large" color="inherit">
-                      <Edit />
-                    </IconButton>
-                  </Link>
-                </Tooltip>
               </div>
             )}
           </div>
-          <div className="text-xl">Designer: {listing.designer}</div>
-          <div className="text-xl">Size: {listing.size}</div>
-          <div className="text-xl">Category: {listing.category}</div>
-          <div className="text-xl">Condition: {listing.condition}</div>
-          <div className="text-2xl my-4 font-bold">{listing.price}₴</div>
+          <div className="text-xl">Designer: {listing?.designer}</div>
+          <div className="text-xl">Size: {listing?.size}</div>
+          <div className="text-xl">Category: {listing?.category}</div>
+          <div className="text-xl">Condition: {listing?.condition}</div>
+          <div className="text-2xl my-4 font-bold">{listing?.price}₴</div>
           <div className="flex w-fit md:w-full items-start gap-5 flex-col">
             <Button
               variant="contained"
@@ -115,7 +115,7 @@ const ListingRoute = () => {
             </Button>
             <Link
               className="flex w-full items-center gap-4 border-main rounded-md border py-1 px-2"
-              to={`/user/${seller.id}`}
+              to={`/user/${seller?.id}`}
             >
               <Avatar
                 sx={{ width: 50, height: 50 }}
@@ -132,7 +132,7 @@ const ListingRoute = () => {
               </div>
             </Link>
           </div>
-          {listing.description && (
+          {listing?.description && (
             <div className="mt-6 whitespace-pre-wrap">
               <div className="text-xl font-semibold">Description</div>
               <div className="text-lg mt-2">{listing.description}</div>

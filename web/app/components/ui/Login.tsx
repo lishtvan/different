@@ -21,6 +21,7 @@ const Login = () => {
     }
   }, [fetcher, location.pathname]);
 
+  // TODO: add counter
   useEffect(() => {
     if (!checkAuth) return;
     const interval = setInterval(() => {

@@ -52,11 +52,14 @@ const Photos = () => {
 
   useEffect(() => {
     if (!loaderData?.imageUrls) return;
+    if (cardList.some((item) => item.imageKey)) return;
     const editImages = [];
     for (let index = 0; index < 10; index++) {
-      editImages.push({ id: index, imageKey: loaderData.imageUrls[index] || null });
+      editImages.push({
+        id: index,
+        imageKey: loaderData.imageUrls[index] || null,
+      });
     }
-    console.log({ editImages });
     setCardList(editImages);
   }, [loaderData.imageUrls]);
 

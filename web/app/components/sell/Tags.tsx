@@ -13,7 +13,6 @@ const Tags = () => {
   useEffect(() => {
     if (!loaderData.tags) return;
     const formattedTags = loaderData.tags.split(",");
-    console.log(formattedTags);
     setTags(formattedTags);
   }, [loaderData.tags]);
 
