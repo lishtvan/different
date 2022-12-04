@@ -69,9 +69,14 @@ const ListingRoute = () => {
       <div className="w-full my-3 flex flex-col gap-6 lg:gap-14 mx-auto justify-center md:flex-row">
         <PurchaseModal toggle={togglePurchaseModal} isOpen={isPurchaseOpen} />
         <div className="w-full md:w-[55%] lg:w-[40%] lg:min-w-[40%]">
-          <ImageGallery infinite showPlayButton={false} items={images} />
+          <ImageGallery
+            infinite
+            showPlayButton={false}
+            showThumbnails={images.length > 1}
+            items={images}
+          />
         </div>
-        <div className="gap-y-3 flex flex-col w-full md:max-w-[380px]">
+        <div className="gap-y-3 mb-10 flex flex-col w-full md:max-w-[380px]">
           <div className="mb-2 flex justify-between items-start">
             <div className="text-2xl font-bold pt-[0.55rem]">
               {listing?.title}
@@ -114,7 +119,7 @@ const ListingRoute = () => {
               Purchase
             </Button>
             <Link
-              className="flex w-full items-center gap-4 border-main rounded-md border py-1 px-2"
+              className="flex w-full items-center gap-4 border-main rounded-lg border py-1 px-2 mb-8"
               to={`/user/${seller?.id}`}
             >
               <Avatar
@@ -132,22 +137,22 @@ const ListingRoute = () => {
               </div>
             </Link>
           </div>
-          {listing?.description && (
-            <div className="mt-6 whitespace-pre-wrap">
-              <div className="text-xl font-semibold">Description</div>
-              <div className="text-lg mt-2">{listing.description}</div>
-            </div>
-          )}
           {listing?.tags && (
-            <div className="flex gap-2 flex-wrap mr-2 mb-6">
+            <div className="flex gap-2 flex-wrap mr-2">
               {tags.map((tag: string) => (
                 <div
                   key={tag}
-                  className="text-xl w-fit border-main rounded-md text-main border py-1 px-2"
+                  className="text-xl w-fit border-main rounded-lg text-main border py-1 px-2"
                 >
                   {tag}
                 </div>
               ))}
+            </div>
+          )}
+          {listing?.description && (
+            <div className="whitespace-pre-wrap">
+              <div className="text-xl font-semibold">Description</div>
+              <div className="text-lg mt-2">{listing.description}</div>
             </div>
           )}
         </div>
