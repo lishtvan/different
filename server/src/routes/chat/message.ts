@@ -1,23 +1,20 @@
 import { FastifyPluginAsync } from 'fastify';
 
-const rooms = new Map();
+const chats = new Map();
 const root: FastifyPluginAsync = async (fastify) => {
   fastify.get('/message', { websocket: true }, (connection) => {
     const { socket } = connection;
     socket.on('message', (message) => {
       const data = JSON.parse(message.toString());
-      console.log({ chatId: data.room });
-      let room = rooms.get(data.room);
 
-      if (!room) {
-        room = new Set();
-        rooms.set(data.room, room);
+      let chat = chats.get(data.chatId);
+      if (!chat) {
+        chat = new Set();
+        chats.set(data.chatId, chat);
       }
+      if (!chat.has(socket)) chat.add(socket);
 
-      if (!room.has(socket)) room.add(socket);
-      console.log(rooms);
-
-      for (const client of room) {
+      for (const client of chat) {
         client.send(JSON.stringify(data));
       }
     });

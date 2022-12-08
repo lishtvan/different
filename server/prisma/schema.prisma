@@ -18,6 +18,7 @@ model User {
   location   String?
   Sessions   Session[]
   Listings   Listing[]
+  Chats      Chat[]
 }
 
 model Session {
@@ -49,4 +50,21 @@ model Listing {
   User        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   status      ListingStatus @default(AVAILABLE)
   userId      Int
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  Chat      Chat?    @relation(fields: [chatId], references: [id])
+  chatId    Int?
+  text      String
+  viewed    Boolean  @default(false)
+  senderId  Int
+}
+
+model Chat {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  Users     User[]
+  Messages  Message[]
 }
