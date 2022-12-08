@@ -1,52 +1,82 @@
 import { Send } from "@mui/icons-material";
-import { IconButton, TextField } from "@mui/material";
-import { useParams } from "@remix-run/react";
-import { useMemo, useState } from "react";
+import { Avatar, IconButton, TextField } from "@mui/material";
+import type { ActionFunction } from "@remix-run/node";
+import {
+  Form,
+  useActionData,
+  useParams,
+  useTransition,
+} from "@remix-run/react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  return formData.get("message");
+};
 
 const IndexRoute = () => {
   const { chatId } = useParams();
-  const ws = useMemo(() => {
-    return new WebSocket("ws://localhost:8000/message");
-  }, []);
+  const message = useActionData();
+  const formRef = useRef<HTMLFormElement>(null);
+  const transition = useTransition();
+
+  const ws = useMemo(
+    () => new WebSocket("ws://localhost:8000/chat/message"),
+    [chatId]
+  );
 
   ws.onopen = () => {
-    ws.send(JSON.stringify({ room: chatId }));
+    console.log("open");
+    ws.send(JSON.stringify({ chatId }));
   };
 
-  const [value, setValue] = useState("");
+  const [messages, setMessages] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (transition.state !== "submitting") formRef?.current?.reset();
+  }, [transition]);
+
+  useEffect(() => {
+    if (!message) return;
+    ws.send(JSON.stringify({ text: message, chatId }));
+  }, [message]);
 
   ws.onmessage = ({ data }) => {
     const msg = JSON.parse(data);
-    console.log(msg);
-    // if (msg.text) setMessage(msg.text);
+    console.log({ msg, chatId });
+    if (msg.text && msg.chatId === chatId) {
+      setMessages([msg.text, ...messages]);
+    }
   };
 
   return (
-    <div className="w-[70%] flex items-end pl-2">
-      <div className="flex w-full">
+    <div className="w-[70%] flex flex-col justify-end pl-2">
+      <div className="ml-2 my-3 flex flex-col-reverse gap-4 overflow-y-scroll">
+        {messages.map((item) => (
+          <div key={item} className="flex gap-2 items-center">
+            <Avatar />
+            <div className="bg-[#efefef] select-text px-4 py-2 rounded-xl w-fit text-lg max-w-[90%] lg:max-w-[50%]">
+              {item}
+            </div>
+          </div>
+        ))}
+      </div>
+      <Form replace method="post" ref={formRef} className="flex w-full">
         <TextField
           placeholder="Write a message..."
-          onChange={(e) => setValue(e.target.value)}
+          name="message"
           className="w-full mr-2"
-          value={value}
           autoComplete="off"
           autoFocus={true}
-          focused={true}
-          onBlur={(e) => e.target.focus()}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") console.log("press");
-          }}
         />
         <IconButton
           size="large"
           className="hover:bg-transparent hover:text-main p-2"
-          onClick={() => ws.send(JSON.stringify({ text: value, room: chatId }))}
+          onClick={() => ws.send(JSON.stringify({ text: "eqw", chatId }))}
         >
           <Send className="hover:bg-none" sx={{ height: 34, width: 34 }} />
         </IconButton>
-      </div>
-
-      {/* <div>{message}</div> */}
+      </Form>
     </div>
   );
 };

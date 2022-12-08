@@ -1,5 +1,21 @@
 import { Avatar } from "@mui/material";
+import type { LoaderFunction } from "@remix-run/node";
 import { Link, Outlet, useParams } from "@remix-run/react";
+import { getCookieValue } from "~/utils/cookie";
+import { fetchInstance } from "~/utils/fetchInstance";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const userId = getCookieValue("userId", request);
+
+  const response = await fetchInstance({
+    request,
+    method: "POST",
+    body: { userId: Number(userId) },
+    route: "/user/get",
+  }).then((res) => res.json());
+
+  return response;
+};
 
 const IndexRoute = () => {
   const { chatId } = useParams();
@@ -19,7 +35,9 @@ const IndexRoute = () => {
           >
             <Avatar sx={{ width: 54, height: 54 }} />
             <div className="max-w-full overflow-hidden">
-              <div className="font-semibold">Юрий Яблоновский</div>
+              <div className="font-semibold text-ellipsis overflow-hidden whitespace-nowrap">
+                Юрий Яблоновский
+              </div>
               <div className="mt-1 text-ellipsis overflow-hidden whitespace-nowrap">
                 Как думаешь на сколько процентов запуск зимой обречён на провал
                 ?
