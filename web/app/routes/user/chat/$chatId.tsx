@@ -43,7 +43,6 @@ const IndexRoute = () => {
 
   ws.onmessage = ({ data }) => {
     const msg = JSON.parse(data);
-    console.log({ msg, chatId });
     if (msg.text && msg.chatId === chatId) {
       setMessages([msg.text, ...messages]);
     }
