@@ -1,6 +1,6 @@
 import { Avatar } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
-import { Link, Outlet, useParams } from "@remix-run/react";
+import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 
@@ -19,7 +19,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const IndexRoute = () => {
   const { chatId } = useParams();
-
+  const loaderData = useLoaderData();
+  console.log(loaderData);
   return (
     <div className="flex w-full mt-1 mx-auto h-[calc(100vh-74px)]">
       <div className="w-[30%] border-r-2 overflow-y-scroll">

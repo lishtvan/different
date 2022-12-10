@@ -26,7 +26,6 @@ const IndexRoute = () => {
   );
 
   ws.onopen = () => {
-    console.log("open");
     ws.send(JSON.stringify({ chatId }));
   };
 
