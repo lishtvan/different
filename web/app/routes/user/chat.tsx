@@ -20,7 +20,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 const IndexRoute = () => {
   const { chatId } = useParams();
   const loaderData = useLoaderData();
-  console.log(loaderData);
+
+  if (loaderData.Chats.length === 0) {
+    return (
+      <div className="mt-6 text-2xl flex items-center justify-center h-[calc(100vh-74px)]">
+        You don`t have any chats yet, message someone! &#128522;
+      </div>
+    );
+  }
+
   return (
     <div className="flex w-full mt-1 mx-auto h-[calc(100vh-74px)]">
       <div className="w-[30%] border-r-2 overflow-y-scroll">
