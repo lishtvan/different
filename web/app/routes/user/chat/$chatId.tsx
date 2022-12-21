@@ -48,8 +48,9 @@ const IndexRoute = () => {
   };
 
   return (
-    <div className="w-[70%] flex flex-col justify-end pl-2">
-      <div className="ml-2 my-3 flex flex-col-reverse gap-4 overflow-y-scroll">
+    <div className="w-[70%] flex flex-col justify-end">
+      <div className="mb-auto font-semibold text-xl pl-2 pb-2 border-b-2">Юрий Яблоновский</div>
+      <div className="ml-4 py-3 flex flex-col-reverse gap-4 overflow-y-scroll">
         {messages.map((item) => (
           <div key={item} className="flex gap-2 items-center">
             <Avatar />
@@ -59,7 +60,7 @@ const IndexRoute = () => {
           </div>
         ))}
       </div>
-      <Form replace method="post" ref={formRef} className="flex w-full">
+      <Form replace method="post" ref={formRef} className="flex w-full ml-2">
         <TextField
           placeholder="Write a message..."
           name="message"

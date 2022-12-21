@@ -51,7 +51,7 @@ const UserListings = () => {
           <div ref={sentinelRef} />
         </div>
       ) : (
-        <div className="text-2xl h-44 flex items-center justify-center font-semibold">
+        <div className="text-xl h-44 flex items-center justify-center font-semibold">
           <div>The are no listings for now</div>
           <div className="ml-2 text-4xl">&#128546;</div>
         </div>

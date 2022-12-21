@@ -21,7 +21,7 @@ const IndexRoute = () => {
   const { chatId } = useParams();
   const loaderData = useLoaderData();
 
-  if (loaderData.Chats.length === 0) {
+  if (loaderData?.Chats?.length === 0) {
     return (
       <div className="mt-6 text-2xl flex items-center justify-center h-[calc(100vh-74px)]">
         You don`t have any chats yet, message someone! &#128522;
@@ -30,7 +30,7 @@ const IndexRoute = () => {
   }
 
   return (
-    <div className="flex w-full mt-1 mx-auto h-[calc(100vh-74px)]">
+    <div className="flex w-full mt-1 mx-auto h-[calc(100vh-78px)]">
       <div className="w-[30%] border-r-2 overflow-y-scroll">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => (
           <Link

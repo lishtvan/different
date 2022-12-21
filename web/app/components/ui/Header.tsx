@@ -1,4 +1,5 @@
 import type { TooltipProps } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import { Avatar } from "@mui/material";
 import { ListItemIcon } from "@mui/material";
 import {
@@ -8,7 +9,13 @@ import {
   Tooltip,
   tooltipClasses,
 } from "@mui/material";
-import { Person, Logout, Settings } from "@mui/icons-material";
+import {
+  Person,
+  Logout,
+  Settings,
+  MailOutline,
+  HandshakeOutlined,
+} from "@mui/icons-material";
 import {
   Form,
   Link,
@@ -34,7 +41,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     margin: 0,
   },
 }));
-
+// TODO: update links
 const Header = () => {
   const { user } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -60,9 +67,24 @@ const Header = () => {
         <div className="flex justify-between items-center w-full">
           <MainSearch />
           <div className="hidden items-center sm:flex ml-auto">
+            <Link className="mr-1" to="/user/chat">
+              <IconButton size="large" className="text-black">
+                <Badge badgeContent={10} color="primary">
+                  <MailOutline fontSize="large" />
+                </Badge>
+              </IconButton>
+            </Link>
+            <Link className="mr-5" to="/user/chat">
+              <IconButton size="large" className="text-black">
+                <Badge badgeContent={4} color="primary">
+                  <HandshakeOutlined fontSize="large" />
+                </Badge>
+              </IconButton>
+            </Link>
             <Link className="mr-5" to="/sell">
               <Button variant="contained">{t("sell")}</Button>
             </Link>
+
             {user ? (
               <LightTooltip
                 placement="bottom-start"
@@ -90,6 +112,28 @@ const Header = () => {
                         <Settings fontSize="large" />
                       </ListItemIcon>
                       <div className="font-normal text-xl">Settings</div>
+                    </MenuItem>
+                    <MenuItem
+                      className="px-4"
+                      onClick={() => onMenuItemClick("/user/edit")}
+                    >
+                      <ListItemIcon className="mr-2">
+                        <Badge badgeContent={10} color="primary">
+                          <MailOutline fontSize="large" />
+                        </Badge>
+                      </ListItemIcon>
+                      <div className="font-normal text-xl">Messages</div>
+                    </MenuItem>
+                    <MenuItem
+                      className="px-4"
+                      onClick={() => onMenuItemClick("/user/edit")}
+                    >
+                      <ListItemIcon className="mr-2">
+                        <Badge badgeContent={10} color="primary">
+                          <HandshakeOutlined fontSize="large" />
+                        </Badge>
+                      </ListItemIcon>
+                      <div className="font-normal text-xl">Deals</div>
                     </MenuItem>
                     <Form action="/logout" method="post">
                       <button
