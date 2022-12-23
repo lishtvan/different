@@ -29,7 +29,7 @@ const IndexRoute = () => {
     ws.send(JSON.stringify({ chatId }));
   };
 
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<string[]>(['hello', 'hi', 'yo']);
 
   useEffect(() => {
     if (transition.state !== "submitting") formRef?.current?.reset();
@@ -49,8 +49,8 @@ const IndexRoute = () => {
 
   return (
     <div className="w-[70%] flex flex-col justify-end">
-      <div className="mb-auto font-semibold text-xl pl-2 pb-2 border-b-2">Юрий Яблоновский</div>
-      <div className="ml-4 py-3 flex flex-col-reverse gap-4 overflow-y-scroll">
+      <div className="mb-auto font-semibold text-xl pl-2 py-2 border-b-2">Юрий Яблоновский</div>
+      <div className="ml-4 py-3 flex flex-col-reverse gap-2 overflow-y-scroll">
         {messages.map((item) => (
           <div key={item} className="flex gap-2 items-center">
             <Avatar />
