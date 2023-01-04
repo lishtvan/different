@@ -1,6 +1,6 @@
 import { Avatar, Button, IconButton } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useParams } from "@remix-run/react";
 import { LocationOnOutlined, Send, Settings } from "@mui/icons-material";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "./../../assets/profile.jpeg";
@@ -13,7 +13,7 @@ import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import UserListings from "~/components/index/listings/UserListings";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const response = await fetchInstance({
+  const user = await fetchInstance({
     request,
     method: "POST",
     body: { userId: Number(params.userId) },
@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const typesenseConfig = getTypesenseConfig({ isWriteConfig: false });
 
-  return { ...response, typesenseConfig };
+  return { ...user, typesenseConfig };
 };
 
 const UserRoute = () => {
@@ -35,6 +35,7 @@ const UserRoute = () => {
     location,
     typesenseConfig,
   } = useLoaderData();
+  const { userId } = useParams();
   const { searchClient } = new TypesenseInstantsearchAdapter({
     server: typesenseConfig,
     additionalSearchParameters: {
@@ -64,7 +65,7 @@ const UserRoute = () => {
                     </IconButton>
                   </Link>
                 ) : (
-                  <Link to="/user/chat">
+                  <Link to={`/user/chat/new/${userId}`}>
                     <Button
                       className="text-black text-sm"
                       variant="outlined"

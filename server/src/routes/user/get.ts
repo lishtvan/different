@@ -17,7 +17,9 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 const getUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/get', { schema }, async (req, reply) => {
     const { userId } = req.body;
-    const isOwnAccount = userId === Number(req.cookies.userId);
+    const ownUserId = Number(req.cookies.userId);
+    const isOwnAccount = userId === ownUserId;
+
     const user = await fastify.prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -26,7 +28,29 @@ const getUser: FastifyPluginAsync = async (fastify) => {
         avatarUrl: true,
         name: true,
         location: true,
-        Chats: isOwnAccount,
+        Chats: isOwnAccount && {
+          select: {
+            id: true,
+            Users: {
+              select: {
+                name: true,
+                nickname: true,
+                avatarUrl: true,
+              },
+              where: {
+                id: {
+                  not: ownUserId,
+                },
+              },
+            },
+            Messages: {
+              select: {
+                text: true,
+              },
+              take: -1,
+            },
+          },
+        },
       },
     });
 
