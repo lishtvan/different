@@ -55,8 +55,8 @@ model Listing {
 model Message {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  Chat      Chat?    @relation(fields: [chatId], references: [id])
-  chatId    Int?
+  Chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chatId    Int
   text      String
   viewed    Boolean  @default(false)
   senderId  Int
