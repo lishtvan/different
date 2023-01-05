@@ -16,6 +16,8 @@ interface User {
 
 interface Message {
   text: string;
+  id: number;
+  senderId: number;
 }
 
 interface Chats {

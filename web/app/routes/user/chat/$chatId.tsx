@@ -8,11 +8,36 @@ import {
   useTransition,
 } from "@remix-run/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import ProfileImage from "../../../assets/profile.jpeg";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  return formData.get("message");
+  const message = formData.get("message")?.toString().trim();
+
+  if (message?.length === 0) return null;
+  return message;
 };
+
+interface Message {
+  text: string;
+  id: number;
+  senderId: number;
+  avatarUrl?: string;
+  nickname?: string;
+  name: string;
+}
+
+interface User {
+  id: number;
+  nickname?: string;
+  avatarUrl?: string;
+  name: string;
+}
+
+interface Participants {
+  recipient: User;
+  sender: User;
+}
 
 const IndexRoute = () => {
   const { chatId } = useParams();
@@ -26,10 +51,11 @@ const IndexRoute = () => {
   );
 
   ws.onopen = () => {
-    ws.send(JSON.stringify({ chatId }));
+    ws.send(JSON.stringify({ chatId, isConnect: true }));
   };
 
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [users, setUsers] = useState<Participants>();
 
   useEffect(() => {
     if (transition.state !== "submitting") formRef?.current?.reset();
@@ -42,22 +68,33 @@ const IndexRoute = () => {
 
   ws.onmessage = ({ data }) => {
     const msg = JSON.parse(data);
-    if (msg.text && msg.chatId === chatId) {
-      setMessages([msg.text, ...messages]);
+    if (msg.chat) {
+      setMessages(msg.chat.Messages);
+      setUsers(msg.chat.Users);
+    }
+    console.log(msg);
+    if (msg.text && msg.chatId === Number(chatId)) {
+      setMessages([msg, ...messages]);
     }
   };
 
   return (
     <div className="w-[70%] flex flex-col justify-end">
       <div className="mb-auto font-semibold text-xl pl-2 py-2 border-b-2">
-        Юрий Яблоновский
+        {users?.recipient.nickname || users?.recipient.name}
       </div>
       <div className="ml-4 py-3 flex flex-col-reverse gap-2 overflow-y-scroll scrollbar-visible">
-        {messages.map((item) => (
-          <div key={item} className="flex gap-2 items-center">
-            <Avatar />
+        {messages.map((msg) => (
+          <div key={msg.id} className="flex gap-2 items-center">
+            <Avatar
+              src={
+                (users?.recipient.id === msg.senderId
+                  ? users.recipient.avatarUrl
+                  : users?.sender.avatarUrl) || ProfileImage
+              }
+            />
             <div className="bg-[#efefef] break-words select-text px-3 py-1.5 rounded-xl w-fit text-lg max-w-[80%] lg:max-w-[50%]">
-              {item}
+              {msg.text}
             </div>
           </div>
         ))}
@@ -73,7 +110,7 @@ const IndexRoute = () => {
         <IconButton
           size="large"
           className="hover:bg-transparent hover:text-main p-2"
-          onClick={() => ws.send(JSON.stringify({ text: "eqw", chatId }))}
+          type="submit"
         >
           <Send className="hover:bg-none" sx={{ height: 34, width: 34 }} />
         </IconButton>
