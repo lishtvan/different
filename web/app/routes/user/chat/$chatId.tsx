@@ -1,4 +1,4 @@
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import type { Message, Participants } from "~/types/chat";
 import { Send } from "@mui/icons-material";
 import { Avatar, IconButton, TextField } from "@mui/material";
@@ -6,6 +6,7 @@ import {
   Form,
   Link,
   useActionData,
+  useLoaderData,
   useParams,
   useTransition,
 } from "@remix-run/react";
@@ -20,15 +21,22 @@ export const action: ActionFunction = async ({ request }) => {
   return message;
 };
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const wsConnection = process.env.ENVIRONMENT === "local" ? "ws" : "wss";
+  return wsConnection;
+};
+
 const IndexRoute = () => {
+  const wsConnection = useLoaderData();
   const { chatId } = useParams();
+  console.log(wsConnection);
   const message = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
   const transition = useTransition();
 
   const ws = useMemo(
-    () => new WebSocket("ws://localhost:8000/chat/message"),
-    [chatId]
+    () => new WebSocket(`${wsConnection}://localhost:8000/chat/message`),
+    [chatId, wsConnection]
   );
 
   ws.onopen = () => {
