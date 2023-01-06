@@ -40,16 +40,13 @@ const root: FastifyPluginAsync = async (fastify) => {
         return;
       }
 
-      let newMessage;
-      if (data.text) {
-        newMessage = await fastify.prisma.message.create({
-          data: {
-            text: data.text,
-            chatId: Number(data.chatId),
-            senderId: ownUserId,
-          },
-        });
-      }
+      const newMessage = await fastify.prisma.message.create({
+        data: {
+          text: data.text,
+          chatId: Number(data.chatId),
+          senderId: ownUserId,
+        },
+      });
 
       for (const client of chat) {
         client.send(JSON.stringify(newMessage));
