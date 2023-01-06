@@ -1,30 +1,12 @@
-import { Avatar } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
+import type { Chats } from "~/types/chat";
+import { Avatar } from "@mui/material";
 import { redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react";
 import { useMemo } from "react";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "../../assets/profile.jpeg";
-
-interface User {
-  id: number;
-  nickname?: string;
-  avatarUrl?: string;
-  name: string;
-}
-
-interface Message {
-  text: string;
-  id: number;
-  senderId: number;
-}
-
-interface Chats {
-  id: number;
-  Users: User[];
-  Messages: Message[];
-}
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = getCookieValue("userId", request);
