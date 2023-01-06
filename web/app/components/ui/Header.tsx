@@ -61,7 +61,7 @@ const Header = () => {
           <div className="hidden items-center sm:flex ml-auto">
             <Link className="mr-1" to="/user/chat">
               <IconButton className="text-black">
-                <Badge badgeContent={10} color="primary">
+                <Badge badgeContent={0} color="primary">
                   <svg
                     version="1.1"
                     id="Layer_1"
@@ -88,9 +88,9 @@ const Header = () => {
                 </Badge>
               </IconButton>
             </Link>
-            <Link className="mr-5" to="/user/chat">
+            <Link className="mr-5" to="/user/deals">
               <IconButton>
-                <Badge badgeContent={4} color="primary">
+                <Badge badgeContent={0} color="primary">
                   <svg
                     version="1.1"
                     id="Capa_1"
