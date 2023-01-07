@@ -16,6 +16,7 @@ const root: FastifyPluginAsync = async (fastify) => {
       if (!chat.has(socket)) chat.add(socket);
 
       if (data.isConnect) {
+        // TODO: check security
         const chat = await fastify.prisma.chat.findUnique({
           where: { id: Number(data.chatId) },
           select: {

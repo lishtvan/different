@@ -21,22 +21,23 @@ export const action: ActionFunction = async ({ request }) => {
   return message;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const wsConnection = process.env.ENVIRONMENT === "local" ? "ws" : "wss";
-  return wsConnection;
+export const loader: LoaderFunction = async () => {
+  // TODO: recheck
+  const { WS_DOMAIN } = process.env;
+  return WS_DOMAIN;
 };
 
 const IndexRoute = () => {
-  const wsConnection = useLoaderData();
+  const wsDomain = useLoaderData();
   const { chatId } = useParams();
-  console.log(wsConnection);
+  console.log(wsDomain);
   const message = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
   const transition = useTransition();
 
   const ws = useMemo(
-    () => new WebSocket(`${wsConnection}://localhost:8000/chat/message`),
-    [chatId, wsConnection]
+    () => new WebSocket(`${wsDomain}/chat/message`),
+    [chatId, wsDomain]
   );
 
   ws.onopen = () => {
