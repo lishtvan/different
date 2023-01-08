@@ -15,9 +15,9 @@ import ProfileImage from "../../../assets/profile.jpeg";
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const message = formData.get("message")?.toString().trim();
-
+  console.log(message);
   if (message?.length === 0) return null;
-  return message;
+  return { message };
 };
 
 const WS_DOMAIN_BY_ORIGIN = {
@@ -29,7 +29,7 @@ const WS_DOMAIN_BY_ORIGIN = {
 
 const IndexRoute = () => {
   const { chatId } = useParams();
-  const message = useActionData();
+  const actionData = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
   const transition = useTransition();
 
@@ -51,9 +51,9 @@ const IndexRoute = () => {
   }, [transition]);
 
   useEffect(() => {
-    if (!message) return;
-    ws.send(JSON.stringify({ text: message, chatId }));
-  }, [message]);
+    if (!actionData?.message) return;
+    ws.send(JSON.stringify({ text: actionData.message, chatId }));
+  }, [actionData]);
 
   ws.onmessage = ({ data }) => {
     const msg = JSON.parse(data);
