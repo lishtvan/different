@@ -1,4 +1,4 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import type { ActionFunction } from "@remix-run/node";
 import type { Message, Participants } from "~/types/chat";
 import { Send } from "@mui/icons-material";
 import { Avatar, IconButton, TextField } from "@mui/material";
@@ -6,7 +6,6 @@ import {
   Form,
   Link,
   useActionData,
-  useLoaderData,
   useParams,
   useTransition,
 } from "@remix-run/react";
@@ -21,24 +20,24 @@ export const action: ActionFunction = async ({ request }) => {
   return message;
 };
 
-export const loader: LoaderFunction = async () => {
-  // TODO: recheck
-  const { WS_DOMAIN } = process.env;
-  return WS_DOMAIN;
+const WS_DOMAIN_BY_ORIGIN = {
+  "http://localhost:3000": "ws://localhost:3000",
+  "https://dev.different-marketplace.com":
+    "wss://dev.api.different-marketplace.com",
+  "https://different-marketplace.com": "wss://api.different-marketplace.com",
 };
 
 const IndexRoute = () => {
-  const wsDomain = useLoaderData();
   const { chatId } = useParams();
-  console.log(wsDomain);
   const message = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
   const transition = useTransition();
 
-  const ws = useMemo(
-    () => new WebSocket(`${wsDomain}/chat/message`),
-    [chatId, wsDomain]
-  );
+  const ws = useMemo(() => {
+    const origin = window.location.origin as keyof typeof WS_DOMAIN_BY_ORIGIN;
+    const WS_DOMAIN = WS_DOMAIN_BY_ORIGIN[origin];
+    return new WebSocket(`${WS_DOMAIN}/chat/message`);
+  }, [chatId]);
 
   ws.onopen = () => {
     ws.send(JSON.stringify({ chatId, isConnect: true }));
