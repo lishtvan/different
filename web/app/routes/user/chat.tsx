@@ -3,7 +3,7 @@ import type { Chats } from "~/types/chat";
 import { Avatar } from "@mui/material";
 import { redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "../../assets/profile.jpeg";
@@ -22,9 +22,29 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return user.Chats;
 };
 
+const WS_DOMAIN_BY_ORIGIN = {
+  "http://localhost:3000": "ws://localhost:8000",
+  "https://dev.different-marketplace.com":
+    "wss://dev.api.different-marketplace.com",
+  "https://different-marketplace.com": "wss://api.different-marketplace.com",
+};
+
 const IndexRoute = () => {
   const { chatId } = useParams();
   const chats = useLoaderData<Chats[]>();
+
+  const [isWsReady, setIsWsReady] = useState(false);
+
+  const ws = useMemo(() => {
+    const origin = window.location.origin as keyof typeof WS_DOMAIN_BY_ORIGIN;
+    const WS_DOMAIN = WS_DOMAIN_BY_ORIGIN[origin];
+    return new WebSocket(`${WS_DOMAIN}/chat/message`);
+  }, []);
+
+  ws.onopen = () => {
+    console.log("open connection");
+    setIsWsReady((current) => !current);
+  };
 
   const noChatsWithMessages = useMemo(
     () => chats.every((chat) => chat.Messages.length === 0),
@@ -72,7 +92,7 @@ const IndexRoute = () => {
           ))}
       </div>
       {chatId ? (
-        <Outlet />
+        <Outlet context={{ ws, isWsReady }} />
       ) : (
         <div className="w-[70%] flex items-center justify-center">
           <div className="text-lg font-medium bg-[#f4f4f5] px-3 py-1 rounded-3xl">

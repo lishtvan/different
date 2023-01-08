@@ -21,3 +21,8 @@ export interface Participants {
   recipient: User;
   sender: User;
 }
+
+export interface ChatContext {
+  ws: WebSocket;
+  isWsReady: boolean;
+}

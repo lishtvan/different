@@ -1,15 +1,16 @@
 import type { ActionFunction } from "@remix-run/node";
-import type { Message, Participants } from "~/types/chat";
+import type { ChatContext, Message, Participants } from "~/types/chat";
 import { Send } from "@mui/icons-material";
 import { Avatar, IconButton, TextField } from "@mui/material";
 import {
   Form,
   Link,
   useActionData,
+  useOutletContext,
   useParams,
   useTransition,
 } from "@remix-run/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProfileImage from "../../../assets/profile.jpeg";
 
 export const action: ActionFunction = async ({ request }) => {
@@ -20,28 +21,17 @@ export const action: ActionFunction = async ({ request }) => {
   return { message };
 };
 
-const WS_DOMAIN_BY_ORIGIN = {
-  "http://localhost:3000": "ws://localhost:8000",
-  "https://dev.different-marketplace.com":
-    "wss://dev.api.different-marketplace.com",
-  "https://different-marketplace.com": "wss://api.different-marketplace.com",
-};
-
 const IndexRoute = () => {
   const { chatId } = useParams();
+  const { ws, isWsReady } = useOutletContext<ChatContext>();
   const actionData = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
   const transition = useTransition();
 
-  const ws = useMemo(() => {
-    const origin = window.location.origin as keyof typeof WS_DOMAIN_BY_ORIGIN;
-    const WS_DOMAIN = WS_DOMAIN_BY_ORIGIN[origin];
-    return new WebSocket(`${WS_DOMAIN}/chat/message`);
-  }, [chatId]);
-
-  ws.onopen = () => {
+  useEffect(() => {
+    if (!isWsReady) return;
     ws.send(JSON.stringify({ chatId, isConnect: true }));
-  };
+  }, [chatId, isWsReady]);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [participants, setParticipants] = useState<Participants>();
