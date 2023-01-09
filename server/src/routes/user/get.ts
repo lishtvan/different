@@ -29,7 +29,7 @@ const getUser: FastifyPluginAsync = async (fastify) => {
         avatarUrl: true,
         name: true,
         location: true,
-        Chats: {
+        Chats: isOwnAccount && {
           orderBy: {
             updatedAt: 'desc',
           },

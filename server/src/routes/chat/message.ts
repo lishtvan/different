@@ -16,9 +16,15 @@ const root: FastifyPluginAsync = async (fastify) => {
       if (!chat.has(socket)) chat.add(socket);
 
       if (data.isConnect) {
-        // TODO: check security
-        const chat = await fastify.prisma.chat.findUnique({
-          where: { id: Number(data.chatId) },
+        const chat = await fastify.prisma.chat.findFirst({
+          where: {
+            id: Number(data.chatId),
+            Users: {
+              some: {
+                id: ownUserId,
+              },
+            },
+          },
           select: {
             Messages: {
               orderBy: {
@@ -35,6 +41,7 @@ const root: FastifyPluginAsync = async (fastify) => {
             },
           },
         });
+        if (!chat) return;
         const recipient = chat?.Users.find((user) => user.id !== ownUserId);
         const sender = chat?.Users.find((user) => user.id === ownUserId);
         socket.send(JSON.stringify({ chat: { ...chat, Users: { recipient, sender } } }));
