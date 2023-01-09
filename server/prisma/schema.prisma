@@ -65,6 +65,7 @@ model Message {
 model Chat {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
   Users     User[]
   Messages  Message[]
 }

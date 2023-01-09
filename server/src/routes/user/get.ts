@@ -22,13 +22,17 @@ const getUser: FastifyPluginAsync = async (fastify) => {
 
     const user = await fastify.prisma.user.findUnique({
       where: { id: userId },
+
       select: {
         nickname: true,
         bio: true,
         avatarUrl: true,
         name: true,
         location: true,
-        Chats: isOwnAccount && {
+        Chats: {
+          orderBy: {
+            updatedAt: 'desc',
+          },
           select: {
             id: true,
             Users: {

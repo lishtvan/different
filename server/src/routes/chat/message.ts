@@ -41,17 +41,30 @@ const root: FastifyPluginAsync = async (fastify) => {
         return;
       }
 
-      const newMessage = await fastify.prisma.message.create({
-        data: {
-          text: data.text,
-          chatId: Number(data.chatId),
-          senderId: ownUserId,
-        },
-      });
+      const [newMessage] = await Promise.all([
+        fastify.prisma.message.create({
+          data: {
+            text: data.text,
+            chatId: Number(data.chatId),
+            senderId: ownUserId,
+          },
+        }),
+        fastify.prisma.chat.update({
+          where: {
+            id: Number(data.chatId),
+          },
+          data: {
+            updatedAt: new Date(),
+          },
+        }),
+      ]);
 
       for (const client of chat) {
         client.send(JSON.stringify(newMessage));
       }
+    });
+    socket.on('close', () => {
+      console.log('socket is closed');
     });
   });
 };
