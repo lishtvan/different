@@ -9,13 +9,13 @@ import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "../../assets/profile.jpeg";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const userId = getCookieValue("userId", request);
+  const userId = Number(getCookieValue("userId", request));
   if (params.chatId === "new") return redirect("/user/chat");
 
   const user = await fetchInstance({
     request,
     method: "POST",
-    body: { userId: Number(userId) },
+    body: { userId: userId },
     route: "/user/get",
   }).then((res) => res.json());
 
@@ -86,6 +86,7 @@ const IndexRoute = () => {
                       {chat.Messages[0].text}
                     </div>
                   </div>
+                  {/* <div className="ml-auto min-w-[12px] w-3 h-3 mt-1.5 bg-main rounded-full" /> */}
                 </Link>
               )}
             </div>

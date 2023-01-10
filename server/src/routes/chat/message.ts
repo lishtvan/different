@@ -17,28 +17,10 @@ const root: FastifyPluginAsync = async (fastify) => {
 
       if (data.isConnect) {
         const chat = await fastify.prisma.chat.findFirst({
-          where: {
-            id: Number(data.chatId),
-            Users: {
-              some: {
-                id: ownUserId,
-              },
-            },
-          },
+          where: { id: Number(data.chatId), Users: { some: { id: ownUserId } } },
           select: {
-            Messages: {
-              orderBy: {
-                createdAt: 'desc',
-              },
-            },
-            Users: {
-              select: {
-                id: true,
-                nickname: true,
-                name: true,
-                avatarUrl: true,
-              },
-            },
+            Messages: { orderBy: { createdAt: 'desc' } },
+            Users: { select: { id: true, nickname: true, name: true, avatarUrl: true } },
           },
         });
         if (!chat) return;

@@ -16,7 +16,6 @@ import ProfileImage from "../../../assets/profile.jpeg";
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const message = formData.get("message")?.toString().trim();
-  console.log(message);
   if (message?.length === 0) return null;
   return { message };
 };

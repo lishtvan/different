@@ -85,7 +85,6 @@
     "no-whitespace-before-property": ["error"],
     "object-curly-spacing": ["error", "always"],
     "operator-assignment": ["error", "always"],
-    "operator-linebreak": ["error", "after"],
     "semi-spacing": [
       "error",
       {
