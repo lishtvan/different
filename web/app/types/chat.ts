@@ -13,6 +13,7 @@ export interface Message {
 
 export interface Chats {
   id: number;
+  notification: boolean;
   Users: User[];
   Messages: Message[];
 }

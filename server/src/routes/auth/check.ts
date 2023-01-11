@@ -10,10 +10,34 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
 
     const user = await fastify.prisma.user.findUnique({
       where: { id: ownUserId },
-      select: { id: true, avatarUrl: true },
+      select: {
+        id: true,
+        avatarUrl: true,
+        Chats: {
+          where: {
+            notification: true,
+            Users: {
+              some: {
+                id: ownUserId,
+              },
+            },
+          },
+          select: {
+            Messages: {
+              select: { senderId: true },
+              take: -1,
+            },
+          },
+        },
+      },
     });
 
-    res.send(user);
+    // TODO: check case with zero chats
+    const chatsWithoutNotification = user?.Chats.filter(
+      (chat) => chat.Messages[0].senderId !== ownUserId
+    );
+
+    res.send({ ...user, chatNoficicationCount: chatsWithoutNotification?.length });
   });
 };
 

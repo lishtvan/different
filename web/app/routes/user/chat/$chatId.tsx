@@ -6,6 +6,7 @@ import {
   Form,
   Link,
   useActionData,
+  useFetcher,
   useOutletContext,
   useParams,
   useTransition,
@@ -22,6 +23,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 const IndexRoute = () => {
   const { chatId } = useParams();
+  const fetcher = useFetcher();
   const { ws, isWsReady } = useOutletContext<ChatContext>();
   const actionData = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
@@ -51,8 +53,13 @@ const IndexRoute = () => {
       setParticipants(msg.chat.Users);
     }
     if (msg.text && msg.chatId === Number(chatId)) {
+      // TODO: implement message seen
       setMessages([msg, ...messages]);
     }
+    fetcher.submit(
+      { route: location.pathname },
+      { method: "post", action: "/" }
+    );
   };
 
   return (

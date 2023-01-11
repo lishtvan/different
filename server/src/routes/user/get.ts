@@ -32,11 +32,12 @@ const getUser: FastifyPluginAsync = async (fastify) => {
           orderBy: { updatedAt: 'desc' },
           select: {
             id: true,
+            notification: true,
             Users: {
               select: { name: true, nickname: true, avatarUrl: true },
               where: { id: { not: ownUserId } },
             },
-            Messages: { select: { text: true }, take: -1 },
+            Messages: { select: { text: true, senderId: true }, take: -1 },
           },
         },
       },

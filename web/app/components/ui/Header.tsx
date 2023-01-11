@@ -63,7 +63,10 @@ const Header = () => {
               <>
                 <Link className="mr-1" to="/user/chat">
                   <IconButton className="text-black">
-                    <Badge badgeContent={0} color="primary">
+                    <Badge
+                      badgeContent={user.chatNoficicationCount}
+                      color="primary"
+                    >
                       <svg
                         version="1.1"
                         id="Layer_1"

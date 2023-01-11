@@ -19,7 +19,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     route: "/user/get",
   }).then((res) => res.json());
 
-  return user.Chats;
+  return { chats: user.Chats, userId };
 };
 
 const WS_DOMAIN_BY_ORIGIN = {
@@ -31,7 +31,7 @@ const WS_DOMAIN_BY_ORIGIN = {
 
 const IndexRoute = () => {
   const { chatId } = useParams();
-  const chats = useLoaderData<Chats[]>();
+  const { chats, userId } = useLoaderData<{ chats: Chats[]; userId: number }>();
 
   const [isWsReady, setIsWsReady] = useState(false);
 
@@ -86,7 +86,10 @@ const IndexRoute = () => {
                       {chat.Messages[0].text}
                     </div>
                   </div>
-                  {/* <div className="ml-auto min-w-[12px] w-3 h-3 mt-1.5 bg-main rounded-full" /> */}
+                  {chat.notification &&
+                    chat.Messages[0].senderId !== userId && (
+                      <div className="ml-auto min-w-[12px] w-3 h-3 mt-1.5 bg-main rounded-full" />
+                    )}
                 </Link>
               )}
             </div>
