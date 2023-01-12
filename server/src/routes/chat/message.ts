@@ -15,6 +15,15 @@ const root: FastifyPluginAsync = async (fastify) => {
       }
       if (!chat.has(socket)) chat.add(socket);
 
+      if (data.messageSeen) {
+        await fastify.prisma.chat.update({
+          where: { id: Number(data.chatId) },
+          data: { notification: false },
+        });
+        socket.send(JSON.stringify({}));
+        return;
+      }
+
       if (data.isConnect) {
         const chat = await fastify.prisma.chat.findFirst({
           where: { id: Number(data.chatId), Users: { some: { id: ownUserId } } },

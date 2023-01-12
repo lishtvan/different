@@ -96,7 +96,7 @@ const IndexRoute = () => {
           ))}
       </div>
       {chatId ? (
-        <Outlet context={{ ws, isWsReady }} />
+        <Outlet context={{ ws, isWsReady, userId }} />
       ) : (
         <div className="w-[70%] flex items-center justify-center">
           <div className="text-lg font-medium bg-[#f4f4f5] px-3 py-1 rounded-3xl">

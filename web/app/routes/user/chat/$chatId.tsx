@@ -16,8 +16,9 @@ import ProfileImage from "../../../assets/profile.jpeg";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const message = formData.get("message")?.toString().trim();
-  if (message?.length === 0) return null;
+  const message = formData.get("message");
+  if (!message) return null;
+  if (message.toString().trim().length === 0) return null;
   return { message };
 };
 
@@ -52,9 +53,11 @@ const IndexRoute = () => {
       setMessages(msg.chat.Messages);
       setParticipants(msg.chat.Users);
     }
-    if (msg.text && msg.chatId === Number(chatId)) {
-      // TODO: implement message seen
+    if (msg.text && location.pathname === `/user/chat/${chatId}`) {
       setMessages([msg, ...messages]);
+      if (msg.senderId !== participants?.sender.id) {
+        ws.send(JSON.stringify({ messageSeen: true, chatId }));
+      }
     }
     fetcher.submit(
       { route: location.pathname },
