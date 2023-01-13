@@ -83,7 +83,13 @@ const IndexRoute = () => {
                   : participants?.sender.avatarUrl) || ProfileImage
               }
             />
-            <div className="bg-[#efefef] break-words select-text px-3 py-1.5 rounded-xl w-fit text-lg max-w-[80%] lg:max-w-[50%]">
+            <div
+              className={`${
+                msg.senderId === participants?.sender.id
+                  ? "bg-main text-white"
+                  : "bg-[#efefef]"
+              }  break-words select-text px-3 py-1.5 rounded-xl w-fit text-lg max-w-[80%] lg:max-w-[50%]`}
+            >
               {msg.text}
             </div>
           </div>
