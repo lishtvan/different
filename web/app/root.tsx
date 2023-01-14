@@ -30,8 +30,8 @@ import {
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 import i18next from "./i18next.server";
-import { useChangeLanguage } from "remix-i18next";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -45,6 +45,27 @@ export const meta: MetaFunction = () => ({
 });
 
 export const handle = { i18n: "common" };
+
+export const action: ActionFunction = async ({ request }) => {
+  const { API_DOMAIN } = process.env;
+  const cookie = request.headers.get("Cookie");
+  if (!cookie) return API_DOMAIN;
+  const tokenRow = cookie.split("; ").find((row) => row.startsWith("token"));
+  if (!tokenRow) return API_DOMAIN;
+  const response = await fetchInstance({
+    request,
+    method: "GET",
+    route: "/auth/check",
+  });
+
+  if (response.status !== 401) {
+    const formData = await request.formData();
+    const route = formData.get("route")?.toString();
+
+    return redirect(route!);
+  }
+  return API_DOMAIN;
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const typesenseConfig = getTypesenseConfig({ isWriteConfig: false });
@@ -69,31 +90,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   const cookieHeader = response.headers.get("set-cookie");
-
   newHeaders.append("set-cookie", cookieHeader!);
 
   return json({ user, typesenseConfig, locale }, { headers: newHeaders });
-};
-
-export const action: ActionFunction = async ({ request }) => {
-  const { API_DOMAIN } = process.env;
-  const cookie = request.headers.get("Cookie");
-  if (!cookie) return API_DOMAIN;
-  const tokenRow = cookie.split("; ").find((row) => row.startsWith("token"));
-  if (!tokenRow) return API_DOMAIN;
-  const response = await fetchInstance({
-    request,
-    method: "GET",
-    route: "/auth/check",
-  });
-
-  if (response.status !== 401) {
-    const formData = await request.formData();
-    const route = formData.get("route")?.toString();
-
-    return redirect(route!);
-  }
-  return API_DOMAIN;
 };
 
 export default function App() {
@@ -101,7 +100,11 @@ export default function App() {
   const { typesenseConfig } = useLoaderData();
   const { locale } = useLoaderData();
   const { i18n } = useTranslation();
-  useChangeLanguage(locale);
+
+  // TODO: update later
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale, i18n]);
 
   const { searchClient } = new TypesenseInstantsearchAdapter({
     server: typesenseConfig,

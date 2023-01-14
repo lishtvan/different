@@ -12,7 +12,7 @@ const i18next = new RemixI18Next({
       serialize: async () => "",
       parse: async (cookieHeader) => {
         if (!cookieHeader) return "";
-        const parsedCookies = cookieHeader
+        const parsedCookies: { lng: string } = cookieHeader
           .split(";")
           .map((v) => v.split("="))
           .reduce((acc, v) => {
@@ -21,8 +21,8 @@ const i18next = new RemixI18Next({
               v[1].trim()
             );
             return acc;
-          }, {});
-        // @ts-ignore
+          }, {} as { lng: string });
+
         return parsedCookies["lng"];
       },
     },
@@ -37,7 +37,6 @@ const i18next = new RemixI18Next({
       loadPath: resolve("./public/locales/{{lng}}/{{ns}}.json"),
     },
   },
-  // @ts-ignore
   backend: Backend,
 });
 

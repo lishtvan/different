@@ -31,7 +31,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const contentType = request.headers.get("Content-type");
   const { listingId } = params;
 
-  if (contentType === "application/x-www-form-urlencoded") {
+  if (contentType === "application/x-www-form-urlencoded;charset=UTF-8") {
     const form = await request.formData();
     const body = getBody(form);
     let formattedTags = [];

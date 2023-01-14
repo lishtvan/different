@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
 
-  if (contentType === "application/x-www-form-urlencoded") {
+  if (contentType === "application/x-www-form-urlencoded;charset=UTF-8") {
     const form = await request.formData();
     const body = getBody(form);
     let formattedTags = [];

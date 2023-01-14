@@ -45,7 +45,7 @@ export const action: ActionFunction = async ({ request }) => {
   const userId = getCookieValue("userId", request);
   const contentType = request.headers.get("Content-type");
 
-  if (contentType === "application/x-www-form-urlencoded") {
+  if (contentType === "application/x-www-form-urlencoded;charset=UTF-8") {
     const formData = await request.formData();
 
     const body = Object.fromEntries(formData);
@@ -71,7 +71,10 @@ export const action: ActionFunction = async ({ request }) => {
         return { errors };
       }
       const newHeaders = new Headers();
-      newHeaders.append("Set-Cookie", `lng=${language}; Path=/; expires=Thu, 01 Jan 2030 00:00:00 GMT`);
+      newHeaders.append(
+        "Set-Cookie",
+        `lng=${language}; Path=/; expires=Thu, 01 Jan 2030 00:00:00 GMT`
+      );
       return redirect(`/user/${userId}`, { headers: newHeaders });
     }
     return { errors };
