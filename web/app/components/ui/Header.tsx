@@ -93,7 +93,7 @@ const Header = () => {
                     </Badge>
                   </IconButton>
                 </Link>
-                <Link className="mr-5" to="/user/deals">
+                <Link className="mr-5" to="/user/orders">
                   <IconButton>
                     <Badge badgeContent={0} color="primary">
                       <svg
