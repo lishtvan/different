@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "../../assets/profile.jpeg";
+import { WS_DOMAIN_BY_ORIGIN } from "~/constants/ws";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = Number(getCookieValue("userId", request));
@@ -20,13 +21,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }).then((res) => res.json());
 
   return { chats: user.Chats, userId };
-};
-
-const WS_DOMAIN_BY_ORIGIN = {
-  "http://localhost:3000": "ws://localhost:8000",
-  "https://dev.different-marketplace.com":
-    "wss://dev.api.different-marketplace.com",
-  "https://different-marketplace.com": "wss://api.different-marketplace.com",
 };
 
 const IndexRoute = () => {
