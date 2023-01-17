@@ -36,7 +36,6 @@ const IndexRoute = () => {
   }, []);
 
   ws.onopen = () => {
-    console.log("open connection");
     setIsWsReady((current) => !current);
   };
 
