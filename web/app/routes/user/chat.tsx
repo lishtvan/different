@@ -53,7 +53,7 @@ const IndexRoute = () => {
   }
 
   return (
-    <div className="flex w-full mt-1 mx-auto h-[calc(100vh-78px)]">
+    <div className="flex w-full mt-1 mx-auto h-[calc(100vh-78px)] 2xl:w-3/4 justify-center border rounded-2xl">
       <div className="w-[30%] border-r-2 overflow-y-scroll scrollbar-visible">
         {!noChatsWithMessages &&
           chats.map((chat) => (
