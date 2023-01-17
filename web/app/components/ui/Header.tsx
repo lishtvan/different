@@ -34,7 +34,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     margin: 0,
   },
 }));
-// TODO: update links
+
 const Header = () => {
   const { user } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();

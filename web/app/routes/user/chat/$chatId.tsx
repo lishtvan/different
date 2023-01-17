@@ -53,9 +53,13 @@ const IndexRoute = () => {
       setMessages(msg.chat.Messages);
       setParticipants(msg.chat.Users);
     }
-    if (msg.text && location.pathname === `/user/chat/${chatId}`) {
+    if (msg.text && msg.chatId === Number(chatId)) {
       setMessages([msg, ...messages]);
-      if (msg.senderId !== participants?.sender.id) {
+      if (
+        msg.senderId !== participants?.sender.id &&
+        location.pathname === `/user/chat/${chatId}`
+      ) {
+        console.log("message seen");
         ws.send(JSON.stringify({ messageSeen: true, chatId }));
       }
     }
