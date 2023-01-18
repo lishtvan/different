@@ -66,9 +66,6 @@ const root: FastifyPluginAsync = async (fastify) => {
         client.send(JSON.stringify(newMessage));
       }
     });
-    socket.on('close', () => {
-      console.log('socket is closed');
-    });
   });
 };
 
