@@ -70,6 +70,7 @@ const ListingRoute = () => {
         <PurchaseModal toggle={togglePurchaseModal} isOpen={isPurchaseOpen} />
         <div className="w-full md:w-[55%] lg:w-[40%] lg:min-w-[40%]">
           <ImageGallery
+            slideDuration={200}
             infinite
             showPlayButton={false}
             showThumbnails={images.length > 1}
