@@ -1,6 +1,8 @@
 import { FastifyPluginAsync } from 'fastify';
+import { WebSocket } from 'ws';
 
-const chats = new Map();
+const chats = new Map<string, Set<WebSocket>>();
+
 const root: FastifyPluginAsync = async (fastify) => {
   fastify.get('/message', { websocket: true }, (connection, req) => {
     const { socket } = connection;
@@ -65,6 +67,11 @@ const root: FastifyPluginAsync = async (fastify) => {
       for (const client of chat) {
         client.send(JSON.stringify(newMessage));
       }
+    });
+    socket.on('close', () => {
+      chats.forEach((chat) => {
+        if (chat.has(socket)) chat.delete(socket);
+      });
     });
   });
 };
