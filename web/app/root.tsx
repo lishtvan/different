@@ -31,7 +31,9 @@ import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 import i18next from "./i18next.server";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+import { WS_DOMAIN_BY_ORIGIN } from "./constants/ws";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -101,6 +103,15 @@ export default function App() {
   const { locale } = useLoaderData();
   const { i18n } = useTranslation();
 
+  const [wsUrl, setWsUrl] = useState("");
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(wsUrl);
+
+  useEffect(() => {
+    const origin = window.location.origin as keyof typeof WS_DOMAIN_BY_ORIGIN;
+    setWsUrl(`${WS_DOMAIN_BY_ORIGIN[origin]}/chat/message`);
+  }, []);
+
   // TODO: update later
   useEffect(() => {
     i18n.changeLanguage(locale);
@@ -126,7 +137,7 @@ export default function App() {
             searchClient={searchClient}
           >
             <Header />
-            <Outlet />
+            <Outlet context={{ sendMessage, lastMessage, readyState }} />
             {searchParams.get("login") && <Login />}
           </InstantSearch>
         </ThemeProvider>

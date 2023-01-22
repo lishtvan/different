@@ -1,13 +1,18 @@
 import type { LoaderFunction } from "@remix-run/node";
-import type { Chats } from "~/types/chat";
+import type { ChatContext, Chats } from "~/types/chat";
 import { Avatar } from "@mui/material";
 import { redirect } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react";
-import { useMemo, useState } from "react";
+import {
+  Link,
+  Outlet,
+  useLoaderData,
+  useOutletContext,
+  useParams,
+} from "@remix-run/react";
+import { useMemo } from "react";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "../../assets/profile.jpeg";
-import { WS_DOMAIN_BY_ORIGIN } from "~/constants/ws";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = Number(getCookieValue("userId", request));
@@ -26,18 +31,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const IndexRoute = () => {
   const { chatId } = useParams();
   const { chats, userId } = useLoaderData<{ chats: Chats[]; userId: number }>();
-
-  const [isWsReady, setIsWsReady] = useState(false);
-
-  const ws = useMemo(() => {
-    const origin = window.location.origin as keyof typeof WS_DOMAIN_BY_ORIGIN;
-    const WS_DOMAIN = WS_DOMAIN_BY_ORIGIN[origin];
-    return new WebSocket(`${WS_DOMAIN}/chat/message`);
-  }, []);
-
-  ws.onopen = () => {
-    setIsWsReady((current) => !current);
-  };
+  const { sendMessage, lastMessage, readyState } =
+    useOutletContext<ChatContext>();
 
   const noChatsWithMessages = useMemo(
     () => chats.every((chat) => chat.Messages.length === 0),
@@ -89,7 +84,7 @@ const IndexRoute = () => {
           ))}
       </div>
       {chatId ? (
-        <Outlet context={{ ws, isWsReady }} />
+        <Outlet context={{ sendMessage, lastMessage, readyState }} />
       ) : (
         <div className="w-[70%] flex items-center justify-center">
           <div className="text-lg font-medium bg-[#f4f4f5] px-3 py-1 rounded-3xl">

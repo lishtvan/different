@@ -13,6 +13,7 @@ import {
 } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import ProfileImage from "../../../assets/profile.jpeg";
+import { ReadyState } from "react-use-websocket";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -25,18 +26,19 @@ export const action: ActionFunction = async ({ request }) => {
 const IndexRoute = () => {
   const { chatId } = useParams();
   const fetcher = useFetcher();
-  const { ws, isWsReady } = useOutletContext<ChatContext>();
+  const { sendMessage, lastMessage, readyState } =
+    useOutletContext<ChatContext>();
   const actionData = useActionData();
   const formRef = useRef<HTMLFormElement>(null);
   const transition = useTransition();
 
-  useEffect(() => {
-    if (!isWsReady) return;
-    ws.send(JSON.stringify({ chatId, isConnect: true }));
-  }, [chatId, isWsReady]);
-
   const [messages, setMessages] = useState<Message[]>([]);
   const [participants, setParticipants] = useState<Participants>();
+
+  useEffect(() => {
+    if (readyState !== ReadyState.OPEN) return;
+    sendMessage(JSON.stringify({ chatId, isConnect: true }));
+  }, [chatId, readyState]);
 
   useEffect(() => {
     if (transition.state !== "submitting") formRef?.current?.reset();
@@ -44,11 +46,12 @@ const IndexRoute = () => {
 
   useEffect(() => {
     if (!actionData?.message) return;
-    ws.send(JSON.stringify({ text: actionData.message, chatId }));
+    sendMessage(JSON.stringify({ text: actionData.message, chatId }));
   }, [actionData]);
 
-  ws.onmessage = ({ data }) => {
-    const msg = JSON.parse(data);
+  useEffect(() => {
+    if (!lastMessage) return;
+    const msg = JSON.parse(lastMessage.data);
     if (msg.chat) {
       setMessages(msg.chat.Messages);
       setParticipants(msg.chat.Users);
@@ -59,14 +62,14 @@ const IndexRoute = () => {
         msg.senderId !== participants?.sender.id &&
         location.pathname === `/user/chat/${chatId}`
       ) {
-        ws.send(JSON.stringify({ messageSeen: true, chatId }));
+        sendMessage(JSON.stringify({ messageSeen: true, chatId }));
       }
     }
     fetcher.submit(
       { route: location.pathname },
       { method: "post", action: "/" }
     );
-  };
+  }, [lastMessage]);
 
   return (
     <div className="w-[70%] flex flex-col justify-end">

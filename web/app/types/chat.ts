@@ -1,3 +1,5 @@
+import type { ReadyState, SendMessage } from "react-use-websocket";
+
 interface User {
   id: number;
   nickname?: string;
@@ -24,6 +26,7 @@ export interface Participants {
 }
 
 export interface ChatContext {
-  ws: WebSocket;
-  isWsReady: boolean;
+  sendMessage: SendMessage;
+  readyState: ReadyState;
+  lastMessage: MessageEvent<any> | null;
 }
