@@ -14,6 +14,7 @@ import {
   Form,
   Link,
   useLoaderData,
+  useLocation,
   useNavigate,
   useSearchParams,
 } from "@remix-run/react";
@@ -40,6 +41,7 @@ const Header = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   let { t } = useTranslation();
 
   const onMenuItemClick = (path: string) => {
@@ -57,7 +59,7 @@ const Header = () => {
           <img src={logoText} width={220} alt="DIFFERENT" />
         </Link>
         <div className="flex justify-between items-center w-full">
-          <MainSearch />
+          {pathname === "/" && <MainSearch />}
           <div className="hidden items-center sm:flex ml-auto">
             {user && (
               <>

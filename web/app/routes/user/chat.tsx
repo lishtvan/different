@@ -1,18 +1,14 @@
 import type { LoaderFunction } from "@remix-run/node";
-import type { ChatContext, Chats } from "~/types/chat";
+import type { Chats } from "~/types/chat";
 import { Avatar } from "@mui/material";
 import { redirect } from "@remix-run/node";
-import {
-  Link,
-  Outlet,
-  useLoaderData,
-  useOutletContext,
-  useParams,
-} from "@remix-run/react";
-import { useMemo } from "react";
+import { Link, Outlet, useLoaderData, useParams } from "@remix-run/react";
+import { useEffect, useMemo, useState } from "react";
 import { getCookieValue } from "~/utils/cookie";
 import { fetchInstance } from "~/utils/fetchInstance";
 import ProfileImage from "../../assets/profile.jpeg";
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+import { WS_DOMAIN_BY_ORIGIN } from "~/constants/ws";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = Number(getCookieValue("userId", request));
@@ -31,8 +27,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const IndexRoute = () => {
   const { chatId } = useParams();
   const { chats, userId } = useLoaderData<{ chats: Chats[]; userId: number }>();
-  const { sendMessage, lastMessage, readyState } =
-    useOutletContext<ChatContext>();
+
+  const [wsUrl, setWsUrl] = useState("wss://echo.websocket.org");
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(wsUrl);
+
+  useEffect(() => {
+    const origin = window.location.origin as keyof typeof WS_DOMAIN_BY_ORIGIN;
+    setWsUrl(`${WS_DOMAIN_BY_ORIGIN[origin]}/chat/message`);
+  }, []);
 
   const noChatsWithMessages = useMemo(
     () => chats.every((chat) => chat.Messages.length === 0),

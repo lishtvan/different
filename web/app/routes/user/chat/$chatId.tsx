@@ -55,6 +55,10 @@ const IndexRoute = () => {
     if (msg.chat) {
       setMessages(msg.chat.Messages);
       setParticipants(msg.chat.Users);
+      fetcher.submit(
+        { route: location.pathname },
+        { method: "post", action: "/" }
+      );
     }
     if (msg.text && msg.chatId === Number(chatId)) {
       setMessages([msg, ...messages]);
@@ -65,10 +69,6 @@ const IndexRoute = () => {
         sendMessage(JSON.stringify({ messageSeen: true, chatId }));
       }
     }
-    fetcher.submit(
-      { route: location.pathname },
-      { method: "post", action: "/" }
-    );
   }, [lastMessage]);
 
   return (
