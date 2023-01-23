@@ -60,7 +60,7 @@ const root: FastifyPluginAsync = async (fastify) => {
         }),
         fastify.prisma.chat.update({
           where: { id: Number(data.chatId) },
-          data: { updatedAt: new Date(), notification: true },
+          data: { notification: true },
         }),
       ]);
 
