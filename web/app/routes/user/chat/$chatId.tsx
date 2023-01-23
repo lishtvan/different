@@ -1,26 +1,19 @@
-import type { ActionFunction } from "@remix-run/node";
 import type { ChatContext, Message, Participants } from "~/types/chat";
 import { Send } from "@mui/icons-material";
 import { Avatar, IconButton, TextField } from "@mui/material";
 import {
-  Form,
   Link,
-  useActionData,
   useFetcher,
   useOutletContext,
   useParams,
-  useTransition,
 } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import type { KeyboardEvent } from "react";
+import { useEffect, useState } from "react";
 import ProfileImage from "../../../assets/profile.jpeg";
 import { ReadyState } from "react-use-websocket";
 
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const message = formData.get("message");
-  if (!message) return null;
-  if (message.toString().trim().length === 0) return null;
-  return { message };
+export const action = () => {
+  return null;
 };
 
 const IndexRoute = () => {
@@ -28,26 +21,29 @@ const IndexRoute = () => {
   const fetcher = useFetcher();
   const { sendMessage, lastMessage, readyState } =
     useOutletContext<ChatContext>();
-  const actionData = useActionData();
-  const formRef = useRef<HTMLFormElement>(null);
-  const transition = useTransition();
+
+  const [inputValue, setInputValue] = useState("");
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [participants, setParticipants] = useState<Participants>();
+
+  const sendTextMessage = () => {
+    if (inputValue.trim().length === 0) {
+      setInputValue("");
+      return;
+    }
+    sendMessage(JSON.stringify({ text: inputValue, chatId }));
+    setInputValue("");
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLImageElement>) => {
+    if (e.key === "Enter") sendTextMessage();
+  };
 
   useEffect(() => {
     if (readyState !== ReadyState.OPEN) return;
     sendMessage(JSON.stringify({ chatId, isConnect: true }));
   }, [chatId, readyState]);
-
-  useEffect(() => {
-    if (transition.state !== "submitting") formRef?.current?.reset();
-  }, [transition]);
-
-  useEffect(() => {
-    if (!actionData?.message) return;
-    sendMessage(JSON.stringify({ text: actionData.message, chatId }));
-  }, [actionData]);
 
   useEffect(() => {
     if (!lastMessage) return;
@@ -101,22 +97,24 @@ const IndexRoute = () => {
           </div>
         ))}
       </div>
-      <Form replace method="post" ref={formRef} className="flex w-full ml-2">
+      <div className="flex w-full mb-1 mx-1">
         <TextField
           placeholder="Write a message..."
-          name="message"
-          className="w-full mr-2"
+          className="w-full"
           autoComplete="off"
           autoFocus={true}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <IconButton
           size="large"
+          onClick={sendTextMessage}
           className="hover:bg-transparent hover:text-main p-2"
-          type="submit"
         >
           <Send className="hover:bg-none" sx={{ height: 34, width: 34 }} />
         </IconButton>
-      </Form>
+      </div>
     </div>
   );
 };
