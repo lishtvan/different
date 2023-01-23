@@ -71,8 +71,10 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const typesenseConfig = getTypesenseConfig({ isWriteConfig: false });
-  const response = await getAuthorizedStatus(request);
-  const locale = await i18next.getLocale(request);
+  const [response, locale] = await Promise.all([
+    getAuthorizedStatus(request),
+    i18next.getLocale(request),
+  ]);
   const user = await response.json();
 
   const newHeaders = new Headers();
