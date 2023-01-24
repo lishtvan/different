@@ -9,7 +9,7 @@ import {
   Tooltip,
   tooltipClasses,
 } from "@mui/material";
-import { Person, Logout, Settings } from "@mui/icons-material";
+import { Person, Logout, Settings, HelpOutline } from "@mui/icons-material";
 import {
   Form,
   Link,
@@ -205,6 +205,15 @@ const Header = () => {
                         <Settings fontSize="large" />
                       </ListItemIcon>
                       <div className="font-normal text-xl">Settings</div>
+                    </MenuItem>
+                    <MenuItem
+                      className="px-4"
+                      onClick={() => onMenuItemClick("/info?q=contact")}
+                    >
+                      <ListItemIcon className="mr-2">
+                        <HelpOutline fontSize="large" />
+                      </ListItemIcon>
+                      <div className="font-normal text-xl">For user</div>
                     </MenuItem>
                     <Form action="/logout" method="post">
                       <button

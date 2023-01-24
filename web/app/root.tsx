@@ -189,9 +189,9 @@ export function CatchBoundary() {
                       support:{" "}
                       <a
                         className="text-blue-500 underline underline-offset-[5px]"
-                        href="https://t.me/DifferentSupport"
+                        href="https://t.me/DifferentMarketplace"
                       >
-                        @DifferentSupport
+                        @DifferentMarketplace
                       </a>
                     </span>
                     <br />
@@ -239,9 +239,9 @@ export function ErrorBoundary() {
                   Please, contact support:{" "}
                   <a
                     className="text-blue-500 underline underline-offset-[5px]"
-                    href="https://t.me/DifferentSupport"
+                    href="https://t.me/DifferentMarketplace"
                   >
-                    @DifferentSupport
+                    @DifferentMarketplace
                   </a>
                 </span>
                 <br />
