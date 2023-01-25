@@ -215,7 +215,7 @@ const Header = () => {
                       </ListItemIcon>
                       <div className="font-normal text-xl">For user</div>
                     </MenuItem>
-                    <Form action="/logout" method="post">
+                    <Form action="/auth/logout" method="post">
                       <button
                         type="submit"
                         onClick={() => setShowTooltip(false)}
