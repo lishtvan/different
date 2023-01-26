@@ -9,10 +9,17 @@ import {
   Tooltip,
   tooltipClasses,
 } from "@mui/material";
-import { Person, Logout, Settings, HelpOutline } from "@mui/icons-material";
+import {
+  Person,
+  Logout,
+  Settings,
+  HelpOutline,
+  Language,
+} from "@mui/icons-material";
 import {
   Form,
   Link,
+  useFetcher,
   useLoaderData,
   useLocation,
   useNavigate,
@@ -43,6 +50,8 @@ const Header = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   let { t } = useTranslation();
+  const { i18n } = useTranslation();
+  const fetcher = useFetcher();
 
   const onMenuItemClick = (path: string) => {
     navigate(path);
@@ -95,7 +104,7 @@ const Header = () => {
                     </Badge>
                   </IconButton>
                 </Link>
-                <Link className="mr-5" to="/user/orders">
+                <Link className="mr-4" to="/user/orders">
                   <IconButton>
                     <Badge badgeContent={0} color="primary">
                       <svg
@@ -174,7 +183,23 @@ const Header = () => {
                 </Link>
               </>
             )}
-            <Link className="mr-5" to="/sell">
+
+            {!user && (
+              <Button
+                onClick={() =>
+                  fetcher.submit(
+                    { language: i18n.language === "en" ? "uk" : "en" },
+                    { method: "post", action: "/language" }
+                  )
+                }
+                startIcon={<Language />}
+                className="text-black mt-[1px] mr-4 rounded-xl hover:bg-[#ebebeb] bg-white"
+              >
+                {i18n.language === "en" ? "EN" : "UA"}
+              </Button>
+            )}
+
+            <Link className="mr-4" to="/sell">
               <Button variant="contained">{t("sell")}</Button>
             </Link>
 
