@@ -19,7 +19,7 @@ const root: FastifyPluginAsync = async (fastify) => {
 
       if (data.messageSeen) {
         await fastify.prisma.chat.update({
-          where: { id: Number(data.chatId) },
+          where: { id: data.chatId },
           data: { notification: false },
         });
         socket.send(JSON.stringify({}));
@@ -28,7 +28,7 @@ const root: FastifyPluginAsync = async (fastify) => {
 
       if (data.isConnect) {
         const chat = await fastify.prisma.chat.findFirst({
-          where: { id: Number(data.chatId), Users: { some: { id: ownUserId } } },
+          where: { id: data.chatId, Users: { some: { id: ownUserId } } },
           select: {
             notification: true,
             Messages: { orderBy: { createdAt: 'desc' } },
@@ -41,7 +41,7 @@ const root: FastifyPluginAsync = async (fastify) => {
         const sender = chat?.Users.find((user) => user.id === ownUserId);
         if (chat.notification && chat.Messages[0].senderId === recipient?.id) {
           await fastify.prisma.chat.update({
-            where: { id: Number(data.chatId) },
+            where: { id: data.chatId },
             data: { notification: false },
           });
         }
@@ -54,12 +54,12 @@ const root: FastifyPluginAsync = async (fastify) => {
         fastify.prisma.message.create({
           data: {
             text: data.text,
-            chatId: Number(data.chatId),
+            chatId: data.chatId,
             senderId: ownUserId,
           },
         }),
         fastify.prisma.chat.update({
-          where: { id: Number(data.chatId) },
+          where: { id: data.chatId },
           data: { notification: true },
         }),
       ]);

@@ -56,7 +56,7 @@ const IndexRoute = () => {
         { method: "post", action: "/" }
       );
     }
-    if (msg.text && msg.chatId === Number(chatId)) {
+    if (msg.text && msg.chatId === chatId) {
       setMessages([msg, ...messages]);
       if (
         msg.senderId !== participants?.sender.id &&

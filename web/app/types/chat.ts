@@ -14,7 +14,7 @@ export interface Message {
 }
 
 export interface Chats {
-  id: number;
+  id: string;
   notification: boolean;
   Users: User[];
   Messages: Message[];

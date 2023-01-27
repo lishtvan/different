@@ -57,7 +57,7 @@ const IndexRoute = () => {
                 <Link
                   to={`/user/chat/${chat.id}`}
                   className={`${
-                    Number(chatId) === chat.id
+                    chatId === chat.id
                       ? "bg-main text-white"
                       : "hover:bg-[#f4f4f5]"
                   } flex px-2 py-3 rounded-2xl gap-2 max-w-full overflow-hidden mr-1`}

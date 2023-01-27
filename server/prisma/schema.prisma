@@ -55,13 +55,13 @@ model Message {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   Chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  chatId    Int
+  chatId    String
   text      String
   senderId  Int
 }
 
 model Chat {
-  id           Int       @id @default(autoincrement())
+  id           String    @id @default(uuid())
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @default(now()) @updatedAt
   notification Boolean   @default(false)
