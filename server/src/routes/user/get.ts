@@ -21,7 +21,9 @@ const getUser: FastifyPluginAsync = async (fastify) => {
     const whereUserInput = userId ? { id: userId } : { nickname };
 
     let isOwnAccount;
-    if (userId) {
+    if (!ownUserId) {
+      isOwnAccount = false;
+    } else if (userId) {
       isOwnAccount = userId === ownUserId;
     } else {
       const ownUser = await fastify.prisma.user.findUnique({
