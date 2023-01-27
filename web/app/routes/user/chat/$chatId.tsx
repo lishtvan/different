@@ -73,7 +73,7 @@ const IndexRoute = () => {
         to={`/user/${participants?.recipient.id}`}
         className="mb-auto font-semibold text-xl pl-2 py-2 border-b-2 hover:text-main"
       >
-        {participants?.recipient.nickname || participants?.recipient.name}
+        {participants?.recipient.nickname}
       </Link>
       <div className="ml-4 py-3 flex flex-col-reverse gap-2 overflow-y-scroll scrollbar-visible">
         {messages.map((msg) => (

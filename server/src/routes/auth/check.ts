@@ -12,6 +12,7 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
       where: { id: ownUserId },
       select: {
         id: true,
+        nickname: true,
         avatarUrl: true,
         Chats: {
           where: {

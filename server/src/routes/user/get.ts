@@ -5,8 +5,8 @@ const schema = {
   tags: ['User'],
   body: {
     type: 'object',
-    required: ['userId'],
     properties: {
+      nickname: { type: 'string' },
       userId: { type: 'number' },
     },
   } as const,
@@ -16,17 +16,27 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const getUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/get', { schema }, async (req, reply) => {
-    const { userId } = req.body;
+    const { nickname, userId } = req.body;
     const ownUserId = Number(req.cookies.userId);
-    const isOwnAccount = userId === ownUserId;
+    const whereUserInput = userId ? { id: userId } : { nickname };
+
+    let isOwnAccount;
+    if (userId) {
+      isOwnAccount = userId === ownUserId;
+    } else {
+      const ownUser = await fastify.prisma.user.findUnique({
+        where: { id: ownUserId },
+      });
+      isOwnAccount = ownUser?.nickname === nickname;
+    }
 
     const user = await fastify.prisma.user.findUnique({
-      where: { id: userId },
+      where: whereUserInput,
       select: {
+        id: true,
         nickname: true,
         bio: true,
         avatarUrl: true,
-        name: true,
         location: true,
         Chats: isOwnAccount && {
           orderBy: { updatedAt: 'desc' },
@@ -34,7 +44,7 @@ const getUser: FastifyPluginAsync = async (fastify) => {
             id: true,
             notification: true,
             Users: {
-              select: { name: true, nickname: true, avatarUrl: true },
+              select: { nickname: true, avatarUrl: true },
               where: { id: { not: ownUserId } },
             },
             Messages: { select: { text: true, senderId: true }, take: -1 },

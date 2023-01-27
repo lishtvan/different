@@ -215,7 +215,7 @@ const Header = () => {
                   <div>
                     <MenuItem
                       className="px-4"
-                      onClick={() => onMenuItemClick(`/user/${user.id}`)}
+                      onClick={() => onMenuItemClick(`/${user.nickname}`)}
                     >
                       <ListItemIcon className="mr-2">
                         <Person fontSize="large" />
@@ -257,7 +257,7 @@ const Header = () => {
                   </div>
                 }
               >
-                <Link to={`/user/${user.id}`}>
+                <Link to={`/${user.nickname}`}>
                   <div className="rounded-full border-4 border-white hover:border-main">
                     <Avatar
                       className="border-2 border-white"

@@ -1,9 +1,9 @@
 import { Avatar, Button, IconButton } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData, useParams } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { LocationOnOutlined, Send, Settings } from "@mui/icons-material";
 import { fetchInstance } from "~/utils/fetchInstance";
-import ProfileImage from "./../../assets/profile.jpeg";
+import ProfileImage from "./../assets/profile.jpeg";
 import { InstantSearch } from "react-instantsearch-hooks-web";
 import {
   getTypesenseConfig,
@@ -16,7 +16,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await fetchInstance({
     request,
     method: "POST",
-    body: { userId: Number(params.userId) },
+    body: { nickname: params.user },
     route: "/user/get",
   }).then((res) => res.json());
 
@@ -27,15 +27,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const UserRoute = () => {
   const {
-    name,
     nickname,
     avatarUrl,
     isOwnAccount,
     bio,
+    id,
     location,
     typesenseConfig,
   } = useLoaderData();
-  const { userId } = useParams();
   const { searchClient } = new TypesenseInstantsearchAdapter({
     server: typesenseConfig,
     additionalSearchParameters: {
@@ -56,7 +55,7 @@ const UserRoute = () => {
           />
           <div className="ml-14">
             <div className="mt-2 flex justify-between items-center">
-              <div className="text-2xl font-normal">{nickname || name}</div>
+              <div className="text-2xl font-normal">{nickname}</div>
               <div className="ml-10">
                 {isOwnAccount ? (
                   <Link to="/user/edit">
@@ -65,7 +64,7 @@ const UserRoute = () => {
                     </IconButton>
                   </Link>
                 ) : (
-                  <Link to={`/user/chat/new/${userId}`}>
+                  <Link to={`/user/chat/new/${id}`}>
                     <Button
                       className="text-black text-sm"
                       variant="outlined"
@@ -96,7 +95,7 @@ const UserRoute = () => {
             )}
           </div>
         </div>
-        <UserListings />
+        <UserListings userId={id} />
       </div>
     </InstantSearch>
   );

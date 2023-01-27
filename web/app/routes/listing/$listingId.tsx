@@ -121,16 +121,14 @@ const ListingRoute = () => {
             </Button>
             <Link
               className="flex w-full items-center gap-4 border-main rounded-lg border py-1 px-2 mb-8"
-              to={`/user/${seller?.id}`}
+              to={`/${seller?.nickname}`}
             >
               <Avatar
                 sx={{ width: 50, height: 50 }}
                 src={seller?.avatarUrl || ProfileImage}
               />
               <div>
-                <div className="text-xl">
-                  {seller?.nickname || seller?.name}
-                </div>
+                <div className="text-xl">{seller?.nickname}</div>
                 <div className="flex gap-2 text-sm text-[#737373]">
                   <div>10 listings</div>
                   <div>6 sold</div>

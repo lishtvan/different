@@ -32,7 +32,7 @@ const root: FastifyPluginAsync = async (fastify) => {
           select: {
             notification: true,
             Messages: { orderBy: { createdAt: 'desc' } },
-            Users: { select: { id: true, nickname: true, name: true, avatarUrl: true } },
+            Users: { select: { id: true, nickname: true, avatarUrl: true } },
           },
         });
         if (!chat) return;

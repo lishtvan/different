@@ -42,7 +42,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const userId = getCookieValue("userId", request);
   const contentType = request.headers.get("Content-type");
 
   if (contentType === "application/x-www-form-urlencoded;charset=UTF-8") {
@@ -75,7 +74,7 @@ export const action: ActionFunction = async ({ request }) => {
         "Set-Cookie",
         `lng=${language}; Path=/; expires=Thu, 01 Jan 2030 00:00:00 GMT`
       );
-      return redirect(`/user/${userId}`, { headers: newHeaders });
+      return redirect(`/${nickname}`, { headers: newHeaders });
     }
     return { errors };
   } else {
@@ -108,7 +107,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const UserEditRoute = () => {
-  const { name, nickname, avatarUrl, bio, location } = useLoaderData();
+  const { nickname, avatarUrl, bio, location } = useLoaderData();
   const data = useActionData();
   const submit = useSubmit();
   const { submission } = useTransition();
@@ -187,7 +186,7 @@ const UserEditRoute = () => {
           inputProps={{
             maxLength: 21,
           }}
-          defaultValue={nickname || name}
+          defaultValue={nickname}
         />
         <TextField
           error={Boolean(data?.errors?.bio)}

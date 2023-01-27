@@ -32,7 +32,6 @@ const schema = {
         properties: {
           nickname: { type: 'string' },
           avatarUrl: { type: 'string', nullable: true },
-          name: { type: 'string', nullable: true },
           id: { type: 'number' },
         },
       },

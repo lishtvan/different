@@ -23,11 +23,14 @@ export default fp(async (fastify) => {
         const createdUser = await fastify.prisma.user.create({
           data: {
             providerId: userInfo.providerId,
-            name: userInfo.name || 'Different User',
             Sessions: {
               create: { token, ip },
             },
           },
+        });
+        await fastify.prisma.user.update({
+          where: { id: createdUser.id },
+          data: { nickname: `different_user_${createdUser.id}` },
         });
         userId = createdUser.id;
       }

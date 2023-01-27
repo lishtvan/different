@@ -1,4 +1,3 @@
-import { useParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import {
   useClearRefinements,
@@ -8,19 +7,18 @@ import {
 import type { TListing } from "~/types/listing";
 import Listing from "./Listing";
 
-const UserListings = () => {
+const UserListings = ({ userId }: { userId: number }) => {
   const { refine: refineStatus } = useRefinementList({ attribute: "status" });
   const { refine: refineSeller } = useRefinementList({ attribute: "sellerId" });
   const clear = useClearRefinements();
   const { hits, isLastPage, showMore, results } = useInfiniteHits<TListing>();
   const sentinelRef = useRef(null);
-  const { userId } = useParams();
 
   useEffect(() => {
     if (!userId) return;
     clear.refine();
     refineStatus("AVAILABLE");
-    refineSeller(userId);
+    refineSeller(userId.toString());
   }, [userId]);
 
   useEffect(() => {

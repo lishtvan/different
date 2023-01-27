@@ -14,7 +14,7 @@ const twitterCallback: FastifyPluginAsync = async (fastify) => {
     if (!data) return reply.send('Something went wrong.');
 
     const { token, userId } = await fastify.session.start(
-      { name: data.name, providerId: data.id },
+      { providerId: data.id },
       req.raw.socket.remoteAddress || ''
     );
 

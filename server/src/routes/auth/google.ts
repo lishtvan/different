@@ -11,7 +11,7 @@ const googleAuth: FastifyPluginAsync = async (fastify) => {
       req
     );
 
-    const { id, name } = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+    const { id } = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
       method: 'GET',
       headers: {
         authorization: 'Bearer' + oauthToken.token.access_token,
@@ -19,7 +19,7 @@ const googleAuth: FastifyPluginAsync = async (fastify) => {
     }).then((res) => res.json());
 
     const { token, userId } = await fastify.session.start(
-      { providerId: id, name },
+      { providerId: id },
       req.raw.socket.remoteAddress || ''
     );
 

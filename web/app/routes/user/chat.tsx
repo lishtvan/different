@@ -21,7 +21,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await fetchInstance({
     request,
     method: "POST",
-    body: { userId: userId },
+    body: { userId },
     route: "/user/get",
   }).then((res) => res.json());
 
@@ -68,7 +68,7 @@ const IndexRoute = () => {
                   />
                   <div className="max-w-full overflow-hidden">
                     <div className="font-semibold text-ellipsis overflow-hidden whitespace-nowrap">
-                      {chat.Users[0].nickname || chat.Users[0].name}
+                      {chat.Users[0].nickname}
                     </div>
                     <div className="mt-1 text-ellipsis overflow-hidden whitespace-nowrap">
                       {chat.Messages[0].text}
