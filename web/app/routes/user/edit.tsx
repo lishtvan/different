@@ -53,7 +53,11 @@ export const action: ActionFunction = async ({ request }) => {
 
     let errors: Record<string, unknown> = {};
     if (nickname.toString().length < 2) errors.nickname = "Too short";
-    if (nickname.toString().length > 20) errors.nickname = "Too long";
+    else if (nickname.toString().length > 20) errors.nickname = "Too long";
+    else if (!/^[a-z0-9_]+$/.exec(nickname.toString())) {
+      errors.nickname = "This symbol not allowed";
+    }
+
     if (bio.toString().length > 150) errors.bio = "Too long";
     if (location.toString().length > 40) errors.location = "Too long";
 
@@ -180,6 +184,7 @@ const UserEditRoute = () => {
         <TextField
           placeholder="Nickname"
           name="nickname"
+          autoComplete="off"
           sx={{ width: "100%" }}
           error={Boolean(data?.errors?.nickname)}
           label={data?.errors?.nickname}
@@ -204,6 +209,7 @@ const UserEditRoute = () => {
         <TextField
           placeholder="Location"
           name="location"
+          autoComplete="off"
           sx={{ marginBottom: "15px", width: "100%" }}
           error={Boolean(data?.errors?.location)}
           label={data?.errors?.location}
