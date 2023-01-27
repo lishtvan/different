@@ -70,7 +70,7 @@ const IndexRoute = () => {
   return (
     <div className="w-[70%] flex flex-col justify-end">
       <Link
-        to={`/user/${participants?.recipient.id}`}
+        to={`/${participants?.recipient.nickname}`}
         className="mb-auto font-semibold text-xl pl-2 py-2 border-b-2 hover:text-main"
       >
         {participants?.recipient.nickname}
