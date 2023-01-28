@@ -39,9 +39,11 @@ const UserListings = ({ userId }: { userId: number }) => {
     }
   }, [isLastPage, showMore]);
 
+  if (!results?.nbHits) return null;
+
   return (
     <div className="mt-10 mb-20 w-full px-0 md:px-24">
-      {results?.nbHits! > 0 ? (
+      {results.nbHits > 0 ? (
         <div className="w-full grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 gap-x-[1.125rem] gap-y-4">
           {hits.map((listing) => (
             <Listing listing={listing} key={listing.objectID} />
