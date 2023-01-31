@@ -101,13 +101,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function App() {
   const [searchParams] = useSearchParams();
-  const { typesenseConfig } = useLoaderData();
+  const { typesenseConfig, user } = useLoaderData();
   const { locale } = useLoaderData();
   const { i18n } = useTranslation();
   const [wsUrl, setWsUrl] = useState("wss://echo.websocket.org");
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(wsUrl, {
-    shouldReconnect: () => true,
+    shouldReconnect: () => Boolean(user),
   });
 
   useEffect(() => {
