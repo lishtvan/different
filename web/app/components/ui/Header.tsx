@@ -104,7 +104,7 @@ const Header = () => {
                     </Badge>
                   </IconButton>
                 </Link>
-                <Link className="mr-4" to="/user/orders">
+                <Link className="mr-2" to="/user/orders">
                   <IconButton>
                     <Badge badgeContent={0} color="primary">
                       <svg
@@ -185,21 +185,30 @@ const Header = () => {
             )}
 
             {!user && (
-              <Button
-                onClick={() =>
-                  fetcher.submit(
-                    { language: i18n.language === "en" ? "uk" : "en" },
-                    { method: "post", action: "/language" }
-                  )
-                }
-                startIcon={<Language />}
-                className="text-black mt-[1px] mr-4 rounded-xl hover:bg-[#ebebeb] bg-white"
-              >
-                {i18n.language === "en" ? "EN" : "UA"}
-              </Button>
+              <>
+                <Button
+                  onClick={() =>
+                    fetcher.submit(
+                      { language: i18n.language === "en" ? "uk" : "en" },
+                      { method: "post", action: "/language" }
+                    )
+                  }
+                  startIcon={<Language />}
+                  className="text-black mt-[1px] mr-2 rounded-xl hover:bg-[#ebebeb] bg-white"
+                >
+                  {i18n.language === "en" ? "EN" : "UA"}
+                </Button>
+                <Button
+                  onClick={() => navigate("/info")}
+                  className="mr-2 whitespace-nowrap"
+                  variant="contained"
+                >
+                  {t("for user")}
+                </Button>
+              </>
             )}
 
-            <Link className="mr-4" to="/sell">
+            <Link className="mr-2" to="/sell">
               <Button variant="contained">{t("sell")}</Button>
             </Link>
 
@@ -275,7 +284,7 @@ const Header = () => {
                 className="whitespace-nowrap"
                 variant="contained"
               >
-                SIGN IN
+                {t("sign in")}
               </Button>
             )}
           </div>
