@@ -1,6 +1,8 @@
 import { Button } from "@mui/material";
 import { Link, useSearchParams } from "@remix-run/react";
 import { useEffect } from "react";
+import visa from "../assets/visa.svg";
+import mastercard from "../assets/mastercard.svg";
 
 const InfoRoute = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -149,9 +151,15 @@ const InfoRoute = () => {
           {searchParams.get("q") === "payment" && (
             <div>
               <h1 className="font-semibold text-xl">Оплата та доставка</h1>
-              <p>
-                <br />
-              </p>
+              <div className="flex my-5">
+                <img src={visa} alt="visa" width={50} />
+                <img
+                  className="ml-2"
+                  src={mastercard}
+                  width={50}
+                  alt="mastercard"
+                />
+              </div>
               <p>
                 Different дає можливість Продавцю в рамках послуги Безпечне
                 замовлення додавати Оголошення з опцією доставки, яка буде
