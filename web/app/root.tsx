@@ -15,6 +15,7 @@ import {
   ScrollRestoration,
   useCatch,
   useLoaderData,
+  useNavigate,
   useSearchParams,
 } from "@remix-run/react";
 import { InstantSearch } from "react-instantsearch-hooks-web";
@@ -156,6 +157,7 @@ export default function App() {
 
 export function CatchBoundary() {
   const caught = useCatch();
+  const navigate = useNavigate();
 
   return (
     <html lang="en">
@@ -172,15 +174,27 @@ export function CatchBoundary() {
               </div>
               <div className="text-2xl mb-3">
                 {caught.status === 404 && (
-                  <span>
-                    Page not found. Go to{" "}
-                    <a
-                      href={"/"}
-                      className="text-blue-500 underline underline-offset-[5px]"
-                    >
-                      main page
-                    </a>
-                  </span>
+                  <>
+                    <span>
+                      Page not found.{" "}
+                      <button
+                        onClick={() => navigate(-1)}
+                        className="text-blue-500 underline underline-offset-[5px]"
+                      >
+                        Go back
+                      </button>
+                    </span>
+                    <br />
+                    <span>
+                      Go to{" "}
+                      <a
+                        href={"/"}
+                        className="text-blue-500 underline underline-offset-[5px]"
+                      >
+                        main page
+                      </a>
+                    </span>
+                  </>
                 )}
                 {caught.status === 500 && (
                   <>
