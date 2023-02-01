@@ -1,4 +1,11 @@
-import { autocompleteClasses, Popper, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  autocompleteClasses,
+  Popper,
+  styled,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import {
   createContext,
   forwardRef,
@@ -6,7 +13,7 @@ import {
   useEffect,
   useRef,
 } from "react";
-import type { ListChildComponentProps} from "react-window";
+import type { ListChildComponentProps } from "react-window";
 import { VariableSizeList } from "react-window";
 
 export const StyledPopper = styled(Popper)({

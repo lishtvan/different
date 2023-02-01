@@ -44,14 +44,14 @@ const UserListings = ({ userId }: { userId: number }) => {
   return (
     <div className="mt-10 mb-20 w-full px-0 md:px-24">
       {results.nbHits > 0 ? (
-        <div className="w-full grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 gap-x-[1.125rem] gap-y-4">
+        <div className="grid w-full grid-cols-2 gap-x-[1.125rem] gap-y-4 lg:grid-cols-3 xl:grid-cols-4">
           {hits.map((listing) => (
             <Listing listing={listing} key={listing.objectID} />
           ))}
           <div ref={sentinelRef} />
         </div>
       ) : (
-        <div className="text-xl h-44 flex items-center justify-center font-semibold">
+        <div className="flex h-44 items-center justify-center text-xl font-semibold">
           <div>The are no listings for now</div>
           <div className="ml-2 text-4xl">&#128546;</div>
         </div>

@@ -5,8 +5,8 @@ import StatusFilter from "./StatusFilter";
 
 const Filters = () => {
   return (
-    <div className="sticky top-[74px] h-screen min-w-[320px] max-w-[320px] hidden sm:block">
-      <div className="top-[74px] sticky h-[calc(93%-74px)] overflow-y-scroll scrollbar-white">
+    <div className="sticky top-[74px] hidden h-screen min-w-[320px] max-w-[320px] sm:block">
+      <div className="scrollbar-white sticky top-[74px] h-[calc(93%-74px)] overflow-y-scroll">
         <PriceFilter />
         <CheckboxFilter enableSearch={true} attribute="designer" />
         <CategoryFilter />

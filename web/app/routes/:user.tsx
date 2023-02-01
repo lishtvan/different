@@ -48,13 +48,13 @@ const UserRoute = () => {
       searchClient={searchClient}
     >
       <div className="mt-4">
-        <div className="flex justify-center items-center">
+        <div className="flex items-center justify-center">
           <Avatar
             src={avatarUrl || ProfileImage}
             sx={{ height: "160px", width: "160px" }}
           />
           <div className="ml-14">
-            <div className="mt-2 flex justify-between items-center">
+            <div className="mt-2 flex items-center justify-between">
               <div className="text-2xl font-normal">{nickname}</div>
               <div className="ml-10">
                 {isOwnAccount ? (
@@ -66,7 +66,7 @@ const UserRoute = () => {
                 ) : (
                   <Link to={`/user/chat/new/${id}`}>
                     <Button
-                      className="text-black text-sm"
+                      className="text-sm text-black"
                       variant="outlined"
                       endIcon={<Send />}
                     >
@@ -80,7 +80,7 @@ const UserRoute = () => {
               <div className="text-lg">
                 <b>5</b> listings
               </div>
-              <div className="text-lg ml-7">
+              <div className="ml-7 text-lg">
                 <b>8</b> sold
               </div>
             </div>
@@ -90,7 +90,7 @@ const UserRoute = () => {
                 <div>
                   <LocationOnOutlined />
                 </div>
-                <div className="text-lg ml-2">{location}</div>
+                <div className="ml-2 text-lg">{location}</div>
               </div>
             )}
           </div>

@@ -66,7 +66,7 @@ const ListingRoute = () => {
 
   return (
     <Form method="post">
-      <div className="w-full my-3 flex flex-col gap-6 lg:gap-14 mx-auto justify-center md:flex-row">
+      <div className="my-3 mx-auto flex w-full flex-col justify-center gap-6 md:flex-row lg:gap-14">
         <PurchaseModal toggle={togglePurchaseModal} isOpen={isPurchaseOpen} />
         <div className="w-full md:w-[55%] lg:w-[40%] lg:min-w-[40%]">
           <ImageGallery
@@ -77,13 +77,13 @@ const ListingRoute = () => {
             items={images}
           />
         </div>
-        <div className="gap-y-3 mb-10 flex flex-col w-full md:max-w-[380px]">
-          <div className="mb-2 flex justify-between items-start">
-            <div className="text-2xl font-bold pt-[0.55rem]">
+        <div className="mb-10 flex w-full flex-col gap-y-3 md:max-w-[380px]">
+          <div className="mb-2 flex items-start justify-between">
+            <div className="pt-[0.55rem] text-2xl font-bold">
               {listing?.title}
             </div>
             {isOwnListing && (
-              <div className="flex ml-4">
+              <div className="ml-4 flex">
                 <Tooltip title="Edit listing">
                   <Link to={`/listing/${listingId}/edit`}>
                     <IconButton size="large" color="inherit">
@@ -110,8 +110,8 @@ const ListingRoute = () => {
           <div className="text-xl">Size: {listing?.size}</div>
           <div className="text-xl">Category: {listing?.category}</div>
           <div className="text-xl">Condition: {listing?.condition}</div>
-          <div className="text-2xl my-4 font-bold">{listing?.price}₴</div>
-          <div className="flex w-fit md:w-full items-start gap-5 flex-col">
+          <div className="my-4 text-2xl font-bold">{listing?.price}₴</div>
+          <div className="flex w-fit flex-col items-start gap-5 md:w-full">
             <Button
               variant="contained"
               className="w-full min-w-fit"
@@ -120,7 +120,7 @@ const ListingRoute = () => {
               Purchase
             </Button>
             <Link
-              className="flex w-full items-center gap-4 border-main rounded-lg border py-1 px-2 mb-8"
+              className="mb-8 flex w-full items-center gap-4 rounded-lg border border-main py-1 px-2"
               to={`/${seller?.nickname}`}
             >
               <Avatar
@@ -137,11 +137,11 @@ const ListingRoute = () => {
             </Link>
           </div>
           {listing?.tags && (
-            <div className="flex gap-2 flex-wrap mr-2">
+            <div className="mr-2 flex flex-wrap gap-2">
               {tags.map((tag: string) => (
                 <div
                   key={tag}
-                  className="text-xl w-fit border-main rounded-lg text-main border py-1 px-2"
+                  className="w-fit rounded-lg border border-main py-1 px-2 text-xl text-main"
                 >
                   {tag}
                 </div>
@@ -151,7 +151,7 @@ const ListingRoute = () => {
           {listing?.description && (
             <div className="whitespace-pre-wrap">
               <div className="text-xl font-semibold">Description</div>
-              <div className="text-lg mt-2">{listing.description}</div>
+              <div className="mt-2 text-lg">{listing.description}</div>
             </div>
           )}
         </div>

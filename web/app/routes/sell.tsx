@@ -105,11 +105,11 @@ const SellRoute = () => {
   }, [actionData]);
 
   return (
-    <div className="flex mt-6 mb-36 mx-auto justify-center items-center flex-col lg:w-[950px]">
+    <div className="mx-auto mt-6 mb-36 flex flex-col items-center justify-center lg:w-[950px]">
       <div className="text-3xl font-semibold">{t("Create a new listing")}</div>
       <Form
         method="post"
-        className="mt-6 grid grid-cols-2 gap-x-8 gap-y-6 w-full"
+        className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-6"
         onSubmit={() => window.scrollTo({ top: 0, left: 0 })}
       >
         <ItemTitle />
@@ -125,7 +125,7 @@ const SellRoute = () => {
         </ClientOnly>
         <Button
           variant="contained"
-          className="col-start-1 col-end-3 mx-auto w-1/3 mt-12"
+          className="col-start-1 col-end-3 mx-auto mt-12 w-1/3"
           type="submit"
         >
           {t("Create")}

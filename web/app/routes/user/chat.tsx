@@ -41,15 +41,15 @@ const IndexRoute = () => {
 
   if (chats?.length === 0) {
     return (
-      <div className="mt-6 text-2xl flex items-center justify-center h-[calc(100vh-74px)]">
+      <div className="mt-6 flex h-[calc(100vh-74px)] items-center justify-center text-2xl">
         You don`t have any chats yet, message someone! &#128522;
       </div>
     );
   }
 
   return (
-    <div className="flex w-full mt-1 mx-auto h-[calc(100vh-78px)] 2xl:w-3/4 justify-center border rounded-2xl">
-      <div className="w-[30%] border-r-2 overflow-y-scroll scrollbar-visible">
+    <div className="mx-auto mt-1 flex h-[calc(100vh-78px)] w-full justify-center rounded-2xl border 2xl:w-3/4">
+      <div className="scrollbar-visible w-[30%] overflow-y-scroll border-r-2">
         {!noChatsWithMessages &&
           chats.map((chat) => (
             <div key={chat.id}>
@@ -60,23 +60,23 @@ const IndexRoute = () => {
                     chatId === chat.id
                       ? "bg-main text-white"
                       : "hover:bg-[#f4f4f5]"
-                  } flex px-2 py-3 rounded-2xl gap-2 max-w-full overflow-hidden mr-1`}
+                  } mr-1 flex max-w-full gap-2 overflow-hidden rounded-2xl px-2 py-3`}
                 >
                   <Avatar
                     src={chat.Users[0].avatarUrl || ProfileImage}
                     sx={{ width: 52, height: 52 }}
                   />
                   <div className="max-w-full overflow-hidden">
-                    <div className="font-semibold text-ellipsis overflow-hidden whitespace-nowrap">
+                    <div className="overflow-hidden text-ellipsis whitespace-nowrap font-semibold">
                       {chat.Users[0].nickname}
                     </div>
-                    <div className="mt-1 text-ellipsis overflow-hidden whitespace-nowrap">
+                    <div className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap">
                       {chat.Messages[0].text}
                     </div>
                   </div>
                   {chat.notification &&
                     chat.Messages[0].senderId !== userId && (
-                      <div className="ml-auto min-w-[12px] w-3 h-3 mt-1.5 bg-main rounded-full" />
+                      <div className="ml-auto mt-1.5 h-3 w-3 min-w-[12px] rounded-full bg-main" />
                     )}
                 </Link>
               )}
@@ -86,8 +86,8 @@ const IndexRoute = () => {
       {chatId ? (
         <Outlet context={{ sendMessage, lastMessage, readyState }} />
       ) : (
-        <div className="w-[70%] flex items-center justify-center">
-          <div className="text-lg font-medium bg-[#f4f4f5] px-3 py-1 rounded-3xl">
+        <div className="flex w-[70%] items-center justify-center">
+          <div className="rounded-3xl bg-[#f4f4f5] px-3 py-1 text-lg font-medium">
             Select a chat to start messaging
           </div>
         </div>

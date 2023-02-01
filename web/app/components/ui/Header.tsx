@@ -59,17 +59,17 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white sticky top-0 z-50">
-      <div className="flex items-cente flex-col mb-5 pt-2 sm:flex-row sm:mb-0">
+    <header className="sticky top-0 z-50 bg-white">
+      <div className="items-cente mb-5 flex flex-col pt-2 sm:mb-0 sm:flex-row">
         <Link
           to="/"
-          className="flex items-center min-w-[320px] justify-center mb-5 sm:justify-start sm:mb-0"
+          className="mb-5 flex min-w-[320px] items-center justify-center sm:mb-0 sm:justify-start"
         >
           <img src={logoText} width={220} alt="DIFFERENT" />
         </Link>
-        <div className="flex justify-between items-center w-full">
+        <div className="flex w-full items-center justify-between">
           {pathname === "/" && <MainSearch />}
-          <div className="hidden items-center sm:flex ml-auto">
+          <div className="ml-auto hidden items-center sm:flex">
             {user && (
               <>
                 <Link className="mr-1" to="/user/chat">
@@ -85,7 +85,7 @@ const Header = () => {
                         x="0px"
                         y="0px"
                         viewBox="0 0 512 512"
-                        className="w-10 h-10 p-1"
+                        className="h-10 w-10 p-1"
                       >
                         <path
                           d="M469.333,64H42.667C19.135,64,0,83.135,0,106.667v298.667C0,428.865,19.135,448,42.667,448h426.667
@@ -114,7 +114,7 @@ const Header = () => {
                         x="0px"
                         y="0px"
                         viewBox="0 0 512 512"
-                        className="w-10 h-10"
+                        className="h-10 w-10"
                       >
                         <path
                           d="M512,174.37c-0.012-7.773-2.298-15.656-7.353-22.154l-40.568-51.908c-6.795-8.628-17.134-13.021-27.466-13.038
@@ -194,7 +194,7 @@ const Header = () => {
                     )
                   }
                   startIcon={<Language />}
-                  className="text-black mt-[1px] mr-2 rounded-xl hover:bg-[#ebebeb] bg-white"
+                  className="mt-[1px] mr-2 rounded-xl bg-white text-black hover:bg-[#ebebeb]"
                 >
                   {i18n.language === "en" ? "EN" : "UA"}
                 </Button>
@@ -229,7 +229,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <Person fontSize="large" />
                       </ListItemIcon>
-                      <div className="font-normal text-xl">Profile</div>
+                      <div className="text-xl font-normal">Profile</div>
                     </MenuItem>
                     <MenuItem
                       className="px-4"
@@ -238,7 +238,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <Settings fontSize="large" />
                       </ListItemIcon>
-                      <div className="font-normal text-xl">Settings</div>
+                      <div className="text-xl font-normal">Settings</div>
                     </MenuItem>
                     <MenuItem
                       className="px-4"
@@ -247,7 +247,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <HelpOutline fontSize="large" />
                       </ListItemIcon>
-                      <div className="font-normal text-xl">For user</div>
+                      <div className="text-xl font-normal">For user</div>
                     </MenuItem>
                     <Form action="/auth/logout" method="post">
                       <button
@@ -259,7 +259,7 @@ const Header = () => {
                           <ListItemIcon className="mr-2">
                             <Logout fontSize="large" />
                           </ListItemIcon>
-                          <div className="font-normal text-xl">Log out</div>
+                          <div className="text-xl font-normal">Log out</div>
                         </MenuItem>
                       </button>
                     </Form>

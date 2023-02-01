@@ -60,16 +60,16 @@ const Login = () => {
     <Dialog
       open={true}
       onClose={onClose}
-      className="flex justify-center items-center mx-auto"
+      className="mx-auto flex items-center justify-center"
     >
       <DialogTitle sx={{ marginLeft: "auto" }}>
         <IconButton onClick={onClose}>
           <Close />
         </IconButton>
       </DialogTitle>
-      <div className="w-96 h-80 flex justify-start items-center flex-col">
-        <div className="font-semibold text-3xl">Sign in with:</div>
-        <div className="mt-10 flex flex-col w-72">
+      <div className="flex h-80 w-96 flex-col items-center justify-start">
+        <div className="text-3xl font-semibold">Sign in with:</div>
+        <div className="mt-10 flex w-72 flex-col">
           <Button
             color="inherit"
             onClick={() => redirect("google")}

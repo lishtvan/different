@@ -24,15 +24,15 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
       open={isOpen}
       onClose={toggle}
       fullWidth={true}
-      className="flex justify-center items-center mx-auto"
+      className="mx-auto flex items-center justify-center"
     >
-      <DialogTitle className="flex items-center justify-between w-full">
+      <DialogTitle className="flex w-full items-center justify-between">
         <div className="font-bold">Placing an order</div>
         <IconButton onClick={toggle}>
           <Close />
         </IconButton>
       </DialogTitle>
-      <div className="w-[450px] flex justify-start items-center flex-col px-5 gap-y-4">
+      <div className="flex w-[450px] flex-col items-center justify-start gap-y-4 px-5">
         <TextField
           className="w-full"
           label="Full name"
@@ -67,11 +67,11 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
         <Button
           variant="outlined"
           startIcon={<Security className="text-black" />}
-          className="w-full mt-auto text-black"
+          className="mt-auto w-full text-black"
         >
           Buyer protection mechanism
         </Button>
-        <Button variant="contained" className="w-full mb-4">
+        <Button variant="contained" className="mb-4 w-full">
           Checkout
         </Button>
       </div>

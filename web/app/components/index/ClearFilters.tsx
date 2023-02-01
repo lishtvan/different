@@ -44,22 +44,23 @@ const ClearFilters = () => {
   return (
     <>
       {soldFilters?.items[0]?.refinements[0]?.label === "AVAILABLE" ? (
-        <div className="text-xl font-bold min-w-fit">
+        <div className="min-w-fit text-xl font-bold">
           {results?.nbHits} {t("listings")}{" "}
           {refinements.length > 0 ? t("for") : t("available")}
         </div>
       ) : (
-        <div className="text-xl font-bold min-w-fit">
-          {results?.nbHits} {t("sold items")} {refinements.length > 0 && t("for")}
+        <div className="min-w-fit text-xl font-bold">
+          {results?.nbHits} {t("sold items")}{" "}
+          {refinements.length > 0 && t("for")}
         </div>
       )}
       {refinements.length > 0 && (
-        <div className="flex max-w-[60%] ml-2 flex-wrap max-h-20 overflow-x-hidden overflow-y-scroll scrollbar-visible">
+        <div className="scrollbar-visible ml-2 flex max-h-20 max-w-[60%] flex-wrap overflow-x-hidden overflow-y-scroll">
           {refinements.map((item) => (
             <button
               key={item.label}
               onClick={() => refine(item)}
-              className="text-xl border-main hover:bg-[#f2f2f5] rounded-md text-main border m-1 pl-2 pr-1"
+              className="m-1 rounded-md border border-main pl-2 pr-1 text-xl text-main hover:bg-[#f2f2f5]"
             >
               {t(item.label)} <Clear />
             </button>
@@ -70,7 +71,7 @@ const ClearFilters = () => {
       {refinements.length > 2 && (
         <button
           onClick={() => clear.refine()}
-          className="text-xl min-w-fit underline underline-offset-2 pl-2 px-1 ml-1 mr-4"
+          className="ml-1 mr-4 min-w-fit px-1 pl-2 text-xl underline underline-offset-2"
         >
           Clear All
         </button>

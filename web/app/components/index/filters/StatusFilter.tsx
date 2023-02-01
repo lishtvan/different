@@ -12,7 +12,7 @@ const StatusFilter = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-2 left-3 w-[20.5rem] flex justify-center items-center">
+    <div className="fixed bottom-2 left-3 flex w-[20.5rem] items-center justify-center">
       {showSold ? (
         <Button
           variant="contained"

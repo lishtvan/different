@@ -125,11 +125,11 @@ const UserEditRoute = () => {
     <div>
       <Form
         method="post"
-        className="flex mt-6 mx-auto justify-center items-center flex-col w-96"
+        className="mx-auto mt-6 flex w-96 flex-col items-center justify-center"
         encType="multipart/form-data"
         onChange={handleChange}
       >
-        <div className="flex relative justify-center items-center w-full">
+        <div className="relative flex w-full items-center justify-center">
           <label className="profile" htmlFor="button-file">
             {submission?.encType === "multipart/form-data" ? (
               <CircularProgress color="primary" />
@@ -178,7 +178,7 @@ const UserEditRoute = () => {
       </Form>
       <Form
         method="post"
-        className="flex mt-6 mx-auto justify-center items-center flex-col w-96"
+        className="mx-auto mt-6 flex w-96 flex-col items-center justify-center"
         onChange={handleChange}
       >
         <TextField

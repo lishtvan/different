@@ -61,7 +61,9 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
   return (
     <>
       <ListItemButton onClick={handleClick} className="rounded-xl">
-        <ListItemText primary={t(attribute.charAt(0).toUpperCase() + attribute.slice(1))} />
+        <ListItemText
+          primary={t(attribute.charAt(0).toUpperCase() + attribute.slice(1))}
+        />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
         ) : (
@@ -73,10 +75,10 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
         <List
           component="div"
           disablePadding
-          className="max-h-96 overflow-y-scroll scrollbar-white"
+          className="scrollbar-white max-h-96 overflow-y-scroll"
         >
           {enableSearch && (
-            <ListItem disablePadding className="mt-2 px-1 mb-2">
+            <ListItem disablePadding className="mt-2 mb-2 px-1">
               <TextField
                 placeholder={t("Search")!}
                 className="w-full px-2"
@@ -96,7 +98,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
           {items.map((item) => (
             <ListItem key={item.label} className="px-1" disablePadding>
               <FormControlLabel
-                className="w-full px-1 m-0 hover:bg-[#f2f2f5] rounded-xl"
+                className="m-0 w-full rounded-xl px-1 hover:bg-[#f2f2f5]"
                 control={
                   <Checkbox
                     checked={item.isRefined}
@@ -108,7 +110,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
                 label={
                   <div className="flex items-center">
                     <div className="break-words">{t(item.label)}</div>
-                    <div className="ml-3 px-2 bg-[#ebebeb] rounded-full">
+                    <div className="ml-3 rounded-full bg-[#ebebeb] px-2">
                       {item.count}
                     </div>
                   </div>

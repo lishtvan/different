@@ -12,10 +12,10 @@ const InfoRoute = () => {
   }, [searchParams]);
 
   return (
-    <div className="mt-5 w-full lg:w-2/3 2xl:w-1/2 m-auto">
+    <div className="m-auto mt-5 w-full lg:w-2/3 2xl:w-1/2">
       <div className="flex justify-center">
         <div className="sticky top-[74px]">
-          <div className="top-[74px] sticky flex flex-col gap-y-1">
+          <div className="sticky top-[74px] flex flex-col gap-y-1">
             <Button
               onClick={() => setSearchParams(`?q=contact`)}
               className={`${
@@ -66,10 +66,10 @@ const InfoRoute = () => {
             </Button>
           </div>
         </div>
-        <div className="w-2/3 ml-8 mb-24 mt-[2px]">
+        <div className="ml-8 mb-24 mt-[2px] w-2/3">
           {searchParams.get("q") === "contact" && (
             <div className="whitespace-pre-wrap">
-              <h1 className="font-semibold text-xl">Зв'язатися з нами</h1>
+              <h1 className="text-xl font-semibold">Зв'язатися з нами</h1>
               <div className="mt-3">
                 Ви можете зв'язатися з нами якщо у вас є будь які проблеми,
                 питання чи пропозиції.
@@ -90,13 +90,13 @@ const InfoRoute = () => {
           )}
           {searchParams.get("q") === "about" && (
             <div>
-              <h1 className="font-semibold text-xl">Про нас</h1>
+              <h1 className="text-xl font-semibold">Про нас</h1>
               <div className="mt-2">
                 Different - це маркетплейс, що не має обмежень та упереджень.
                 Наш орієнтир - секонд-хенд одяг та аксессуари. Ми прагнемо
                 задовільнити бажання кожного, хто хоче стильно одягатись, та
                 дати можливість зручно, швидко та безпечно продавати речі.
-                <p className="mt-2 font-medium text-lg">Особливості</p>
+                <p className="mt-2 text-lg font-medium">Особливості</p>
                 <p className="mt-2">
                   Different - безкоштовна платформа. Вам не потрібно платити за
                   розміщення оголошень. Єдиною платною функцією є{" "}
@@ -113,7 +113,7 @@ const InfoRoute = () => {
                   цінуємо свободу наших користувачів, тому завжди даємо
                   безкоштовну альтернативу.
                 </p>
-                <p className="mt-2 font-medium text-lg">Що ми пропонуємо?</p>
+                <p className="mt-2 text-lg font-medium">Що ми пропонуємо?</p>
                 <p className="mt-2">
                   Зрозумілій інтерфейс для продавців і доступний пошук для
                   покупців. Можливість вільно продавати необмежену кількість
@@ -127,7 +127,7 @@ const InfoRoute = () => {
           )}
           {searchParams.get("q") === "safe" && (
             <div>
-              <h1 className="font-semibold text-xl">Безпечне замовлення</h1>
+              <h1 className="text-xl font-semibold">Безпечне замовлення</h1>
               <p>
                 <br />
               </p>
@@ -150,8 +150,8 @@ const InfoRoute = () => {
           )}
           {searchParams.get("q") === "payment" && (
             <div>
-              <h1 className="font-semibold text-xl">Оплата та доставка</h1>
-              <div className="flex my-5">
+              <h1 className="text-xl font-semibold">Оплата та доставка</h1>
+              <div className="my-5 flex">
                 <img src={visa} alt="visa" width={50} />
                 <img
                   className="ml-2"
@@ -278,7 +278,7 @@ const InfoRoute = () => {
           )}
           {searchParams.get("q") === "privacy" && (
             <div>
-              <h1 className="font-semibold text-xl">
+              <h1 className="text-xl font-semibold">
                 Політика конфіденційності
               </h1>
               <p>
@@ -512,7 +512,7 @@ const InfoRoute = () => {
           )}
           {searchParams.get("q") === "terms" && (
             <div>
-              <h1 className="font-semibold text-xl">Офферта</h1>
+              <h1 className="text-xl font-semibold">Офферта</h1>
               <p>
                 <br />
               </p>

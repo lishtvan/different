@@ -68,16 +68,16 @@ const IndexRoute = () => {
   }, [lastMessage]);
 
   return (
-    <div className="w-[70%] flex flex-col justify-end">
+    <div className="flex w-[70%] flex-col justify-end">
       <Link
         to={`/${participants?.recipient.nickname}`}
-        className="mb-auto font-semibold text-xl pl-2 py-2 border-b-2 hover:text-main"
+        className="mb-auto border-b-2 py-2 pl-2 text-xl font-semibold hover:text-main"
       >
         {participants?.recipient.nickname}
       </Link>
-      <div className="ml-4 py-3 flex flex-col-reverse gap-2 overflow-y-scroll scrollbar-visible">
+      <div className="scrollbar-visible ml-4 flex flex-col-reverse gap-2 overflow-y-scroll py-3">
         {messages.map((msg) => (
-          <div key={msg.id} className="flex gap-2 items-center">
+          <div key={msg.id} className="flex items-center gap-2">
             <Avatar
               src={
                 (participants?.recipient.id === msg.senderId
@@ -90,14 +90,14 @@ const IndexRoute = () => {
                 msg.senderId === participants?.sender.id
                   ? "bg-main text-white"
                   : "bg-[#efefef]"
-              }  break-words select-text px-3 py-1.5 rounded-xl w-fit text-lg max-w-[80%] lg:max-w-[50%]`}
+              }  w-fit max-w-[80%] select-text break-words rounded-xl px-3 py-1.5 text-lg lg:max-w-[50%]`}
             >
               {msg.text}
             </div>
           </div>
         ))}
       </div>
-      <div className="flex w-full mb-1 mx-1">
+      <div className="mx-1 mb-1 flex w-full">
         <TextField
           placeholder="Write a message..."
           className="w-full"
@@ -110,7 +110,7 @@ const IndexRoute = () => {
         <IconButton
           size="large"
           onClick={sendTextMessage}
-          className="hover:bg-transparent hover:text-main p-2"
+          className="p-2 hover:bg-transparent hover:text-main"
         >
           <Send className="hover:bg-none" sx={{ height: 34, width: 34 }} />
         </IconButton>

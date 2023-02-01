@@ -55,7 +55,7 @@ const PriceFilter = () => {
 
       <Collapse in={open} timeout="auto">
         <List className="px-8" component="div" disablePadding>
-          <div className="flex justify-around my-2">
+          <div className="my-2 flex justify-around">
             <FormControl className="w-1/2" variant="outlined">
               <InputLabel htmlFor="min-label">Min</InputLabel>
               <OutlinedInput
@@ -68,7 +68,7 @@ const PriceFilter = () => {
                 value={start[0]?.toString()}
               />
             </FormControl>
-            <FormControl className="w-1/2 ml-5" variant="outlined">
+            <FormControl className="ml-5 w-1/2" variant="outlined">
               <InputLabel htmlFor="max-label">Max</InputLabel>
               <OutlinedInput
                 type="number"

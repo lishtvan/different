@@ -168,14 +168,14 @@ const Photos = () => {
         {uploadError ? (
           <Alert
             severity="error"
-            className="mx-auto rounded-xl w-full font-bold"
+            className="mx-auto w-full rounded-xl font-bold"
           >
             {t(uploadError as string)}
           </Alert>
         ) : (
           <>
             <p className="ml-2 mr-auto">
-              <span className="text-main mr-1">{t("Note")}:</span>
+              <span className="mr-1 text-main">{t("Note")}:</span>
               {t("You can change order of images by grabbing them")}.
             </p>
             <Button
@@ -189,7 +189,7 @@ const Photos = () => {
           </>
         )}
       </div>
-      <div className="w-full mt-3 flex justify-center">
+      <div className="mt-3 flex w-full justify-center">
         <Gallery>
           <ImageList
             className="w-full"
@@ -205,7 +205,7 @@ const Photos = () => {
               >
                 {item.imageKey ? (
                   <div
-                    className="h-full relative cursor-grab"
+                    className="relative h-full cursor-grab"
                     draggable={true}
                     onDragStart={() => dragStartHandler(item)}
                     onDragOver={(e) => e.preventDefault()}
@@ -215,7 +215,7 @@ const Photos = () => {
                       <IconButton
                         onClick={() => handleDeleteImage(item.id)}
                         size="small"
-                        className="text-white backdrop-brightness-50 bg-white/30"
+                        className="bg-white/30 text-white backdrop-brightness-50"
                       >
                         <Close />
                       </IconButton>
@@ -237,7 +237,7 @@ const Photos = () => {
                             <IconButton
                               size="small"
                               onClick={open}
-                              className="text-white backdrop-brightness-50 bg-white/30"
+                              className="bg-white/30 text-white backdrop-brightness-50"
                             >
                               <Search />
                             </IconButton>
@@ -258,7 +258,7 @@ const Photos = () => {
                     </Item>
                   </div>
                 ) : imagesLoading.includes(item.id) ? (
-                  <div className="h-full w-full flex items-center justify-center">
+                  <div className="flex h-full w-full items-center justify-center">
                     <CircularProgress color="primary" />
                   </div>
                 ) : (
@@ -272,10 +272,10 @@ const Photos = () => {
                       htmlFor={item.id.toString()}
                       className={`${
                         fetcher.submission && "cursor-not-allowed"
-                      } h-full flex items-center justify-center rounded-md bg-[#f2f2f2] hover:bg-[#ebebeb]`}
+                      } flex h-full items-center justify-center rounded-md bg-[#f2f2f2] hover:bg-[#ebebeb]`}
                     >
                       <div>
-                        <AddAPhoto className="w-9 h-9" />
+                        <AddAPhoto className="h-9 w-9" />
                       </div>
                       <input
                         disabled={Boolean(fetcher.submission)}

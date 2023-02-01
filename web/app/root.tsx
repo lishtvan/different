@@ -167,12 +167,12 @@ export function CatchBoundary() {
       </head>
       <body className="px-4">
         <ThemeProvider theme={theme}>
-          <div className="w-full h-screen flex flex-col justify-center items-center">
+          <div className="flex h-screen w-full flex-col items-center justify-center">
             <div>
-              <div className="bg-red-100 text-lg rounded-xl py-1 px-2 w-fit mb-3">
+              <div className="mb-3 w-fit rounded-xl bg-red-100 py-1 px-2 text-lg">
                 Error {caught.status}
               </div>
-              <div className="text-2xl mb-3">
+              <div className="mb-3 text-2xl">
                 {caught.status === 404 && (
                   <>
                     <span>
@@ -241,12 +241,12 @@ export function ErrorBoundary() {
       </head>
       <body className="px-4">
         <ThemeProvider theme={theme}>
-          <div className="w-full h-screen flex flex-col justify-center items-center">
+          <div className="flex h-screen w-full flex-col items-center justify-center">
             <div>
-              <div className="bg-red-100 text-lg rounded-xl py-1 px-2 w-fit mb-3">
+              <div className="mb-3 w-fit rounded-xl bg-red-100 py-1 px-2 text-lg">
                 Error 500
               </div>
-              <div className="text-2xl mb-3">
+              <div className="mb-3 text-2xl">
                 Something went wrong on our side.
                 <br />
                 <span>
