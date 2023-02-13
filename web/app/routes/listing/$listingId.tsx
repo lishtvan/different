@@ -43,7 +43,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     .documents(params.listingId!)
     .delete();
 
-  return redirect("/user");
+  return redirect("/");
 };
 
 const ListingRoute = () => {
