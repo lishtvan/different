@@ -522,12 +522,13 @@ export const DESIGNERS = [
 ];
 
 export const TAGS = [
-  "#Luxury",
   "#Vintage",
   "#Collaboration",
   "#Streetwear",
   "#Outdoor",
+  "#Tech",
   "#Custom Made",
+  "#Luxury",
   "#Music Band",
   "#Japanese",
   "#Celebrity",
