@@ -5,11 +5,13 @@ import { fetchInstance } from "~/utils/fetchInstance";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const { recipientId } = params;
 
-  const { chatId } = await fetchInstance({
+  const response = await fetchInstance({
     request,
     method: "POST",
     body: { recipientId: Number(recipientId) },
     route: "/chat/create",
-  }).then((res) => res.json());
+  });
+  if (response.status === 302) return response;
+  const { chatId } = await response.json();
   return redirect(`/user/chat/${chatId}`);
 };
