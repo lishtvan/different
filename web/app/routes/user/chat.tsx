@@ -11,7 +11,7 @@ import {
 } from "@remix-run/react";
 import { useMemo } from "react";
 import { getCookieValue } from "~/utils/cookie";
-import { fetchInstance } from "~/utils/fetchInstance";
+import { fetcher } from "~/utils/fetcher";
 import ProfileImage from "../../assets/profile.jpeg";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!userId) return null;
   if (params.chatId === "new") return redirect("/user/chat");
 
-  const user = await fetchInstance({
+  const user = await fetcher({
     request,
     method: "POST",
     body: { userId },

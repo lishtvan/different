@@ -20,7 +20,7 @@ import {
   useTransition,
 } from "@remix-run/react";
 import { getCookieValue } from "~/utils/cookie";
-import { fetchInstance } from "~/utils/fetchInstance";
+import { fetcher } from "~/utils/fetcher";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";
@@ -31,7 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const userId = getCookieValue("userId", request);
   if (!userId) return redirect("/");
 
-  const response = await fetchInstance({
+  const response = await fetcher({
     request,
     method: "POST",
     body: { userId: Number(userId) },
@@ -62,7 +62,7 @@ export const action: ActionFunction = async ({ request }) => {
     if (location.toString().length > 40) errors.location = "Too long";
 
     if (_action === "save") {
-      const response = await fetchInstance({
+      const response = await fetcher({
         request,
         route: "/user/update",
         method: "POST",
@@ -85,7 +85,7 @@ export const action: ActionFunction = async ({ request }) => {
     const deleteImage = (await request.clone().formData()).get("deleteImage");
 
     if (deleteImage) {
-      await fetchInstance({
+      await fetcher({
         request,
         route: "/user/update",
         method: "POST",
@@ -99,7 +99,7 @@ export const action: ActionFunction = async ({ request }) => {
       );
       const avatarUrl = formData.get("image");
 
-      fetchInstance({
+      fetcher({
         request,
         route: "/user/update",
         method: "POST",

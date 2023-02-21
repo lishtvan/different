@@ -1,7 +1,7 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
-import { fetchInstance } from "~/utils/fetchInstance";
+import { fetcher } from "~/utils/fetcher";
 import ImageGallery from "react-image-gallery";
 import { useCallback, useMemo, useState } from "react";
 import { Avatar, Button, IconButton, Tooltip } from "@mui/material";
@@ -17,7 +17,7 @@ import PurchaseModal from "~/components/listing/PurchaseModal";
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
 
-  const response = await fetchInstance({
+  const response = await fetcher({
     request,
     route: "/listing/get",
     method: "POST",
@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
-  const response = await fetchInstance({
+  const response = await fetcher({
     request,
     route: "/listing/delete",
     method: "POST",

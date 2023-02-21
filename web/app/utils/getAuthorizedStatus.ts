@@ -1,7 +1,7 @@
-import { fetchInstance } from "./fetchInstance";
+import { fetcher } from "./fetcher";
 
 export const getAuthorizedStatus = (request: Request) =>
-  fetchInstance({
+  fetcher({
     request,
     method: "GET",
     route: "/auth/check",

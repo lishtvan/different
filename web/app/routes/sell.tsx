@@ -21,7 +21,7 @@ import {
   LISTINGS_COLLECTION_NAME,
 } from "~/constants/typesense";
 import Typesense from "typesense";
-import { fetchInstance } from "~/utils/fetchInstance";
+import { fetcher } from "~/utils/fetcher";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
     // @ts-ignore
     if (body.tags) formattedTags = body.tags.split(",");
 
-    const response = await fetchInstance({
+    const response = await fetcher({
       request,
       route: "/listing/create",
       method: "POST",
@@ -73,7 +73,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const response = await fetchInstance({
+  const response = await fetcher({
     request,
     route: "/",
     method: "GET",

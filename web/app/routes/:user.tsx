@@ -2,7 +2,7 @@ import { Avatar, Button, IconButton } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { LocationOnOutlined, Send, Settings } from "@mui/icons-material";
-import { fetchInstance } from "~/utils/fetchInstance";
+import { fetcher } from "~/utils/fetcher";
 import ProfileImage from "./../assets/profile.jpeg";
 import { InstantSearch } from "react-instantsearch-hooks-web";
 import {
@@ -13,7 +13,7 @@ import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import UserListings from "~/components/index/listings/UserListings";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await fetchInstance({
+  const user = await fetcher({
     request,
     method: "POST",
     body: { nickname: params.user },

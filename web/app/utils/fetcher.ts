@@ -1,6 +1,6 @@
 import { redirect } from "@remix-run/node";
 
-interface FetchInstance {
+interface Fetcher {
   (input: {
     request: Request;
     route: string;
@@ -17,7 +17,7 @@ interface FetchInstance {
   }): Promise<Response>;
 }
 
-export const fetchInstance: FetchInstance = async ({
+export const fetcher: Fetcher = async ({
   request,
   route,
   body,

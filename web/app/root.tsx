@@ -23,7 +23,7 @@ import Header from "./components/ui/Header";
 import Login from "./components/ui/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
 import { theme } from "./styles/theme";
-import { fetchInstance } from "./utils/fetchInstance";
+import { fetcher } from "./utils/fetcher";
 import {
   getTypesenseConfig,
   LISTINGS_COLLECTION_NAME,
@@ -55,7 +55,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (!cookie) return API_DOMAIN;
   const tokenRow = cookie.split("; ").find((row) => row.startsWith("token"));
   if (!tokenRow) return API_DOMAIN;
-  const response = await fetchInstance({
+  const response = await fetcher({
     request,
     method: "GET",
     route: "/auth/check",

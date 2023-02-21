@@ -1,11 +1,11 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { fetchInstance } from "~/utils/fetchInstance";
+import { fetcher } from "~/utils/fetcher";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const { recipientId } = params;
 
-  const response = await fetchInstance({
+  const response = await fetcher({
     request,
     method: "POST",
     body: { recipientId: Number(recipientId) },
