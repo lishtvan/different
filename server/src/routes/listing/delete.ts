@@ -18,10 +18,9 @@ const getListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/delete', { schema }, async (req, reply) => {
     const { listingId } = req.body;
 
-    await fastify.prisma.listing.delete({
-      where: {
-        id: listingId,
-      },
+    await fastify.prisma.user.update({
+      where: { id: Number(req.cookies.userId) },
+      data: { Listings: { delete: { id: listingId } } },
     });
 
     return reply.send();
