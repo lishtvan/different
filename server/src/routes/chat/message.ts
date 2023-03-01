@@ -50,24 +50,31 @@ const root: FastifyPluginAsync = async (fastify) => {
         return;
       }
 
-      const [newMessage] = await Promise.all([
-        fastify.prisma.message.create({
-          data: {
-            text: data.text,
-            chatId: data.chatId,
-            senderId: ownUserId,
+      const { Messages } = await fastify.prisma.chat.update({
+        where: { id: data.chatId },
+        select: {
+          Messages: {
+            take: -1,
           },
-        }),
-        fastify.prisma.chat.update({
-          where: { id: data.chatId },
-          data: { notification: true },
-        }),
-      ]);
+        },
+        data: {
+          notification: true,
+          Messages: {
+            create: {
+              text: data.text,
+              senderId: ownUserId,
+            },
+          },
+        },
+      });
+
+      const newMessage = Messages[0];
 
       for (const client of chat) {
         client.send(JSON.stringify(newMessage));
       }
     });
+
     socket.on('close', () => {
       chats.forEach((chat) => {
         if (chat.has(socket)) chat.delete(socket);
