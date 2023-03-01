@@ -14,11 +14,10 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const getListing: FastifyPluginAsync = async (fastify) => {
+const deleteListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/delete', { schema }, async (req, reply) => {
     const { listingId } = req.body;
 
-    // TODO: test on ui
     await fastify.prisma.user.update({
       where: { id: Number(req.cookies.userId) },
       data: { Listings: { delete: { id: listingId } } },
@@ -28,4 +27,4 @@ const getListing: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default getListing;
+export default deleteListing;

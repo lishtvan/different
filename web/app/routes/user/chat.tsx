@@ -17,7 +17,8 @@ import ProfileImage from "../../assets/profile.jpeg";
 export const loader: LoaderFunction = async ({ request, params }) => {
   // TODO: rewrite to auth user route
   const userId = Number(getCookieValue("userId", request));
-  if (!userId) return null;
+
+  if (!userId) return redirect("/");
   if (params.chatId === "new") return redirect("/user/chat");
 
   const user = await fetcher({

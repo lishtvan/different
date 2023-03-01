@@ -34,11 +34,11 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
     });
 
     // TODO: check case with zero chats
-    const chatsWithoutNotification = user?.Chats.filter(
+    const chatsWithNotification = user?.Chats.filter(
       (chat) => chat.Messages[0].senderId !== ownUserId
     );
 
-    res.send({ ...user, chatNoficicationCount: chatsWithoutNotification?.length });
+    res.send({ ...user, chatNoficicationCount: chatsWithNotification?.length });
   });
 };
 

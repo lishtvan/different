@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = getCookieValue("userId", request);
   if (!userId) return redirect("/");
-
+  // TODO: rewrite to auth user route
   const response = await fetcher({
     request,
     method: "POST",
