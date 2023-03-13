@@ -49,7 +49,7 @@ const Header = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  let { t } = useTranslation();
+  const { t } = useTranslation();
   const { i18n } = useTranslation();
   const fetcher = useFetcher();
 

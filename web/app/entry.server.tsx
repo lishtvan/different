@@ -16,12 +16,12 @@ export default async function handleRequest(
 ) {
   // First, we create a new instance of i18next so every request will have a
   // completely unique instance and not share any state
-  let instance = createInstance();
+  const instance = createInstance();
 
   // Then we could detect locale from the request
-  let lng = await i18next.getLocale(request);
+  const lng = await i18next.getLocale(request);
   // And here we detect what namespaces the routes about to render want to use
-  let ns = i18next.getRouteNamespaces(context);
+  const ns = i18next.getRouteNamespaces(context);
 
   await instance
     .use(initReactI18next) // Tell our instance to use react-i18next
@@ -37,7 +37,7 @@ export default async function handleRequest(
 
   // Then you can render your app wrapped in the I18nextProvider as in the
   // entry.client file
-  let markup = renderToString(
+  const markup = renderToString(
     <I18nextProvider i18n={instance}>
       <RemixServer context={context} url={request.url} />
     </I18nextProvider>

@@ -1,13 +1,15 @@
 import { Button, Dialog, DialogTitle, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { useFetcher, useLocation, useNavigate } from "@remix-run/react";
+import { Link, useFetcher, useLocation, useNavigate } from "@remix-run/react";
 import GoogleIcon from "./../../assets/google.svg";
 import FacebookIcon from "./../../assets/facebook.svg";
 import TwitterIcon from "./../../assets/twitter.svg";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const fetcher = useFetcher();
   const [checkAuth, setCheckAuth] = useState(false);
   const location = useLocation();
@@ -67,8 +69,8 @@ const Login = () => {
           <Close />
         </IconButton>
       </DialogTitle>
-      <div className="flex h-80 w-96 flex-col items-center justify-start">
-        <div className="text-3xl font-semibold">Sign in with:</div>
+      <div className="flex w-[400px] flex-col items-center justify-start">
+        <div className="text-3xl font-semibold">{t("Sign in with")}:</div>
         <div className="mt-10 flex w-72 flex-col">
           <Button
             color="inherit"
@@ -104,6 +106,35 @@ const Login = () => {
             <img width={44} height={44} src={FacebookIcon} alt="facebook" />
             <div className="w-1/2">Facebook</div>
           </Button>
+        </div>
+        <div className="my-6 flex w-3/4 flex-col items-center">
+          <div>{t("By creating an account, I accept")} </div>
+          <div>
+            <Link
+              target="_blank"
+              className="text-blue-500 underline underline-offset-[4px]"
+              to="/info?q=terms"
+            >
+              {t("Terms of Service")}
+            </Link>
+            {", "}
+            <Link
+              target="_blank"
+              className="text-blue-500 underline underline-offset-[4px]"
+              to="/info?q=privacy"
+            >
+              {t("Privacy policy")}
+            </Link>
+            {", "}
+          </div>
+
+          <Link
+            target="_blank"
+            className="text-blue-500 underline underline-offset-[4px]"
+            to="/info?q=payment"
+          >
+            {t("Payment and Delivery")}
+          </Link>
         </div>
       </div>
     </Dialog>
