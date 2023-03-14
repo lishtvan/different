@@ -61,6 +61,7 @@ const Login = () => {
   return (
     <Dialog
       open={true}
+      disableScrollLock={true}
       onClose={onClose}
       className="mx-auto flex items-center justify-center"
     >
@@ -77,7 +78,13 @@ const Login = () => {
             onClick={() => redirect("google")}
             sx={{ display: "flex", justifyContent: "center" }}
           >
-            <img width={44} height={44} src={GoogleIcon} alt="google" />
+            <img
+              className="ml-4"
+              width={44}
+              height={44}
+              src={GoogleIcon}
+              alt="google"
+            />
             <div className="w-1/2">Google</div>
           </Button>
           <Button
@@ -91,7 +98,13 @@ const Login = () => {
               justifyContent: "center",
             }}
           >
-            <img width={44} height={44} src={TwitterIcon} alt="twitter" />
+            <img
+              className="ml-4"
+              width={44}
+              height={44}
+              src={TwitterIcon}
+              alt="twitter"
+            />
             <div className="w-1/2">Twitter</div>
           </Button>
           <Button
@@ -103,21 +116,19 @@ const Login = () => {
               justifyContent: "center",
             }}
           >
-            <img width={44} height={44} src={FacebookIcon} alt="facebook" />
+            <img
+              className="ml-4"
+              width={44}
+              height={44}
+              src={FacebookIcon}
+              alt="facebook"
+            />
             <div className="w-1/2">Facebook</div>
           </Button>
         </div>
-        <div className="my-6 flex w-3/4 flex-col items-center">
-          <div>{t("By creating an account, I accept")} </div>
+        <div className="my-6 flex w-3/4 justify-center text-center">
           <div>
-            <Link
-              target="_blank"
-              className="text-blue-500 underline underline-offset-[4px]"
-              to="/info?q=terms"
-            >
-              {t("Terms of Service")}
-            </Link>
-            {", "}
+            {t("By creating an account, you accept our")}{" "}
             <Link
               target="_blank"
               className="text-blue-500 underline underline-offset-[4px]"
@@ -125,16 +136,7 @@ const Login = () => {
             >
               {t("Privacy policy")}
             </Link>
-            {", "}
           </div>
-
-          <Link
-            target="_blank"
-            className="text-blue-500 underline underline-offset-[4px]"
-            to="/info?q=payment"
-          >
-            {t("Payment and Delivery")}
-          </Link>
         </div>
       </div>
     </Dialog>

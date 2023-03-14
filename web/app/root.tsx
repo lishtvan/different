@@ -136,7 +136,9 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="px-4">
+      <body className={`px-3 overflow-y-scroll ${
+        searchParams.get("login") && "scrollbar"
+      }`}>
         <ThemeProvider theme={theme}>
           <InstantSearch
             indexName={LISTINGS_COLLECTION_NAME}
