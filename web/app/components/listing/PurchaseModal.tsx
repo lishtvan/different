@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { Close, Security } from "@mui/icons-material";
+import { CheckBox, Close, Security } from "@mui/icons-material";
 import {
   Autocomplete,
   Button,
@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number-2";
 import type { FC } from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { NOVA_POSHTA_DEPARTMENTS } from "~/constants/novaposhta";
 import { ListboxComponent, StyledPopper } from "../ui/Autocomplete";
 
@@ -19,6 +21,8 @@ interface Props {
 }
 
 const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
+  const { t } = useTranslation();
+
   return (
     <Dialog
       open={isOpen}
@@ -71,6 +75,26 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
         >
           Buyer protection mechanism
         </Button>
+        <div className="mt-auto flex items-center text-base">
+          <CheckBox fontSize="small" className="mr-1 text-main" />
+          <div>{t("I agree with")}</div>
+          <Link
+            target="_blank"
+            className="ml-1 text-blue-500 underline underline-offset-[4px]"
+            to="/info?q=terms"
+          >
+            {t("Terms of Service")}
+          </Link>
+          {","}
+          <Link
+            target="_blank"
+            className="ml-1 text-blue-500 underline underline-offset-[4px]"
+            to="/info?q=payment"
+          >
+            {t("Payment and Delivery")}
+          </Link>
+        </div>
+
         <Button variant="contained" className="mb-4 w-full">
           Checkout
         </Button>
