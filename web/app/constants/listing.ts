@@ -537,7 +537,7 @@ export const TAGS = [
   "#Skateboarding",
   "#Military",
   "#Drill",
-  "Hip-hop",
+  "#Hip-hop",
   "#Sport",
   "#Nature",
   "#Movie",
