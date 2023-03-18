@@ -747,8 +747,7 @@ export const CATEGORIES: Categories = {
 };
 
 export const CONDITIONS = [
-  "New with tags",
-  "Several times worn",
+  "New",
   "Gently used",
   "Used",
   "Very worn",
