@@ -34,15 +34,15 @@ const getListing: FastifyPluginAsync = async (fastify) => {
         tags: true,
         imageUrls: true,
         status: true,
-        sellerId: true,
+        userId: true,
         cardNumber: true,
-        Seller: { select: { id: true, avatarUrl: true, nickname: true } },
+        User: { select: { id: true, avatarUrl: true, nickname: true } },
       },
     });
 
     if (!listing) throw fastify.httpErrors.notFound();
 
-    const isOwnListing = listing.sellerId === Number(req.cookies.userId);
+    const isOwnListing = listing.userId === Number(req.cookies.userId);
 
     return reply.send({ listing, isOwnListing });
   });
