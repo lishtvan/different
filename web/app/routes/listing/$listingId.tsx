@@ -123,7 +123,7 @@ const ListingRoute = () => {
 
                 <Link
                   className="w-full min-w-fit"
-                  to={`/user/chat/new/${listing?.Seller.id}`}
+                  to={`/user/chat/new/${listing?.User.id}`}
                 >
                   <Button variant="outlined" className="w-full min-w-fit">
                     Message
@@ -134,14 +134,14 @@ const ListingRoute = () => {
 
             <Link
               className="mb-5 flex w-full items-center gap-4 rounded-lg border border-main py-1 px-2"
-              to={`/${listing?.Seller.nickname}`}
+              to={`/${listing?.User.nickname}`}
             >
               <Avatar
                 sx={{ width: 50, height: 50 }}
-                src={listing?.Seller.avatarUrl || ProfileImage}
+                src={listing?.User.avatarUrl || ProfileImage}
               />
               <div>
-                <div className="text-xl">{listing?.Seller.nickname}</div>
+                <div className="text-xl">{listing?.User.nickname}</div>
                 <div className="flex gap-2 text-sm text-[#737373]">
                   <div>10 listings</div>
                   <div>6 sold</div>
