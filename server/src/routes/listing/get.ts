@@ -10,36 +10,6 @@ const schema = {
       listingId: { type: 'number' },
     },
   } as const,
-  response: {
-    '2xx': {
-      listing: {
-        type: 'object',
-        properties: {
-          title: { type: 'string' },
-          designer: { type: 'string' },
-          description: { type: 'string' },
-          tags: { type: 'string' },
-          condition: { type: 'string' },
-          category: { type: 'string' },
-          size: { type: 'string' },
-          imageUrls: { type: 'array', items: { type: 'string' } },
-          price: { type: 'number' },
-          cardNumber: { type: 'string' },
-        },
-      },
-      seller: {
-        type: 'object',
-        properties: {
-          nickname: { type: 'string' },
-          avatarUrl: { type: 'string', nullable: true },
-          id: { type: 'number' },
-        },
-      },
-      isOwnListing: {
-        type: 'boolean',
-      },
-    },
-  },
 };
 
 type Schema = { Body: FromSchema<typeof schema.body> };
@@ -51,20 +21,29 @@ const getListing: FastifyPluginAsync = async (fastify) => {
       where: {
         id: listingId,
       },
-    });
-    if (!listing) throw fastify.httpErrors.notFound();
-
-    const seller = await fastify.prisma.user.findFirst({
-      where: {
-        id: listing?.userId,
+      select: {
+        id: true,
+        createdAt: true,
+        price: true,
+        title: true,
+        size: true,
+        designer: true,
+        condition: true,
+        category: true,
+        description: true,
+        tags: true,
+        imageUrls: true,
+        status: true,
+        userId: true,
+        User: { select: { id: true, avatarUrl: true, nickname: true } },
       },
     });
 
-    return reply.send({
-      listing,
-      seller,
-      isOwnListing: listing.userId === Number(req.cookies.userId),
-    });
+    if (!listing) throw fastify.httpErrors.notFound();
+
+    const isOwnListing = listing.userId === Number(req.cookies.userId);
+
+    return reply.send({ listing, isOwnListing });
   });
 };
 

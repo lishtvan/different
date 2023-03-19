@@ -47,17 +47,16 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 const ListingRoute = () => {
-  const { listing, seller, isOwnListing } = useLoaderData();
+  const { listing, isOwnListing } = useLoaderData();
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const { listingId } = useParams();
 
-  const { tags, images } = useMemo(() => {
-    const formattedImages = listing?.imageUrls.map((imageUrl: string) => ({
+  const { images } = useMemo(() => {
+    const imageGalleryImages = listing?.imageUrls.map((imageUrl: string) => ({
       original: imageUrl,
       thumbnail: imageUrl,
     }));
-    const formattedTags = listing?.tags.split(",");
-    return { images: formattedImages, tags: formattedTags };
+    return { images: imageGalleryImages };
   }, [listing]);
 
   const togglePurchaseModal = useCallback(() => {
@@ -124,7 +123,7 @@ const ListingRoute = () => {
 
                 <Link
                   className="w-full min-w-fit"
-                  to={`/user/chat/new/${seller?.id}`}
+                  to={`/user/chat/new/${listing?.User.id}`}
                 >
                   <Button variant="outlined" className="w-full min-w-fit">
                     Message
@@ -134,15 +133,15 @@ const ListingRoute = () => {
             )}
 
             <Link
-              className="mb-8 flex w-full items-center gap-4 rounded-lg border border-main py-1 px-2"
-              to={`/${seller?.nickname}`}
+              className="mb-5 flex w-full items-center gap-4 rounded-lg border border-main py-1 px-2"
+              to={`/${listing?.User.nickname}`}
             >
               <Avatar
                 sx={{ width: 50, height: 50 }}
-                src={seller?.avatarUrl || ProfileImage}
+                src={listing?.User.avatarUrl || ProfileImage}
               />
               <div>
-                <div className="text-xl">{seller?.nickname}</div>
+                <div className="text-xl">{listing?.User.nickname}</div>
                 <div className="flex gap-2 text-sm text-[#737373]">
                   <div>10 listings</div>
                   <div>6 sold</div>
@@ -150,9 +149,9 @@ const ListingRoute = () => {
               </div>
             </Link>
           </div>
-          {listing?.tags && (
+          {listing?.tags.length > 0 && (
             <div className="mr-2 flex flex-wrap gap-2">
-              {tags.map((tag: string) => (
+              {listing.tags.map((tag: string) => (
                 <div
                   key={tag}
                   className="w-fit rounded-lg border border-main py-1 px-2 text-xl text-main"
