@@ -25,7 +25,6 @@ import { fetcher } from "~/utils/fetcher";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
-import { getCookieValue } from "~/utils/cookie";
 
 export const action: ActionFunction = async ({ request, params }) => {
   const contentType = request.headers.get("Content-type");
@@ -76,18 +75,16 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
-  const userId = getCookieValue("userId", request);
 
-  const response = await fetcher({
+  const { listing, isOwnListing } = await fetcher({
     request,
     route: "/listing/get",
     method: "POST",
     body: { listingId },
   }).then((res) => res.json());
-  if (response.seller.id !== Number(userId)) {
-    throw new Response("", { status: 404 });
-  }
-  return response.listing;
+
+  if (!isOwnListing) throw new Response("", { status: 404 });
+  return listing;
 };
 
 const EditListingRoute = () => {

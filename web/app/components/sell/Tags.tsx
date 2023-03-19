@@ -11,9 +11,7 @@ const Tags = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!loaderData.tags) return;
-    const formattedTags = loaderData.tags.split(",");
-    setTags(formattedTags);
+    if (loaderData?.tags?.length > 0) setTags(loaderData.tags);
   }, [loaderData.tags]);
 
   return (

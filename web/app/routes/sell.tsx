@@ -110,7 +110,6 @@ const SellRoute = () => {
       <Form
         method="post"
         className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-6"
-        onSubmit={() => window.scrollTo({ top: 0, left: 0 })}
       >
         <ItemTitle />
         <Designer />
