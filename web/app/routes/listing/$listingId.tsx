@@ -111,14 +111,32 @@ const ListingRoute = () => {
           <div className="text-xl">Category: {listing?.category}</div>
           <div className="text-xl">Condition: {listing?.condition}</div>
           <div className="my-4 text-2xl font-bold">{listing?.price}₴</div>
-          <div className="flex w-fit flex-col items-start gap-5 md:w-full">
-            <Button
-              variant="contained"
-              className="w-full min-w-fit"
-              onClick={togglePurchaseModal}
-            >
-              Purchase
-            </Button>
+          <div className="flex w-fit flex-col items-start gap-3 md:w-full">
+            {!isOwnListing && (
+              <div className="flex w-full gap-2">
+                <Button
+                  variant="contained"
+                  className="w-full min-w-fit"
+                  onClick={togglePurchaseModal}
+                >
+                  Purchase
+                </Button>
+
+                <Link
+                  className="w-full min-w-fit"
+                  to={`/user/chat/new/${seller?.id}`}
+                >
+                  <Button
+                    variant="outlined"
+                    className="w-full min-w-fit"
+                    onClick={togglePurchaseModal}
+                  >
+                    Message
+                  </Button>
+                </Link>
+              </div>
+            )}
+
             <Link
               className="mb-8 flex w-full items-center gap-4 rounded-lg border border-main py-1 px-2"
               to={`/${seller?.nickname}`}

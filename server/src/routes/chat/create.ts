@@ -18,12 +18,16 @@ const getListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
     const { recipientId } = req.body;
     const userId = Number(req.cookies.userId);
+    if (userId === recipientId) throw fastify.httpErrors.notFound();
     const chat = await fastify.prisma.chat.findFirst({
       where: { Users: { every: { id: { in: [recipientId, userId] } } } },
     });
 
     if (chat) return reply.send({ chatId: chat.id });
-
+    const recipient = await fastify.prisma.user.findUnique({
+      where: { id: recipientId },
+    });
+    if (!recipient) throw fastify.httpErrors.notFound();
     const newChat = await fastify.prisma.chat.create({
       data: { Users: { connect: [{ id: recipientId }, { id: userId }] } },
     });
