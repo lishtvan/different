@@ -60,6 +60,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     if (bio.toString().length > 150) errors.bio = "Too long";
     if (location.toString().length > 40) errors.location = "Too long";
+    if (Object.keys(errors).length > 0) return { errors };
 
     if (_action === "save") {
       const response = await fetcher({

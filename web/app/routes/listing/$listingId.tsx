@@ -126,11 +126,7 @@ const ListingRoute = () => {
                   className="w-full min-w-fit"
                   to={`/user/chat/new/${seller?.id}`}
                 >
-                  <Button
-                    variant="outlined"
-                    className="w-full min-w-fit"
-                    onClick={togglePurchaseModal}
-                  >
+                  <Button variant="outlined" className="w-full min-w-fit">
                     Message
                   </Button>
                 </Link>
