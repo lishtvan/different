@@ -117,7 +117,7 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         imageUrls,
         description,
         cardNumber,
-        userId: Number(req.cookies.userId),
+        sellerId: Number(req.cookies.userId),
       },
     });
 

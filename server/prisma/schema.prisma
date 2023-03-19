@@ -46,9 +46,9 @@ model Listing {
   description String?
   tags        String[]
   imageUrls   String[]
-  User        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Seller      User          @relation(fields: [sellerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   status      ListingStatus @default(AVAILABLE)
-  userId      Int
+  sellerId    Int
 }
 
 model Message {

@@ -97,7 +97,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
     } = req.body;
 
     const listingToUpdate = await fastify.prisma.listing.findFirst({
-      where: { id: listingId, userId: Number(req.cookies.userId) },
+      where: { id: listingId, sellerId: Number(req.cookies.userId) },
     });
     if (!listingToUpdate) throw fastify.httpErrors.unauthorized();
 
