@@ -23,6 +23,9 @@ const SortByPrice = () => {
           MenuProps={{
             disableScrollLock: true,
           }}
+          value={
+            sort.currentRefinement === "listings" ? "" : sort.currentRefinement
+          }
           onChange={(e) => sort.refine(e.target.value as string)}
         >
           {sort.options?.map((sort) => (

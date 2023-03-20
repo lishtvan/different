@@ -102,8 +102,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function App() {
   const [searchParams] = useSearchParams();
-  const { typesenseConfig, user } = useLoaderData();
-  const { locale } = useLoaderData();
+  const { typesenseConfig, user, locale } = useLoaderData();
   const { i18n } = useTranslation();
   const [wsUrl, setWsUrl] = useState("wss://echo.websocket.org");
 
@@ -136,9 +135,11 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className={`px-3 overflow-y-scroll ${
-        searchParams.get("login") && "scrollbar"
-      }`}>
+      <body
+        className={`overflow-y-scroll px-3 ${
+          searchParams.get("login") && "scrollbar"
+        }`}
+      >
         <ThemeProvider theme={theme}>
           <InstantSearch
             indexName={LISTINGS_COLLECTION_NAME}
