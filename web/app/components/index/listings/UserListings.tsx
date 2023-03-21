@@ -39,11 +39,9 @@ const UserListings = ({ userId }: { userId: number }) => {
     }
   }, [isLastPage, showMore]);
 
-  if (!results?.nbHits) return null;
-
   return (
     <div className="mt-10 mb-20 w-full px-0 md:px-24">
-      {results.nbHits > 0 ? (
+      {results?.nbHits!! > 0 ? (
         <div className="grid w-full grid-cols-2 gap-x-[1.125rem] gap-y-4 lg:grid-cols-3 xl:grid-cols-4">
           {hits.map((listing) => (
             <Listing listing={listing} key={listing.objectID} />
@@ -52,8 +50,7 @@ const UserListings = ({ userId }: { userId: number }) => {
         </div>
       ) : (
         <div className="flex h-44 items-center justify-center text-xl font-semibold">
-          <div>The are no listings for now</div>
-          <div className="ml-2 text-4xl">&#128546;</div>
+          <div>There are no listings for now.</div>
         </div>
       )}
     </div>
