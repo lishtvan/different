@@ -1,4 +1,3 @@
-import { ThemeProvider } from "@emotion/react";
 import type {
   ActionFunction,
   LinksFunction,
@@ -34,6 +33,7 @@ import i18next from "./i18next.server";
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
 import { WS_DOMAIN_BY_ORIGIN } from "./constants/ws";
+import { ThemeProvider } from "@mui/material";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 
 export const links: LinksFunction = () => [
