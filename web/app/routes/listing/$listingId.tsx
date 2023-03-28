@@ -7,11 +7,6 @@ import { useCallback, useMemo, useState } from "react";
 import { Avatar, Button, IconButton, Tooltip } from "@mui/material";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { Delete, Edit } from "@mui/icons-material";
-import Typesense from "typesense";
-import {
-  getTypesenseConfig,
-  LISTINGS_COLLECTION_NAME,
-} from "~/constants/typesense";
 import PurchaseModal from "~/components/listing/PurchaseModal";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -36,12 +31,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     body: { listingId },
   });
   if (response.headers.get("location")) return null;
-  const writeConfig = getTypesenseConfig({ isWriteConfig: true });
-  const typesenseClient = new Typesense.Client(writeConfig);
-  await typesenseClient
-    .collections(LISTINGS_COLLECTION_NAME)
-    .documents(params.listingId!)
-    .delete();
 
   return redirect("/");
 };

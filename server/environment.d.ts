@@ -12,6 +12,8 @@ declare global {
       NODE_ENV: string;
       WEB_DOMAIN: string;
       S3_CLEANUP_SECRET: string;
+      TYPESENSE_HOST: string;
+      TYPESENSE_WRITE_API_KEY: string;
     }
   }
 }
