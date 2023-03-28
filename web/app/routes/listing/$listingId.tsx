@@ -24,6 +24,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
+  // TODO: try redirect inside fetcher
   const response = await fetcher({
     request,
     route: "/listing/delete",
