@@ -51,6 +51,7 @@ const UserRoute = () => {
         <div className="flex items-center justify-center">
           <Avatar
             src={avatarUrl || ProfileImage}
+            alt="avatar"
             sx={{ height: "160px", width: "160px" }}
           />
           <div className="ml-14">

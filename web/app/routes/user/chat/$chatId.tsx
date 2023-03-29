@@ -79,6 +79,7 @@ const IndexRoute = () => {
         {messages.map((msg) => (
           <div key={msg.id} className="flex items-center gap-2">
             <Avatar
+              alt="avatar"
               src={
                 (participants?.recipient.id === msg.senderId
                   ? participants.recipient.avatarUrl

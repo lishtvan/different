@@ -68,6 +68,7 @@ const IndexRoute = () => {
                   <Avatar
                     src={chat.Users[0].avatarUrl || ProfileImage}
                     sx={{ width: 52, height: 52 }}
+                    alt="avatar"
                   />
                   <div className="max-w-full overflow-hidden">
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap font-semibold">

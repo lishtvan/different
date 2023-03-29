@@ -129,6 +129,7 @@ const ListingRoute = () => {
               <Avatar
                 sx={{ width: 50, height: 50 }}
                 src={listing?.User.avatarUrl || ProfileImage}
+                alt="avatar"
               />
               <div>
                 <div className="text-xl">{listing?.User.nickname}</div>

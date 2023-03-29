@@ -272,6 +272,7 @@ const Header = () => {
                       className="border-2 border-white"
                       src={user.avatarUrl || ProfileImage}
                       sx={{ width: 50, height: 50 }}
+                      alt="avatar"
                     />
                   </div>
                 </Link>
