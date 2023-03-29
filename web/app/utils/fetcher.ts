@@ -13,7 +13,6 @@ interface Fetcher {
       | FormData;
     formData?: boolean;
     domain?: string;
-    authorization?: boolean;
   }): Promise<Response>;
 }
 
