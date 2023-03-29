@@ -19,7 +19,6 @@ const Listing: FC<Props> = ({ listing }) => {
         <img
           className="aspect-[9.4/10] w-full rounded-t-md object-cover"
           src={`${listing.imageUrls[0]}`}
-          loading="lazy"
           alt="item"
         />
         <div className="px-2">
