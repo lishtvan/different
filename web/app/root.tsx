@@ -23,18 +23,23 @@ import Login from "./components/ui/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
 import { theme } from "./styles/theme";
 import { fetcher } from "./utils/fetcher";
-import {
-  getTypesenseConfig,
-  LISTINGS_COLLECTION_NAME,
-} from "./constants/typesense";
+import { LISTINGS_COLLECTION_NAME } from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 import i18next from "./i18next.server";
 import { useTranslation } from "react-i18next";
-import { useEffect, useMemo, useState } from "react";
-import { WS_DOMAIN_BY_ORIGIN } from "./constants/ws";
+import { useEffect, useMemo } from "react";
 import { ThemeProvider } from "@mui/material";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+import type { Env } from "./types/env";
+import type { User } from "./types/user";
+import { config } from "./constants/envConfig";
+
+interface LoaderData {
+  ENV: Env;
+  locale: string;
+  user?: User;
+}
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -71,13 +76,12 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const typesenseConfig = getTypesenseConfig({ isWriteConfig: false });
   const [response, locale] = await Promise.all([
     getAuthorizedStatus(request),
     i18next.getLocale(request),
   ]);
   const user = await response.json();
-
+  const ENV = process.env.ENVIRONMENT;
   const newHeaders = new Headers();
   if (user.statusCode === 401) {
     if (!request.url.includes("auth")) {
@@ -85,35 +89,27 @@ export const loader: LoaderFunction = async ({ request }) => {
         "set-cookie",
         "token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT, userId=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
       );
-      return json(
-        { typesenseConfig, user: null, locale },
-        { headers: newHeaders }
-      );
+      return json({ user: null, locale, ENV }, { headers: newHeaders });
     }
 
-    return json({ typesenseConfig, user: null, locale });
+    return json({ user: null, locale, ENV });
   }
 
   const cookieHeader = response.headers.get("set-cookie");
   newHeaders.append("set-cookie", cookieHeader!);
-
-  return json({ user, typesenseConfig, locale }, { headers: newHeaders });
+  return json({ user, locale, ENV }, { headers: newHeaders });
 };
 
 export default function App() {
   const [searchParams] = useSearchParams();
-  const { typesenseConfig, user, locale } = useLoaderData();
+  const { user, locale, ENV } = useLoaderData<LoaderData>();
+  console.log(ENV);
   const { i18n } = useTranslation();
-  const [wsUrl, setWsUrl] = useState("wss://echo.websocket.org");
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(wsUrl, {
-    shouldReconnect: () => Boolean(user),
-  });
-
-  useEffect(() => {
-    const origin = window.location.origin as keyof typeof WS_DOMAIN_BY_ORIGIN;
-    setWsUrl(`${WS_DOMAIN_BY_ORIGIN[origin]}/chat/message`);
-  }, []);
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    `${config[ENV].wsDomain}/chat/message`,
+    { shouldReconnect: () => Boolean(user) }
+  );
 
   // TODO: update later
   useEffect(() => {
@@ -122,10 +118,8 @@ export default function App() {
 
   const { searchClient } = useMemo(() => {
     return new TypesenseInstantsearchAdapter({
-      server: typesenseConfig,
-      additionalSearchParameters: {
-        query_by: "title,designer",
-      },
+      server: config[ENV].typesense,
+      additionalSearchParameters: { query_by: "title,designer" },
     });
   }, []);
 

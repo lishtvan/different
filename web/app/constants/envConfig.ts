@@ -1,0 +1,41 @@
+export const config = {
+  local: {
+    typesense: {
+      nodes: [
+        {
+          host: "127.0.0.1",
+          port: 8108,
+          protocol: "http",
+        },
+      ],
+      apiKey: "xyz",
+    },
+    wsDomain: "ws://localhost:8000",
+  },
+  development: {
+    typesense: {
+      nodes: [
+        {
+          host: "o2by0uh958xjn1igp-1.a1.typesense.net",
+          port: 443,
+          protocol: "https",
+        },
+      ],
+      apiKey: "LStsJHZnSoNFwVXzyfJU3D9xxvvjQcyg",
+    },
+    wsDomain: "wss://dev.api.different-marketplace.com",
+  },
+  production: {
+    typesense: {
+      nodes: [
+        {
+          host: "o2by0uh958xjn1igp-1.a1.typesense.net",
+          port: 443,
+          protocol: "https",
+        },
+      ],
+      apiKey: "LStsJHZnSoNFwVXzyfJU3D9xxvvjQcyg",
+    },
+    wsDomain: "wss://api.different-marketplace.com",
+  },
+};

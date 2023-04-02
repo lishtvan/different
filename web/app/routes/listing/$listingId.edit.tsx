@@ -16,11 +16,6 @@ import {
   SelectCategory,
   Tags,
 } from "~/components/sell";
-import {
-  getTypesenseConfig,
-  LISTINGS_COLLECTION_NAME,
-} from "~/constants/typesense";
-import Typesense from "typesense";
 import { fetcher } from "~/utils/fetcher";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
@@ -54,15 +49,8 @@ export const action: ActionFunction = async ({ request, params }) => {
       const errors = getErrors(message);
       return { errors };
     }
-    const listing = await response.json();
-    const writeConfig = getTypesenseConfig({ isWriteConfig: true });
-    const typesenseClient = new Typesense.Client(writeConfig);
-    await typesenseClient
-      .collections(LISTINGS_COLLECTION_NAME)
-      .documents()
-      .update({ ...listing, id: listing.id.toString() });
 
-    return redirect(`/listing/${listing.id}`);
+    return redirect(`/listing/${listingId}`);
   }
 
   const form = await unstable_parseMultipartFormData(

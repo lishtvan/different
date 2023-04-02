@@ -65,7 +65,7 @@ const Header = () => {
           to="/"
           className="mb-5 flex min-w-[320px] items-center justify-center sm:mb-0 sm:justify-start"
         >
-          <img src={logoText} width={220} alt="DIFFERENT" />
+          <img src={logoText} height={60} width={220} alt="DIFFERENT" />
         </Link>
         <div className="flex w-full items-center justify-between">
           {pathname === "/" && <MainSearch />}

@@ -1,11 +1,5 @@
 import type { ReadyState, SendMessage } from "react-use-websocket";
-
-interface User {
-  id: number;
-  nickname?: string;
-  avatarUrl?: string;
-  name: string;
-}
+import type { User } from "./user";
 
 export interface Message {
   text: string;

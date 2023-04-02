@@ -1,16 +1,15 @@
 import { Avatar, Button, IconButton } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useRouteLoaderData } from "@remix-run/react";
 import { LocationOnOutlined, Send, Settings } from "@mui/icons-material";
 import { fetcher } from "~/utils/fetcher";
 import ProfileImage from "./../assets/profile.jpeg";
 import { InstantSearch } from "react-instantsearch-hooks-web";
-import {
-  getTypesenseConfig,
-  LISTINGS_COLLECTION_NAME,
-} from "~/constants/typesense";
+import { LISTINGS_COLLECTION_NAME } from "~/constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import UserListings from "~/components/index/listings/UserListings";
+import { useMemo } from "react";
+import { config } from "~/constants/envConfig";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await fetcher({
@@ -18,29 +17,24 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     method: "POST",
     body: { nickname: params.user },
     route: "/user/get",
-  }).then((res) => res.json());
+  });
 
-  const typesenseConfig = getTypesenseConfig({ isWriteConfig: false });
-
-  return { ...user, typesenseConfig };
+  return user;
 };
 
 const UserRoute = () => {
-  const {
-    nickname,
-    avatarUrl,
-    isOwnAccount,
-    bio,
-    id,
-    location,
-    typesenseConfig,
-  } = useLoaderData();
-  const { searchClient } = new TypesenseInstantsearchAdapter({
-    server: typesenseConfig,
-    additionalSearchParameters: {
-      query_by: "title,designer",
-    },
-  });
+  const { nickname, avatarUrl, isOwnAccount, bio, id, location } =
+    useLoaderData();
+  const { ENV } = useRouteLoaderData("root") as {
+    ENV: "local" | "development" | "production";
+  };
+
+  const { searchClient } = useMemo(() => {
+    return new TypesenseInstantsearchAdapter({
+      server: config[ENV].typesense,
+      additionalSearchParameters: { query_by: "title,designer" },
+    });
+  }, []);
 
   return (
     <InstantSearch

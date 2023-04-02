@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
+import { LISTINGS_COLLECTION_NAME } from '../../constants/typesense';
 
 const schema = {
   tags: ['Listing'],
@@ -92,9 +93,11 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       category,
       imageUrls,
     } = req.body;
+
     const listing = await fastify.prisma.listing.create({
       select: {
         id: true,
+        description: true,
         title: true,
         size: true,
         designer: true,
@@ -121,7 +124,11 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    return reply.send({ ...listing, sellerId: req.cookies.userId });
+    await fastify.typesense
+      .collections(LISTINGS_COLLECTION_NAME)
+      .documents()
+      .create({ ...listing, id: listing.id.toString(), sellerId: req.cookies.userId });
+    return reply.send({ listingId: listing.id });
   });
 };
 

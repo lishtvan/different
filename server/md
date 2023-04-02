@@ -1,0 +1,21 @@
+prod server:
+
+DATABASE_URL: 'postgres://different_api:cVmIpUjhbO3JFFF@top2.nearest.of.different-api-db.internal:5432/different_api'
+FACEBOOK_CLIENT_SECRET: 'e7ae33f1408a22ac67c5a1698479e6ca'
+FASTIFY_ADDRESS: '::'
+GOOGLE_CLIENT_SECRET: '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'
+NODE_ENV: 'production'
+S3_CLEANUP_SECRET: 'koSDiQyrR9KSHaMvva23tBpGiGf0UJ5R8yyvoKHqoMsyuWNrC4Fm0Ixaz8hx32a3'
+TOKEN_CHARACTERS: 'ABCDEFGHIJKOPQRLMNSTUVWXbcdeYZafghijkrstuvlmnopqwxyz0123456789'
+TOKEN_SECRET: 'multibrand'
+TWITTER_CLIENT_SECRET: 'ZFreoRGspBgHqIR7dQPsNXRj3ok_gDg4T4LRtNyHnr97x1QKSb'
+WEB_DOMAIN: 'https://different-marketplace.com'
+TYPESENSE_HOST: 'o2by0uh958xjn1igp-1.a1.typesense.net'
+TYPESENSE_WRITE_API_KEY: '2HrzvdCDAAk2kvCsRO8M0s9Gryork7Qv'
+
+prod dev
+
+API_DOMAIN: 'https://api.different-marketplace.com'
+AWS_ACCESS_KEY_ID: 'AKIARB3YF42RNJWJ3UNT'
+AWS_SECRET_ACCESS_KEY: '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'
+ENVIRONMENT: 'production'
