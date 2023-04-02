@@ -103,7 +103,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function App() {
   const [searchParams] = useSearchParams();
   const { user, locale, ENV } = useLoaderData<LoaderData>();
-  console.log(ENV);
   const { i18n } = useTranslation();
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
