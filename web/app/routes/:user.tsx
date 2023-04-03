@@ -10,6 +10,7 @@ import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import UserListings from "~/components/index/listings/UserListings";
 import { useMemo } from "react";
 import { config } from "~/constants/envConfig";
+import type { Env } from "~/types/env";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await fetcher({
@@ -25,9 +26,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 const UserRoute = () => {
   const { nickname, avatarUrl, isOwnAccount, bio, id, location } =
     useLoaderData();
-  const { ENV } = useRouteLoaderData("root") as {
-    ENV: "local" | "development" | "production";
-  };
+  const { ENV } = useRouteLoaderData("root") as { ENV: Env };
 
   const { searchClient } = useMemo(() => {
     return new TypesenseInstantsearchAdapter({
