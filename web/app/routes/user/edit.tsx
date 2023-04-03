@@ -16,8 +16,8 @@ import {
   Form,
   useActionData,
   useLoaderData,
+  useNavigation,
   useSubmit,
-  useTransition,
 } from "@remix-run/react";
 import { getCookieValue } from "~/utils/cookie";
 import { fetcher } from "~/utils/fetcher";
@@ -115,7 +115,7 @@ const UserEditRoute = () => {
   const { nickname, avatarUrl, bio, location } = useLoaderData();
   const data = useActionData();
   const submit = useSubmit();
-  const { submission } = useTransition();
+  const navigation = useNavigation();
   const { i18n } = useTranslation();
 
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
@@ -132,7 +132,7 @@ const UserEditRoute = () => {
       >
         <div className="relative flex w-full items-center justify-center">
           <label className="profile" htmlFor="button-file">
-            {submission?.encType === "multipart/form-data" ? (
+            {navigation?.formEncType === "multipart/form-data" ? (
               <CircularProgress color="primary" />
             ) : (
               <>
@@ -256,14 +256,14 @@ const UserEditRoute = () => {
         </TextField>
         <Button
           type="submit"
-          disabled={submission?.encType === "multipart/form-data"}
+          disabled={navigation?.formEncType === "multipart/form-data"}
           name="_action"
           value="save"
           sx={{ marginTop: "20px", marginBottom: "20px", width: "100%" }}
           variant="contained"
         >
-          {submission?.encType === "multipart/form-data" ||
-          submission?.formData.get("_action") === "save"
+          {navigation?.formEncType === "multipart/form-data" ||
+          navigation?.formData?.get("_action") === "save"
             ? "Saving..."
             : "Save"}
         </Button>
