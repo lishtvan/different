@@ -9,37 +9,23 @@ import {
   Tooltip,
 } from "@mui/material";
 import { PhotoCamera, Delete } from "@mui/icons-material";
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import type { ActionFunction } from "@remix-run/node";
 import { unstable_parseMultipartFormData } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
-  useLoaderData,
   useNavigation,
+  useRouteLoaderData,
   useSubmit,
 } from "@remix-run/react";
-import { getCookieValue } from "~/utils/cookie";
 import { fetcher } from "~/utils/fetcher";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const userId = getCookieValue("userId", request);
-  if (!userId) return redirect("/");
-  // TODO: rewrite to auth user route
-  const response = await fetcher({
-    request,
-    method: "POST",
-    body: { userId: Number(userId) },
-    route: "/user/get",
-  }).then((res) => res.json());
-
-  return response;
-};
+import type { RootLoaderData } from "~/types/root";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -112,7 +98,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const UserEditRoute = () => {
-  const { nickname, avatarUrl, bio, location } = useLoaderData();
+  const { user } = useRouteLoaderData("root") as RootLoaderData;
   const data = useActionData();
   const submit = useSubmit();
   const navigation = useNavigation();
@@ -137,7 +123,7 @@ const UserEditRoute = () => {
             ) : (
               <>
                 <img
-                  src={data?.avatarUrl || avatarUrl || ProfileImage}
+                  src={data?.avatarUrl || user?.avatarUrl || ProfileImage}
                   alt="Avatar"
                   onError={({ currentTarget }) => {
                     currentTarget.onerror = null;
@@ -159,7 +145,7 @@ const UserEditRoute = () => {
               </>
             )}
           </label>
-          {avatarUrl && (
+          {user?.avatarUrl && (
             <div className="absolute ml-56">
               <Tooltip title="Delete">
                 <IconButton
@@ -192,7 +178,7 @@ const UserEditRoute = () => {
           inputProps={{
             maxLength: 21,
           }}
-          defaultValue={nickname}
+          defaultValue={user?.nickname}
         />
         <TextField
           error={Boolean(data?.errors?.bio)}
@@ -203,7 +189,7 @@ const UserEditRoute = () => {
             maxLength: 151,
           }}
           name="bio"
-          defaultValue={bio}
+          defaultValue={user?.bio}
           sx={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
           placeholder="Bio"
         />
@@ -217,7 +203,7 @@ const UserEditRoute = () => {
           inputProps={{
             maxLength: 41,
           }}
-          defaultValue={location}
+          defaultValue={user?.location}
         />
         <TextField
           select

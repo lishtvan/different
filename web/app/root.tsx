@@ -31,15 +31,8 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useMemo } from "react";
 import { ThemeProvider } from "@mui/material";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
-import type { Env } from "./types/env";
-import type { User } from "./types/user";
 import { config } from "./constants/envConfig";
-
-interface LoaderData {
-  ENV: Env;
-  locale: string;
-  user?: User;
-}
+import type { RootLoaderData } from "./types/root";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -102,7 +95,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function App() {
   const [searchParams] = useSearchParams();
-  const { user, locale, ENV } = useLoaderData<LoaderData>();
+  const { user, locale, ENV } = useLoaderData<RootLoaderData>();
   const { i18n } = useTranslation();
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(

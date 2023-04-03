@@ -14,6 +14,8 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
         id: true,
         nickname: true,
         avatarUrl: true,
+        location: true,
+        bio: true,
         Chats: {
           where: {
             notification: true,
