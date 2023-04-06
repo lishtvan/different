@@ -203,7 +203,7 @@ const Header = () => {
                   className="mr-2 whitespace-nowrap"
                   variant="contained"
                 >
-                  {t("for user")}
+                  {t("For user")}
                 </Button>
               </>
             )}
@@ -229,7 +229,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <Person fontSize="large" />
                       </ListItemIcon>
-                      <div className="text-xl font-normal">Profile</div>
+                      <div className="text-xl font-normal">{t("Profile")}</div>
                     </MenuItem>
                     <MenuItem
                       className="px-4"
@@ -238,7 +238,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <Settings fontSize="large" />
                       </ListItemIcon>
-                      <div className="text-xl font-normal">Settings</div>
+                      <div className="text-xl font-normal">{t("Settings")}</div>
                     </MenuItem>
                     <MenuItem
                       className="px-4"
@@ -247,7 +247,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <HelpOutline fontSize="large" />
                       </ListItemIcon>
-                      <div className="text-xl font-normal">For user</div>
+                      <div className="text-xl font-normal">{t("For user")}</div>
                     </MenuItem>
                     <Form action="/auth/logout" method="post">
                       <button
@@ -259,7 +259,9 @@ const Header = () => {
                           <ListItemIcon className="mr-2">
                             <Logout fontSize="large" />
                           </ListItemIcon>
-                          <div className="text-xl font-normal">Log out</div>
+                          <div className="text-xl font-normal">
+                            {t("Log out")}
+                          </div>
                         </MenuItem>
                       </button>
                     </Form>

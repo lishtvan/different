@@ -8,6 +8,7 @@ import { Avatar, Button, IconButton, Tooltip } from "@mui/material";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { Delete, Edit } from "@mui/icons-material";
 import PurchaseModal from "~/components/listing/PurchaseModal";
+import { useTranslation } from "react-i18next";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
@@ -40,6 +41,7 @@ const ListingRoute = () => {
   const { listing, isOwnListing } = useLoaderData();
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const { listingId } = useParams();
+  const { t } = useTranslation();
 
   const { images } = useMemo(() => {
     const imageGalleryImages = listing?.imageUrls.map((imageUrl: string) => ({
@@ -73,14 +75,14 @@ const ListingRoute = () => {
             </div>
             {isOwnListing && (
               <div className="ml-4 flex">
-                <Tooltip title="Edit listing">
+                <Tooltip title={t("Edit listing")}>
                   <Link to={`/listing/${listingId}/edit`}>
                     <IconButton size="large" color="inherit">
                       <Edit />
                     </IconButton>
                   </Link>
                 </Tooltip>
-                <Tooltip title="Delete listing">
+                <Tooltip title={t("Delete listing")}>
                   <IconButton
                     type="submit"
                     name="delete"
@@ -95,10 +97,18 @@ const ListingRoute = () => {
               </div>
             )}
           </div>
-          <div className="text-xl">Designer: {listing?.designer}</div>
-          <div className="text-xl">Size: {listing?.size}</div>
-          <div className="text-xl">Category: {listing?.category}</div>
-          <div className="text-xl">Condition: {listing?.condition}</div>
+          <div className="text-xl">
+            {t("Designer")}: {listing?.designer}
+          </div>
+          <div className="text-xl">
+            {t("Size")}: {listing?.size}
+          </div>
+          <div className="text-xl">
+            {t("Category")}: {listing?.category}
+          </div>
+          <div className="text-xl">
+            {t("Condition")}: {listing?.condition}
+          </div>
           <div className="my-4 text-2xl font-bold">{listing?.price}₴</div>
           <div className="flex w-fit flex-col items-start gap-3 md:w-full">
             {!isOwnListing && (
@@ -154,7 +164,7 @@ const ListingRoute = () => {
           )}
           {listing?.description && (
             <div className="whitespace-pre-wrap">
-              <div className="text-xl font-semibold">Description</div>
+              <div className="text-xl font-semibold">{t("Description")}</div>
               <div className="mt-2 text-lg">{listing.description}</div>
             </div>
           )}

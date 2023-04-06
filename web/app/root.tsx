@@ -32,7 +32,7 @@ import { useEffect, useMemo } from "react";
 import { ThemeProvider } from "@mui/material";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { config } from "./constants/envConfig";
-import type { RootLoaderData } from "./types/root";
+import type { RootLoaderData } from "./types/rootLoader";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },

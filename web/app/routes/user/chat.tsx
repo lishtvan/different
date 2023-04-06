@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import { getCookieValue } from "~/utils/cookie";
 import { fetcher } from "~/utils/fetcher";
 import ProfileImage from "../../assets/profile.jpeg";
+import { useTranslation } from "react-i18next";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   // TODO: rewrite to auth user route
@@ -36,6 +37,7 @@ const IndexRoute = () => {
   const { chats, userId } = useLoaderData<{ chats: Chats[]; userId: number }>();
   const { sendMessage, lastMessage, readyState } =
     useOutletContext<ChatContext>();
+  const { t } = useTranslation();
 
   const noChatsWithMessages = useMemo(
     () => chats.every((chat) => chat.Messages.length === 0),
@@ -92,7 +94,7 @@ const IndexRoute = () => {
       ) : (
         <div className="flex w-[70%] items-center justify-center">
           <div className="rounded-3xl bg-[#f4f4f5] px-3 py-1 text-lg font-medium">
-            Select a chat to start messaging
+            {t("Select a chat to start messaging")}
           </div>
         </div>
       )}

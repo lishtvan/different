@@ -25,7 +25,7 @@ import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
-import type { RootLoaderData } from "~/types/root";
+import type { RootLoaderData } from "~/types/rootLoader";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -98,11 +98,11 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const UserEditRoute = () => {
-  const { user } = useRouteLoaderData("root") as RootLoaderData;
+  const { user, locale } = useRouteLoaderData("root") as RootLoaderData;
   const data = useActionData();
   const submit = useSubmit();
   const navigation = useNavigation();
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
     submit(e.currentTarget, { replace: true });
@@ -211,14 +211,14 @@ const UserEditRoute = () => {
           SelectProps={{
             displayEmpty: true,
             MenuProps: { disableScrollLock: true },
-            renderValue: (value) =>
-              typeof value === "string" ? (
-                <div>Language: {value === "en" ? "English" : "Ukrainian"}</div>
-              ) : (
-                <div className="text-[#aaa]">Language</div>
-              ),
+            renderValue: (value) => (
+              <div>
+                {t("Language")}:{" "}
+                {value === "en" ? t("English") : t("Ukrainian")}
+              </div>
+            ),
           }}
-          defaultValue={i18n.language}
+          defaultValue={locale}
           className="w-full"
         >
           <MenuItem value={"en"}>
@@ -228,7 +228,7 @@ const UserEditRoute = () => {
                 src="http://purecatamphetamine.github.io/country-flag-icons/3x2/GB.svg"
               />
             </ListItemIcon>
-            <ListItemText>English</ListItemText>
+            <ListItemText>{t("English")}</ListItemText>
           </MenuItem>
           <MenuItem value={"uk"}>
             <ListItemIcon className="mr-2">
@@ -237,7 +237,7 @@ const UserEditRoute = () => {
                 src="http://purecatamphetamine.github.io/country-flag-icons/3x2/UA.svg"
               />
             </ListItemIcon>
-            <ListItemText> Ukrainian</ListItemText>
+            <ListItemText>{t("Ukrainian")}</ListItemText>
           </MenuItem>
         </TextField>
         <Button
@@ -250,8 +250,8 @@ const UserEditRoute = () => {
         >
           {navigation?.formEncType === "multipart/form-data" ||
           navigation?.formData?.get("_action") === "save"
-            ? "Saving..."
-            : "Save"}
+            ? t("Saving...")
+            : t("Save")}
         </Button>
       </Form>
     </div>

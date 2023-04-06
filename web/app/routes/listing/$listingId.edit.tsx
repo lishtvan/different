@@ -20,6 +20,7 @@ import { fetcher } from "~/utils/fetcher";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
+import { useTranslation } from "react-i18next";
 
 export const action: ActionFunction = async ({ request, params }) => {
   const contentType = request.headers.get("Content-type");
@@ -77,6 +78,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const EditListingRoute = () => {
   const actionData = useActionData();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!actionData?.errors) return;
@@ -100,7 +102,7 @@ const EditListingRoute = () => {
 
   return (
     <div className="mx-auto mt-6 mb-36 flex flex-col items-center justify-center lg:w-[950px]">
-      <h1 className="text-3xl font-semibold">Edit listing</h1>
+      <h1 className="text-3xl font-semibold">{t("Edit listing")}</h1>
       <Form
         method="post"
         className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-6"
@@ -122,7 +124,7 @@ const EditListingRoute = () => {
           className="col-start-1 col-end-3 mx-auto mt-12 w-1/3"
           type="submit"
         >
-          Save
+          {t("Save")}
         </Button>
       </Form>
     </div>
