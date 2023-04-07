@@ -1,10 +1,5 @@
 import type { ActionFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
 import { json } from "react-router";
-
-export const loader = async () => {
-  return redirect("/");
-};
 
 export const action: ActionFunction = async ({ request }) => {
   const newHeaders = new Headers();
