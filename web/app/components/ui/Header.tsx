@@ -27,7 +27,7 @@ import {
 } from "@remix-run/react";
 import { useState } from "react";
 import ProfileImage from "./../../assets/profile.jpeg";
-import logoText from "./../../assets/logoText.jpg";
+import logo from "./../../assets/logo.jpg";
 import MainSearch from "../index/Search";
 import { useTranslation } from "react-i18next";
 
@@ -65,7 +65,7 @@ const Header = () => {
           to="/"
           className="mb-5 flex min-w-[320px] items-center justify-center sm:mb-0 sm:justify-start"
         >
-          <img src={logoText} height={60} width={220} alt="DIFFERENT" />
+          <img src={logo} width={170} alt="DIFFERENT" />
         </Link>
         <div className="flex w-full items-center justify-between">
           {pathname === "/" && <MainSearch />}
