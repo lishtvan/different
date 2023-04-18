@@ -249,11 +249,15 @@ const Header = () => {
                       </ListItemIcon>
                       <div className="text-xl font-normal">{t("For user")}</div>
                     </MenuItem>
-                    <Form action="/auth/logout" method="post">
+                    <Form
+                      action="/auth/logout"
+                      className="w-full"
+                      method="post"
+                    >
                       <button
                         type="submit"
                         onClick={() => setShowTooltip(false)}
-                        className="text-xl"
+                        className="w-full text-xl"
                       >
                         <MenuItem className="px-4">
                           <ListItemIcon className="mr-2">

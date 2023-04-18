@@ -13,14 +13,14 @@ import { config } from "~/constants/envConfig";
 import type { Env } from "~/types/env";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const user = await fetcher({
+  const response = await fetcher({
     request,
     method: "POST",
     body: { nickname: params.user },
     route: "/user/get",
   });
 
-  return user;
+  return response;
 };
 
 const UserRoute = () => {

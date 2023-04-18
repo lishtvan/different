@@ -10,26 +10,18 @@ import {
   useParams,
 } from "@remix-run/react";
 import { useMemo } from "react";
-import { getCookieValue } from "~/utils/cookie";
 import { fetcher } from "~/utils/fetcher";
 import ProfileImage from "../../assets/profile.jpeg";
 import { useTranslation } from "react-i18next";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  // TODO: rewrite to auth user route
-  const userId = Number(getCookieValue("userId", request));
-
-  if (!userId) return redirect("/");
   if (params.chatId === "new") return redirect("/user/chat");
-
-  const user = await fetcher({
+  const response = await fetcher({
     request,
     method: "POST",
-    body: { userId },
-    route: "/user/get",
-  }).then((res) => res.json());
-
-  return { chats: user.Chats, userId };
+    route: "/chat/getMany",
+  });
+  return response;
 };
 
 const IndexRoute = () => {

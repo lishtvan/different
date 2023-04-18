@@ -16,46 +16,22 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const getUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/get', { schema }, async (req, reply) => {
-    const { nickname, userId } = req.body;
+    const { nickname } = req.body;
     const ownUserId = Number(req.cookies.userId);
-    const whereUserInput = userId ? { id: userId } : { nickname };
-
-    let isOwnAccount;
-    if (!ownUserId) {
-      isOwnAccount = false;
-    } else if (userId) {
-      isOwnAccount = userId === ownUserId;
-    } else {
-      const ownUser = await fastify.prisma.user.findUnique({
-        where: { id: ownUserId },
-      });
-      isOwnAccount = ownUser?.nickname === nickname;
-    }
 
     const user = await fastify.prisma.user.findUnique({
-      where: whereUserInput,
+      where: { nickname },
       select: {
         id: true,
         nickname: true,
         bio: true,
         avatarUrl: true,
         location: true,
-        Chats: isOwnAccount && {
-          orderBy: { updatedAt: 'desc' },
-          select: {
-            id: true,
-            notification: true,
-            Users: {
-              select: { nickname: true, avatarUrl: true },
-              where: { id: { not: ownUserId } },
-            },
-            Messages: { select: { text: true, senderId: true }, take: -1 },
-          },
-        },
       },
     });
 
     if (!user) throw fastify.httpErrors.notFound();
+    const isOwnAccount = user.id === ownUserId;
 
     return reply.send({ isOwnAccount, ...user });
   });
