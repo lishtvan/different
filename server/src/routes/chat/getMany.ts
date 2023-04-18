@@ -22,7 +22,7 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
         },
       },
     });
-    console.log('chatsssss');
+
     return reply.send({ chats: user?.Chats, userId: user?.id });
   });
 };

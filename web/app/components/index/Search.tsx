@@ -22,6 +22,7 @@ const MainSearch = () => {
 
   return (
     <TextField
+      size="small"
       className="ml-4 mr-2 w-[100%] sm:w-[48.5%]"
       placeholder={t("Search")!}
       inputProps={{ "aria-label": "search" }}
@@ -31,13 +32,13 @@ const MainSearch = () => {
         endAdornment: (
           <InputAdornment position="end">
             {seachValue ? (
-              <IconButton onClick={clearSearch}>
+              <IconButton size="small" onClick={clearSearch}>
                 <Clear />
               </IconButton>
             ) : (
-              <IconButton>
-                <Search />
-              </IconButton>
+              // <IconButton size="small">
+              <Search />
+              // </IconButton>
             )}
           </InputAdornment>
         ),

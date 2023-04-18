@@ -60,12 +60,16 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white">
-      <div className="items-cente mb-5 flex flex-col pt-2 sm:mb-0 sm:flex-row">
+      <div
+        className={`items-cente mb-5 flex flex-col ${
+          user ? "pt-2" : "pt-4"
+        }  sm:mb-0 sm:flex-row`}
+      >
         <Link
           to="/"
           className="mb-5 flex min-w-[320px] items-center justify-center sm:mb-0 sm:justify-start"
         >
-          <img src={logo} width={170} alt="DIFFERENT" />
+          <img src={logo} width={170} height={60} alt="different" />
         </Link>
         <div className="flex w-full items-center justify-between">
           {pathname === "/" && <MainSearch />}
@@ -194,16 +198,16 @@ const Header = () => {
                     )
                   }
                   startIcon={<Language />}
-                  className="mt-[1px] mr-2 rounded-xl bg-white text-black hover:bg-[#ebebeb]"
+                  className="mt-[1px] mr-2 rounded-xl text-black hover:bg-[#ebebeb]"
                 >
                   {i18n.language === "en" ? "EN" : "UA"}
                 </Button>
                 <Button
                   onClick={() => navigate("/info")}
-                  className="mr-2 whitespace-nowrap"
-                  variant="contained"
+                  className="mr-2 mt-[1px] h-full rounded-xl text-black hover:bg-[#ebebeb]"
+                  variant="text"
                 >
-                  {t("For user")}
+                  {t("Resources")}
                 </Button>
               </>
             )}
@@ -247,7 +251,9 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <HelpOutline fontSize="large" />
                       </ListItemIcon>
-                      <div className="text-xl font-normal">{t("For user")}</div>
+                      <div className="text-xl font-normal">
+                        {t("Resources")}
+                      </div>
                     </MenuItem>
                     <Form
                       action="/auth/logout"
