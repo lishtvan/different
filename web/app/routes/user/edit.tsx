@@ -15,6 +15,7 @@ import { redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
+  useNavigate,
   useNavigation,
   useRouteLoaderData,
   useSubmit,
@@ -23,6 +24,7 @@ import { fetcher } from "~/utils/fetcher";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";
+import { useEffect } from "react";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
 import type { RootLoaderData } from "~/types/rootLoader";
@@ -103,6 +105,12 @@ const UserEditRoute = () => {
   const submit = useSubmit();
   const navigation = useNavigation();
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) return;
+    navigate("/");
+  }, [user]);
 
   const handleChange = (e: FormEvent<HTMLFormElement>) => {
     submit(e.currentTarget, { replace: true });
