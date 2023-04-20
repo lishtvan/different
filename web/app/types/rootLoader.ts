@@ -4,5 +4,5 @@ import type { User } from "./user";
 export interface RootLoaderData {
   ENV: Env;
   locale: string;
-  user?: User;
+  user: User | null;
 }
