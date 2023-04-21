@@ -1,7 +1,7 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
-import { fetcher } from "~/utils/fetcher";
+import { fetcher } from "~/fetcher.server";
 import ImageGallery from "react-image-gallery";
 import { useCallback, useMemo, useState } from "react";
 import { Avatar, Button, IconButton, Tooltip } from "@mui/material";
@@ -57,7 +57,7 @@ const ListingRoute = () => {
 
   return (
     <Form method="post">
-      <div className="my-3 mx-auto flex w-full flex-col justify-center gap-6 md:flex-row lg:gap-14">
+      <div className="mx-auto my-3 flex w-full flex-col justify-center gap-6 md:flex-row lg:gap-14">
         <PurchaseModal toggle={togglePurchaseModal} isOpen={isPurchaseOpen} />
         <div className="w-full md:w-[55%] lg:w-[40%] lg:min-w-[40%]">
           <ImageGallery
@@ -133,7 +133,7 @@ const ListingRoute = () => {
             )}
 
             <Link
-              className="mb-5 flex w-full items-center gap-4 rounded-lg border border-main py-1 px-2"
+              className="mb-5 flex w-full items-center gap-4 rounded-lg border border-main px-2 py-1"
               to={`/${listing?.User.nickname}`}
             >
               <Avatar
@@ -151,11 +151,11 @@ const ListingRoute = () => {
             </Link>
           </div>
           {listing?.tags.length > 0 && (
-            <div className="mr-2 mb-2 flex flex-wrap gap-2">
+            <div className="mb-2 mr-2 flex flex-wrap gap-2">
               {listing.tags.map((tag: string) => (
                 <div
                   key={tag}
-                  className="w-fit rounded-lg border border-main py-1 px-2 text-xl text-main"
+                  className="w-fit rounded-lg border border-main px-2 py-1 text-xl text-main"
                 >
                   {tag}
                 </div>

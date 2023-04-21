@@ -1,7 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useEffect } from "react";
-import { fetcher } from "~/utils/fetcher";
+import { fetcher } from "~/fetcher.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { pathname, search } = new URL(request.url);

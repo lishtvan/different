@@ -34,9 +34,8 @@ export const fetcher: Fetcher = async ({
     if (!formData) {
       headers.append("Content-type", "application/json");
       formattedBody = JSON.stringify(body);
-    } else if (body instanceof FormData) {
-      formattedBody = body;
-    } else formattedBody = null;
+    } else if (body instanceof FormData) formattedBody = body;
+    else formattedBody = null;
 
     response = await fetch(`${domain}${route}`, {
       method,

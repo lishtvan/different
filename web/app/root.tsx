@@ -22,7 +22,7 @@ import Header from "./components/ui/Header";
 import Login from "./components/ui/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
 import { theme } from "./styles/theme";
-import { fetcher } from "./utils/fetcher";
+import { fetcher } from "./fetcher.server";
 import { LISTINGS_COLLECTION_NAME } from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
@@ -31,7 +31,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useMemo } from "react";
 import { ThemeProvider } from "@mui/material";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
-import { config } from "./constants/envConfig";
+import { config } from "./constants/config";
 import type { RootLoaderData } from "./types/rootLoader";
 
 export const links: LinksFunction = () => [
@@ -158,7 +158,7 @@ export function CatchBoundary() {
         <ThemeProvider theme={theme}>
           <div className="flex h-screen w-full flex-col items-center justify-center">
             <div>
-              <div className="mb-3 w-fit rounded-xl bg-red-100 py-1 px-2 text-lg">
+              <div className="mb-3 w-fit rounded-xl bg-red-100 px-2 py-1 text-lg">
                 Error {caught.status}
               </div>
               <div className="mb-3 text-2xl">
@@ -232,7 +232,7 @@ export function ErrorBoundary() {
         <ThemeProvider theme={theme}>
           <div className="flex h-screen w-full flex-col items-center justify-center">
             <div>
-              <div className="mb-3 w-fit rounded-xl bg-red-100 py-1 px-2 text-lg">
+              <div className="mb-3 w-fit rounded-xl bg-red-100 px-2 py-1 text-lg">
                 Error 500
               </div>
               <div className="mb-3 text-2xl">

@@ -16,7 +16,7 @@ import {
   SelectCategory,
   Tags,
 } from "~/components/sell";
-import { fetcher } from "~/utils/fetcher";
+import { fetcher } from "~/fetcher.server";
 import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
@@ -94,7 +94,7 @@ const SellRoute = () => {
   }, [actionData]);
 
   return (
-    <div className="mx-auto mt-6 mb-36 flex flex-col items-center justify-center lg:w-[950px]">
+    <div className="mx-auto mb-36 mt-6 flex flex-col items-center justify-center lg:w-[950px]">
       <div className="text-3xl font-semibold">{t("Create a new listing")}</div>
       <Form
         method="post"

@@ -1,4 +1,4 @@
-import { fetcher } from "./fetcher";
+import { fetcher } from "../fetcher.server";
 
 export const getAuthorizedStatus = (request: Request) =>
   fetcher({

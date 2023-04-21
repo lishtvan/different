@@ -10,7 +10,7 @@ import {
   useParams,
 } from "@remix-run/react";
 import { useMemo } from "react";
-import { fetcher } from "~/utils/fetcher";
+import { fetcher } from "~/fetcher.server";
 import ProfileImage from "../../assets/profile.jpeg";
 import { useTranslation } from "react-i18next";
 

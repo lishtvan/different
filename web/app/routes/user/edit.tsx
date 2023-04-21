@@ -20,7 +20,7 @@ import {
   useRouteLoaderData,
   useSubmit,
 } from "@remix-run/react";
-import { fetcher } from "~/utils/fetcher";
+import { fetcher } from "~/fetcher.server";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";

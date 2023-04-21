@@ -2,14 +2,14 @@ import { Avatar, Button, IconButton } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData, useRouteLoaderData } from "@remix-run/react";
 import { LocationOnOutlined, Send, Settings } from "@mui/icons-material";
-import { fetcher } from "~/utils/fetcher";
+import { fetcher } from "~/fetcher.server";
 import ProfileImage from "./../assets/profile.jpeg";
 import { InstantSearch } from "react-instantsearch-hooks-web";
 import { LISTINGS_COLLECTION_NAME } from "~/constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import UserListings from "~/components/index/listings/UserListings";
 import { useMemo } from "react";
-import { config } from "~/constants/envConfig";
+import { config } from "~/constants/config";
 import type { Env } from "~/types/env";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
