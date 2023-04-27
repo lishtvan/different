@@ -62,7 +62,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-white">
       <div
         className={`items-cente mb-5 flex flex-col ${
-          user ? "pt-2" : "pt-4"
+          user ? "pt-2" : "py-4"
         }  sm:mb-0 sm:flex-row`}
       >
         <Link
