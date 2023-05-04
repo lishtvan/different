@@ -11,7 +11,6 @@ model User {
   id         Int       @id @default(autoincrement())
   createdAt  DateTime  @default(now())
   providerId String    @unique
-  npApiKey   String?
   nickname   String?   @unique @db.VarChar(20)
   bio        String?
   avatarUrl  String?

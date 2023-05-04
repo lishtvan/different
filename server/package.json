@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build:ts": "tsc",
-    "start": "tsc && fastify start dist/app.js --options --log-level=info --pretty-logs=true",
+    "start": "npx prisma migrate deploy && tsc && fastify start dist/app.js --options --log-level=info --pretty-logs=true",
     "lint": "eslint .",
     "format": "prettier --write .",
     "check:format": "prettier --check .",
