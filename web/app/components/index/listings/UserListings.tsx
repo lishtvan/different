@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   useClearRefinements,
   useInfiniteHits,
@@ -13,12 +13,14 @@ const UserListings = ({ userId }: { userId: number }) => {
   const clear = useClearRefinements();
   const { hits, isLastPage, showMore, results } = useInfiniteHits<TListing>();
   const sentinelRef = useRef(null);
+  const [showListings, setShowListings] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!userId) return;
     clear.refine();
     refineStatus("AVAILABLE");
     refineSeller(userId.toString());
+    setShowListings(true);
   }, [userId]);
 
   useEffect(() => {
@@ -40,17 +42,17 @@ const UserListings = ({ userId }: { userId: number }) => {
   }, [isLastPage, showMore]);
 
   return (
-    <div className="mt-10 mb-20 w-full px-0 md:px-24">
-      {results?.nbHits!! > 0 ? (
+    <div className="mb-20 mt-10 w-full px-0 md:px-24">
+      {!showListings && !results?.nbHits ? (
+        <div className="flex h-44 items-center justify-center text-xl font-semibold">
+          <div>There are no listings for now.</div>
+        </div>
+      ) : (
         <div className="grid w-full grid-cols-2 gap-x-[1.125rem] gap-y-4 lg:grid-cols-3 xl:grid-cols-4">
           {hits.map((listing) => (
             <Listing listing={listing} key={listing.objectID} />
           ))}
           <div ref={sentinelRef} />
-        </div>
-      ) : (
-        <div className="flex h-44 items-center justify-center text-xl font-semibold">
-          <div>There are no listings for now.</div>
         </div>
       )}
     </div>
