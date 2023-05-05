@@ -49,7 +49,7 @@ const UserRoute = () => {
           />
           <div className="ml-14">
             <div className="mt-2 flex items-center justify-between">
-              <div className="text-2xl font-normal">{nickname}</div>
+              <div className="text-2xl font-semibold">{nickname}</div>
               <div className="ml-10">
                 {isOwnAccount ? (
                   <Link to="/user/edit">
