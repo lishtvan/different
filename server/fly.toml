@@ -6,14 +6,8 @@ kill_timeout = "5s"
 [experimental]
   auto_rollback = true
 
-[build.args]
-  NODE_ENV="production"
-
-[build]
-  builder = "heroku/buildpacks:20"
-
-# [deploy]
-#  release_command = "npm -v"
+[deploy]
+  release_command = "npx prisma migrate deploy"
 
 [env]
   PORT = "8080"

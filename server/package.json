@@ -14,6 +14,7 @@
     "build:ts": "tsc",
     "start": "fastify start dist/app.js --options --log-level=info --pretty-logs=true",
     "lint": "eslint .",
+    "build": "tsc",
     "format": "prettier --write .",
     "check:format": "prettier --check .",
     "dev": "tsc && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"tsc -w\" \"fastify start --ignore-watch='.ts$ .git node_modules database' -w -l info -P dist/app.js --options\""
