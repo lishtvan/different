@@ -5,7 +5,8 @@
   "license": "",
   "sideEffects": false,
   "engines": {
-    "node": "18.9.0"
+    "node": "19.9.0",
+    "npm": "9.6.6"
   },
   "scripts": {
     "build": "run-s build:*",

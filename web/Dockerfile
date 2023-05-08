@@ -1,5 +1,6 @@
 # base node image
-FROM node:18-bullseye-slim as base
+ARG NODE_VERSION=19.9.0
+FROM node:${NODE_VERSION}-slim as base
 
 # Install all node_modules, including dev dependencies
 FROM base as deps
