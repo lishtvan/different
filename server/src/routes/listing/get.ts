@@ -42,9 +42,23 @@ const getListing: FastifyPluginAsync = async (fastify) => {
 
     if (!listing) throw fastify.httpErrors.notFound();
 
+    const [sellerAvailableListingsCount, sellerSoldListingsCount] = await Promise.all([
+      fastify.prisma.listing.count({
+        where: { status: 'AVAILABLE', User: { nickname: listing?.User.nickname } },
+      }),
+      fastify.prisma.listing.count({
+        where: { status: 'SOLD', User: { nickname: listing?.User.nickname } },
+      }),
+    ]);
+
     const isOwnListing = listing.userId === Number(req.cookies.userId);
 
-    return reply.send({ listing, isOwnListing });
+    return reply.send({
+      listing,
+      isOwnListing,
+      sellerAvailableListingsCount,
+      sellerSoldListingsCount,
+    });
   });
 };
 

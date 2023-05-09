@@ -1,3 +1,4 @@
+import type { FC } from "react";
 import { useEffect, useRef } from "react";
 import {
   useClearRefinements,
@@ -7,7 +8,12 @@ import {
 import type { TListing } from "~/types/listing";
 import Listing from "./Listing";
 
-const UserListings = ({ userId }: { userId: number }) => {
+interface Props {
+  userId: number;
+  showSold: boolean;
+}
+
+const UserListings: FC<Props> = ({ userId, showSold }) => {
   const { refine: refineStatus } = useRefinementList({ attribute: "status" });
   const { refine: refineSeller } = useRefinementList({ attribute: "sellerId" });
   const clear = useClearRefinements();
@@ -17,9 +23,9 @@ const UserListings = ({ userId }: { userId: number }) => {
   useEffect(() => {
     if (!userId) return;
     clear.refine();
-    refineStatus("AVAILABLE");
+    refineStatus(showSold ? "SOLD" : "AVAILABLE");
     refineSeller(userId.toString());
-  }, [userId]);
+  }, [userId, showSold]);
 
   useEffect(() => {
     if (sentinelRef.current !== null) {
@@ -43,7 +49,7 @@ const UserListings = ({ userId }: { userId: number }) => {
     <div className="mb-20 mt-10 w-full px-0 md:px-24">
       {!results?.nbHits ? (
         <div className="flex h-44 items-center justify-center text-2xl font-semibold">
-          <div>No Listings Yet</div>
+          <div>{showSold ? "No Items Sold Yet" : "No Listings Yet"} </div>
         </div>
       ) : (
         <div className="grid w-full grid-cols-2 gap-x-[1.125rem] gap-y-4 lg:grid-cols-3 xl:grid-cols-4">

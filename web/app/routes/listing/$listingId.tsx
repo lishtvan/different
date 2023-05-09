@@ -38,7 +38,12 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 const ListingRoute = () => {
-  const { listing, isOwnListing } = useLoaderData();
+  const {
+    listing,
+    isOwnListing,
+    sellerSoldListingsCount,
+    sellerAvailableListingsCount,
+  } = useLoaderData();
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const { listingId } = useParams();
   const { t } = useTranslation();
@@ -109,7 +114,13 @@ const ListingRoute = () => {
           <div className="text-xl">
             {t("Condition")}: {listing?.condition}
           </div>
-          <div className="my-4 text-2xl font-bold">{listing?.price}₴</div>
+          <div
+            className={`my-4 text-2xl font-bold ${
+              listing.status === "SOLD" && "text-main"
+            }`}
+          >
+            {listing?.price}₴ {listing.status === "SOLD" && "(Sold price)"}
+          </div>
           <div className="flex w-fit flex-col items-start gap-3 md:w-full">
             {!isOwnListing && (
               <div className="flex w-full gap-2">
@@ -144,8 +155,8 @@ const ListingRoute = () => {
               <div>
                 <div className="text-xl">{listing?.User.nickname}</div>
                 <div className="flex gap-2 text-sm text-[#737373]">
-                  <div>10 listings</div>
-                  <div>6 sold</div>
+                  <div>{sellerAvailableListingsCount} listings</div>
+                  <div>{sellerSoldListingsCount} sold</div>
                 </div>
               </div>
             </Link>

@@ -1,6 +1,12 @@
 import { Avatar, Button, IconButton } from "@mui/material";
 import type { LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData, useRouteLoaderData } from "@remix-run/react";
+import {
+  Link,
+  NavLink,
+  useLoaderData,
+  useRouteLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
 import { LocationOnOutlined, Send, Settings } from "@mui/icons-material";
 import { fetcher } from "~/fetcher.server";
 import ProfileImage from "./../assets/profile.jpeg";
@@ -35,6 +41,7 @@ const UserRoute = () => {
     soldListingsCount,
   } = useLoaderData();
   const { ENV } = useRouteLoaderData("root") as { ENV: Env };
+  const [searchParams] = useSearchParams();
 
   const { searchClient } = useMemo(() => {
     return new TypesenseInstantsearchAdapter({
@@ -79,12 +86,26 @@ const UserRoute = () => {
               </div>
             </div>
             <div className="my-3 flex">
-              <div className="text-lg">
+              <NavLink
+                to={""}
+                className={`text-lg ${
+                  searchParams.get("q")
+                    ? " decoration-main decoration-2 underline-offset-[5px] hover:underline"
+                    : "underline decoration-main decoration-2 underline-offset-[5px]"
+                }`}
+              >
                 <b>{availableListingsCount}</b> listings
-              </div>
-              <div className="ml-7 text-lg">
+              </NavLink>
+              <NavLink
+                to={"?q=sold"}
+                className={`ml-7 text-lg ${
+                  searchParams.get("q") === "sold"
+                    ? "underline decoration-main decoration-2 underline-offset-[5px]"
+                    : "decoration-main decoration-2 underline-offset-[5px] hover:underline"
+                }`}
+              >
                 <b>{soldListingsCount}</b> sold
-              </div>
+              </NavLink>
             </div>
             <div className="max-w-md break-words">{bio}</div>
             {location && (
@@ -97,7 +118,7 @@ const UserRoute = () => {
             )}
           </div>
         </div>
-        <UserListings userId={id} />
+        <UserListings userId={id} showSold={searchParams.get("q") === "sold"} />
       </div>
     </InstantSearch>
   );
