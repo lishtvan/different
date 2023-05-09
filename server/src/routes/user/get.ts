@@ -19,21 +19,27 @@ const getUser: FastifyPluginAsync = async (fastify) => {
     const { nickname } = req.body;
     const ownUserId = Number(req.cookies.userId);
 
-    const user = await fastify.prisma.user.findUnique({
-      where: { nickname },
-      select: {
-        id: true,
-        nickname: true,
-        bio: true,
-        avatarUrl: true,
-        location: true,
-      },
-    });
-
+    const [user, availableListingsCount, soldListingsCount] = await Promise.all([
+      fastify.prisma.user.findUnique({
+        where: { nickname },
+        select: { id: true, nickname: true, bio: true, avatarUrl: true, location: true },
+      }),
+      fastify.prisma.listing.count({
+        where: { status: 'AVAILABLE', User: { nickname } },
+      }),
+      fastify.prisma.listing.count({
+        where: { status: 'SOLD', User: { nickname } },
+      }),
+    ]);
     if (!user) throw fastify.httpErrors.notFound();
     const isOwnAccount = user.id === ownUserId;
 
-    return reply.send({ isOwnAccount, ...user });
+    return reply.send({
+      isOwnAccount,
+      ...user,
+      availableListingsCount,
+      soldListingsCount,
+    });
   });
 };
 

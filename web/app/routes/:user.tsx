@@ -24,8 +24,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 const UserRoute = () => {
-  const { nickname, avatarUrl, isOwnAccount, bio, id, location } =
-    useLoaderData();
+  const {
+    nickname,
+    avatarUrl,
+    isOwnAccount,
+    bio,
+    id,
+    location,
+    availableListingsCount,
+    soldListingsCount,
+  } = useLoaderData();
   const { ENV } = useRouteLoaderData("root") as { ENV: Env };
 
   const { searchClient } = useMemo(() => {
@@ -72,10 +80,10 @@ const UserRoute = () => {
             </div>
             <div className="my-3 flex">
               <div className="text-lg">
-                <b>5</b> listings
+                <b>{availableListingsCount}</b> listings
               </div>
               <div className="ml-7 text-lg">
-                <b>8</b> sold
+                <b>{soldListingsCount}</b> sold
               </div>
             </div>
             <div className="max-w-md break-words">{bio}</div>
