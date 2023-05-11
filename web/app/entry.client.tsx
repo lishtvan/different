@@ -6,6 +6,8 @@ import ReactDOM from "react-dom/client";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { getInitialNamespaces } from "remix-i18next";
 import i18n from "./i18n"; // your i18n configuration file
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./styles/theme";
 
 i18next
   .use(initReactI18next) // Tell i18next to use the react-i18next plugin
@@ -35,7 +37,9 @@ i18next
     return ReactDOM.hydrateRoot(
       document,
       <I18nextProvider i18n={i18next}>
-        <RemixBrowser />
+        <ThemeProvider theme={theme}>
+          <RemixBrowser />
+        </ThemeProvider>
       </I18nextProvider>
     );
   });

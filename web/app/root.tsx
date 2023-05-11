@@ -21,7 +21,6 @@ import { InstantSearch } from "react-instantsearch-hooks-web";
 import Header from "./components/ui/Header";
 import Login from "./components/ui/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
-import { theme } from "./styles/theme";
 import { fetcher } from "./fetcher.server";
 import { LISTINGS_COLLECTION_NAME } from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
@@ -29,7 +28,6 @@ import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 import i18next from "./i18next.server";
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo } from "react";
-import { ThemeProvider } from "@mui/material";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { config } from "./constants/config";
 import type { RootLoaderData } from "./types/rootLoader";
@@ -126,16 +124,14 @@ export default function App() {
           searchParams.get("login") && "scrollbar"
         }`}
       >
-        <ThemeProvider theme={theme}>
-          <InstantSearch
-            indexName={LISTINGS_COLLECTION_NAME}
-            searchClient={searchClient}
-          >
-            <Header />
-            <Outlet context={{ sendMessage, lastMessage, readyState }} />
-            {searchParams.get("login") && <Login />}
-          </InstantSearch>
-        </ThemeProvider>
+        <InstantSearch
+          indexName={LISTINGS_COLLECTION_NAME}
+          searchClient={searchClient}
+        >
+          <Header />
+          <Outlet context={{ sendMessage, lastMessage, readyState }} />
+          {searchParams.get("login") && <Login />}
+        </InstantSearch>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -155,64 +151,62 @@ export function CatchBoundary() {
         <Links />
       </head>
       <body className="px-4">
-        <ThemeProvider theme={theme}>
-          <div className="flex h-screen w-full flex-col items-center justify-center">
-            <div>
-              <div className="mb-3 w-fit rounded-xl bg-red-100 px-2 py-1 text-lg">
-                Error {caught.status}
-              </div>
-              <div className="mb-3 text-2xl">
-                {caught.status === 404 && (
-                  <>
-                    <span>
-                      Page not found.{" "}
-                      <button
-                        onClick={() => navigate(-1)}
-                        className="text-blue-500 underline underline-offset-[5px]"
-                      >
-                        Go back
-                      </button>
-                    </span>
-                    <br />
-                    <span>
-                      Go to{" "}
-                      <a
-                        href={"/"}
-                        className="text-blue-500 underline underline-offset-[5px]"
-                      >
-                        main page
-                      </a>
-                    </span>
-                  </>
-                )}
-                {caught.status === 500 && (
-                  <>
-                    <span>
-                      Something went wrong on our side. <br /> Please, contact
-                      support:{" "}
-                      <a
-                        className="text-blue-500 underline underline-offset-[5px]"
-                        href="https://t.me/DifferentMarketplace"
-                      >
-                        @DifferentMarketplace
-                      </a>
-                    </span>
-                    <br />
-                    <span>
-                      Return to{" "}
-                      <a
-                        href={caught.data}
-                        className="text-blue-500 underline underline-offset-[5px]"
-                      >
-                        previous page
-                      </a>
-                    </span>
-                  </>
-                )}
-              </div>
+        <div className="flex h-screen w-full flex-col items-center justify-center">
+          <div>
+            <div className="mb-3 w-fit rounded-xl bg-red-100 px-2 py-1 text-lg">
+              Error {caught.status}
+            </div>
+            <div className="mb-3 text-2xl">
+              {caught.status === 404 && (
+                <>
+                  <span>
+                    Page not found.{" "}
+                    <button
+                      onClick={() => navigate(-1)}
+                      className="text-blue-500 underline underline-offset-[5px]"
+                    >
+                      Go back
+                    </button>
+                  </span>
+                  <br />
+                  <span>
+                    Go to{" "}
+                    <a
+                      href={"/"}
+                      className="text-blue-500 underline underline-offset-[5px]"
+                    >
+                      main page
+                    </a>
+                  </span>
+                </>
+              )}
+              {caught.status === 500 && (
+                <>
+                  <span>
+                    Something went wrong on our side. <br /> Please, contact
+                    support:{" "}
+                    <a
+                      className="text-blue-500 underline underline-offset-[5px]"
+                      href="https://t.me/DifferentMarketplace"
+                    >
+                      @DifferentMarketplace
+                    </a>
+                  </span>
+                  <br />
+                  <span>
+                    Return to{" "}
+                    <a
+                      href={caught.data}
+                      className="text-blue-500 underline underline-offset-[5px]"
+                    >
+                      previous page
+                    </a>
+                  </span>
+                </>
+              )}
             </div>
           </div>
-        </ThemeProvider>
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
@@ -229,38 +223,36 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body className="px-4">
-        <ThemeProvider theme={theme}>
-          <div className="flex h-screen w-full flex-col items-center justify-center">
-            <div>
-              <div className="mb-3 w-fit rounded-xl bg-red-100 px-2 py-1 text-lg">
-                Error 500
-              </div>
-              <div className="mb-3 text-2xl">
-                Something went wrong on our side.
-                <br />
-                <span>
-                  Please, contact support:{" "}
-                  <a
-                    className="text-blue-500 underline underline-offset-[5px]"
-                    href="https://t.me/DifferentMarketplace"
-                  >
-                    @DifferentMarketplace
-                  </a>
-                </span>
-                <br />
-                <span>
-                  Return to{" "}
-                  <a
-                    href={window.location.href}
-                    className="text-blue-500 underline underline-offset-[5px]"
-                  >
-                    previous page
-                  </a>
-                </span>
-              </div>
+        <div className="flex h-screen w-full flex-col items-center justify-center">
+          <div>
+            <div className="mb-3 w-fit rounded-xl bg-red-100 px-2 py-1 text-lg">
+              Error 500
+            </div>
+            <div className="mb-3 text-2xl">
+              Something went wrong on our side.
+              <br />
+              <span>
+                Please, contact support:{" "}
+                <a
+                  className="text-blue-500 underline underline-offset-[5px]"
+                  href="https://t.me/DifferentMarketplace"
+                >
+                  @DifferentMarketplace
+                </a>
+              </span>
+              <br />
+              <span>
+                Return to{" "}
+                <a
+                  href={window.location.href}
+                  className="text-blue-500 underline underline-offset-[5px]"
+                >
+                  previous page
+                </a>
+              </span>
             </div>
           </div>
-        </ThemeProvider>
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
