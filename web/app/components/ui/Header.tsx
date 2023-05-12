@@ -198,7 +198,7 @@ const Header = () => {
                     )
                   }
                   startIcon={<Language />}
-                  className="mt-[1px] mr-2 rounded-xl text-black hover:bg-[#ebebeb]"
+                  className="mr-2 mt-[1px] rounded-xl text-black hover:bg-[#ebebeb]"
                 >
                   {i18n.language === "en" ? "EN" : "UA"}
                 </Button>
@@ -213,7 +213,9 @@ const Header = () => {
             )}
 
             <Link className="mr-2" to="/sell">
-              <Button variant="contained">{t("sell")}</Button>
+              <Button className="bg-main hover:bg-dark" variant="contained">
+                {t("sell")}
+              </Button>
             </Link>
 
             {user ? (
