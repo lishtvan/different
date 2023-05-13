@@ -53,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     return redirect(`/listing/${listingId}`);
   }
-
+  // TODO: add validation max upload for authenticated user
   const form = await unstable_parseMultipartFormData(
     request,
     s3UploaderHandler

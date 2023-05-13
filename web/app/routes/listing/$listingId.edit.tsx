@@ -21,6 +21,7 @@ import { getBody } from "~/utils/getBody";
 import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
+import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 
 export const action: ActionFunction = async ({ request, params }) => {
   const contentType = request.headers.get("Content-type");
@@ -131,4 +132,5 @@ const EditListingRoute = () => {
   );
 };
 
+export const ErrorBoundary = () => <ErrorBoundaryComponent />;
 export default EditListingRoute;

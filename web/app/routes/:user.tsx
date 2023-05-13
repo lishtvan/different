@@ -17,6 +17,7 @@ import UserListings from "~/components/index/listings/UserListings";
 import { useMemo } from "react";
 import { config } from "~/constants/config";
 import type { Env } from "~/types";
+import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const response = await fetcher({
@@ -124,4 +125,5 @@ const UserRoute = () => {
   );
 };
 
+export const ErrorBoundary = () => <ErrorBoundaryComponent />;
 export default UserRoute;

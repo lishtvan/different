@@ -9,6 +9,7 @@ import ProfileImage from "./../../assets/profile.jpeg";
 import { Delete, Edit } from "@mui/icons-material";
 import PurchaseModal from "~/components/listing/PurchaseModal";
 import { useTranslation } from "react-i18next";
+import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
@@ -185,4 +186,5 @@ const ListingRoute = () => {
   );
 };
 
+export const ErrorBoundary = () => <ErrorBoundaryComponent />;
 export default ListingRoute;

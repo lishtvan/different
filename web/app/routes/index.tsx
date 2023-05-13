@@ -2,6 +2,7 @@ import ClearFilters from "~/components/index/ClearFilters";
 import SortBy from "~/components/index/SortBy";
 import Filters from "~/components/index/filters";
 import Listings from "~/components/index/listings/Listings";
+import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 
 const IndexRoute = () => {
   return (
@@ -18,4 +19,5 @@ const IndexRoute = () => {
   );
 };
 
+export const ErrorBoundary = () => <ErrorBoundaryComponent />;
 export default IndexRoute;

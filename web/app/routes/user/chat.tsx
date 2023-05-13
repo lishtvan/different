@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import { fetcher } from "~/fetcher.server";
 import ProfileImage from "../../assets/profile.jpeg";
 import { useTranslation } from "react-i18next";
+import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   if (params.chatId === "new") return redirect("/user/chat");
@@ -24,7 +25,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return response;
 };
 
-const IndexRoute = () => {
+const ChatRoute = () => {
   const { chatId } = useParams();
   const { chats, userId } = useLoaderData<{ chats: Chats[]; userId: number }>();
   const { sendMessage, lastMessage, readyState } =
@@ -94,4 +95,5 @@ const IndexRoute = () => {
   );
 };
 
-export default IndexRoute;
+export const ErrorBoundary = () => <ErrorBoundaryComponent />;
+export default ChatRoute;

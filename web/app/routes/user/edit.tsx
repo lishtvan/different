@@ -28,6 +28,7 @@ import { useEffect } from "react";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
 import type { RootLoaderData } from "~/types";
+import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -266,4 +267,5 @@ const UserEditRoute = () => {
   );
 };
 
+export const ErrorBoundary = () => <ErrorBoundaryComponent />;
 export default UserEditRoute;
