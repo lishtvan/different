@@ -14,7 +14,6 @@ import {
   ScrollRestoration,
   useCatch,
   useLoaderData,
-  useNavigate,
   useSearchParams,
 } from "@remix-run/react";
 import { InstantSearch } from "react-instantsearch-hooks-web";
@@ -143,7 +142,6 @@ export default function App() {
 
 export function CatchBoundary() {
   const caught = useCatch();
-  const navigate = useNavigate();
 
   return (
     <html lang="en">
@@ -159,51 +157,21 @@ export function CatchBoundary() {
             </div>
             <div className="mb-3 text-2xl">
               {caught.status === 404 && (
-                <>
-                  <span>
-                    Page not found.{" "}
-                    <button
-                      onClick={() => navigate(-1)}
-                      className="text-blue-500 underline underline-offset-[5px]"
-                    >
-                      Go back
-                    </button>
-                  </span>
-                  <br />
-                  <span>
-                    Go to{" "}
-                    <a
-                      href={"/"}
-                      className="text-blue-500 underline underline-offset-[5px]"
-                    >
-                      main page
-                    </a>
-                  </span>
-                </>
+                <span>
+                  Page not found. <br />
+                </span>
               )}
               {caught.status === 500 && (
-                <>
-                  <span>
-                    Something went wrong on our side. <br /> Please, contact
-                    support:{" "}
-                    <a
-                      className="text-blue-500 underline underline-offset-[5px]"
-                      href="https://t.me/DifferentMarketplace"
-                    >
-                      @DifferentMarketplace
-                    </a>
-                  </span>
-                  <br />
-                  <span>
-                    Return to{" "}
-                    <a
-                      href={caught.data}
-                      className="text-blue-500 underline underline-offset-[5px]"
-                    >
-                      previous page
-                    </a>
-                  </span>
-                </>
+                <span>
+                  Something went wrong on our side. <br /> Please, contact
+                  support:{" "}
+                  <a
+                    className="text-blue-500 underline underline-offset-[5px]"
+                    href="https://t.me/DifferentMarketplace"
+                  >
+                    @DifferentMarketplace
+                  </a>
+                </span>
               )}
             </div>
           </div>
