@@ -1,4 +1,4 @@
-import type { ChatContext, Message, Participants } from "~/types/chat";
+import type { ChatContext, Message, Participants } from "~/types";
 import { Send } from "@mui/icons-material";
 import { Avatar, IconButton, TextField } from "@mui/material";
 import {

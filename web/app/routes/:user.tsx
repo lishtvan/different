@@ -16,7 +16,7 @@ import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import UserListings from "~/components/index/listings/UserListings";
 import { useMemo } from "react";
 import { config } from "~/constants/config";
-import type { Env } from "~/types/env";
+import type { Env } from "~/types";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const response = await fetcher({

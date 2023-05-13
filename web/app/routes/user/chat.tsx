@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node";
-import type { ChatContext, Chats } from "~/types/chat";
+import type { ChatContext, Chats } from "~/types";
 import { Avatar } from "@mui/material";
 import { redirect } from "@remix-run/node";
 import {

@@ -30,7 +30,8 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useMemo } from "react";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { config } from "./constants/config";
-import type { RootLoaderData } from "./types/rootLoader";
+import type { RootLoaderData } from "./types";
+import ErrorBoundaryComponent from "./components/platform/ErrorBoundary";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -223,36 +224,7 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body className="px-4">
-        <div className="flex h-screen w-full flex-col items-center justify-center">
-          <div>
-            <div className="mb-3 w-fit rounded-xl bg-red-100 px-2 py-1 text-lg">
-              Error 500
-            </div>
-            <div className="mb-3 text-2xl">
-              Something went wrong on our side.
-              <br />
-              <span>
-                Please, contact support:{" "}
-                <a
-                  className="text-blue-500 underline underline-offset-[5px]"
-                  href="https://t.me/DifferentMarketplace"
-                >
-                  @DifferentMarketplace
-                </a>
-              </span>
-              <br />
-              <span>
-                Return to{" "}
-                <a
-                  href={window.location.href}
-                  className="text-blue-500 underline underline-offset-[5px]"
-                >
-                  previous page
-                </a>
-              </span>
-            </div>
-          </div>
-        </div>
+        <ErrorBoundaryComponent root={true} />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

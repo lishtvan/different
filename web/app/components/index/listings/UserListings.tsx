@@ -5,7 +5,7 @@ import {
   useInfiniteHits,
   useRefinementList,
 } from "react-instantsearch-hooks-web";
-import type { TListing } from "~/types/listing";
+import type { TListing } from "~/types";
 import Listing from "./Listing";
 
 interface Props {

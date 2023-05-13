@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useInfiniteHits } from "react-instantsearch-hooks-web";
-import type { TListing } from "~/types/listing";
+import type { TListing } from "~/types";
 import Listing from "./Listing";
 
 const Listings = () => {

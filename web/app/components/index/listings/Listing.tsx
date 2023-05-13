@@ -2,7 +2,7 @@ import { Tooltip } from "@mui/material";
 import { Link } from "@remix-run/react";
 import type { FC } from "react";
 import { SHORT_SIZES } from "~/constants/listing";
-import type { TListing } from "~/types/listing";
+import type { TListing } from "~/types";
 
 interface Props {
   listing: TListing;

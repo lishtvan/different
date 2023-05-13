@@ -27,7 +27,7 @@ import type { FormEvent } from "react";
 import { useEffect } from "react";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
-import type { RootLoaderData } from "~/types/rootLoader";
+import type { RootLoaderData } from "~/types";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
