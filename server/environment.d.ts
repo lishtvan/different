@@ -9,7 +9,7 @@ declare global {
       TOKEN_SECRET: string;
       TOKEN_CHARACTERS: string;
       API_KEY: string;
-      NODE_ENV: string;
+      NODE_ENV: 'local' | 'development' | 'production';
       WEB_DOMAIN: string;
       S3_CLEANUP_SECRET: string;
       TYPESENSE_HOST: string;
