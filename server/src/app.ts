@@ -21,10 +21,6 @@ export default app;
 export { app };
 
 exports.options = {
-  trustProxy: true,
   logger: { level: 'error' },
-  ajv: {
-    customOptions: { allErrors: true },
-    plugins: [ajvErrors],
-  },
+  ajv: { customOptions: { allErrors: true }, plugins: [ajvErrors] },
 };
