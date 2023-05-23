@@ -26,6 +26,7 @@ const schema = {
         cardNumber: '/cardNumber Card number is required ',
         category: '/category Category is required ',
         imageUrls: '/imageUrls At least one photo is required ',
+        // npApiKey: '/npApiKey Nova Poshta API Key is required ',
       },
     },
     properties: {
@@ -73,6 +74,7 @@ const schema = {
       },
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
+      npApiKey: { type: 'string' },
     },
   } as const,
 };
@@ -81,6 +83,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const createListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
+    const { userId } = req.cookies;
     const {
       title,
       size,
@@ -92,7 +95,27 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       cardNumber,
       category,
       imageUrls,
+      npApiKey,
     } = req.body;
+
+    const seller = await fastify.prisma.user.findUnique({
+      where: { id: Number(userId) },
+      select: { npApiKey: true },
+    });
+
+    if (!seller?.npApiKey && !npApiKey) {
+      throw fastify.httpErrors.badRequest('/npApiKey NovaPoshta API Key is required ');
+    }
+    if (seller?.npApiKey && npApiKey) {
+      throw fastify.httpErrors.badRequest('/npApiKey NovaPoshta API Key already exists ');
+    }
+    if (!seller?.npApiKey && npApiKey) {
+      // TODO: check validity of api key
+      await fastify.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { npApiKey },
+      });
+    }
 
     const listing = await fastify.prisma.listing.create({
       select: {
@@ -120,14 +143,14 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         imageUrls,
         description,
         cardNumber,
-        userId: Number(req.cookies.userId),
+        userId: Number(userId),
       },
     });
 
     await fastify.typesense
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
-      .create({ ...listing, id: listing.id.toString(), sellerId: req.cookies.userId });
+      .create({ ...listing, id: listing.id.toString(), sellerId: userId });
     return reply.send({ listingId: listing.id });
   });
 };

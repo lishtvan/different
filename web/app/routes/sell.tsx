@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { unstable_parseMultipartFormData } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { ClientOnly } from "remix-utils";
 import {
@@ -11,6 +11,7 @@ import {
   Description,
   Designer,
   ItemTitle,
+  NpApiKey,
   Photos,
   Price,
   SelectCategory,
@@ -45,7 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
     if (response.headers.get("location")) return null;
     if (response.status === 400) {
       const { message } = await response.json();
-
+      console.log(message);
       const errors = getErrors(message);
       return { errors };
     }
@@ -65,7 +66,7 @@ export const action: ActionFunction = async ({ request }) => {
 export const loader: LoaderFunction = async ({ request }) => {
   const response = await fetcher({
     request,
-    route: "/",
+    route: "/auth/check",
     method: "GET",
   });
   return response;
@@ -73,6 +74,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const SellRoute = () => {
   const actionData = useActionData();
+  const loaderData = useLoaderData();
   const { t } = useTranslation();
   useEffect(() => {
     if (!actionData?.errors) return;
@@ -112,6 +114,7 @@ const SellRoute = () => {
         <ClientOnly fallback={<p>Loading...</p>}>
           {() => <CardNumber />}
         </ClientOnly>
+        {!loaderData?.npApiKey && <NpApiKey />}
         <Button
           variant="contained"
           className="col-start-1 col-end-3 mx-auto mt-12 w-1/3"

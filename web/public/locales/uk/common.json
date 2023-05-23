@@ -122,5 +122,7 @@
   "Save": "Зберегти",
   "Edit listing": "Редагувати оголошення",
   "Delete listing": "Видалити оголошення",
-  "Saving...": "Збереження..."
+  "Saving...": "Збереження...",
+  "In order to get the NovaPoshta API key, follow the link": "Щоб отримати ключ API Нової Пошти, перейдіть за посиланням",
+  "click Login as a private person, after login go to Settings => Security, copy the API key with the Mobile App service.": "натисніть Увійти як приватна особа, після входу перейдіть до Налаштування => Безпека, скопіюйте API ключ з сервісом Мобільний додаток."
 }

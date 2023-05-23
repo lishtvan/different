@@ -8,3 +8,4 @@ export { default as Tags } from "./Tags";
 export { default as Price } from "./Price";
 export { default as CardNumber } from "./CardNumber";
 export { default as Photos } from "./Photos";
+export { default as NpApiKey } from "./NpApiKey";
