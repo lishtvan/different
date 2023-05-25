@@ -85,7 +85,6 @@ const Photos = () => {
     setImageLoading([]);
     setCardList(newCards);
     // TODO: remove
-    console.log("end", new Date().getSeconds());
   }, [fetcher.data?.imageKeys]);
 
   const dragStartHandler = (card: ItemImage) => setCurrentCard(card);
@@ -136,7 +135,6 @@ const Photos = () => {
       }
     }
     if (uploadError) setUploadError(false);
-    console.log("start", new Date().getSeconds());
 
     fetcher.submit(e.currentTarget, { replace: true });
 
