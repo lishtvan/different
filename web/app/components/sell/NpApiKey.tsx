@@ -16,7 +16,7 @@ const NpApiKey = () => {
             className="text-blue-500 underline underline-offset-[5px]"
             target="_blank"
             rel="noreferrer"
-            href="https://handy-clover-f3d.notion.site/API-c1a0dae6eed34a97a5057888de4c5e8f"
+            href="https://different-marketplace.notion.site/API-c1a0dae6eed34a97a5057888de4c5e8f"
           >
             Detailed instruction and why do you need this.
           </a>

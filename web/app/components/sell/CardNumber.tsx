@@ -5,14 +5,25 @@ import images from "react-payment-inputs/images";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
+// @ts-ignore
+const cardNumberValidator = ({ cardType }) => {
+  const { displayName } = cardType;
+  if (displayName === "Visa" || displayName === "Mastercard") return;
+  return "Card must be Visa or Mastercard";
+};
+
 const CardNumber = () => {
   const { t } = useTranslation();
   const actionData = useActionData();
   const loaderData = useLoaderData();
-  const { getCardNumberProps, getCardImageProps, meta } = usePaymentInputs();
+  const { getCardNumberProps, getCardImageProps, meta } = usePaymentInputs({
+    // @ts-ignore
+    cardNumberValidator,
+  });
 
   return (
     <div>
+      <input type="hidden" name="cardNumberError" value={meta.error} />
       <FieldTitle title={t("Card number")} required={true} />
       <TextField
         fullWidth

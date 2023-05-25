@@ -35,7 +35,7 @@
     "fastify": "^4.17.0",
     "fastify-cli": "^5.7.1",
     "fastify-plugin": "^4.5.0",
-    "novaposhta": "^1.1.1",
+    "novaposhtajs": "^1.1.5",
     "twitter-api-sdk": "^1.2.1",
     "typesense": "^1.5.3"
   },

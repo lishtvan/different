@@ -23,10 +23,9 @@ const schema = {
         designer: '/designer Designer is required ',
         condition: '/condition Condition is required ',
         price: '/price Price is required ',
-        cardNumber: '/cardNumber Card number is required ',
         category: '/category Category is required ',
         imageUrls: '/imageUrls At least one photo is required ',
-        // npApiKey: '/npApiKey Nova Poshta API Key is required ',
+        cardNumber: '/cardNumber Card number is required',
       },
     },
     properties: {
@@ -34,9 +33,7 @@ const schema = {
         type: 'array',
         maxItems: 3,
         items: { type: 'string' },
-        errorMessage: {
-          minItems: 'You can select maximum 3 tags ',
-        },
+        errorMessage: { minItems: 'You can select maximum 3 tags ' },
       },
       title: {
         type: 'string',
@@ -59,9 +56,7 @@ const schema = {
         type: 'array',
         minItems: 1,
         items: { type: 'string' },
-        errorMessage: {
-          minItems: 'At least one photo is required ',
-        },
+        errorMessage: { minItems: 'At least one photo is required ' },
       },
       price: {
         type: 'number',
@@ -75,6 +70,7 @@ const schema = {
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
       npApiKey: { type: 'string' },
+      cardNumberError: { type: 'string' },
     },
   } as const,
 };
@@ -96,7 +92,12 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       category,
       imageUrls,
       npApiKey,
+      cardNumberError,
     } = req.body;
+
+    if (cardNumberError) {
+      throw fastify.httpErrors.badRequest(`/cardNumber ${cardNumberError} `);
+    }
 
     const seller = await fastify.prisma.user.findUnique({
       where: { id: Number(userId) },
@@ -110,7 +111,11 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       throw fastify.httpErrors.badRequest('/npApiKey NovaPoshta API Key already exists ');
     }
     if (!seller?.npApiKey && npApiKey) {
-      // TODO: check validity of api key
+      const isNpApiKeyValid = await fastify.np.checkNpApiKeyValidity(npApiKey);
+      if (!isNpApiKeyValid) {
+        throw fastify.httpErrors.badRequest('/npApiKey NovaPoshta API Key is invalid ');
+      }
+
       await fastify.prisma.user.update({
         where: { id: Number(userId) },
         data: { npApiKey },
