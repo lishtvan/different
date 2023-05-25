@@ -63,12 +63,22 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const response = await fetcher({
+  // TODO: parallel later
+  const lastListingResponse = await fetcher({
+    request,
+    route: "/listing/getPrevious",
+    method: "POST",
+  });
+  const userResponse = await fetcher({
     request,
     route: "/auth/check",
     method: "GET",
   });
-  return response;
+
+  const user = await userResponse.json();
+  const { cardNumber } = await lastListingResponse.json();
+
+  return { ...user, cardNumber };
 };
 
 const SellRoute = () => {

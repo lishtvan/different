@@ -2,7 +2,7 @@ const getError = (message: string) => {
   const arr = message.split("/")[1].split(" ");
   const field = arr[0];
   arr.shift();
-  const formattedMessage = arr.join(" ");
+  const formattedMessage = arr.join(" ").trim();
   return { formattedMessage, field };
 };
 

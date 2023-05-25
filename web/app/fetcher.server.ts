@@ -47,7 +47,7 @@ export const fetcher: Fetcher = async ({
   if (response.status < 400) return response;
 
   if (response.status === 401 && route !== "/auth/check") {
-    return redirect(`/?login=true`);
+    throw redirect(`/?login=true`);
   }
 
   if (response.status === 404) throw new Response("", { status: 404 });

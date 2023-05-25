@@ -18,20 +18,8 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
         npApiKey: true,
         bio: true,
         Chats: {
-          where: {
-            notification: true,
-            Users: {
-              some: {
-                id: ownUserId,
-              },
-            },
-          },
-          select: {
-            Messages: {
-              select: { senderId: true },
-              take: -1,
-            },
-          },
+          where: { notification: true, Users: { some: { id: ownUserId } } },
+          select: { Messages: { select: { senderId: true }, take: -1 } },
         },
       },
     });
