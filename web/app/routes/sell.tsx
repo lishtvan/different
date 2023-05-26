@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { unstable_parseMultipartFormData } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { ClientOnly } from "remix-utils";
 import {
@@ -23,6 +23,7 @@ import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
+import type { RootLoaderData } from "~/types";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -63,27 +64,19 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  // TODO: parallel later
-  const lastListingResponse = await fetcher({
+  const response = await fetcher({
     request,
     route: "/listing/getPrevious",
     method: "POST",
   });
-  const userResponse = await fetcher({
-    request,
-    route: "/auth/check",
-    method: "GET",
-  });
-
-  const user = await userResponse.json();
-  const { cardNumber } = await lastListingResponse.json();
-
-  return { ...user, cardNumber };
+  const prevListing = await response.json();
+  return { cardNumber: prevListing.cardNumber };
 };
 
 const SellRoute = () => {
   const actionData = useActionData();
-  const loaderData = useLoaderData();
+  const { user } = useRouteLoaderData("root") as RootLoaderData;
+
   const { t } = useTranslation();
   useEffect(() => {
     if (!actionData?.errors) return;
@@ -123,7 +116,7 @@ const SellRoute = () => {
         <ClientOnly fallback={<p>Loading...</p>}>
           {() => <CardNumber />}
         </ClientOnly>
-        {!loaderData?.npApiKey && <NpApiKey />}
+        {!user?.npApiKey && <NpApiKey />}
         <Button
           variant="contained"
           className="col-start-1 col-end-3 mx-auto mt-12 w-1/3"
