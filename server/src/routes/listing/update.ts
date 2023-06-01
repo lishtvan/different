@@ -75,6 +75,7 @@ const schema = {
       },
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
+      cardNumberError: { type: 'string' },
     },
   } as const,
 };
@@ -95,12 +96,17 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
       category,
       imageUrls,
       listingId,
+      cardNumberError,
     } = req.body;
 
     const listingToUpdate = await fastify.prisma.listing.findFirst({
       where: { id: listingId, userId: Number(req.cookies.userId) },
     });
     if (!listingToUpdate) throw fastify.httpErrors.unauthorized();
+
+    if (cardNumberError) {
+      throw fastify.httpErrors.badRequest(`/cardNumber ${cardNumberError} `);
+    }
 
     const listing = await fastify.prisma.listing.update({
       where: {

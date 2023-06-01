@@ -35,6 +35,18 @@ export const action: ActionFunction = async ({ request, params }) => {
   });
   if (response.headers.get("location")) return null;
 
+  // const np = initNovaPoshta('');
+  // const [{ addresses }] = await np.address.searchSettlements({
+  //   cityName: 'Апо',
+  //   limit: '100',
+  //   page: '1',
+  // });
+  // const [warehouse] = await np.address.getWarehouses({
+  //   // @ts-expect-error
+  //   cityRef: addresses[0].deliveryCity,
+  // }); // CityRecipient (cityRef), RecipientAddress (ref)
+
+
   return redirect("/");
 };
 
