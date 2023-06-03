@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { CheckBox, Close, Security } from "@mui/icons-material";
+import { CheckBox, Close } from "@mui/icons-material";
 import {
   Autocomplete,
   Button,
@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { searchCity, searchDepartments } from "~/utils/novaposhta";
+import novaposhtaLogo from "app/assets/nova-poshta.png";
 
 interface City {
   DeliveryCity: string;
@@ -51,7 +52,6 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
     if (!city) return;
     searchDepartments(city.DeliveryCity).then((res) => setDepartments(res));
   }, [city]);
-  console.log(departments.length);
 
   return (
     <Dialog
@@ -127,13 +127,20 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
           defaultCountry="ua"
           regions={["europe"]}
         />
-        <Button
-          variant="outlined"
-          startIcon={<Security className="text-black" />}
-          className="mt-auto w-full text-black"
+        <a
+          href="https://novaposhta.ua/safeservice/"
+          target="_blank"
+          rel="noreferrer"
+          className="mt-auto w-full"
         >
-          Nova Poshta Safe Service
-        </Button>
+          <Button
+            variant="outlined"
+            startIcon={<img src={novaposhtaLogo} width={70} alt="novaposhta" />}
+            className="w-full text-lg normal-case text-black"
+          >
+            Safe Service
+          </Button>
+        </a>
         <div className="mt-auto flex items-center text-base">
           <CheckBox fontSize="small" className="mr-1 text-main" />
           <div>{t("I agree with")}</div>
