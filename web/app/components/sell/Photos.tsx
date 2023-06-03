@@ -84,7 +84,6 @@ const Photos = () => {
     });
     setImageLoading([]);
     setCardList(newCards);
-    // TODO: remove
   }, [fetcher.data?.imageKeys]);
 
   const dragStartHandler = (card: ItemImage) => setCurrentCard(card);
@@ -209,7 +208,7 @@ const Photos = () => {
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => dropHandler(e, item)}
                   >
-                    <div className="absolute top-1 right-1 flex">
+                    <div className="absolute right-1 top-1 flex">
                       <IconButton
                         onClick={() => handleDeleteImage(item.id)}
                         size="small"
@@ -231,7 +230,7 @@ const Photos = () => {
                     >
                       {({ ref, open }) => (
                         <>
-                          <div className="absolute top-1 left-1">
+                          <div className="absolute left-1 top-1">
                             <IconButton
                               size="small"
                               onClick={open}
