@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { searchCity, searchDepartments } from "~/utils/novaposhta";
 import novaposhtaLogo from "app/assets/nova-poshta.png";
+import { Form, useActionData } from "@remix-run/react";
 
 interface City {
   DeliveryCity: string;
@@ -41,6 +42,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selectedDepartment, setSelectedDepartments] =
     useState<Department | null>(null);
+  const data = useActionData();
 
   const onCityChange = async (cityName: string) => {
     const cities = await searchCity(cityName);
@@ -66,15 +68,26 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
           <Close />
         </IconButton>
       </DialogTitle>
-      <div className="flex w-[450px] flex-col items-center justify-start gap-y-4 px-5">
+      <Form
+        method="post"
+        className="flex w-[450px] flex-col items-center justify-start gap-y-4 px-5"
+      >
+        <input
+          hidden
+          name="CityRecipient"
+          value={selectedDepartment?.CityRef}
+        />
+        <input hidden name="RecipientAddress" value={selectedDepartment?.Ref} />
         <TextField
           className="w-full"
           label="Name"
+          name="firstName"
           placeholder="Enter your name"
         />
         <TextField
           className="w-full"
           label="Last Name"
+          name="lastName"
           placeholder="Enter your name"
         />
         <Autocomplete
@@ -120,8 +133,14 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
         <MuiPhoneNumber
           className="w-full"
           variant="outlined"
-          label="Phone number"
+          name="RecipientsPhone"
+          label={
+            data?.errors?.RecipientsPhone
+              ? "Phone number is invalid"
+              : "Phone number"
+          }
           onChange={() => {}}
+          error={data?.errors?.RecipientsPhone}
           countryCodeEditable={false}
           onlyCountries={["ua"]}
           defaultCountry="ua"
@@ -160,10 +179,16 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
             {t("Payment and Delivery")}
           </Link>
         </div>
-        <Button variant="contained" className="mb-4 w-full">
+        <Button
+          type="submit"
+          name="_action"
+          value="createOrder"
+          variant="contained"
+          className="mb-4 w-full"
+        >
           Submit order
         </Button>
-      </div>
+      </Form>
     </Dialog>
   );
 };

@@ -18,6 +18,8 @@ import PurchaseModal from "~/components/listing/PurchaseModal";
 import { useTranslation } from "react-i18next";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 import type { RootLoaderData } from "~/types";
+import { getBody } from "~/utils/getBody";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
@@ -34,15 +36,43 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
+  const form = await request.formData();
+  const body = getBody(form);
 
-  await fetcher({
-    request,
-    route: "/listing/delete",
-    method: "POST",
-    body: { listingId },
-  });
+  if (body._action === "delete") {
+    await fetcher({
+      request,
+      route: "/listing/delete",
+      method: "POST",
+      body: { listingId },
+    });
+    return redirect("/");
+  }
+  if (body._action === "createOrder") {
+    let phoneNumber = parsePhoneNumberFromString(
+      body.RecipientsPhone as string,
+      "UA"
+    );
+    if (!phoneNumber?.isValid()) {
+      return { errors: { RecipientsPhone: "Phone number is invalid" } };
+    }
+    const RecipientsPhone = parseInt(phoneNumber.number);
+    const { orderId } = await fetcher({
+      request,
+      route: "/order/create",
+      method: "POST",
+      body: {
+        listingId,
+        RecipientsPhone,
+        CityRecipient: body.CityRecipient,
+        RecipientAddress: body.RecipientAddress,
+        firstName: body.firstName,
+        lastName: body.lastName,
+      },
+    }).then((res) => res.json());
 
-  return redirect("/");
+    return redirect(`/orders/${orderId}`);
+  }
 };
 
 const ListingRoute = () => {
@@ -100,7 +130,7 @@ const ListingRoute = () => {
                 <Tooltip title={t("Delete listing")}>
                   <IconButton
                     type="submit"
-                    name="delete"
+                    name="_action"
                     value="delete"
                     size="large"
                     color="inherit"
