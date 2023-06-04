@@ -1,6 +1,13 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useParams,
+  useRouteLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
 import { fetcher } from "~/fetcher.server";
 import ImageGallery from "react-image-gallery";
 import { useCallback, useMemo, useState } from "react";
@@ -10,6 +17,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import PurchaseModal from "~/components/listing/PurchaseModal";
 import { useTranslation } from "react-i18next";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
+import type { RootLoaderData } from "~/types";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
@@ -47,6 +55,8 @@ const ListingRoute = () => {
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const { listingId } = useParams();
   const { t } = useTranslation();
+  const [, setSearchParams] = useSearchParams();
+  const { user } = useRouteLoaderData("root") as RootLoaderData;
 
   const { images } = useMemo(() => {
     const imageGalleryImages = listing?.imageUrls.map((imageUrl: string) => ({
@@ -127,7 +137,11 @@ const ListingRoute = () => {
                 <Button
                   variant="contained"
                   className="w-full min-w-fit"
-                  onClick={togglePurchaseModal}
+                  onClick={
+                    user
+                      ? togglePurchaseModal
+                      : () => setSearchParams("?login=true")
+                  }
                 >
                   Purchase
                 </Button>

@@ -16,6 +16,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { searchCity, searchDepartments } from "~/utils/novaposhta";
 import novaposhtaLogo from "app/assets/nova-poshta.png";
+import type { RootLoaderData } from "~/types";
+import { useRouteLoaderData, useSearchParams } from "@remix-run/react";
 
 interface City {
   DeliveryCity: string;
@@ -36,7 +38,9 @@ interface Props {
 
 const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
   const { t } = useTranslation();
+  const { user } = useRouteLoaderData("root") as RootLoaderData;
   const [cities, setCities] = useState<City[]>([]);
+  const [, setSearchParams] = useSearchParams();
   const [city, setCity] = useState<City>();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selectedDepartment, setSelectedDepartments] =
