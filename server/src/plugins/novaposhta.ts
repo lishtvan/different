@@ -2,7 +2,7 @@ import fp from 'fastify-plugin';
 import { initNovaPoshta } from 'novaposhtajs/build/NovaPoshta';
 
 const checkNpApiKeyValidity = async (npApiKey: string): Promise<boolean> => {
-  const { success } = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+  const res = await fetch('https://api.novaposhta.ua/v2.0/json/', {
     body: JSON.stringify({
       apiKey: npApiKey,
       modelName: 'Counterparty',
@@ -10,22 +10,10 @@ const checkNpApiKeyValidity = async (npApiKey: string): Promise<boolean> => {
       methodProperties: { CounterpartyProperty: 'Sender' },
     }),
     method: 'POST',
-  }).then((res) => res.json());
-  return success;
+  });
+  const result = await res.json();
+  return result.success;
 };
-
-// BackwardDeliveryData: [
-//   {
-//     PayerType: 'Recipient',
-//     CargoType: 'Money',
-//     RedeliveryString: 200,
-//     Cash2CardPayout_Id: '767d8375-26ff-4c46-84aa-5ee098779aed',
-//     Cash2CardAlias: '',
-//     Cash2CardPAN: '537541xxxxxx7863',
-//   },
-// ],
-// SecurePayment: true, prefilled
-// Number: '20450716963972',
 
 type CreateSafeDelivery = (props: {
   npApiKey: string;
@@ -37,6 +25,8 @@ type CreateSafeDelivery = (props: {
   DateTime: string;
   firstName: string;
   lastName: string;
+  cardNumber: string;
+  SendersPhone: string;
 }) => Promise<unknown>;
 
 const createSafeDelivery: CreateSafeDelivery = async ({
@@ -45,10 +35,12 @@ const createSafeDelivery: CreateSafeDelivery = async ({
   Description,
   RecipientAddress,
   RecipientsPhone,
+  SendersPhone,
   Cost,
   DateTime,
   firstName,
   lastName,
+  cardNumber,
 }) => {
   const np = initNovaPoshta(npApiKey);
   const [counterpartySender] = await np.counterparty.getCounterparties({
@@ -84,24 +76,63 @@ const createSafeDelivery: CreateSafeDelivery = async ({
     phone: RecipientsPhone,
   });
 
-  const internetDocument = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+  const payout = await fetch('https://api.novaposhta.ua/v2.0/json/', {
     body: JSON.stringify({
+      modelName: 'Payment',
       apiKey: npApiKey,
+      calledMethod: 'initPayout',
+      methodProperties: { Phone: RecipientsPhone },
+    }),
+    method: 'POST',
+  })
+    .then((res) => res.json())
+    .then((res) => res.data[0]);
+
+  const { pan } = await fetch(
+    `https://e-com.novapay.ua/api/payout?sid=${payout.Id}&lang=ua&theme=`,
+    {
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ pan: cardNumber, expire: '' }),
+      method: 'POST',
+    }
+  ).then((res) => res.json());
+
+  const InternetDocument = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+    headers: {
+      'content-type': 'application/json',
+      tokenoauth2:
+        // eslint-disable-next-line max-len
+        'G1PIpBU5FpsMazT5XGx7fHbEVCKeNMiBUCRGGBwMlJU.LdUgLKtEr_S7LuDSU6YR_RqEmaBAlKJCHKs8npTfrZM',
+    },
+    body: JSON.stringify({
       modelName: 'InternetDocument',
       calledMethod: 'save',
+      system: 'PA 3.0',
       methodProperties: {
-        ContactRecipient: contactRecipient.ref, // backend
+        ContactRecipient: contactRecipient.ref,
         CitySender: counterpartyContact.Addresses.WarehouseAddresses[0].CityRef,
         SenderAddress: counterpartyContact.Addresses.WarehouseAddresses[0].Ref,
         Sender: counterpartySender.ref,
         ContactSender: counterpartyContact.Ref,
-        SendersPhone: counterpartyContact.Phones,
+        SendersPhone,
         Recipient: counterpartyRecipient.ref,
         CityRecipient,
         RecipientAddress,
         RecipientsPhone,
         Description,
         Cost,
+        BackwardDeliveryData: [
+          {
+            PayerType: 'Recipient',
+            CargoType: 'Money',
+            RedeliveryString: Cost,
+            Cash2CardPayout_Id: payout.Id,
+            Cash2CardAlias: '',
+            Cash2CardPAN: pan,
+          },
+        ],
+        SecurePayment: true,
+        Number: payout.IntDocNumber,
         ServiceType: 'WarehouseWarehouse',
         CargoType: 'Cargo',
         ParamsOptionsSeats: true,
@@ -121,10 +152,25 @@ const createSafeDelivery: CreateSafeDelivery = async ({
     }),
     method: 'POST',
   }).then((res) => res.json());
-  return internetDocument;
+
+  return InternetDocument;
 };
 
 export default fp(async (fastify) => {
+  await createSafeDelivery({
+    npApiKey: '09cdc5830cf3fd811889e4cf08822277',
+    CityRecipient: 'f7062316-4078-11de-b509-001d92f78698',
+    RecipientAddress: '169227e2-e1c2-11e3-8c4a-0050568002cf',
+    RecipientsPhone: '380980015719',
+    SendersPhone: '380950820647',
+    Description: 'Кроссівки Nike Different',
+    Cost: 100,
+    DateTime: '22.06.2023',
+    firstName: 'Юрій',
+    lastName: 'Яблоновський',
+    cardNumber: '5375411422818984',
+  });
+
   fastify.decorate('np', {
     checkNpApiKeyValidity,
     createSafeDelivery,
