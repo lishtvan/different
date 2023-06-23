@@ -69,7 +69,6 @@ const schema = {
       },
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
-      npApiKey: { type: 'string' },
       cardNumberError: { type: 'string' },
     },
   } as const,
@@ -91,35 +90,11 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       cardNumber,
       category,
       imageUrls,
-      npApiKey,
       cardNumberError,
     } = req.body;
 
     if (cardNumberError) {
       throw fastify.httpErrors.badRequest(`/cardNumber ${cardNumberError} `);
-    }
-
-    const seller = await fastify.prisma.user.findUnique({
-      where: { id: Number(userId) },
-      select: { npApiKey: true },
-    });
-
-    if (!seller?.npApiKey && !npApiKey) {
-      throw fastify.httpErrors.badRequest('/npApiKey NovaPoshta API Key is required ');
-    }
-    if (seller?.npApiKey && npApiKey) {
-      throw fastify.httpErrors.badRequest('/npApiKey NovaPoshta API Key already exists ');
-    }
-    if (!seller?.npApiKey && npApiKey) {
-      const isNpApiKeyValid = await fastify.np.checkNpApiKeyValidity(npApiKey);
-      if (!isNpApiKeyValid) {
-        throw fastify.httpErrors.badRequest('/npApiKey NovaPoshta API Key is invalid ');
-      }
-
-      await fastify.prisma.user.update({
-        where: { id: Number(userId) },
-        data: { npApiKey },
-      });
     }
 
     const listing = await fastify.prisma.listing.create({

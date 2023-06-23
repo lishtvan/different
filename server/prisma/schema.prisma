@@ -15,7 +15,6 @@ model User {
   bio        String?
   avatarUrl  String?
   location   String?
-  npApiKey   String?
   Sessions   Session[]
   Listings   Listing[]
   Chats      Chat[]

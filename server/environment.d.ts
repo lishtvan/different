@@ -14,6 +14,8 @@ declare global {
       S3_CLEANUP_SECRET: string;
       TYPESENSE_HOST: string;
       TYPESENSE_WRITE_API_KEY: string;
+      NP_TOKEN: string;
+      NP_API_KEY: string;
     }
   }
 }

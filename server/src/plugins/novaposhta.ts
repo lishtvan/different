@@ -1,22 +1,7 @@
 import fp from 'fastify-plugin';
 import { initNovaPoshta } from 'novaposhtajs/build/NovaPoshta';
 
-const checkNpApiKeyValidity = async (npApiKey: string): Promise<boolean> => {
-  const res = await fetch('https://api.novaposhta.ua/v2.0/json/', {
-    body: JSON.stringify({
-      apiKey: npApiKey,
-      modelName: 'Counterparty',
-      calledMethod: 'getCounterparties',
-      methodProperties: { CounterpartyProperty: 'Sender' },
-    }),
-    method: 'POST',
-  });
-  const result = await res.json();
-  return result.success;
-};
-
 type CreateSafeDelivery = (props: {
-  npApiKey: string;
   CityRecipient: string;
   RecipientAddress: string;
   Description: string;
@@ -30,7 +15,6 @@ type CreateSafeDelivery = (props: {
 }) => Promise<unknown>;
 
 const createSafeDelivery: CreateSafeDelivery = async ({
-  npApiKey,
   CityRecipient,
   Description,
   RecipientAddress,
@@ -42,7 +26,7 @@ const createSafeDelivery: CreateSafeDelivery = async ({
   lastName,
   cardNumber,
 }) => {
-  const np = initNovaPoshta(npApiKey);
+  const np = initNovaPoshta(process.env.NP_API_KEY);
   const [counterpartySender] = await np.counterparty.getCounterparties({
     counterpartyProperty: 'Sender',
   });
@@ -52,7 +36,7 @@ const createSafeDelivery: CreateSafeDelivery = async ({
   const [counterpartyContact] = await fetch('https://api.novaposhta.ua/v2.0/json/', {
     body: JSON.stringify({
       modelName: 'ContactPersonGeneral',
-      apiKey: npApiKey,
+      apiKey: process.env.NP_API_KEY,
       calledMethod: 'getContactPersonsList',
       methodProperties: {
         CounterpartyRef: counterpartySender.ref,
@@ -79,7 +63,7 @@ const createSafeDelivery: CreateSafeDelivery = async ({
   const payout = await fetch('https://api.novaposhta.ua/v2.0/json/', {
     body: JSON.stringify({
       modelName: 'Payment',
-      apiKey: npApiKey,
+      apiKey: process.env.NP_API_KEY,
       calledMethod: 'initPayout',
       methodProperties: { Phone: RecipientsPhone },
     }),
@@ -98,12 +82,7 @@ const createSafeDelivery: CreateSafeDelivery = async ({
   ).then((res) => res.json());
 
   const InternetDocument = await fetch('https://api.novaposhta.ua/v2.0/json/', {
-    headers: {
-      'content-type': 'application/json',
-      tokenoauth2:
-        // eslint-disable-next-line max-len
-        'G1PIpBU5FpsMazT5XGx7fHbEVCKeNMiBUCRGGBwMlJU.LdUgLKtEr_S7LuDSU6YR_RqEmaBAlKJCHKs8npTfrZM',
-    },
+    headers: { 'content-type': 'application/json', tokenoauth2: process.env.NP_TOKEN },
     body: JSON.stringify({
       modelName: 'InternetDocument',
       calledMethod: 'save',
@@ -158,7 +137,6 @@ const createSafeDelivery: CreateSafeDelivery = async ({
 
 export default fp(async (fastify) => {
   await createSafeDelivery({
-    npApiKey: '09cdc5830cf3fd811889e4cf08822277',
     CityRecipient: 'f7062316-4078-11de-b509-001d92f78698',
     RecipientAddress: '169227e2-e1c2-11e3-8c4a-0050568002cf',
     RecipientsPhone: '380980015719',
@@ -172,7 +150,6 @@ export default fp(async (fastify) => {
   });
 
   fastify.decorate('np', {
-    checkNpApiKeyValidity,
     createSafeDelivery,
   });
 });
@@ -180,7 +157,6 @@ export default fp(async (fastify) => {
 declare module 'fastify' {
   interface FastifyInstance {
     np: {
-      checkNpApiKeyValidity: typeof checkNpApiKeyValidity;
       createSafeDelivery: CreateSafeDelivery;
     };
   }

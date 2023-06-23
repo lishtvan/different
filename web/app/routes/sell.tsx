@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { unstable_parseMultipartFormData } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, useActionData, useRouteLoaderData } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import { useEffect } from "react";
 import { ClientOnly } from "remix-utils";
 import {
@@ -11,7 +11,6 @@ import {
   Description,
   Designer,
   ItemTitle,
-  NpApiKey,
   Photos,
   Price,
   SelectCategory,
@@ -23,7 +22,6 @@ import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
-import type { RootLoaderData } from "~/types";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -74,7 +72,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const SellRoute = () => {
   const actionData = useActionData();
-  const { user } = useRouteLoaderData("root") as RootLoaderData;
 
   const { t } = useTranslation();
   useEffect(() => {
@@ -115,7 +112,6 @@ const SellRoute = () => {
         <ClientOnly fallback={<p>Loading...</p>}>
           {() => <CardNumber />}
         </ClientOnly>
-        {!user?.npApiKey && <NpApiKey />}
         <Button
           variant="contained"
           className="col-start-1 col-end-3 mx-auto mt-12 w-1/3"
