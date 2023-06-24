@@ -108,6 +108,8 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
       throw fastify.httpErrors.badRequest(`/cardNumber ${cardNumberError} `);
     }
 
+    if (listingToUpdate.status !== 'AVAILABLE') throw fastify.httpErrors.badRequest();
+
     const listing = await fastify.prisma.listing.update({
       where: {
         id: listingId,

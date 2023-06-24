@@ -136,18 +136,18 @@ const createSafeDelivery: CreateSafeDelivery = async ({
 };
 
 export default fp(async (fastify) => {
-  await createSafeDelivery({
-    CityRecipient: 'f7062316-4078-11de-b509-001d92f78698',
-    RecipientAddress: '169227e2-e1c2-11e3-8c4a-0050568002cf',
-    RecipientsPhone: '380980015719',
-    SendersPhone: '380950820647',
-    Description: 'Кроссівки Nike Different',
-    Cost: 100,
-    DateTime: '22.06.2023',
-    firstName: 'Юрій',
-    lastName: 'Яблоновський',
-    cardNumber: '5375411422818984',
-  });
+  // await createSafeDelivery({
+  //   CityRecipient: 'f7062316-4078-11de-b509-001d92f78698',
+  //   RecipientAddress: '169227e2-e1c2-11e3-8c4a-0050568002cf',
+  //   RecipientsPhone: '380980015719',
+  //   SendersPhone: '380950820647',
+  //   Description: 'Кроссівки Nike Different',
+  //   Cost: 100,
+  //   DateTime: '22.06.2023',
+  //   firstName: 'Юрій',
+  //   lastName: 'Яблоновський',
+  //   cardNumber: '5375411422818984',
+  // });
 
   fastify.decorate('np', {
     createSafeDelivery,
