@@ -52,6 +52,7 @@ model Listing {
   status      ListingStatus @default(AVAILABLE)
   userId      Int
   Order       Order[]
+  phone       String        @default("")
 }
 
 enum OrderStatus {
