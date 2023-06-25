@@ -5,11 +5,14 @@ const getListing: FastifyPluginAsync = async (fastify) => {
     const listings = await fastify.prisma.listing.findMany({
       where: { userId: Number(req.cookies.userId) },
       take: -1,
-      select: { cardNumber: true },
+      select: { cardNumber: true, phone: true },
     });
 
     if (listings.length === 0) return reply.send({ cardNumber: null });
-    return reply.send({ cardNumber: listings[0].cardNumber });
+    return reply.send({
+      cardNumber: listings[0].cardNumber,
+      phone: listings[0].phone,
+    });
   });
 };
 

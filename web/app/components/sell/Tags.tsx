@@ -15,7 +15,7 @@ const Tags = () => {
   }, [loaderData.tags]);
 
   return (
-    <div>
+    <div className="col-start-1 col-end-3">
       <FieldTitle title={t("Tags")} required={false} />
       <input hidden name="tags" readOnly value={tags} />
       <Autocomplete

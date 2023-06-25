@@ -14,6 +14,7 @@ import {
   Photos,
   Price,
   SelectCategory,
+  SellerPhone,
   Tags,
 } from "~/components/sell";
 import { fetcher } from "~/fetcher.server";
@@ -22,6 +23,7 @@ import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 export const action: ActionFunction = async ({ request }) => {
   const contentType = request.headers.get("Content-type");
@@ -32,6 +34,11 @@ export const action: ActionFunction = async ({ request }) => {
     let formattedTags = [];
     // @ts-ignore
     if (body.tags) formattedTags = body.tags.split(",");
+    const phoneNumber = parsePhoneNumberFromString(body.phone as string, "UA");
+    if (!phoneNumber?.isValid()) {
+      return { errors: { phone: "Phone number is invalid" } };
+    }
+    const phone = parseInt(phoneNumber.number);
 
     const response = await fetcher({
       request,
@@ -39,6 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
       method: "POST",
       body: {
         ...body,
+        phone,
         tags: formattedTags,
       },
     });
@@ -67,7 +75,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     method: "POST",
   });
   const prevListing = await response.json();
-  return { cardNumber: prevListing.cardNumber };
+  return { cardNumber: prevListing.cardNumber, phone: prevListing.phone };
 };
 
 const SellRoute = () => {
@@ -99,16 +107,17 @@ const SellRoute = () => {
       <div className="text-3xl font-semibold">{t("Create a new listing")}</div>
       <Form
         method="post"
-        className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-6"
+        className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-5"
       >
         <ItemTitle />
         <Designer />
         <SelectCategory />
         <Photos />
         <Description />
-        <Condition />
         <Tags />
+        <Condition />
         <Price />
+        <SellerPhone />
         <ClientOnly fallback={<p>Loading...</p>}>
           {() => <CardNumber />}
         </ClientOnly>

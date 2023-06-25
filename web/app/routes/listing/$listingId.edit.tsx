@@ -14,6 +14,7 @@ import {
   Photos,
   Price,
   SelectCategory,
+  SellerPhone,
   Tags,
 } from "~/components/sell";
 import { fetcher } from "~/fetcher.server";
@@ -22,6 +23,7 @@ import { getErrors } from "~/utils/getErrors";
 import { s3UploaderHandler } from "~/s3.server";
 import { useTranslation } from "react-i18next";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 export const action: ActionFunction = async ({ request, params }) => {
   const contentType = request.headers.get("Content-type");
@@ -33,6 +35,11 @@ export const action: ActionFunction = async ({ request, params }) => {
     let formattedTags = [];
     // @ts-ignore
     if (body.tags) formattedTags = body.tags.split(",");
+    const phoneNumber = parsePhoneNumberFromString(body.phone as string, "UA");
+    if (!phoneNumber?.isValid()) {
+      return { errors: { phone: "Phone number is invalid" } };
+    }
+    const phone = parseInt(phoneNumber.number);
 
     const response = await fetcher({
       request,
@@ -41,6 +48,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       body: {
         ...body,
         tags: formattedTags,
+        phone,
         listingId: Number(listingId),
       },
     });
@@ -106,16 +114,17 @@ const EditListingRoute = () => {
       <h1 className="text-3xl font-semibold">{t("Edit listing")}</h1>
       <Form
         method="post"
-        className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-6"
+        className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-5"
       >
         <ItemTitle />
         <Designer />
         <SelectCategory />
         <Photos />
         <Description />
-        <Condition />
         <Tags />
+        <Condition />
         <Price />
+        <SellerPhone />
         <ClientOnly fallback={<p>Loading...</p>}>
           {() => <CardNumber />}
         </ClientOnly>

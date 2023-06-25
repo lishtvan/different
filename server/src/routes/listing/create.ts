@@ -26,8 +26,8 @@ const schema = {
         price: '/price Price is required ',
         category: '/category Category is required ',
         imageUrls: '/imageUrls At least one photo is required ',
-        cardNumber: '/cardNumber Card number is required ',
-        phone: '/phone Phone Number is required',
+        phone: '/phone Phone Number is required ',
+        cardNumber: '/cardNumber Card number is required',
       },
     },
     properties: {

@@ -28,6 +28,7 @@ const getListing: FastifyPluginAsync = async (fastify) => {
         title: true,
         size: true,
         designer: true,
+        phone: true,
         condition: true,
         category: true,
         description: true,

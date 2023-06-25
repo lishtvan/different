@@ -16,6 +16,7 @@ const schema = {
       'imageUrls',
       'category',
       'listingId',
+      'phone',
     ],
     errorMessage: {
       required: {
@@ -27,6 +28,7 @@ const schema = {
         cardNumber: '/cardNumber Card number is required ',
         category: '/category Category is required ',
         imageUrls: '/imageUrls At least one photo is required ',
+        phone: '/phone Phone Number is required ',
       },
     },
     properties: {
@@ -76,6 +78,7 @@ const schema = {
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
       cardNumberError: { type: 'string' },
+      phone: { type: 'string' },
     },
   } as const,
 };
@@ -97,6 +100,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
       imageUrls,
       listingId,
       cardNumberError,
+      phone,
     } = req.body;
 
     const listingToUpdate = await fastify.prisma.listing.findFirst({
@@ -111,9 +115,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
     if (listingToUpdate.status !== 'AVAILABLE') throw fastify.httpErrors.badRequest();
 
     const listing = await fastify.prisma.listing.update({
-      where: {
-        id: listingId,
-      },
+      where: { id: listingId },
       select: {
         id: true,
         title: true,
@@ -137,6 +139,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
         imageUrls,
         description,
         cardNumber,
+        phone,
       },
     });
 

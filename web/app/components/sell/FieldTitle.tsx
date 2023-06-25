@@ -10,7 +10,7 @@ interface Props {
 const FieldTitle: FC<Props> = ({ title, required }) => {
   const { t } = useTranslation();
   return (
-    <div className="mb-2 ml-2 flex text-2xl">
+    <div className="mb-2 ml-2 flex text-xl">
       {required ? (
         <Tooltip
           title={t("Field is required")}
