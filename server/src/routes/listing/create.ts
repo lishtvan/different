@@ -15,6 +15,7 @@ const schema = {
       'cardNumber',
       'imageUrls',
       'category',
+      'phone',
     ],
     errorMessage: {
       required: {
@@ -25,7 +26,8 @@ const schema = {
         price: '/price Price is required ',
         category: '/category Category is required ',
         imageUrls: '/imageUrls At least one photo is required ',
-        cardNumber: '/cardNumber Card number is required',
+        cardNumber: '/cardNumber Card number is required ',
+        phone: '/phone Phone Number is required',
       },
     },
     properties: {
@@ -70,6 +72,7 @@ const schema = {
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
       cardNumberError: { type: 'string' },
+      phone: { type: 'string' },
     },
   } as const,
 };
@@ -91,6 +94,7 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       category,
       imageUrls,
       cardNumberError,
+      phone,
     } = req.body;
 
     if (cardNumberError) {
@@ -123,6 +127,7 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         imageUrls,
         description,
         cardNumber,
+        phone,
         userId: Number(userId),
       },
     });
