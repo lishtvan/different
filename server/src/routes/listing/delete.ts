@@ -21,10 +21,14 @@ const deleteListing: FastifyPluginAsync = async (fastify) => {
     const { listingId } = req.body;
 
     try {
-      await fastify.prisma.user.update({
-        where: { id: Number(req.cookies.userId) },
-        data: { Listings: { delete: { id: listingId } } },
+      const listingToDelete = await fastify.prisma.listing.findFirst({
+        where: { id: listingId, userId: Number(req.cookies.userId) },
       });
+
+      if (!listingToDelete) throw fastify.httpErrors.unauthorized();
+      if (listingToDelete.status !== 'AVAILABLE') throw fastify.httpErrors.badRequest();
+
+      await fastify.prisma.listing.delete({ where: { id: listingId } });
       await fastify.typesense
         .collections(LISTINGS_COLLECTION_NAME)
         .documents(listingId.toString())
