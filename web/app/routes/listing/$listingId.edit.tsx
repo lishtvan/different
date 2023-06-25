@@ -35,6 +35,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     let formattedTags = [];
     // @ts-ignore
     if (body.tags) formattedTags = body.tags.split(",");
+    // TODO:REFACTOR reuse code
     const phoneNumber = parsePhoneNumberFromString(body.phone as string, "UA");
     if (!phoneNumber?.isValid()) {
       return { errors: { phone: "Phone number is invalid" } };
