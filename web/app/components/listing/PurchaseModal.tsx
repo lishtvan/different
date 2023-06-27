@@ -1,5 +1,6 @@
 /* eslint-disable react/display-name */
 import { CheckBox, Close } from "@mui/icons-material";
+import type { AutocompleteChangeReason } from "@mui/material";
 import {
   Autocomplete,
   Button,
@@ -9,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number-2";
-import type { FC } from "react";
+import type { FC, SyntheticEvent } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,17 +38,39 @@ interface Props {
 
 const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
   const { t } = useTranslation();
+  const actionData = useActionData();
   const [cities, setCities] = useState<City[]>([]);
   const [city, setCity] = useState<City>();
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [selectedDepartment, setSelectedDepartments] =
+  const [selectedDepartment, setSelectedDepartment] =
     useState<Department | null>(null);
   const data = useActionData();
+  const [isDepartmentsLoading, setIsDepartmentsLoading] = useState(false);
 
-  const onCityChange = async (cityName: string) => {
+  const onCityInputChange = async (cityName: string) => {
+    setIsDepartmentsLoading(true);
     const cities = await searchCity(cityName);
-    if (selectedDepartment) setSelectedDepartments(null);
+    if (selectedDepartment) setSelectedDepartment(null);
     setCities(cities);
+  };
+
+  const onCityAutocompleteChange = (
+    e: SyntheticEvent,
+    value: City | null,
+    reason: AutocompleteChangeReason
+  ) => {
+    if (reason === "clear") setCity(undefined);
+    if (selectedDepartment) setSelectedDepartment(null);
+    if (value) setCity(value);
+  };
+
+  const onDepartmentAutocompleteChange = (
+    e: unknown,
+    value: Department | null,
+    reason: AutocompleteChangeReason
+  ) => {
+    if (reason === "clear") setSelectedDepartment(null);
+    if (value) setSelectedDepartment(value);
   };
 
   useEffect(() => {
@@ -72,38 +95,39 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
         method="post"
         className="flex w-[450px] flex-col items-center justify-start gap-y-4 px-5"
       >
+        <input hidden name="CityRecipient" value={city?.DeliveryCity || ""} />
         <input
           hidden
-          name="CityRecipient"
-          value={selectedDepartment?.CityRef}
+          name="RecipientAddress"
+          value={selectedDepartment?.Ref || ""}
         />
-        <input hidden name="RecipientAddress" value={selectedDepartment?.Ref} />
         <TextField
           className="w-full"
-          label="Name"
           name="firstName"
-          placeholder="Enter your name"
+          label={actionData?.errors?.firstName || "Ім`я"}
+          error={Boolean(actionData?.errors?.firstName)}
         />
         <TextField
           className="w-full"
-          label="Last Name"
           name="lastName"
-          placeholder="Enter your name"
+          label={actionData?.errors?.lastName || "Фамілія"}
+          error={Boolean(actionData?.errors?.lastName)}
         />
         <Autocomplete
           id="city"
           className="w-full"
           options={cities}
+          noOptionsText={"Населений пункт не знайдено"}
           getOptionLabel={(o) => o.Present}
-          onChange={(e, value) => {
-            if (value) setCity(value);
-          }}
+          onChange={onCityAutocompleteChange}
           renderInput={(params) => (
             <TextField
               {...params}
-              label="City"
-              onChange={(e) => onCityChange(e.target.value)}
-              placeholder="Enter your city name"
+              onChange={(e) => onCityInputChange(e.target.value)}
+              value={city?.Present}
+              placeholder="Введіть назву вашого населеного пункту"
+              label={actionData?.errors?.CityRecipient || "Населений пункт"}
+              error={Boolean(actionData?.errors?.CityRecipient)}
             />
           )}
         />
@@ -113,19 +137,23 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
           options={departments.filter(
             (d) => d.TypeOfWarehouse !== "f9316480-5f2d-425d-bc2c-ac7cd29decf0"
           )}
+          noOptionsText={
+            isDepartmentsLoading ? "Завантаження..." : "Відділення не знайдено"
+          }
           getOptionLabel={(o) => o.Description}
-          onChange={(e, value) => {
-            if (value) setSelectedDepartments(value);
-          }}
+          onChange={onDepartmentAutocompleteChange}
           value={selectedDepartment}
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Nova Poshta department"
+              label={
+                actionData?.errors?.RecipientAddress || "Відділення Нової Пошти"
+              }
+              error={Boolean(actionData?.errors?.RecipientAddress)}
               placeholder={
                 city
-                  ? "Enter Nova Poshta department"
-                  : "Please, select city first"
+                  ? "Оберіть відділення"
+                  : "Будь ласка, спочатку оберіть місто"
               }
             />
           )}
@@ -136,11 +164,11 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
           name="RecipientsPhone"
           label={
             data?.errors?.RecipientsPhone
-              ? "Phone number is invalid"
-              : "Phone number"
+              ? "Недійсний номер телефону"
+              : "Номер телефону"
           }
           onChange={() => {}}
-          error={data?.errors?.RecipientsPhone}
+          error={Boolean(data?.errors?.RecipientsPhone)}
           countryCodeEditable={false}
           onlyCountries={["ua"]}
           defaultCountry="ua"

@@ -20,6 +20,7 @@ import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 import type { RootLoaderData } from "~/types";
 import { getBody } from "~/utils/getBody";
 import parsePhoneNumberFromString from "libphonenumber-js";
+import { getErrors } from "~/utils/getErrors";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
@@ -57,7 +58,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       return { errors: { RecipientsPhone: "Phone number is invalid" } };
     }
     const RecipientsPhone = parseInt(phoneNumber.number);
-    const { orderId } = await fetcher({
+    const orderResponse = await fetcher({
       request,
       route: "/order/create",
       method: "POST",
@@ -69,7 +70,14 @@ export const action: ActionFunction = async ({ request, params }) => {
         firstName: body.firstName,
         lastName: body.lastName,
       },
-    }).then((res) => res.json());
+    });
+
+    if (orderResponse.status === 400) {
+      const { message } = await orderResponse.json();
+      const errors = getErrors(message);
+      return { errors };
+    }
+    const { orderId } = await orderResponse.json();
 
     return redirect(`/orders/${orderId}`);
   }

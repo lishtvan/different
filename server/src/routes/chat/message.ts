@@ -6,7 +6,7 @@ const chats = new Map<string, Set<WebSocket>>();
 const root: FastifyPluginAsync = async (fastify) => {
   fastify.get('/message', { websocket: true }, (connection, req) => {
     const { socket } = connection;
-    socket.on('message', async (message) => {
+    socket.on('message', async (message: object) => {
       const data = JSON.parse(message.toString());
       const ownUserId = Number(req.cookies.userId);
 
