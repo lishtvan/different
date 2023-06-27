@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { CheckBox, Close } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import type { AutocompleteChangeReason } from "@mui/material";
 import {
   Autocomplete,
@@ -11,13 +11,10 @@ import {
 } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number-2";
 import type { FC, SyntheticEvent } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { searchCity, searchDepartments } from "~/utils/novaposhta";
 import novaposhtaLogo from "app/assets/nova-poshta.png";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 
 interface City {
   DeliveryCity: string;
@@ -37,7 +34,6 @@ interface Props {
 }
 
 const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
-  const { t } = useTranslation();
   const actionData = useActionData();
   const [cities, setCities] = useState<City[]>([]);
   const [city, setCity] = useState<City>();
@@ -45,6 +41,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
   const [selectedDepartment, setSelectedDepartment] =
     useState<Department | null>(null);
   const data = useActionData();
+  const navigation = useNavigation();
   const [isDepartmentsLoading, setIsDepartmentsLoading] = useState(false);
 
   const onCityInputChange = async (cityName: string) => {
@@ -188,25 +185,6 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
             Safe Service
           </Button>
         </a>
-        <div className="mt-auto flex items-center text-base">
-          <CheckBox fontSize="small" className="mr-1 text-main" />
-          <div>{t("I agree with")}</div>
-          <Link
-            target="_blank"
-            className="ml-1 text-blue-500 underline underline-offset-[4px]"
-            to="/info?q=terms"
-          >
-            {t("Terms of Service")}
-          </Link>
-          {","}
-          <Link
-            target="_blank"
-            className="ml-1 text-blue-500 underline underline-offset-[4px]"
-            to="/info?q=payment"
-          >
-            {t("Payment and Delivery")}
-          </Link>
-        </div>
         <Button
           type="submit"
           name="_action"
@@ -214,7 +192,9 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
           variant="contained"
           className="mb-4 w-full"
         >
-          Submit order
+          {navigation?.formData?.get("_action") === "createOrder"
+            ? "Замовлення сворюється..."
+            : "Створити замовлення"}
         </Button>
       </Form>
     </Dialog>
