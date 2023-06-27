@@ -7,12 +7,11 @@ type CreateSafeDelivery = (props: {
   Description: string;
   RecipientsPhone: string;
   Cost: number;
-  DateTime: string;
   firstName: string;
   lastName: string;
   cardNumber: string;
   SendersPhone: string;
-}) => Promise<unknown>;
+}) => Promise<{ trackingNumber?: string }>;
 
 const createSafeDelivery: CreateSafeDelivery = async ({
   CityRecipient,
@@ -21,7 +20,6 @@ const createSafeDelivery: CreateSafeDelivery = async ({
   RecipientsPhone,
   SendersPhone,
   Cost,
-  DateTime,
   firstName,
   lastName,
   cardNumber,
@@ -81,7 +79,10 @@ const createSafeDelivery: CreateSafeDelivery = async ({
     }
   ).then((res) => res.json());
 
-  const InternetDocument = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+  const date = new Date();
+  const {
+    data: [internetDocument],
+  } = await fetch('https://api.novaposhta.ua/v2.0/json/', {
     headers: { 'content-type': 'application/json', tokenoauth2: process.env.NP_TOKEN },
     body: JSON.stringify({
       modelName: 'InternetDocument',
@@ -123,7 +124,7 @@ const createSafeDelivery: CreateSafeDelivery = async ({
         MarketplacePartnerToken: '005056887b8d-b5da-11e6-9f54-cea38574',
         AdditionalInformation: '',
         AccompanyingDocuments: '',
-        DateTime,
+        DateTime: `${date.getDate()}.0${date.getMonth() + 1}.${date.getFullYear()}`,
         SeatsAmount: '1',
         Weight: '2',
         VolumeGeneral: '',
@@ -132,18 +133,17 @@ const createSafeDelivery: CreateSafeDelivery = async ({
     method: 'POST',
   }).then((res) => res.json());
 
-  return InternetDocument;
+  return { trackingNumber: internetDocument?.IntDocNumber };
 };
 
 export default fp(async (fastify) => {
-  // await createSafeDelivery({
+  // const { trackingNumber } = await createSafeDelivery({
   //   CityRecipient: 'f7062316-4078-11de-b509-001d92f78698',
   //   RecipientAddress: '169227e2-e1c2-11e3-8c4a-0050568002cf',
-  //   RecipientsPhone: '380980015719',
-  //   SendersPhone: '380950820647',
+  //   RecipientsPhone: '380967521614',
+  //   SendersPhone: '380965134969',
   //   Description: 'Кроссівки Nike Different',
   //   Cost: 100,
-  //   DateTime: '22.06.2023',
   //   firstName: 'Юрій',
   //   lastName: 'Яблоновський',
   //   cardNumber: '5375411422818984',

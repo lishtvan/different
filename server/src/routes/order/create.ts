@@ -46,17 +46,35 @@ const getListing: FastifyPluginAsync = async (fastify) => {
       lastName,
     } = req.body;
 
-    console.log({
-      userId,
-      listingId,
-      RecipientsPhone,
+    const listing = await fastify.prisma.listing.findFirst({
+      where: { id: listingId },
+    });
+    if (!listing || listing.status !== 'AVAILABLE') throw fastify.httpErrors.notFound();
+
+    const { trackingNumber } = await fastify.np.createSafeDelivery({
       CityRecipient,
       RecipientAddress,
+      RecipientsPhone,
+      SendersPhone: listing.phone,
+      Description: listing.title,
+      Cost: listing.price,
       firstName,
       lastName,
+      cardNumber: listing.cardNumber.trim(),
+    });
+    if (!trackingNumber) throw fastify.httpErrors.internalServerError();
+
+    const { id } = await fastify.prisma.order.create({
+      data: { buyerId: Number(userId), listingId, trackingNumber },
+      select: { id: true },
     });
 
-    return reply.send({ orderId: 1 });
+    await fastify.prisma.listing.update({
+      where: { id: listingId },
+      data: { status: 'ORDER' },
+    });
+
+    return reply.send({ orderId: id });
   });
 };
 
