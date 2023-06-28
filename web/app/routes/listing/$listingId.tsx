@@ -21,6 +21,7 @@ import type { RootLoaderData } from "~/types";
 import { getBody } from "~/utils/getBody";
 import parsePhoneNumberFromString from "libphonenumber-js";
 import { getErrors } from "~/utils/getErrors";
+import SellerHint from "~/components/listing/SellerHint";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
@@ -93,7 +94,8 @@ const ListingRoute = () => {
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const { listingId } = useParams();
   const { t } = useTranslation();
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { user } = useRouteLoaderData("root") as RootLoaderData;
 
   const { images } = useMemo(() => {
@@ -111,6 +113,7 @@ const ListingRoute = () => {
   return (
     <Form method="post">
       <div className="mx-auto my-3 flex w-full flex-col justify-center gap-6 md:flex-row lg:gap-14">
+        {searchParams.get("q") && <SellerHint />}
         <PurchaseModal toggle={togglePurchaseModal} isOpen={isPurchaseOpen} />
         <div className="w-full md:w-[55%] lg:w-[40%] lg:min-w-[40%]">
           <ImageGallery

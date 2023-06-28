@@ -57,7 +57,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
     const { listingId } = await response.json();
 
-    return redirect(`/listing/${listingId}`);
+    return redirect(`/listing/${listingId}?q=created`);
   }
   // TODO: add validation max upload for authenticated user
   const form = await unstable_parseMultipartFormData(
