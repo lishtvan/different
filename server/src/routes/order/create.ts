@@ -35,7 +35,7 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const getListing: FastifyPluginAsync = async (fastify) => {
+const createOrder: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
     const { userId } = req.cookies;
     const {
@@ -84,4 +84,4 @@ const getListing: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default getListing;
+export default createOrder;

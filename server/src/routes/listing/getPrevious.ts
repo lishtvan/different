@@ -1,6 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 
-const getListing: FastifyPluginAsync = async (fastify) => {
+const getPreviousListing: FastifyPluginAsync = async (fastify) => {
   fastify.post('/getPrevious', async (req, reply) => {
     const listings = await fastify.prisma.listing.findMany({
       where: { userId: Number(req.cookies.userId) },
@@ -16,4 +16,4 @@ const getListing: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default getListing;
+export default getPreviousListing;
