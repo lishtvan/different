@@ -126,7 +126,7 @@ const ListingRoute = () => {
             <div className="pt-[0.55rem] text-2xl font-bold">
               {listing?.title}
             </div>
-            {isOwnListing && (
+            {isOwnListing && listing.status === "AVAILABLE" && (
               <div className="ml-4 flex">
                 <Tooltip title={t("Edit listing")}>
                   <Link to={`/listing/${listingId}/edit`}>
@@ -169,12 +169,18 @@ const ListingRoute = () => {
           >
             {listing?.price}₴ {listing.status === "SOLD" && "(Sold price)"}
           </div>
+          {listing.status === "ORDER" && (
+            <div className="rounded-xl bg-[#e8e4e4] px-2 py-1 text-sm">
+              На це оголошення вже було створено замовлення
+            </div>
+          )}
           <div className="flex w-fit flex-col items-start gap-3 md:w-full">
             {!isOwnListing && (
               <div className="flex w-full gap-2">
                 <Button
                   variant="contained"
                   className="w-full min-w-fit"
+                  disabled={listing.status === "ORDER"}
                   onClick={
                     user
                       ? togglePurchaseModal
@@ -183,7 +189,6 @@ const ListingRoute = () => {
                 >
                   Purchase
                 </Button>
-
                 <Link
                   className="w-full min-w-fit"
                   to={`/user/chat/new/${listing?.User.id}`}
@@ -194,7 +199,6 @@ const ListingRoute = () => {
                 </Link>
               </div>
             )}
-
             <Link
               className="mb-5 flex w-full items-center gap-4 rounded-lg border border-main px-2 py-1"
               to={`/${listing?.User.nickname}`}

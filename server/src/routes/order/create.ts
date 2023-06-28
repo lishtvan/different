@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
+import { LISTINGS_COLLECTION_NAME } from '../../constants/typesense';
 
 const schema = {
   tags: ['Order'],
@@ -73,6 +74,11 @@ const getListing: FastifyPluginAsync = async (fastify) => {
       where: { id: listingId },
       data: { status: 'ORDER' },
     });
+
+    await fastify.typesense
+      .collections(LISTINGS_COLLECTION_NAME)
+      .documents()
+      .update({ status: 'ORDER', id: listing.id.toString() });
 
     return reply.send({ orderId: id });
   });
