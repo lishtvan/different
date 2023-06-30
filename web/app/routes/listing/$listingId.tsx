@@ -78,9 +78,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       const errors = getErrors(message);
       return { errors };
     }
-    const { orderId } = await orderResponse.json();
-
-    return redirect(`/orders/${orderId}`);
+    return redirect(`/user/orders`);
   }
 };
 

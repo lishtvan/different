@@ -61,26 +61,26 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
       Cost: listing.price,
       firstName,
       lastName,
-      cardNumber: listing.cardNumber.trim(),
+      cardNumber: listing.cardNumber.replace(/\s/g, ''),
     });
     if (!trackingNumber) throw fastify.httpErrors.internalServerError();
 
-    const { id } = await fastify.prisma.order.create({
-      data: { buyerId: Number(userId), listingId, trackingNumber },
-      select: { id: true },
-    });
+    await Promise.all([
+      fastify.prisma.order.create({
+        data: { buyerId: Number(userId), listingId, trackingNumber },
+        select: { id: true },
+      }),
+      fastify.prisma.listing.update({
+        where: { id: listingId },
+        data: { status: 'ORDER' },
+      }),
+      fastify.typesense
+        .collections(LISTINGS_COLLECTION_NAME)
+        .documents()
+        .update({ status: 'ORDER', id: listing.id.toString() }),
+    ]);
 
-    await fastify.prisma.listing.update({
-      where: { id: listingId },
-      data: { status: 'ORDER' },
-    });
-
-    await fastify.typesense
-      .collections(LISTINGS_COLLECTION_NAME)
-      .documents()
-      .update({ status: 'ORDER', id: listing.id.toString() });
-
-    return reply.send({ orderId: id });
+    return reply.send();
   });
 };
 

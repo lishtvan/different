@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
-  tags: ['Listing'],
+  tags: ['Order'],
   body: {
     type: 'object',
     required: ['orderId'],
