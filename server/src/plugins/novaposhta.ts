@@ -30,7 +30,8 @@ const createSafeDelivery: CreateSafeDelivery = async ({
   });
   const [counterpartyRecipient] = await np.counterparty.getCounterparties({
     counterpartyProperty: 'Recipient',
-  });
+  }); // Parallel
+
   const [counterpartyContact] = await fetch('https://api.novaposhta.ua/v2.0/json/', {
     body: JSON.stringify({
       modelName: 'ContactPersonGeneral',
@@ -137,18 +138,6 @@ const createSafeDelivery: CreateSafeDelivery = async ({
 };
 
 export default fp(async (fastify) => {
-  // const { trackingNumber } = await createSafeDelivery({
-  //   CityRecipient: 'f7062316-4078-11de-b509-001d92f78698',
-  //   RecipientAddress: '169227e2-e1c2-11e3-8c4a-0050568002cf',
-  //   RecipientsPhone: '380967521614',
-  //   SendersPhone: '380965134969',
-  //   Description: 'Кроссівки Nike Different',
-  //   Cost: 100,
-  //   firstName: 'Юрій',
-  //   lastName: 'Яблоновський',
-  //   cardNumber: '5375411422818984',
-  // });
-
   fastify.decorate('np', {
     createSafeDelivery,
   });
