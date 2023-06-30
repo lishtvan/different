@@ -66,11 +66,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 const SellTable: FC<{ sellOrders: SellOrder[] }> = ({ sellOrders }) => {
   return (
-    <Table
-      sx={{ minWidth: 650 }}
-      className="border px-10"
-      aria-label="simple table"
-    >
+    <Table sx={{ minWidth: 650 }} className="border" aria-label="simple table">
       <TableHead>
         <TableRow>
           <TableCell className="font-semibold">Оголошення</TableCell>
@@ -116,11 +112,7 @@ const SellTable: FC<{ sellOrders: SellOrder[] }> = ({ sellOrders }) => {
 
 const BuyTable: FC<{ buyOrders: BuyOrder[] }> = ({ buyOrders }) => {
   return (
-    <Table
-      sx={{ minWidth: 650 }}
-      className="border px-10"
-      aria-label="simple table"
-    >
+    <Table sx={{ minWidth: 650 }} className="border" aria-label="simple table">
       <TableHead>
         <TableRow>
           <TableCell className="font-semibold">Оголошення</TableCell>
@@ -180,7 +172,7 @@ const OrdersRoute = () => {
   }, [loaderData, searchParams]);
 
   return (
-    <div className="mt-6 px-4">
+    <div className="mt-6 px-4 2xl:px-32">
       <div className="flex w-fit border border-b-0 text-xl font-bold">
         <button
           onClick={() => setSearchParams("?q=sell")}
