@@ -11,6 +11,7 @@ import {
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 import { fetcher } from "~/fetcher.server";
+import BuyerHint from "~/components/order/BuyerHint";
 
 interface SellOrder {
   id: string;
@@ -173,6 +174,7 @@ const OrdersRoute = () => {
 
   return (
     <div className="mt-6 px-4 2xl:px-32">
+      {searchParams.get("hint") && <BuyerHint />}
       <div className="flex w-fit border border-b-0 text-xl font-bold">
         <button
           onClick={() => setSearchParams("?q=sell")}

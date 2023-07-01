@@ -78,7 +78,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       const errors = getErrors(message);
       return { errors };
     }
-    return redirect(`/user/orders?q=buy`);
+    return redirect("/user/orders?q=buy&hint=show");
   }
 };
 
