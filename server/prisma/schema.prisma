@@ -15,6 +15,7 @@ model User {
   bio        String?
   avatarUrl  String?
   location   String?
+  phone      String?
   Sessions   Session[]
   Listings   Listing[]
   Chats      Chat[]

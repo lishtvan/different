@@ -19,7 +19,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
           status: true,
           createdAt: true,
           trackingNumber: true,
-          buyer: { select: { nickname: true } },
+          buyer: { select: { nickname: true, phone: true } },
           listing: { select: { price: true, title: true, id: true } },
         },
       }),

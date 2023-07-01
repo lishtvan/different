@@ -9,6 +9,7 @@ export interface User {
   avatarUrl?: string;
   bio: string;
   location: string;
+  phone?: string;
 }
 
 export interface Message {

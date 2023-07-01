@@ -14,7 +14,13 @@ import type { FC, SyntheticEvent } from "react";
 import { useEffect, useState } from "react";
 import { searchCity, searchDepartments } from "~/utils/novaposhta";
 import novaposhtaLogo from "app/assets/nova-poshta.png";
-import { Form, useActionData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useNavigation,
+  useRouteLoaderData,
+} from "@remix-run/react";
+import type { RootLoaderData } from "~/types";
 
 interface City {
   DeliveryCity: string;
@@ -43,6 +49,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
   const data = useActionData();
   const navigation = useNavigation();
   const [isDepartmentsLoading, setIsDepartmentsLoading] = useState(false);
+  const { user } = useRouteLoaderData("root") as RootLoaderData;
 
   const onCityInputChange = async (cityName: string) => {
     setIsDepartmentsLoading(true);
@@ -165,6 +172,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
               : "Номер телефону"
           }
           onChange={() => {}}
+          value={user?.phone}
           error={Boolean(data?.errors?.RecipientsPhone)}
           countryCodeEditable={false}
           onlyCountries={["ua"]}

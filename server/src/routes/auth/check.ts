@@ -13,6 +13,7 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
       select: {
         id: true,
         nickname: true,
+        phone: true,
         avatarUrl: true,
         location: true,
         bio: true,

@@ -17,7 +17,7 @@ interface SellOrder {
   status: "SHIPPING" | "HANDLING" | "PAYMENT";
   createdAt: string;
   trackingNumber: string;
-  buyer: { nickname: string };
+  buyer: { nickname: string; phone: string };
   listing: { price: number; title: string; id: number };
 }
 
@@ -99,7 +99,7 @@ const SellTable: FC<{ sellOrders: SellOrder[] }> = ({ sellOrders }) => {
               <Link to={`/${row.buyer.nickname}`}>{row.buyer.nickname}</Link>
             </TableCell>
             <TableCell>{row.listing.price} грн</TableCell>
-            <TableCell>-</TableCell>
+            <TableCell>{row.buyer.phone}</TableCell>
             <TableCell>
               {new Date(row.createdAt).toLocaleDateString()}
             </TableCell>

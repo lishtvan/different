@@ -74,11 +74,16 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
         where: { id: listingId },
         data: { status: 'ORDER' },
       }),
-      fastify.typesense
-        .collections(LISTINGS_COLLECTION_NAME)
-        .documents()
-        .update({ status: 'ORDER', id: listing.id.toString() }),
+      fastify.prisma.user.update({
+        where: { id: Number(userId) },
+        data: { phone: RecipientsPhone },
+      }),
     ]);
+
+    await fastify.typesense
+      .collections(LISTINGS_COLLECTION_NAME)
+      .documents()
+      .update({ status: 'ORDER', id: listing.id.toString() });
 
     return reply.send();
   });
