@@ -12,7 +12,6 @@ import {
 import { useMemo } from "react";
 import { fetcher } from "~/fetcher.server";
 import ProfileImage from "../../assets/profile.jpeg";
-import { useTranslation } from "react-i18next";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -30,7 +29,6 @@ const ChatRoute = () => {
   const { chats, userId } = useLoaderData<{ chats: Chats[]; userId: number }>();
   const { sendMessage, lastMessage, readyState } =
     useOutletContext<ChatContext>();
-  const { t } = useTranslation();
 
   const noChatsWithMessages = useMemo(
     () => chats.every((chat) => chat.Messages.length === 0),
@@ -87,7 +85,7 @@ const ChatRoute = () => {
       ) : (
         <div className="flex w-[70%] items-center justify-center">
           <div className="rounded-3xl bg-[#f4f4f5] px-3 py-1 text-lg font-medium">
-            {t("Select a chat to start messaging")}
+            Оберіть чат для початку спілкування
           </div>
         </div>
       )}

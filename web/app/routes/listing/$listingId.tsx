@@ -15,7 +15,6 @@ import { Avatar, Button, IconButton, Tooltip } from "@mui/material";
 import ProfileImage from "./../../assets/profile.jpeg";
 import { Delete, Edit } from "@mui/icons-material";
 import PurchaseModal from "~/components/listing/PurchaseModal";
-import { useTranslation } from "react-i18next";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 import type { RootLoaderData } from "~/types";
 import { getBody } from "~/utils/getBody";
@@ -91,7 +90,6 @@ const ListingRoute = () => {
   } = useLoaderData();
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const { listingId } = useParams();
-  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { user } = useRouteLoaderData("root") as RootLoaderData;
@@ -129,14 +127,14 @@ const ListingRoute = () => {
             </div>
             {isOwnListing && listing.status === "AVAILABLE" && (
               <div className="ml-4 flex">
-                <Tooltip title={t("Edit listing")}>
+                <Tooltip title={"Редагувати оголошення"}>
                   <Link to={`/listing/${listingId}/edit`}>
                     <IconButton size="large" color="inherit">
                       <Edit />
                     </IconButton>
                   </Link>
                 </Tooltip>
-                <Tooltip title={t("Delete listing")}>
+                <Tooltip title={"Видалити оголошення"}>
                   <IconButton
                     type="submit"
                     name="_action"
@@ -151,18 +149,10 @@ const ListingRoute = () => {
               </div>
             )}
           </div>
-          <div className="text-xl">
-            {t("Designer")}: {listing?.designer}
-          </div>
-          <div className="text-xl">
-            {t("Size")}: {listing?.size}
-          </div>
-          <div className="text-xl">
-            {t("Category")}: {listing?.category}
-          </div>
-          <div className="text-xl">
-            {t("Condition")}: {listing?.condition}
-          </div>
+          <div className="text-xl">Дизайнер: {listing?.designer}</div>
+          <div className="text-xl">Розмір: {listing?.size}</div>
+          <div className="text-xl">Категорія: {listing?.category}</div>
+          <div className="text-xl">Стан: {listing?.condition}</div>
           <div
             className={`my-4 text-2xl font-bold ${
               listing.status === "SOLD" && "text-main"
@@ -188,14 +178,14 @@ const ListingRoute = () => {
                       : () => setSearchParams("?login=true")
                   }
                 >
-                  Purchase
+                  Купити
                 </Button>
                 <Link
                   className="w-full min-w-fit"
                   to={`/user/chat/new/${listing?.User.id}`}
                 >
                   <Button variant="outlined" className="w-full min-w-fit">
-                    Message
+                    Повідомлення
                   </Button>
                 </Link>
               </div>
@@ -232,7 +222,7 @@ const ListingRoute = () => {
           )}
           {listing?.description && (
             <div className="whitespace-pre-wrap">
-              <div className="text-xl font-semibold">{t("Description")}</div>
+              <div className="text-xl font-semibold">Опис</div>
               <div className="mt-2 text-lg">{listing.description}</div>
             </div>
           )}

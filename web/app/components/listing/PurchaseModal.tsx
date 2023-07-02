@@ -90,7 +90,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
       className="mx-auto flex items-center justify-center"
     >
       <DialogTitle className="flex w-full items-center justify-between">
-        <div className="font-bold">Placing an order</div>
+        <div className="font-bold">Створення замовлення</div>
         <IconButton onClick={toggle}>
           <Close />
         </IconButton>
@@ -202,7 +202,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
         >
           {navigation?.formData?.get("_action") === "createOrder"
             ? "Замовлення сворюється..."
-            : "Створити замовлення"}
+            : "Замовити"}
         </Button>
       </Form>
     </Dialog>

@@ -5,11 +5,9 @@ import GoogleIcon from "./../../assets/google.svg";
 import FacebookIcon from "./../../assets/facebook.svg";
 import TwitterIcon from "./../../assets/twitter.svg";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const fetcher = useFetcher();
   const [checkAuth, setCheckAuth] = useState(false);
   const location = useLocation();
@@ -71,7 +69,7 @@ const Login = () => {
         </IconButton>
       </DialogTitle>
       <div className="flex w-[400px] flex-col items-center justify-start">
-        <div className="text-3xl font-semibold">{t("Sign in with")}:</div>
+        <div className="text-3xl font-semibold">Увійти за допомогою:</div>
         <div className="mt-10 flex w-72 flex-col">
           <Button
             color="inherit"
@@ -128,13 +126,13 @@ const Login = () => {
         </div>
         <div className="my-6 flex w-3/4 justify-center text-center">
           <div>
-            {t("By creating an account, you accept our")}{" "}
+            Створюючи аккаунт, ви погоджуєтесь з нашою{" "}
             <Link
               target="_blank"
               className="text-blue-500 underline underline-offset-[4px]"
               to="/info?q=privacy"
             >
-              {t("Privacy policy")}
+              Політикою конфіденційності
             </Link>
           </div>
         </div>

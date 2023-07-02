@@ -48,6 +48,5 @@ export type TListing = {
 
 export interface RootLoaderData {
   ENV: Env;
-  locale: string;
   user: User | null;
 }

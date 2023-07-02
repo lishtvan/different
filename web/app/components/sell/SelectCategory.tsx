@@ -4,11 +4,8 @@ import FieldTitle from "./FieldTitle";
 import type { Section } from "~/constants/listing";
 import { CATEGORIES, SIZES } from "~/constants/listing";
 import { useActionData, useLoaderData } from "@remix-run/react";
-import { useTranslation } from "react-i18next";
 
 const SelectCategory = () => {
-  const { t } = useTranslation();
-
   const actionData = useActionData();
   const loaderData = useLoaderData();
 
@@ -53,7 +50,7 @@ const SelectCategory = () => {
   return (
     <div className="col-start-1 col-end-3 grid grid-cols-2 gap-8">
       <div>
-        <FieldTitle title={t("Category")} required={true} />
+        <FieldTitle title={"Категорія"} required={true} />
         <Select
           className="w-full"
           displayEmpty
@@ -74,8 +71,8 @@ const SelectCategory = () => {
           }}
           renderValue={
             selectedCategory !== ""
-              ? () => <div>{t(selectedCategory)}</div>
-              : () => <div className="text-[#aaa]">{t("Select category")}</div>
+              ? () => <div>{selectedCategory}</div>
+              : () => <div className="text-[#aaa]">Оберіть категорію</div>
           }
         >
           <div className="w-2/5">
@@ -84,7 +81,7 @@ const SelectCategory = () => {
                 key={index}
                 onMouseOver={() => setCurrentSection(section)}
               >
-                {t(section)}
+                {section}
               </MenuItem>
             ))}
           </div>
@@ -97,7 +94,7 @@ const SelectCategory = () => {
                       key={index}
                       onClick={() => hanldeCategoryClick(category)}
                     >
-                      {t(category)}
+                      {category}
                     </MenuItem>
                   ))}
                 </div>
@@ -107,12 +104,12 @@ const SelectCategory = () => {
         </Select>
         {actionData?.errors?.category && (
           <p className="ml-2 mt-1 text-[#d32f2f]">
-            {t(actionData.errors.category)}
+            {actionData.errors.category}
           </p>
         )}
       </div>
       <div>
-        <FieldTitle title={t("Size")} required={true} />
+        <FieldTitle title={"Розмір"} required={true} />
         <TextField
           select
           disabled={!selectedSection}
@@ -139,8 +136,8 @@ const SelectCategory = () => {
               ) : (
                 <div className="text-[#aaa]">
                   {sizePlaceholder
-                    ? t("Select size")
-                    : t("Please, select category first")}
+                    ? "Оберіть розмір"
+                    : "Будь ласка, спершу оберіть категорію"}
                 </div>
               ),
           }}
@@ -157,9 +154,7 @@ const SelectCategory = () => {
           )}
         </TextField>
         {actionData?.errors?.size && (
-          <p className="ml-2 mt-1 text-[#d32f2f]">
-            {t(actionData.errors.size)}
-          </p>
+          <p className="ml-2 mt-1 text-[#d32f2f]">{actionData.errors.size}</p>
         )}
       </div>
     </div>

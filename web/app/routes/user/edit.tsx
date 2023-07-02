@@ -2,9 +2,6 @@ import {
   Button,
   CircularProgress,
   IconButton,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
   TextField,
   Tooltip,
 } from "@mui/material";
@@ -26,7 +23,6 @@ import { getErrors } from "~/utils/getErrors";
 import type { FormEvent } from "react";
 import { useEffect } from "react";
 import { s3UploaderHandler } from "~/s3.server";
-import { useTranslation } from "react-i18next";
 import type { RootLoaderData } from "~/types";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 
@@ -38,7 +34,7 @@ export const action: ActionFunction = async ({ request }) => {
 
     const body = Object.fromEntries(formData);
 
-    const { bio, nickname, location, _action, language } = body;
+    const { bio, nickname, location, _action } = body;
 
     let errors: Record<string, unknown> = {};
     if (nickname.toString().length < 2) errors.nickname = "Too short";
@@ -63,12 +59,8 @@ export const action: ActionFunction = async ({ request }) => {
         errors = getErrors(message);
         return { errors };
       }
-      const newHeaders = new Headers();
-      newHeaders.append(
-        "Set-Cookie",
-        `lng=${language}; Path=/; expires=Thu, 01 Jan 2030 00:00:00 GMT`
-      );
-      return redirect(`/${nickname}`, { headers: newHeaders });
+
+      return redirect(`/${nickname}`);
     }
     return { errors };
   } else {
@@ -101,11 +93,10 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const UserEditRoute = () => {
-  const { user, locale } = useRouteLoaderData("root") as RootLoaderData;
+  const { user } = useRouteLoaderData("root") as RootLoaderData;
   const data = useActionData();
   const submit = useSubmit();
   const navigation = useNavigation();
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -214,41 +205,6 @@ const UserEditRoute = () => {
           }}
           defaultValue={user?.location}
         />
-        <TextField
-          select
-          name="language"
-          SelectProps={{
-            displayEmpty: true,
-            MenuProps: { disableScrollLock: true },
-            renderValue: (value) => (
-              <div>
-                {t("Language")}:{" "}
-                {value === "en" ? t("English") : t("Ukrainian")}
-              </div>
-            ),
-          }}
-          defaultValue={locale}
-          className="w-full"
-        >
-          <MenuItem value={"en"}>
-            <ListItemIcon className="mr-2">
-              <img
-                alt="United States"
-                src="http://purecatamphetamine.github.io/country-flag-icons/3x2/GB.svg"
-              />
-            </ListItemIcon>
-            <ListItemText>{t("English")}</ListItemText>
-          </MenuItem>
-          <MenuItem value={"uk"}>
-            <ListItemIcon className="mr-2">
-              <img
-                alt="United States"
-                src="http://purecatamphetamine.github.io/country-flag-icons/3x2/UA.svg"
-              />
-            </ListItemIcon>
-            <ListItemText>{t("Ukrainian")}</ListItemText>
-          </MenuItem>
-        </TextField>
         <Button
           type="submit"
           disabled={navigation?.formEncType === "multipart/form-data"}
@@ -259,8 +215,8 @@ const UserEditRoute = () => {
         >
           {navigation?.formEncType === "multipart/form-data" ||
           navigation?.formData?.get("_action") === "save"
-            ? t("Saving...")
-            : t("Save")}
+            ? "Збереження..."
+            : "Зберегти"}
         </Button>
       </Form>
     </div>

@@ -14,7 +14,6 @@ import { Search, ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import type { FC } from "react";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 interface Props {
   enableSearch: boolean;
@@ -22,7 +21,6 @@ interface Props {
 }
 
 const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
-  const { t } = useTranslation();
   const { refine, searchForItems, items, toggleShowMore, isShowingMore } =
     useRefinementList({
       attribute,
@@ -62,7 +60,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
     <>
       <ListItemButton onClick={handleClick} className="rounded-xl">
         <ListItemText
-          primary={t(attribute.charAt(0).toUpperCase() + attribute.slice(1))}
+          primary={attribute.charAt(0).toUpperCase() + attribute.slice(1)}
         />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
@@ -78,10 +76,10 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
           className="scrollbar-white max-h-96 overflow-y-scroll"
         >
           {enableSearch && (
-            <ListItem disablePadding className="mt-2 mb-2 px-1">
+            <ListItem disablePadding className="mb-2 mt-2 px-1">
               <TextField
                 size="small"
-                placeholder={t("Search")!}
+                placeholder={"Пошук"}
                 className="w-full px-2"
                 inputProps={{ "aria-label": "search" }}
                 onChange={(event) => searchForItems(event.currentTarget.value)}
@@ -110,7 +108,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
                 }
                 label={
                   <div className="flex items-center">
-                    <div className="break-words">{t(item.label)}</div>
+                    <div className="break-words">{item.label}</div>
                     <div className="ml-3 rounded-full bg-[#ebebeb] px-2">
                       {item.count}
                     </div>

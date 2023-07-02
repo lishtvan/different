@@ -3,7 +3,6 @@ import FieldTitle from "./FieldTitle";
 import { usePaymentInputs } from "react-payment-inputs";
 import images from "react-payment-inputs/images";
 import { useActionData, useLoaderData } from "@remix-run/react";
-import { useTranslation } from "react-i18next";
 
 // @ts-ignore
 const cardNumberValidator = ({ cardType }) => {
@@ -13,7 +12,6 @@ const cardNumberValidator = ({ cardType }) => {
 };
 
 const CardNumber = () => {
-  const { t } = useTranslation();
   const actionData = useActionData();
   const loaderData = useLoaderData();
   const { getCardNumberProps, getCardImageProps, meta } = usePaymentInputs({
@@ -24,7 +22,7 @@ const CardNumber = () => {
   return (
     <div>
       <input type="hidden" name="cardNumberError" value={meta.error} />
-      <FieldTitle title={t("Card number")} required={true} />
+      <FieldTitle title={"Номер картки"} required={true} />
       <TextField
         fullWidth
         type="tel"
@@ -32,7 +30,7 @@ const CardNumber = () => {
         defaultValue={loaderData?.cardNumber}
         inputProps={{
           ...getCardNumberProps({}),
-          placeholder: t("Enter card number")!,
+          placeholder: "Введіть номер картки",
         }}
         error={
           (meta.isTouched && Boolean(meta.error)) ||
@@ -50,7 +48,7 @@ const CardNumber = () => {
       />
       {actionData?.errors?.cardNumber && (
         <p className="ml-2 mt-1 text-[#d32f2f]">
-          {t(actionData.errors.cardNumber)}
+          {actionData.errors.cardNumber}
         </p>
       )}
     </div>

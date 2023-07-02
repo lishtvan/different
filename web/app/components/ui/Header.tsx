@@ -9,17 +9,10 @@ import {
   Tooltip,
   tooltipClasses,
 } from "@mui/material";
-import {
-  Person,
-  Logout,
-  Settings,
-  HelpOutline,
-  Language,
-} from "@mui/icons-material";
+import { Person, Logout, Settings, HelpOutline } from "@mui/icons-material";
 import {
   Form,
   Link,
-  useFetcher,
   useLoaderData,
   useLocation,
   useNavigate,
@@ -29,7 +22,6 @@ import { useState } from "react";
 import ProfileImage from "./../../assets/profile.jpeg";
 import logo from "./../../assets/logo.jpg";
 import MainSearch from "../index/Search";
-import { useTranslation } from "react-i18next";
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -49,9 +41,6 @@ const Header = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { t } = useTranslation();
-  const { i18n } = useTranslation();
-  const fetcher = useFetcher();
 
   const onMenuItemClick = (path: string) => {
     navigate(path);
@@ -189,32 +178,18 @@ const Header = () => {
             )}
 
             {!user && (
-              <>
-                <Button
-                  onClick={() =>
-                    fetcher.submit(
-                      { language: i18n.language === "en" ? "uk" : "en" },
-                      { method: "post", action: "/language" }
-                    )
-                  }
-                  startIcon={<Language />}
-                  className="mr-2 mt-[1px] rounded-xl text-black hover:bg-[#ebebeb]"
-                >
-                  {i18n.language === "en" ? "EN" : "UA"}
-                </Button>
-                <Button
-                  onClick={() => navigate("/info")}
-                  className="mr-2 mt-[1px] h-full rounded-xl text-black hover:bg-[#ebebeb]"
-                  variant="text"
-                >
-                  {t("Resources")}
-                </Button>
-              </>
+              <Button
+                onClick={() => navigate("/info")}
+                className="mr-2 mt-[1px] h-full rounded-xl text-black hover:bg-[#ebebeb]"
+                variant="text"
+              >
+                Ресурси
+              </Button>
             )}
 
             <Link className="mr-2" to="/sell">
               <Button className="bg-main hover:bg-dark" variant="contained">
-                {t("sell")}
+                Продати
               </Button>
             </Link>
 
@@ -235,7 +210,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <Person fontSize="large" />
                       </ListItemIcon>
-                      <div className="text-xl font-normal">{t("Profile")}</div>
+                      <div className="text-xl font-normal">Профіль</div>
                     </MenuItem>
                     <MenuItem
                       className="px-4"
@@ -244,7 +219,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <Settings fontSize="large" />
                       </ListItemIcon>
-                      <div className="text-xl font-normal">{t("Settings")}</div>
+                      <div className="text-xl font-normal">Налаштування</div>
                     </MenuItem>
                     <MenuItem
                       className="px-4"
@@ -253,9 +228,7 @@ const Header = () => {
                       <ListItemIcon className="mr-2">
                         <HelpOutline fontSize="large" />
                       </ListItemIcon>
-                      <div className="text-xl font-normal">
-                        {t("Resources")}
-                      </div>
+                      <div className="text-xl font-normal">Ресурси</div>
                     </MenuItem>
                     <Form
                       action="/auth/logout"
@@ -271,9 +244,7 @@ const Header = () => {
                           <ListItemIcon className="mr-2">
                             <Logout fontSize="large" />
                           </ListItemIcon>
-                          <div className="text-xl font-normal">
-                            {t("Log out")}
-                          </div>
+                          <div className="text-xl font-normal">Вийти</div>
                         </MenuItem>
                       </button>
                     </Form>
@@ -299,7 +270,7 @@ const Header = () => {
                 className="whitespace-nowrap"
                 variant="contained"
               >
-                {t("sign in")}
+                Увійти
               </Button>
             )}
           </div>

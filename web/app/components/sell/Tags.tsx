@@ -1,14 +1,12 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { TAGS } from "~/constants/listing";
 import FieldTitle from "./FieldTitle";
 
 const Tags = () => {
   const loaderData = useLoaderData();
   const [tags, setTags] = useState<string[]>([]);
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (loaderData?.tags?.length > 0) setTags(loaderData.tags);
@@ -16,7 +14,7 @@ const Tags = () => {
 
   return (
     <div className="col-start-1 col-end-3">
-      <FieldTitle title={t("Tags")} required={false} />
+      <FieldTitle title={"Теги"} required={false} />
       <input hidden name="tags" readOnly value={tags} />
       <Autocomplete
         className="w-full"
@@ -26,7 +24,7 @@ const Tags = () => {
         disableCloseOnSelect
         blurOnSelect={tags.length === 2}
         value={tags}
-        noOptionsText={t("You can set maximum 3 tags")}
+        noOptionsText={"Ви можете обрати максимум 3 теги"}
         onChange={(e, newVal) => {
           const newTags = [...newVal];
           if (newTags.length) {
@@ -48,7 +46,7 @@ const Tags = () => {
             }}
             disabled={tags.length === 3}
             placeholder={
-              tags.length ? "" : t("Make the search of your item easier")!
+              tags.length ? "" : "Зробіть пошук свого оголошення простішим"
             }
           />
         )}

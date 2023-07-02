@@ -1,6 +1,5 @@
 import { Tooltip } from "@mui/material";
 import type { FC } from "react";
-import { useTranslation } from "react-i18next";
 
 interface Props {
   title: string;
@@ -8,12 +7,11 @@ interface Props {
 }
 
 const FieldTitle: FC<Props> = ({ title, required }) => {
-  const { t } = useTranslation();
   return (
     <div className="mb-2 ml-2 flex text-xl">
       {required ? (
         <Tooltip
-          title={t("Field is required")}
+          title={"Це поле є обов'язковим"}
           PopperProps={{
             modifiers: [
               {

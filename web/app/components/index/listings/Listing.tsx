@@ -43,7 +43,7 @@ const Listing: FC<Props> = ({ listing }) => {
               listing.status === "SOLD" && "text-main"
             }`}
           >
-            {listing.price} ₴ {listing.status === "SOLD" && "(Sold price)"}
+            {listing.price} ₴ {listing.status === "SOLD" && "(Ціна продажі)"}
           </div>
         </div>
       </div>

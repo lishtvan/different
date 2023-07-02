@@ -24,9 +24,7 @@ import { fetcher } from "./fetcher.server";
 import { LISTINGS_COLLECTION_NAME } from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
-import i18next from "./i18next.server";
-import { useTranslation } from "react-i18next";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { config } from "./constants/config";
 import type { RootLoaderData } from "./types";
@@ -67,10 +65,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const [response, locale] = await Promise.all([
-    getAuthorizedStatus(request),
-    i18next.getLocale(request),
-  ]);
+  const [response] = await Promise.all([getAuthorizedStatus(request)]);
   const user = await response.json();
   const ENV = process.env.ENVIRONMENT;
   const newHeaders = new Headers();
@@ -80,31 +75,25 @@ export const loader: LoaderFunction = async ({ request }) => {
         "set-cookie",
         "token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT, userId=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
       );
-      return json({ user: null, locale, ENV }, { headers: newHeaders });
+      return json({ user: null, ENV }, { headers: newHeaders });
     }
 
-    return json({ user: null, locale, ENV });
+    return json({ user: null, ENV });
   }
 
   const cookieHeader = response.headers.get("set-cookie");
   newHeaders.append("set-cookie", cookieHeader!);
-  return json({ user, locale, ENV }, { headers: newHeaders });
+  return json({ user, ENV }, { headers: newHeaders });
 };
 
 export default function App() {
   const [searchParams] = useSearchParams();
-  const { user, locale, ENV } = useLoaderData<RootLoaderData>();
-  const { i18n } = useTranslation();
+  const { user, ENV } = useLoaderData<RootLoaderData>();
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     `${config[ENV].wsDomain}/chat/message`,
     { shouldReconnect: () => Boolean(user) }
   );
-
-  // TODO: update later
-  useEffect(() => {
-    i18n.changeLanguage(locale);
-  }, [locale, i18n]);
 
   const { searchClient } = useMemo(() => {
     return new TypesenseInstantsearchAdapter({
@@ -114,7 +103,7 @@ export default function App() {
   }, []);
 
   return (
-    <html lang={locale} dir={i18n.dir()}>
+    <html lang={"uk"}>
       <head>
         <Meta />
         <Links />
@@ -144,7 +133,7 @@ export function CatchBoundary() {
   const caught = useCatch();
 
   return (
-    <html lang="en">
+    <html lang="uk">
       <head>
         <Meta />
         <Links />
@@ -186,7 +175,7 @@ export function CatchBoundary() {
 
 export function ErrorBoundary() {
   return (
-    <html lang="en">
+    <html lang="uk">
       <head>
         <Meta />
         <Links />

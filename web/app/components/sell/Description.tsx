@@ -1,15 +1,13 @@
 import { TextField } from "@mui/material";
 import { useLoaderData } from "@remix-run/react";
-import { useTranslation } from "react-i18next";
 import FieldTitle from "./FieldTitle";
 
 const Description = () => {
-  const { t } = useTranslation();
   const loaderData = useLoaderData();
 
   return (
     <div className="col-start-1 col-end-3">
-      <FieldTitle title={t("Description")} required={false} />
+      <FieldTitle title={"Опис"} required={false} />
       <TextField
         rows={3}
         name="description"
@@ -20,9 +18,7 @@ const Description = () => {
         }}
         className="w-full"
         placeholder={
-          t(
-            "Add more information about condition of item, how does it fit, measurements, expierence of wearing, materials, etc. (up to 1000 characters)"
-          )!
+          "Додайте більше інформації про стан речі, її посадку, розміри, досвід використання, матеріали, тощо. (до 1000 символів)"
         }
       />
     </div>

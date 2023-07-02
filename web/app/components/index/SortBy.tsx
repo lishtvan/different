@@ -1,25 +1,23 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useTranslation } from "react-i18next";
 import { useSortBy } from "react-instantsearch-hooks-web";
 
 const SortByPrice = () => {
   const sort = useSortBy({
     items: [
-      { label: "Default", value: "listings" },
-      { label: "Price: Low first", value: "listings/sort/price:asc" },
-      { label: "Price: High first", value: "listings/sort/price:desc" },
+      { label: "За замовчуванням", value: "listings" },
+      { label: "Спочатку дешеві", value: "listings/sort/price:asc" },
+      { label: "Спочатку дорогі", value: "listings/sort/price:desc" },
     ],
   });
-  const { t } = useTranslation();
 
   return (
     <div className="ml-auto">
       <FormControl sx={{ minWidth: 150 }} size="small">
-        <InputLabel id="demo-select-small">{t("Sort by")}</InputLabel>
+        <InputLabel id="demo-select-small">Сортувати</InputLabel>
         <Select
           labelId="demo-select-small"
           id="demo-select-small"
-          label={t("Sort by")}
+          label={"Сортувати"}
           MenuProps={{
             disableScrollLock: true,
           }}
@@ -30,7 +28,7 @@ const SortByPrice = () => {
         >
           {sort.options?.map((sort) => (
             <MenuItem key={sort.value} value={sort.value}>
-              {t(sort.label)}
+              sort.label
             </MenuItem>
           ))}
         </Select>

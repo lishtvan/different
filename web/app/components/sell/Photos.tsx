@@ -13,7 +13,6 @@ import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
 
 import { Gallery, Item } from "react-photoswipe-gallery";
 import FieldTitle from "./FieldTitle";
-import { useTranslation } from "react-i18next";
 
 interface ItemImage {
   imageKey: string | null;
@@ -34,7 +33,6 @@ const initialImageList: ItemImage[] = [
 ];
 
 const Photos = () => {
-  const { t } = useTranslation();
   const loaderData = useLoaderData();
   const [cardList, setCardList] = useState<ItemImage[]>(initialImageList);
   const [currentCard, setCurrentCard] = useState<null | ItemImage>(null);
@@ -155,10 +153,10 @@ const Photos = () => {
 
   return (
     <div className="col-start-1 col-end-3">
-      <FieldTitle required={true} title={t("Photos")} />
+      <FieldTitle required={true} title={"Фотографії"} />
       {actionData?.errors?.imageUrls && (
         <p className="ml-2 mt-1 text-[#d32f2f]">
-          {t(actionData.errors.imageUrls)}
+          {actionData.errors.imageUrls}
         </p>
       )}
       <div className="flex items-center">
@@ -167,13 +165,13 @@ const Photos = () => {
             severity="error"
             className="mx-auto w-full rounded-xl font-bold"
           >
-            {t(uploadError as string)}
+            {uploadError as string}
           </Alert>
         ) : (
           <>
             <p className="ml-2 mr-auto">
-              <span className="mr-1 text-main">{t("Note")}:</span>
-              {t("You can change order of images by grabbing them")}.
+              <span className="mr-1 text-main">Примітка:</span>
+              Ви можете змінювати порядок фотографій перетягуючи їх.
             </p>
             <Button
               variant="outlined"
@@ -181,7 +179,7 @@ const Photos = () => {
               className="text-black"
               onClick={deleteAllHandler}
             >
-              {t("Delete all")}
+              Видалити все
             </Button>
           </>
         )}

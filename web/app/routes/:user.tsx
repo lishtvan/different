@@ -80,7 +80,7 @@ const UserRoute = () => {
                       variant="outlined"
                       endIcon={<Send />}
                     >
-                      Message
+                      Повідомлення
                     </Button>
                   </Link>
                 )}
