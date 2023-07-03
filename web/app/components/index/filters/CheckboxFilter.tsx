@@ -18,9 +18,10 @@ import { useState } from "react";
 interface Props {
   enableSearch: boolean;
   attribute: string;
+  title: string;
 }
 
-const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
+const CheckboxFilter: FC<Props> = ({ enableSearch, attribute, title }) => {
   const { refine, searchForItems, items, toggleShowMore, isShowingMore } =
     useRefinementList({
       attribute,
@@ -52,16 +53,12 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute }) => {
     }
   }, [isShowingMore]);
 
-  if (attribute === "tags" && items.length === 0) {
-    return null;
-  }
+  if (attribute === "tags" && items.length === 0) return null;
 
   return (
     <>
       <ListItemButton onClick={handleClick} className="rounded-xl">
-        <ListItemText
-          primary={attribute.charAt(0).toUpperCase() + attribute.slice(1)}
-        />
+        <ListItemText primary={title} />
         {open ? (
           <ArrowDropUp className="mr-1.5" />
         ) : (
