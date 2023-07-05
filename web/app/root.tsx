@@ -23,7 +23,6 @@ import tailwindStylesUrl from "./styles/tailwind.css";
 import { fetcher } from "./fetcher.server";
 import { LISTINGS_COLLECTION_NAME } from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
-import { getAuthorizedStatus } from "./utils/getAuthorizedStatus";
 import { useMemo } from "react";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { config } from "./constants/config";
@@ -65,7 +64,11 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const [response] = await Promise.all([getAuthorizedStatus(request)]);
+  const response = await fetcher({
+    request,
+    method: "GET",
+    route: "/auth/check",
+  });
   const user = await response.json();
   const ENV = process.env.ENVIRONMENT;
   const newHeaders = new Headers();
@@ -77,7 +80,6 @@ export const loader: LoaderFunction = async ({ request }) => {
       );
       return json({ user: null, ENV }, { headers: newHeaders });
     }
-
     return json({ user: null, ENV });
   }
 
