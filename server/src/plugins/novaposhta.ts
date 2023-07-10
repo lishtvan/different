@@ -1,5 +1,6 @@
 import fp from 'fastify-plugin';
 import { initNovaPoshta } from 'novaposhtajs/build/NovaPoshta';
+import { LISTINGS_COLLECTION_NAME } from '../constants/typesense';
 
 type CreateSafeDelivery = (props: {
   CityRecipient: string;
@@ -138,8 +139,79 @@ const createSafeDelivery: CreateSafeDelivery = async ({
 };
 
 export default fp(async (fastify) => {
+  const trackInternetDocuments = async (userId: number) => {
+    const orders = await fastify.prisma.order.findMany({
+      where: {
+        OR: [{ listing: { userId } }, { buyerId: userId }],
+        NOT: { status: 'COMMISSION' },
+        AND: { NOT: { status: 'FINISHED' } },
+      },
+      select: {
+        trackingNumber: true,
+        status: true,
+      },
+    });
+
+    const documents = orders.map((order) => order.trackingNumber);
+
+    const np = initNovaPoshta(process.env.NP_API_KEY);
+    const internetDocuments = await np.trackingDocument.getStatusDocuments({
+      documents,
+    });
+    const trackings = internetDocuments.map((i) => ({
+      status: i.status,
+      statusCode: i.statusCode,
+      trackingNumber: i.number,
+    }));
+    console.log(trackings);
+
+    const refusalStatusCodes = ['2', '3', '102', '103', '105', '111'];
+    const shippingStatusesCodes = ['4', '5', '6', '7', '101'];
+    const receivalStatusCodes = ['9', '10', '11'];
+
+    const statusUpdatePromises = trackings.map((i) => {
+      if (refusalStatusCodes.includes(i.statusCode)) {
+        return fastify.prisma.order
+          .delete({
+            where: { trackingNumber: i.trackingNumber },
+            select: { listing: { select: { id: true } } },
+          })
+          .then(async (res) => {
+            await fastify.typesense
+              .collections(LISTINGS_COLLECTION_NAME)
+              .documents()
+              .update({ status: 'AVAILABLE', id: res.listing.id.toString() });
+          });
+      }
+      if (i.statusCode === '1' && !i.status.includes('оплату')) {
+        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
+        if (order?.status === 'HANDLING') return;
+        return fastify.prisma.order.update({
+          where: { trackingNumber: i.trackingNumber },
+          data: { status: 'HANDLING' },
+        });
+      }
+      if (shippingStatusesCodes.includes(i.statusCode)) {
+        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
+        if (order?.status === 'SHIPPING') return;
+        return fastify.prisma.order.update({
+          where: { trackingNumber: i.trackingNumber },
+          data: { status: 'SHIPPING' },
+        });
+      }
+      if (receivalStatusCodes.includes(i.statusCode)) {
+        return fastify.prisma.order.update({
+          where: { trackingNumber: i.trackingNumber },
+          data: { status: 'COMMISSION' },
+        });
+      }
+    });
+    await Promise.all(statusUpdatePromises);
+  };
+
   fastify.decorate('np', {
     createSafeDelivery,
+    trackInternetDocuments,
   });
 });
 
@@ -147,6 +219,23 @@ declare module 'fastify' {
   interface FastifyInstance {
     np: {
       createSafeDelivery: CreateSafeDelivery;
+      trackInternetDocuments: (userId: number) => Promise<void>;
     };
   }
 }
+
+// { status: 'Відмова від отримання', statusCode: '102' } // Bodya refuse
+// { status: 'Покупка не підтверджена Покупцем', statusCode: '2' }, // EN Deleted
+// {
+//   status: 'Очікуємо на посилку від Відправника, щоб доставити її Одержувачу',
+//   statusCode: '1'
+// } // Payed
+// {
+//   status: 'Відправлення у м. Апостолове',
+//   statusCode: '4',
+//   trackingNumber: '20450739397986'
+// },
+// {
+//   status: 'Очікує на оплату доставки та сейф-сервісу',
+//   statusCode: '1'
+// }

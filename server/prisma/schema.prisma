@@ -71,7 +71,7 @@ model Order {
   status         OrderStatus @default(PAYMENT)
   listing        Listing     @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   listingId      Int
-  trackingNumber String
+  trackingNumber String      @unique
   buyer          User        @relation(fields: [buyerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   buyerId        Int
 }

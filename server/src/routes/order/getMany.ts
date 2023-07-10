@@ -14,6 +14,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
           NOT: { status: 'COMMISSION' },
           AND: { NOT: { status: 'FINISHED' } },
         },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           status: true,
@@ -29,6 +30,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
           NOT: { status: 'COMMISSION' },
           AND: { NOT: { status: 'FINISHED' } },
         },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           status: true,
