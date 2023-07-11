@@ -70,7 +70,7 @@ const ClearFilters = () => {
           onClick={() => clear.refine()}
           className="ml-1 mr-4 min-w-fit px-1 pl-2 text-xl underline underline-offset-2"
         >
-          Clear All
+          Видалити все
         </button>
       )}
     </>
