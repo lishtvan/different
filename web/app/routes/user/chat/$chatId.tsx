@@ -100,7 +100,7 @@ const IndexRoute = () => {
       </div>
       <div className="mx-1 mb-1 flex w-full">
         <TextField
-          placeholder="Write a message..."
+          placeholder="Написати повідомлення..."
           className="w-full"
           autoComplete="off"
           autoFocus={true}

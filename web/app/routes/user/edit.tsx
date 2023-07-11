@@ -37,14 +37,14 @@ export const action: ActionFunction = async ({ request }) => {
     const { bio, nickname, location, _action } = body;
 
     let errors: Record<string, unknown> = {};
-    if (nickname.toString().length < 2) errors.nickname = "Too short";
-    else if (nickname.toString().length > 20) errors.nickname = "Too long";
+    if (nickname.toString().length < 2) errors.nickname = "Занадто короткий";
+    else if (nickname.toString().length > 20) errors.nickname = "Занадто довгий";
     else if (!/^[a-z0-9_]+$/.exec(nickname.toString())) {
-      errors.nickname = "This symbol not allowed";
+      errors.nickname = "Дозволено лише a-z, 0-9 та підкреслення";
     }
 
-    if (bio.toString().length > 150) errors.bio = "Too long";
-    if (location.toString().length > 40) errors.location = "Too long";
+    if (bio.toString().length > 150) errors.bio = "Занадто довго";
+    if (location.toString().length > 40) errors.location = "Занадто довго";
     if (Object.keys(errors).length > 0) return { errors };
 
     if (_action === "save") {
@@ -147,7 +147,7 @@ const UserEditRoute = () => {
           </label>
           {user?.avatarUrl && (
             <div className="absolute ml-56">
-              <Tooltip title="Delete">
+              <Tooltip title="Видалити">
                 <IconButton
                   type="submit"
                   name="deleteImage"
@@ -169,7 +169,7 @@ const UserEditRoute = () => {
         onChange={handleChange}
       >
         <TextField
-          placeholder="Nickname"
+          placeholder="Нікнейм"
           name="nickname"
           autoComplete="off"
           sx={{ width: "100%" }}
@@ -191,10 +191,10 @@ const UserEditRoute = () => {
           name="bio"
           defaultValue={user?.bio}
           sx={{ marginTop: "15px", marginBottom: "15px", width: "100%" }}
-          placeholder="Bio"
+          placeholder="Про себе"
         />
         <TextField
-          placeholder="Location"
+          placeholder="Місце знаходження"
           name="location"
           autoComplete="off"
           sx={{ marginBottom: "15px", width: "100%" }}

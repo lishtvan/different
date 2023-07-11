@@ -38,7 +38,7 @@ const ChatRoute = () => {
   if (chats?.length === 0) {
     return (
       <div className="mt-6 flex h-[calc(100vh-74px)] items-center justify-center text-2xl">
-        You don`t have any chats yet, message someone! &#128522;
+        У вас ще немає чатів, напишіть комусь! &#128522;
       </div>
     );
   }

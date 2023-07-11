@@ -95,7 +95,7 @@ const UserRoute = () => {
                     : "underline decoration-main decoration-2 underline-offset-[5px]"
                 }`}
               >
-                <b>{availableListingsCount}</b> listings
+                <b>{availableListingsCount}</b> оголошень
               </NavLink>
               <NavLink
                 to={"?q=sold"}
@@ -105,7 +105,7 @@ const UserRoute = () => {
                     : "decoration-main decoration-2 underline-offset-[5px] hover:underline"
                 }`}
               >
-                <b>{soldListingsCount}</b> sold
+                <b>{soldListingsCount}</b> проданих
               </NavLink>
             </div>
             <div className="max-w-md break-words">{bio}</div>

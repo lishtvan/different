@@ -5,6 +5,7 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
+import type { ShouldRevalidateFunction } from "@remix-run/react";
 import {
   Links,
   LiveReload,
@@ -41,6 +42,20 @@ export const meta: MetaFunction = () => ({
 });
 
 export const handle = { i18n: "common" };
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  currentUrl,
+  defaultShouldRevalidate,
+  formEncType,
+}) => {
+  if (
+    currentUrl.pathname === "/user/edit" &&
+    formEncType !== "multipart/form-data"
+  ) {
+    return false;
+  }
+  return defaultShouldRevalidate;
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const { API_DOMAIN } = process.env;
