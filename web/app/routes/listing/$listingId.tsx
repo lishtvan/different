@@ -202,8 +202,8 @@ const ListingRoute = () => {
               <div>
                 <div className="text-xl">{listing?.User.nickname}</div>
                 <div className="flex gap-2 text-sm text-[#737373]">
-                  <div>{sellerAvailableListingsCount} listings</div>
-                  <div>{sellerSoldListingsCount} sold</div>
+                  <div>{sellerAvailableListingsCount} оголошень</div>
+                  <div>{sellerSoldListingsCount} проданих</div>
                 </div>
               </div>
             </Link>

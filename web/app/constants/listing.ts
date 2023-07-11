@@ -554,7 +554,7 @@ export const TAGS = [
 ];
 
 export const SIZES = {
-  Tops: [
+  Верх: [
     "US XXS / EU 40",
     "US XS / EU 42",
     "US S / EU 44-46",
@@ -563,7 +563,7 @@ export const SIZES = {
     "US XL / EU 56",
     "US XXL / EU 58",
   ],
-  Bottoms: [
+  Низ: [
     "US 28-29 / EU 44 / XS",
     "US 30-31 / EU 46 / S",
     "US 32-33 / EU 48 / M",
@@ -572,7 +572,7 @@ export const SIZES = {
     "US 38-39 / EU 54 / XXL",
     "US 40-41 / EU 56 / 3XL",
   ],
-  Outerwear: [
+  "Верхній одяг": [
     "US XXS / EU 40",
     "US XS / EU 42",
     "US S / EU 44-46",
@@ -581,7 +581,7 @@ export const SIZES = {
     "US XL / EU 56",
     "US XXL / EU 58",
   ],
-  Footwear: [
+  Взуття: [
     "US 5 / EU 37",
     "US 5.5 / EU 38",
     "US 6 / EU 39",
@@ -602,7 +602,7 @@ export const SIZES = {
     "US 14 / EU 47",
     "US 15 / EU 48 ",
   ],
-  Tailoring: [
+  "Офіційний одяг": [
     "34S",
     "34R",
     "36S",
@@ -623,7 +623,7 @@ export const SIZES = {
     "46R",
     "46L",
   ],
-  Accessories: ["ONE SIZE"],
+  Аксесуари: ["ONE SIZE"],
 };
 
 export const SHORT_SIZES = {
@@ -683,72 +683,67 @@ export const SHORT_SIZES = {
 };
 
 export type Section =
-  | "Tops"
-  | "Bottoms"
-  | "Outerwear"
-  | "Footwear"
-  | "Tailoring"
-  | "Accessories";
+  | "Верх"
+  | "Низ"
+  | "Верхній одяг"
+  | "Взуття"
+  | "Офіційний одяг"
+  | "Аксесуари";
 
 type Categories = Record<Section, string[]>;
 
 export const CATEGORIES: Categories = {
-  Tops: [
-    "T-shirts",
-    "Long sleeve",
-    "Polo",
-    "Shirts",
-    "Sweaters",
-    "Hoodies",
-    "Sweatshirts",
+  Верх: [
+    "Футболки",
+    "Лонгсліви",
+    "Поло",
+    "Сорочки",
+    "Светри",
+    "Худі",
+    "Світшоти",
   ],
-  Bottoms: [
-    "Pants",
-    "Cargo pants",
-    "Jeans",
-    "Shorts",
-    "Cropped pants",
-    "Track pants",
-    "Overalls",
+  Низ: [
+    "Штани",
+    "Карго штани",
+    "Джинси",
+    "Шорти",
+    "Бриджі",
+    "Спортивні штани",
+    "Комбінезони",
   ],
-  Outerwear: [
-    "Jackets",
-    "Windbreakers",
-    "Bomber jackets",
-    "Leather jackets",
-    "Parkas",
-    "Denim jackets",
-    "Coats",
-    "Trenches",
-    "Vests",
+  "Верхній одяг": [
+    "Куртки",
+    "Вітрівки",
+    "Бомбери",
+    "Шкіряні куртки",
+    "Парки",
+    "Джинсові куртки",
+    "Пальта",
+    "Тренчі",
+    "Жилети",
   ],
-  Footwear: [
-    "Sneakers",
-    "Cotton sneakers",
-    "Casual shoes",
-    "Boots",
-    "Sandals",
-    "Slip-ons",
-    "Flip-flops",
+  Взуття: [
+    "Кросівки",
+    "Кеди",
+    "Туфлі",
+    "Черевики",
+    "Сандалі",
+    "Сліпони",
+    "Капці",
   ],
-  Tailoring: ["Suits", "Blazers", "Suit pants", "Suit vests"],
-  Accessories: [
-    "Bags",
-    "Belts",
-    "Wallets",
-    "Glasses",
-    "Hats",
-    "Casual hats",
-    "Gloves",
-    "Scarfs",
-    "Ties",
-    "Jewelry",
+  "Офіційний одяг": ["Офіційні костюми", "Піджаки", "Офіційні штани", "Жилетки"],
+  Аксесуари: [
+    "Сумки",
+    "Ремені, пояси",
+    "Гаманці",
+    "Окуляри",
+    "Кепки, шапки",
+    "Капелюхи",
+    "Рукавиці",
+    "Шарфи, хустки",
+    "Краватки",
+    "Ювелірні вироби",
   ],
 };
 
-export const CONDITIONS = [
-  "New",
-  "Gently used",
-  "Used",
-  "Very worn",
-];
+export const CONDITIONS = ["Новий", "Мінімально вживаний", "Вживаний", "Поношений"];

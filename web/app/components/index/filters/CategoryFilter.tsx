@@ -6,12 +6,12 @@ import { CATEGORIES } from "~/constants/listing";
 import SubCategoryFilter from "./SubcategoryFilter";
 
 interface CategoriesFilter<T> {
-  Tops: T;
-  Bottoms: T;
-  Outerwear: T;
-  Footwear: T;
-  Tailoring: T;
-  Accessories: T;
+  Верх: T;
+  Низ: T;
+  "Верхній одяг": T;
+  Взуття: T;
+  "Офіційний одяг": T;
+  Аксесуари: T;
 }
 
 const CategoryFilter = () => {
@@ -20,35 +20,35 @@ const CategoryFilter = () => {
   });
 
   const [categories, setCategories] = useState<CategoriesFilter<typeof items>>({
-    Tops: [],
-    Bottoms: [],
-    Outerwear: [],
-    Footwear: [],
-    Tailoring: [],
-    Accessories: [],
+    Верх: [],
+    Низ: [],
+    "Верхній одяг": [],
+    Взуття: [],
+    "Офіційний одяг": [],
+    Аксесуари: [],
   });
 
   useEffect(() => {
     const newCategories: CategoriesFilter<typeof items> = {
-      Tops: [],
-      Bottoms: [],
-      Outerwear: [],
-      Footwear: [],
-      Tailoring: [],
-      Accessories: [],
+      Верх: [],
+      Низ: [],
+      "Верхній одяг": [],
+      Взуття: [],
+      "Офіційний одяг": [],
+      Аксесуари: [],
     };
     items.forEach((item) => {
-      if (CATEGORIES.Tops.includes(item.label)) newCategories.Tops.push(item);
-      else if (CATEGORIES.Bottoms.includes(item.label)) {
-        newCategories.Bottoms.push(item);
-      } else if (CATEGORIES.Footwear.includes(item.label)) {
-        newCategories.Footwear.push(item);
-      } else if (CATEGORIES.Outerwear.includes(item.label)) {
-        newCategories.Outerwear.push(item);
-      } else if (CATEGORIES.Tailoring.includes(item.label)) {
-        newCategories.Tailoring.push(item);
-      } else if (CATEGORIES.Accessories.includes(item.label)) {
-        newCategories.Accessories.push(item);
+      if (CATEGORIES.Верх.includes(item.label)) newCategories.Верх.push(item);
+      else if (CATEGORIES.Низ.includes(item.label)) {
+        newCategories.Низ.push(item);
+      } else if (CATEGORIES.Взуття.includes(item.label)) {
+        newCategories.Взуття.push(item);
+      } else if (CATEGORIES["Верхній одяг"].includes(item.label)) {
+        newCategories["Верхній одяг"].push(item);
+      } else if (CATEGORIES["Офіційний одяг"].includes(item.label)) {
+        newCategories["Офіційний одяг"].push(item);
+      } else if (CATEGORIES.Аксесуари.includes(item.label)) {
+        newCategories.Аксесуари.push(item);
       }
     });
     setCategories(newCategories);
@@ -72,26 +72,26 @@ const CategoryFilter = () => {
       </ListItemButton>
 
       <Collapse in={open} timeout="auto">
-        <SubCategoryFilter subcategories={categories.Tops} category="Tops" />
+        <SubCategoryFilter subcategories={categories.Верх} category="Верх" />
         <SubCategoryFilter
-          subcategories={categories.Bottoms}
-          category="Bottoms"
+          subcategories={categories.Низ}
+          category="Низ"
         />
         <SubCategoryFilter
-          subcategories={categories.Outerwear}
-          category="Outerwear"
+          subcategories={categories["Верхній одяг"]}
+          category="Верхній одяг"
         />
         <SubCategoryFilter
-          subcategories={categories.Footwear}
-          category="Footwear"
+          subcategories={categories.Взуття}
+          category="Взуття"
         />
         <SubCategoryFilter
-          subcategories={categories.Tailoring}
-          category="Tailoring"
+          subcategories={categories["Офіційний одяг"]}
+          category="Офіційний одяг"
         />
         <SubCategoryFilter
-          subcategories={categories.Accessories}
-          category="Accessories"
+          subcategories={categories.Аксесуари}
+          category="Аксесуари"
         />
       </Collapse>
     </>

@@ -177,6 +177,10 @@ export default fp(async (fastify) => {
             select: { listing: { select: { id: true } } },
           })
           .then(async (res) => {
+            await fastify.prisma.listing.update({
+              where: { id: res.listing.id },
+              data: { status: 'AVAILABLE' },
+            });
             await fastify.typesense
               .collections(LISTINGS_COLLECTION_NAME)
               .documents()
