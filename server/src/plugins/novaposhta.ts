@@ -163,7 +163,6 @@ export default fp(async (fastify) => {
       statusCode: i.statusCode,
       trackingNumber: i.number,
     }));
-    console.log(trackings);
 
     const refusalStatusCodes = ['2', '3', '102', '103', '105', '111'];
     const shippingStatusesCodes = ['4', '5', '6', '7', '101'];
