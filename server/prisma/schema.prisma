@@ -16,6 +16,7 @@ model User {
   avatarUrl  String?
   location   String?
   phone      String?
+  isBill     Boolean?
   Sessions   Session[]
   Listings   Listing[]
   Chats      Chat[]

@@ -44,6 +44,9 @@ export const fetcher: Fetcher = async ({
     });
   } else response = await fetch(`${domain}${route}`, { method, headers });
 
+  if (response.headers.get("bill") && !request.url.includes("/bill")) {
+    throw redirect("/bill");
+  }
   if (response.status < 400) return response;
 
   if (response.status === 401 && route !== "/auth/check") {
@@ -52,6 +55,5 @@ export const fetcher: Fetcher = async ({
 
   if (response.status === 404) throw new Response("", { status: 404 });
   if (response.status === 500) throw new Response("", { status: 500 });
-
   return response;
 };

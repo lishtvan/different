@@ -114,7 +114,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
         <TextField
           className="w-full"
           name="lastName"
-          label={actionData?.errors?.lastName || "Фамілія"}
+          label={actionData?.errors?.lastName || "Прізвище"}
           error={Boolean(actionData?.errors?.lastName)}
         />
         <Autocomplete
@@ -201,7 +201,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
           className="mb-4 w-full"
         >
           {navigation?.formData?.get("_action") === "createOrder"
-            ? "Замовлення сворюється..."
+            ? "Замовлення створюється..."
             : "Замовити"}
         </Button>
       </Form>

@@ -178,7 +178,7 @@ const ListingRoute = () => {
                       : () => setSearchParams("?login=true")
                   }
                 >
-                  Купити
+                  Замовити
                 </Button>
                 <Link
                   className="w-full min-w-fit"

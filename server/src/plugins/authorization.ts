@@ -24,11 +24,17 @@ export default fp(async (fastify) => {
     if (!token || !userId) throw fastify.httpErrors.unauthorized();
     const session = await fastify.prisma.session.findFirst({
       where: { token, userId: Number(userId) },
+      select: { token: true, userId: true, User: { select: { isBill: true } } },
     });
     if (!session) throw fastify.httpErrors.unauthorized();
 
     reply
       .setCookie('token', session.token, COOKIE_OPTIONS)
       .setCookie('userId', session.userId.toString(), COOKIE_OPTIONS);
+
+    if (session.User.isBill) {
+      reply.header('bill', 'pay');
+      if (routerPath === '/auth/logout') return reply.send();
+    }
   });
 });

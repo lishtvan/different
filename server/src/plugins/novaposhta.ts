@@ -203,10 +203,18 @@ export default fp(async (fastify) => {
         });
       }
       if (receivalStatusCodes.includes(i.statusCode)) {
-        return fastify.prisma.order.update({
-          where: { trackingNumber: i.trackingNumber },
-          data: { status: 'COMMISSION' },
-        });
+        return fastify.prisma.order
+          .update({
+            where: { trackingNumber: i.trackingNumber },
+            data: { status: 'COMMISSION' },
+            select: { listing: { select: { userId: true } } },
+          })
+          .then(async (res) => {
+            await fastify.prisma.user.update({
+              where: { id: res.listing.userId },
+              data: { isBill: true },
+            });
+          });
       }
     });
     await Promise.all(statusUpdatePromises);
