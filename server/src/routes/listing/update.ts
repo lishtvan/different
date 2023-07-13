@@ -103,15 +103,15 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
       phone,
     } = req.body;
 
-    const listingToUpdate = await fastify.prisma.listing.findFirst({
-      where: { id: listingId, userId: Number(req.cookies.userId) },
-    });
-    if (!listingToUpdate) throw fastify.httpErrors.unauthorized();
-
     if (cardNumberError) {
       throw fastify.httpErrors.badRequest(`/cardNumber ${cardNumberError} `);
     }
 
+    const listingToUpdate = await fastify.prisma.listing.findFirst({
+      where: { id: listingId, userId: Number(req.cookies.userId) },
+    });
+
+    if (!listingToUpdate) throw fastify.httpErrors.unauthorized();
     if (listingToUpdate.status !== 'AVAILABLE') throw fastify.httpErrors.badRequest();
 
     const listing = await fastify.prisma.listing.update({

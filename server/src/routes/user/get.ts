@@ -7,7 +7,6 @@ const schema = {
     type: 'object',
     properties: {
       nickname: { type: 'string' },
-      userId: { type: 'number' },
     },
   } as const,
 };

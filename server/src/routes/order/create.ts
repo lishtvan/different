@@ -47,9 +47,8 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
       lastName,
     } = req.body;
 
-    const listing = await fastify.prisma.listing.findFirst({
-      where: { id: listingId },
-    });
+    const listing = await fastify.prisma.listing.findUnique({ where: { id: listingId } });
+
     if (!listing || listing.status !== 'AVAILABLE') throw fastify.httpErrors.notFound();
 
     const { trackingNumber } = await fastify.np.createSafeDelivery({
