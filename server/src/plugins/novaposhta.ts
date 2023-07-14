@@ -142,7 +142,7 @@ export default fp(async (fastify) => {
   const trackInternetDocuments = async (userId: number) => {
     const orders = await fastify.prisma.order.findMany({
       where: {
-        OR: [{ listing: { userId } }, { buyerId: userId }],
+        OR: [{ Listing: { userId } }, { buyerId: userId }],
         NOT: { status: 'COMMISSION' },
         AND: { NOT: { status: 'FINISHED' } },
       },
@@ -173,17 +173,17 @@ export default fp(async (fastify) => {
         return fastify.prisma.order
           .delete({
             where: { trackingNumber: i.trackingNumber },
-            select: { listing: { select: { id: true } } },
+            select: { Listing: { select: { id: true } } },
           })
           .then(async (res) => {
             await fastify.prisma.listing.update({
-              where: { id: res.listing.id },
+              where: { id: res.Listing.id },
               data: { status: 'AVAILABLE' },
             });
             await fastify.typesense
               .collections(LISTINGS_COLLECTION_NAME)
               .documents()
-              .update({ status: 'AVAILABLE', id: res.listing.id.toString() });
+              .update({ status: 'AVAILABLE', id: res.Listing.id.toString() });
           });
       }
       if (i.statusCode === '1' && !i.status.includes('оплату')) {
@@ -207,11 +207,11 @@ export default fp(async (fastify) => {
           .update({
             where: { trackingNumber: i.trackingNumber },
             data: { status: 'COMMISSION' },
-            select: { listing: { select: { userId: true } } },
+            select: { Listing: { select: { userId: true } } },
           })
           .then(async (res) => {
             await fastify.prisma.user.update({
-              where: { id: res.listing.userId },
+              where: { id: res.Listing.userId },
               data: { isBill: true },
             });
           });

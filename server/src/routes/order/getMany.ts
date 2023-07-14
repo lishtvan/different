@@ -10,7 +10,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
     const [sellOrders, buyOrders] = await Promise.all([
       fastify.prisma.order.findMany({
         where: {
-          listing: { userId: Number(userId) },
+          Listing: { userId: Number(userId) },
           NOT: { status: 'COMMISSION' },
           AND: { NOT: { status: 'FINISHED' } },
         },
@@ -21,7 +21,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
           createdAt: true,
           trackingNumber: true,
           buyer: { select: { nickname: true, phone: true } },
-          listing: { select: { price: true, title: true, id: true } },
+          Listing: { select: { price: true, title: true, id: true } },
         },
       }),
       await fastify.prisma.order.findMany({
@@ -36,7 +36,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
           status: true,
           createdAt: true,
           trackingNumber: true,
-          listing: {
+          Listing: {
             select: {
               price: true,
               title: true,

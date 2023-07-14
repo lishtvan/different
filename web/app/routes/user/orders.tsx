@@ -19,7 +19,7 @@ interface SellOrder {
   createdAt: string;
   trackingNumber: string;
   buyer: { nickname: string; phone: string };
-  listing: { price: number; title: string; id: number };
+  Listing: { price: number; title: string; id: number };
 }
 
 interface BuyOrder {
@@ -27,7 +27,7 @@ interface BuyOrder {
   status: "SHIPPING" | "HANDLING" | "PAYMENT";
   createdAt: string;
   trackingNumber: string;
-  listing: {
+  Listing: {
     price: number;
     title: string;
     id: number;
@@ -90,7 +90,7 @@ const SellTable: FC<{ sellOrders: SellOrder[] }> = ({ sellOrders }) => {
               component="th"
               scope="row"
             >
-              <Link to={`/listing/${row.listing.id}`}>{row.listing.title}</Link>
+              <Link to={`/listing/${row.Listing.id}`}>{row.Listing.title}</Link>
             </TableCell>
             <TableCell className={`${STATUS_FORMAT[row.status].color}`}>
               {STATUS_FORMAT[row.status].statusTranslation}
@@ -99,7 +99,7 @@ const SellTable: FC<{ sellOrders: SellOrder[] }> = ({ sellOrders }) => {
             <TableCell className="underline decoration-main decoration-2 underline-offset-[5px]">
               <Link to={`/${row.buyer.nickname}`}>{row.buyer.nickname}</Link>
             </TableCell>
-            <TableCell>{row.listing.price} грн</TableCell>
+            <TableCell>{row.Listing.price} грн</TableCell>
             <TableCell>{row.buyer.phone}</TableCell>
             <TableCell>
               {new Date(row.createdAt).toLocaleDateString()}
@@ -136,19 +136,19 @@ const BuyTable: FC<{ buyOrders: BuyOrder[] }> = ({ buyOrders }) => {
               component="th"
               scope="row"
             >
-              <Link to={`/listing/${row.listing.id}`}>{row.listing.title}</Link>
+              <Link to={`/listing/${row.Listing.id}`}>{row.Listing.title}</Link>
             </TableCell>
             <TableCell className={`${STATUS_FORMAT[row.status].color}`}>
               {STATUS_FORMAT[row.status].statusTranslation}
             </TableCell>
             <TableCell>{row.trackingNumber}</TableCell>
             <TableCell className="underline decoration-main decoration-2 underline-offset-[5px]">
-              <Link to={`/${row.listing.User.nickname}`}>
-                {row.listing.User.nickname}
+              <Link to={`/${row.Listing.User.nickname}`}>
+                {row.Listing.User.nickname}
               </Link>
             </TableCell>
-            <TableCell>{row.listing.price} грн</TableCell>
-            <TableCell>{row.listing.phone}</TableCell>
+            <TableCell>{row.Listing.price} грн</TableCell>
+            <TableCell>{row.Listing.phone}</TableCell>
             <TableCell>
               {new Date(row.createdAt).toLocaleDateString()}
             </TableCell>
@@ -162,6 +162,7 @@ const BuyTable: FC<{ buyOrders: BuyOrder[] }> = ({ buyOrders }) => {
 const OrdersRoute = () => {
   const loaderData = useLoaderData<Orders>();
   const [searchParams, setSearchParams] = useSearchParams();
+  console.log(loaderData);
 
   useEffect(() => {
     const { buyOrders, sellOrders } = loaderData;

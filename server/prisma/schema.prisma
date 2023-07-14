@@ -53,7 +53,7 @@ model Listing {
   User        User          @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   status      ListingStatus @default(AVAILABLE)
   userId      Int
-  Order       Order[]
+  Order       Order?
   phone       String
 }
 
@@ -70,11 +70,11 @@ model Order {
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @default(now()) @updatedAt
   status         OrderStatus @default(PAYMENT)
-  listing        Listing     @relation(fields: [listingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  listingId      Int
   trackingNumber String      @unique
   buyer          User        @relation(fields: [buyerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   buyerId        Int
+  Listing        Listing     @relation(fields: [listingId], references: [id])
+  listingId      Int         @unique
 }
 
 model Message {
