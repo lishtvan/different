@@ -35,7 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
     if (body.tags) formattedTags = body.tags.split(",");
     const phoneNumber = parsePhoneNumberFromString(body.phone as string, "UA");
     if (!phoneNumber?.isValid()) {
-      return { errors: { phone: "Phone number is invalid" } };
+      return { errors: { phone: "Недійсний номер телефону" } };
     }
     const phone = parseInt(phoneNumber.number);
 

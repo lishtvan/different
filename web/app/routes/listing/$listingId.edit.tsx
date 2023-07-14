@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     // TODO:REFACTOR reuse code
     const phoneNumber = parsePhoneNumberFromString(body.phone as string, "UA");
     if (!phoneNumber?.isValid()) {
-      return { errors: { phone: "Phone number is invalid" } };
+      return { errors: { phone: "Недійсний номер телефону" } };
     }
     const phone = parseInt(phoneNumber.number);
 

@@ -55,7 +55,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       "UA"
     );
     if (!phoneNumber?.isValid()) {
-      return { errors: { RecipientsPhone: "Phone number is invalid" } };
+      return { errors: { RecipientsPhone: "Недійсний номер телефону" } };
     }
     const RecipientsPhone = parseInt(phoneNumber.number);
     const orderResponse = await fetcher({
