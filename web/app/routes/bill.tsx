@@ -7,21 +7,49 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { type LoaderFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 import { fetcher } from "~/fetcher.server";
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+interface SoldItem {
+  price: number;
+  title: string;
+  id: string;
+  commission: string;
+}
+
+interface Bill {
+  soldItems: SoldItem[];
+  totalCommission: number;
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
   const response = await fetcher({
     request,
     method: "POST",
     route: "/bill/get",
   });
-
+  if (response.status === 400) return redirect("/");
   return response;
 };
 
+export const action: ActionFunction = async ({ request }) => {
+  const response = await fetcher({
+    request,
+    method: "POST",
+    route: "/bill/getPaymentLink",
+  });
+  if (response.status === 400) return;
+  const { paymentLink } = await response.json();
+
+  return redirect(paymentLink);
+};
+
 const BillRoute = () => {
+  const loaderData = useLoaderData<Bill>();
+
   return (
     <div className="flex min-h-[calc(100vh-74px)] w-full items-center justify-center ">
       <div className="mb-20 w-fit">
@@ -48,20 +76,9 @@ const BillRoute = () => {
               </TableRow>
             </TableHead>
             <TableBody className="max-h-96 overflow-y-scroll">
-              {[
-                {
-                  price: 100,
-                  comission: 5,
-                  title: "shoes",
-                },
-                {
-                  price: 100,
-                  comission: 5,
-                  title: "shoes",
-                },
-              ].map((row) => (
+              {loaderData?.soldItems.map((row) => (
                 <TableRow
-                  key={"2"}
+                  key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell
@@ -75,7 +92,7 @@ const BillRoute = () => {
                     {row.price} грн
                   </TableCell>
                   <TableCell className="text-xl text-main">
-                    {row.comission} грн
+                    {row.commission} грн
                   </TableCell>
                 </TableRow>
               ))}
@@ -83,12 +100,19 @@ const BillRoute = () => {
           </Table>
         </TableContainer>
         <div className="ml-4 mt-4 flex items-center">
-          <div className="text-xl font-semibold">
-            Всього до сплати: <span className="text-main">15 грн</span>
-          </div>
-          <Button className="ml-auto" variant="contained">
-            Сплатити
-          </Button>
+          {loaderData?.soldItems.length > 1 && (
+            <div className="text-xl font-semibold">
+              Всього до сплати:{" "}
+              <span className="text-main">
+                {loaderData?.totalCommission} грн
+              </span>
+            </div>
+          )}
+          <Form className="ml-auto" method="POST">
+            <Button type="submit" variant="contained">
+              Сплатити
+            </Button>
+          </Form>
         </div>
         <div className="ml-4 mt-8">
           Якщо у вас виникли питання, зверніться в{" "}

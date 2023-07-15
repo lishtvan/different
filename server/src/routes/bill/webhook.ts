@@ -1,5 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
+import { LISTINGS_COLLECTION_NAME } from '../../constants/typesense';
 
 const schema = {
   tags: ['Bill'],
@@ -34,7 +35,45 @@ const getBill: FastifyPluginAsync = async (fastify) => {
     }
     if (status === 'success') {
       const orderIds = reference.split('+');
-      console.log(orderIds);
+
+      await Promise.all([
+        fastify.prisma.order.updateMany({
+          where: { id: { in: orderIds } },
+          data: { status: 'FINISHED' },
+        }),
+        fastify.prisma.listing.updateMany({
+          where: { Order: { id: { in: orderIds } } },
+          data: { status: 'SOLD' },
+        }),
+        fastify.prisma.order
+          .findUnique({
+            where: { id: orderIds[0] },
+            select: { Listing: { select: { userId: true } } },
+          })
+          .then(async (res) => {
+            await fastify.prisma.user.update({
+              where: { id: res?.Listing.userId },
+              data: { isBill: false },
+            });
+          }),
+      ]);
+
+      const typesenseListingUpdatePromises = orderIds.map((orderId) => {
+        const promise = fastify.prisma.order
+          .findUnique({
+            where: { id: orderId },
+            select: { listingId: true, Listing: { select: { userId: true } } },
+          })
+          .then(async (order) => {
+            await fastify.typesense
+              .collections(LISTINGS_COLLECTION_NAME)
+              .documents()
+              .update({ status: 'SOLD', id: order?.listingId.toString() });
+          });
+        return promise;
+      });
+
+      await Promise.all(typesenseListingUpdatePromises);
     }
     return reply.send();
   });

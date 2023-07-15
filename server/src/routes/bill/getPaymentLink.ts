@@ -9,20 +9,20 @@ const getBill: FastifyPluginAsync = async (fastify) => {
     const { userId } = req.cookies;
     const { MNBNK_WEBHOOK_KEY, WEB_DOMAIN, API_DOMAIN, MNBNK_TOKEN } = process.env;
 
-    const bills = await fastify.prisma.listing.findMany({
+    const soldItems = await fastify.prisma.listing.findMany({
       where: { userId: Number(userId), Order: { status: 'COMMISSION' } },
       select: { price: true, Order: { select: { id: true } } },
     });
 
-    if (bills.length === 0) throw fastify.httpErrors.badRequest();
+    if (soldItems.length === 0) throw fastify.httpErrors.badRequest();
 
     let totalCommission = 0;
     const orderIds: string[] = [];
 
-    bills.forEach((bill) => {
-      const commission = Math.ceil((bill.price / 100) * 5);
+    soldItems.forEach((item) => {
+      const commission = Math.ceil((item.price / 100) * 5);
       totalCommission += commission;
-      orderIds.push(bill.Order!.id);
+      orderIds.push(item.Order!.id);
     });
 
     const reference = orderIds.join('+');
@@ -41,7 +41,7 @@ const getBill: FastifyPluginAsync = async (fastify) => {
       }
     ).then((res) => res.json());
 
-    return reply.send(pageUrl);
+    return reply.send({ paymentLink: pageUrl });
   });
 };
 
