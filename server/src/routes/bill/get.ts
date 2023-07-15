@@ -9,18 +9,21 @@ const getBill: FastifyPluginAsync = async (fastify) => {
     const { userId } = req.cookies;
 
     const bills = await fastify.prisma.listing.findMany({
-      where: {
-        userId: Number(userId),
-        Order: { status: 'COMMISSION' },
-      },
-      select: {
-        price: true,
-        title: true,
-        imageUrls: true,
-      },
+      where: { userId: Number(userId), Order: { status: 'COMMISSION' } },
+      select: { id: true, price: true, title: true },
     });
 
-    return reply.send(bills);
+    if (bills.length === 0) return reply.send({ isBill: false });
+
+    let totalCommission = 0;
+
+    const calculatedBills = bills.map((bill) => {
+      const commission = Math.ceil((bill.price / 100) * 5);
+      totalCommission += commission;
+      return { ...bill, commission };
+    });
+
+    return reply.send({ bills: calculatedBills, totalCommission });
   });
 };
 

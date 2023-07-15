@@ -8,7 +8,6 @@ declare global {
       PORT: string;
       TOKEN_SECRET: string;
       TOKEN_CHARACTERS: string;
-      API_KEY: string;
       NODE_ENV: 'local' | 'development' | 'production';
       WEB_DOMAIN: string;
       S3_CLEANUP_SECRET: string;
@@ -16,6 +15,9 @@ declare global {
       TYPESENSE_WRITE_API_KEY: string;
       NP_TOKEN: string;
       NP_API_KEY: string;
+      MNBNK_WEBHOOK_KEY: string;
+      API_DOMAIN: string;
+      MNBNK_TOKEN: string;
     }
   }
 }

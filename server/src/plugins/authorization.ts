@@ -12,7 +12,7 @@ export default fp(async (fastify) => {
     '/user/get',
     '/listing/get',
     '/images/getAll/:s3DeleteKey',
-    '/bill/get',
+    '/bill/webhook/:MNBNK_WEBHOOK_KEY',
   ];
 
   fastify.addHook('preHandler', async (req, reply) => {
