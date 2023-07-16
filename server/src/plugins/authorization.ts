@@ -16,6 +16,7 @@ export default fp(async (fastify) => {
   ];
 
   fastify.addHook('preHandler', async (req, reply) => {
+    if (reply.statusCode === 404) return;
     const { routerPath, cookies } = req;
     const { token, userId } = cookies;
 
