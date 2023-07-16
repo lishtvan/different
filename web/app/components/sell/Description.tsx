@@ -9,7 +9,6 @@ const Description = () => {
     <div className="col-start-1 col-end-3">
       <FieldTitle title={"Опис"} required={false} />
       <TextField
-        rows={3}
         name="description"
         multiline
         defaultValue={loaderData?.description}
