@@ -162,7 +162,6 @@ const BuyTable: FC<{ buyOrders: BuyOrder[] }> = ({ buyOrders }) => {
 const OrdersRoute = () => {
   const loaderData = useLoaderData<Orders>();
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(loaderData);
 
   useEffect(() => {
     const { buyOrders, sellOrders } = loaderData;
