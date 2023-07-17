@@ -3,7 +3,7 @@ import rateLimit from '@fastify/rate-limit';
 
 export default fp(async (fastify) => {
   await fastify.register(rateLimit, {
-    max: 100,
+    max: 200,
     timeWindow: '1 minute',
     ban: 2,
     allowList: [], // add monobank
@@ -14,7 +14,7 @@ export default fp(async (fastify) => {
         reply.status(404);
         done();
       },
-      preHandler: fastify.rateLimit({ max: 50, ban: 2 }),
+      preHandler: fastify.rateLimit({ max: 100, ban: 2, timeWindow: '1 minute' }),
     },
     (req, reply) => {
       reply.send();
