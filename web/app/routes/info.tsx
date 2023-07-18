@@ -1,6 +1,11 @@
 import { Button } from "@mui/material";
 import { useSearchParams } from "@remix-run/react";
 import { useEffect } from "react";
+import monopay from "../assets/monopay.png";
+import mastercard from "../assets/mastercard.png";
+import visa from "../assets/visa.png";
+import applepay from "../assets/applepay.png";
+import googlepay from "../assets/googlepay.png";
 
 const InfoRoute = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -338,9 +343,13 @@ const InfoRoute = () => {
           {searchParams.get("q") === "terms" && (
             <div>
               <h1 className="text-xl font-semibold">Умови використання</h1>
-              <p>
-                <br />
-              </p>
+              <div className="my-4 flex items-center gap-x-4">
+                <img width={100} src={monopay} alt="monopay" />
+                <img width={40} src={mastercard} alt="mastercard" />
+                <img width={50} src={visa} alt="visa" />
+                <img width={55} src={applepay} alt="applepay" />
+                <img width={55} src={googlepay} alt="googlepay" />
+              </div>
               <p>
                 ФОП Ліштван Сергій Олександрович (код ЄДРПОУ 3719907573), (далі
                 &mdash; Виконавець),&nbsp;який діє на підставі свідоцтва про

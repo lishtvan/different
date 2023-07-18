@@ -12,6 +12,11 @@ import { redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import ErrorBoundaryComponent from "~/components/platform/ErrorBoundary";
 import { fetcher } from "~/fetcher.server";
+import monopay from "../assets/monopay.png";
+import mastercard from "../assets/mastercard.png";
+import visa from "../assets/visa.png";
+import applepay from "../assets/applepay.png";
+import googlepay from "../assets/googlepay.png";
 
 interface SoldItem {
   price: number;
@@ -113,6 +118,13 @@ const BillRoute = () => {
               Сплатити
             </Button>
           </Form>
+        </div>
+        <div className="ml-4 mt-4 flex items-center gap-x-4">
+          <img width={100} src={monopay} alt="monopay" />
+          <img width={40} src={mastercard} alt="mastercard" />
+          <img width={50} src={visa} alt="visa" />
+          <img width={55} src={applepay} alt="applepay" />
+          <img width={55} src={googlepay} alt="googlepay" />
         </div>
         <div className="ml-4 mt-8">
           Якщо у вас виникли питання, зверніться в{" "}
