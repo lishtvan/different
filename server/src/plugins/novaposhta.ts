@@ -135,7 +135,6 @@ const createSafeDelivery: CreateSafeDelivery = async ({
     method: 'POST',
   }).then((res) => res.json());
 
-  console.log({ internetDocument });
   return {
     trackingNumber: internetDocument?.IntDocNumber,
     intDocRef: internetDocument?.Ref,
