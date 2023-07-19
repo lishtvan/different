@@ -12,7 +12,7 @@ type CreateSafeDelivery = (props: {
   lastName: string;
   cardNumber: string;
   SendersPhone: string;
-}) => Promise<{ trackingNumber?: string }>;
+}) => Promise<{ trackingNumber?: string; intDocRef: string }>;
 
 const createSafeDelivery: CreateSafeDelivery = async ({
   CityRecipient,
@@ -135,7 +135,11 @@ const createSafeDelivery: CreateSafeDelivery = async ({
     method: 'POST',
   }).then((res) => res.json());
 
-  return { trackingNumber: internetDocument?.IntDocNumber };
+  console.log({ internetDocument });
+  return {
+    trackingNumber: internetDocument?.IntDocNumber,
+    intDocRef: internetDocument?.Ref,
+  };
 };
 
 export default fp(async (fastify) => {
@@ -149,6 +153,8 @@ export default fp(async (fastify) => {
       select: {
         trackingNumber: true,
         status: true,
+        createdAt: true,
+        intDocRef: true,
       },
     });
 
@@ -185,6 +191,14 @@ export default fp(async (fastify) => {
               .documents()
               .update({ status: 'AVAILABLE', id: res.Listing.id.toString() });
           });
+      }
+      if (i.statusCode === '1' && i.status.includes('оплату')) {
+        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
+        const orderDueDate = new Date(order!.createdAt);
+        orderDueDate.setHours(orderDueDate.getHours() + 2);
+        const currentDate = new Date();
+        if (currentDate < orderDueDate) return;
+        return np.internetDocument.delete({ documentRefs: order!.intDocRef! });
       }
       if (i.statusCode === '1' && !i.status.includes('оплату')) {
         const order = orders.find((order) => order.trackingNumber === i.trackingNumber);

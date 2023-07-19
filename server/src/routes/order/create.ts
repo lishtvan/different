@@ -51,7 +51,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
 
     if (!listing || listing.status !== 'AVAILABLE') throw fastify.httpErrors.notFound();
 
-    const { trackingNumber } = await fastify.np.createSafeDelivery({
+    const { trackingNumber, intDocRef } = await fastify.np.createSafeDelivery({
       CityRecipient,
       RecipientAddress,
       RecipientsPhone,
@@ -66,7 +66,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
 
     await Promise.all([
       fastify.prisma.order.create({
-        data: { buyerId: Number(userId), listingId, trackingNumber },
+        data: { buyerId: Number(userId), listingId, trackingNumber, intDocRef },
         select: { id: true },
       }),
       fastify.prisma.listing.update({

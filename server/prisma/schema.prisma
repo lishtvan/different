@@ -71,6 +71,7 @@ model Order {
   updatedAt      DateTime    @default(now()) @updatedAt
   status         OrderStatus @default(PAYMENT)
   trackingNumber String      @unique
+  intDocRef      String?     @unique
   buyer          User        @relation(fields: [buyerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   buyerId        Int
   Listing        Listing     @relation(fields: [listingId], references: [id])
