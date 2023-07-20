@@ -36,6 +36,14 @@ const InfoRoute = () => {
               Про нас
             </Button>
             <Button
+              onClick={() => setSearchParams(`?q=guides`)}
+              className={`${
+                searchParams.get("q") === "guides" ? "" : "text-black"
+              } `}
+            >
+              Поради та інструкції
+            </Button>
+            <Button
               onClick={() => setSearchParams(`?q=privacy`)}
               className={`${
                 searchParams.get("q") === "privacy" ? "" : "text-black"
@@ -338,6 +346,21 @@ const InfoRoute = () => {
               </p>
 
               <p>ФОП Ліштван Сергій Олександрович, код едрпоу 3719907573</p>
+            </div>
+          )}
+          {searchParams.get("q") === "guides" && (
+            <div>
+              <h1 className="text-xl font-semibold">Поради та інструкції</h1>
+              <div className="mt-4">
+                <a
+                  href="https://different-marketplace.notion.site/a55a5e3a915e4617a209442bb7793477"
+                  className="text-blue-500 underline underline-offset-[5px]"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Інструкція для продавців
+                </a>
+              </div>
             </div>
           )}
           {searchParams.get("q") === "terms" && (

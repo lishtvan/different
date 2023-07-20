@@ -39,12 +39,12 @@ export default function SellerHint() {
             <br />
             <div className="mt-2 flex">
               <a
-                href="https://different-marketplace.notion.site/API-c1a0dae6eed34a97a5057888de4c5e8f"
+                href="https://different-marketplace.notion.site/85d5b550e71446fcac1a0ddd697325ce"
                 className="text-blue-500 underline underline-offset-[5px]"
                 target="_blank"
                 rel="noreferrer"
               >
-                Детальна інструкція відправки
+                Детальна інструкція продажу
               </a>
               <a
                 href="https://novaposhta.ua/safeservice/"
