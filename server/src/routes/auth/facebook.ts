@@ -25,7 +25,7 @@ const facebookAuth: FastifyPluginAsync = async (fastify) => {
     reply
       .setCookie('token', token, COOKIE_OPTIONS)
       .setCookie('userId', userId, COOKIE_OPTIONS)
-      .send();
+      .redirect(`${process.env.WEB_DOMAIN}/auth?token=${token}&userId=${userId}`);
   });
 };
 

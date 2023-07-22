@@ -2,8 +2,10 @@ import fp from 'fastify-plugin';
 import { OAuth2Namespace } from '@fastify/oauth2';
 import oauthPlugin from '@fastify/oauth2';
 import { Client, auth } from 'twitter-api-sdk';
+import cookie from '@fastify/cookie';
 
 export default fp(async (fastify) => {
+  fastify.register(cookie);
   fastify.register(oauthPlugin, {
     name: 'googleOAuth2',
     scope: ['profile', 'email'],
@@ -15,7 +17,7 @@ export default fp(async (fastify) => {
       auth: oauthPlugin.GOOGLE_CONFIGURATION,
     },
     startRedirectPath: '/auth/google',
-    callbackUri: `${process.env.WEB_DOMAIN}/auth/google`,
+    callbackUri: `${process.env.API_DOMAIN}/auth/google/callback`,
     callbackUriParams: {
       access_type: 'offline',
     },
@@ -32,13 +34,13 @@ export default fp(async (fastify) => {
       auth: oauthPlugin.FACEBOOK_CONFIGURATION,
     },
     startRedirectPath: '/auth/facebook',
-    callbackUri: `${process.env.WEB_DOMAIN}/auth/facebook`,
+    callbackUri: `${process.env.API_DOMAIN}/auth/facebook/callback`,
   });
 
   const twitterOauth2 = new auth.OAuth2User({
     client_id: 'WWxwUFZ3dVVwanR4SGc5dnZWa3Q6MTpjaQ',
     client_secret: process.env.TWITTER_CLIENT_SECRET,
-    callback: `${process.env.WEB_DOMAIN}/auth/twitter`,
+    callback: `${process.env.API_DOMAIN}/auth/twitter/callback`,
     scopes: ['offline.access', 'tweet.read', 'users.read'],
   });
 
