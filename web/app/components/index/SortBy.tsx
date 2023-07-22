@@ -28,7 +28,7 @@ const SortByPrice = () => {
         >
           {sort.options?.map((sort) => (
             <MenuItem key={sort.value} value={sort.value}>
-              sort.label
+              {sort.label}
             </MenuItem>
           ))}
         </Select>
