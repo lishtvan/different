@@ -51,18 +51,21 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
 
     if (!listing || listing.status !== 'AVAILABLE') throw fastify.httpErrors.notFound();
 
-    const { trackingNumber, intDocRef } = await fastify.np.createSafeDelivery({
-      CityRecipient,
-      RecipientAddress,
-      RecipientsPhone,
-      SendersPhone: listing.phone,
-      Description: listing.title,
-      Cost: listing.price,
-      firstName,
-      lastName,
-      cardNumber: listing.cardNumber.replace(/\s/g, ''),
-    });
-    if (!trackingNumber) throw fastify.httpErrors.internalServerError();
+    const { trackingNumber, intDocRef, success, translatedErrors } =
+      await fastify.np.createSafeDelivery({
+        CityRecipient,
+        RecipientAddress,
+        RecipientsPhone,
+        SendersPhone: listing.phone,
+        Description: listing.title,
+        Cost: listing.price,
+        firstName,
+        lastName,
+        cardNumber: listing.cardNumber.replace(/\s/g, ''),
+      });
+    if (!success) {
+      throw fastify.httpErrors.badRequest(`/np ${translatedErrors?.join(' ')} `);
+    }
 
     await Promise.all([
       fastify.prisma.order.create({

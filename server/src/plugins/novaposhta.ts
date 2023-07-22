@@ -12,7 +12,12 @@ type CreateSafeDelivery = (props: {
   lastName: string;
   cardNumber: string;
   SendersPhone: string;
-}) => Promise<{ trackingNumber?: string; intDocRef: string }>;
+}) => Promise<{
+  trackingNumber: string;
+  intDocRef: string;
+  success: boolean;
+  translatedErrors?: string[];
+}>;
 
 const createSafeDelivery: CreateSafeDelivery = async ({
   CityRecipient,
@@ -83,6 +88,8 @@ const createSafeDelivery: CreateSafeDelivery = async ({
 
   const date = new Date();
   const {
+    success,
+    translatedErrors,
     data: [internetDocument],
   } = await fetch('https://api.novaposhta.ua/v2.0/json/', {
     headers: { 'content-type': 'application/json', tokenoauth2: process.env.NP_TOKEN },
@@ -138,6 +145,8 @@ const createSafeDelivery: CreateSafeDelivery = async ({
   return {
     trackingNumber: internetDocument?.IntDocNumber,
     intDocRef: internetDocument?.Ref,
+    success,
+    translatedErrors,
   };
 };
 

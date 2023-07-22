@@ -46,7 +46,6 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [selectedDepartment, setSelectedDepartment] =
     useState<Department | null>(null);
-  const data = useActionData();
   const navigation = useNavigation();
   const [isDepartmentsLoading, setIsDepartmentsLoading] = useState(false);
   const { user } = useRouteLoaderData("root") as RootLoaderData;
@@ -97,7 +96,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
       </DialogTitle>
       <Form
         method="post"
-        className="flex w-[450px] flex-col items-center justify-start gap-y-4 px-5"
+        className="mb-5 flex w-[450px] flex-col items-center justify-start gap-y-4 px-5"
       >
         <input hidden name="CityRecipient" value={city?.DeliveryCity || ""} />
         <input
@@ -167,13 +166,13 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
           variant="outlined"
           name="RecipientsPhone"
           label={
-            data?.errors?.RecipientsPhone
+            actionData?.errors?.RecipientsPhone
               ? "Недійсний номер телефону"
               : "Номер телефону"
           }
           onChange={() => {}}
           value={user?.phone}
-          error={Boolean(data?.errors?.RecipientsPhone)}
+          error={Boolean(actionData?.errors?.RecipientsPhone)}
           countryCodeEditable={false}
           onlyCountries={["ua"]}
           defaultCountry="ua"
@@ -198,12 +197,15 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
           name="_action"
           value="createOrder"
           variant="contained"
-          className="mb-4 w-full"
+          className="w-full"
         >
           {navigation?.formData?.get("_action") === "createOrder"
             ? "Замовлення створюється..."
             : "Замовити"}
         </Button>
+        {actionData?.errors?.np && (
+          <p className="text-[#d32f2f]">{actionData.errors.np}</p>
+        )}
       </Form>
     </Dialog>
   );
