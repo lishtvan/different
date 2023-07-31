@@ -41,8 +41,6 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1,viewport-fit=cover",
 });
 
-export const handle = { i18n: "common" };
-
 export const shouldRevalidate: ShouldRevalidateFunction = ({
   currentUrl,
   defaultShouldRevalidate,

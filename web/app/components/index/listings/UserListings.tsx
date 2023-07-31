@@ -25,9 +25,7 @@ const UserListings: FC<Props> = ({ userId, showSold }) => {
     clear.refine();
     refineStatus(showSold ? "SOLD" : "AVAILABLE");
     refineSeller(userId.toString());
-  }, [userId, showSold]);
 
-  useEffect(() => {
     if (sentinelRef.current !== null) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -43,7 +41,7 @@ const UserListings: FC<Props> = ({ userId, showSold }) => {
         observer.disconnect();
       };
     }
-  }, [isLastPage, showMore]);
+  }, [isLastPage, showMore, userId, showSold]);
 
   return (
     <div className="mb-20 mt-10 w-full px-0 md:px-24">
