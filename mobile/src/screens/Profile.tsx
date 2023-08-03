@@ -20,7 +20,13 @@ const Profile = ({navigation}) => {
 
 const ProfileNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerTitle: '',
+        headerShadowVisible: false,
+      }}
+      initialRouteName="Home">
       <Stack.Screen
         name="Profile"
         component={Profile}

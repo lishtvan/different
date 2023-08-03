@@ -20,7 +20,13 @@ const Home = ({navigation}) => {
 
 const HomeNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerTitle: '',
+        headerShadowVisible: false,
+      }}
+      initialRouteName="Home">
       <Stack.Screen
         name="Home"
         component={Home}

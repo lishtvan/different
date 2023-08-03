@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -33,8 +33,7 @@ const ProfileTab: React.FC<Tab> = ({color}) => (
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator
-      screenOptions={{headerShown: false, tabBarActiveTintColor: '#168c94'}}>
+    <Tab.Navigator screenOptions={{headerShown: false}}>
       <Tab.Screen
         name="Search"
         options={{tabBarLabel: 'Пошук', tabBarIcon: HomeTab}}
@@ -65,9 +64,18 @@ const Auth = () => (
   </View>
 );
 
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white',
+    primary: '#168c94',
+  },
+};
+
 const App = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme}>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
