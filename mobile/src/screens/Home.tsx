@@ -1,12 +1,34 @@
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Button, Text, View} from 'react-native';
+import Listing from '../components/Listing';
 
-const HomeScreen = () => {
+const Stack = createNativeStackNavigator();
+
+// @ts-ignore
+const Home = ({navigation}) => {
   return (
     <View className="flex-1 justify-center items-center">
       <Text>Home</Text>
+      <Button
+        title="Go to listing"
+        onPress={() => navigation.navigate('Listing')}
+      />
     </View>
   );
 };
 
-export default HomeScreen;
+const HomeNavigator = () => {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="Listing" component={Listing} />
+    </Stack.Navigator>
+  );
+};
+
+export default HomeNavigator;

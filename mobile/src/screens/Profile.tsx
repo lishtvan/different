@@ -1,12 +1,34 @@
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Button, Text, View} from 'react-native';
+import Listing from '../components/Listing';
 
-const ProfileScreen = () => {
+const Stack = createNativeStackNavigator();
+
+// @ts-ignore
+const Profile = ({navigation}) => {
   return (
     <View className="flex-1 justify-center items-center">
       <Text>Profile</Text>
+      <Button
+        title="Go to listing"
+        onPress={() => navigation.navigate('Listing')}
+      />
     </View>
   );
 };
 
-export default ProfileScreen;
+const ProfileNavigator = () => {
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="Listing" component={Listing} />
+    </Stack.Navigator>
+  );
+};
+
+export default ProfileNavigator;
