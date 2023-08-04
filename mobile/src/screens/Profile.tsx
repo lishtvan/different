@@ -6,7 +6,7 @@ import Listing from '../components/Listing';
 const Stack = createNativeStackNavigator();
 
 // @ts-ignore
-const Profile = ({navigation}) => {
+const ProfileComponent = ({navigation}) => {
   return (
     <View className="flex-1 justify-center items-center">
       <Text>Profile</Text>
@@ -26,10 +26,10 @@ const ProfileNavigator = () => {
         headerTitle: '',
         headerShadowVisible: false,
       }}
-      initialRouteName="Home">
+      initialRouteName="ProfileC">
       <Stack.Screen
-        name="Profile"
-        component={Profile}
+        name="ProfileC"
+        component={ProfileComponent}
         options={{headerShown: false}}
       />
       <Stack.Screen name="Listing" component={Listing} />
