@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {Button, Text, View} from 'react-native';
 import Listing from '../components/Listing';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,30 @@ const HomeComponent = ({navigation}) => {
       <Button
         title="Go to listing"
         onPress={() => navigation.navigate('Listing')}
+      />
+      <Button
+        title={'Sign in with Google'}
+        onPress={() => {
+          GoogleSignin.configure({
+            iosClientId:
+              '24434242390-l4r82unf87hh643nmssogggm3grvqcvq.apps.googleusercontent.com',
+          });
+          GoogleSignin.hasPlayServices()
+            .then(hasPlayService => {
+              if (hasPlayService) {
+                GoogleSignin.signIn()
+                  .then(userInfo => {
+                    console.log(JSON.stringify(userInfo));
+                  })
+                  .catch(e => {
+                    console.log('ERROR IS: ' + JSON.stringify(e));
+                  });
+              }
+            })
+            .catch((e: any) => {
+              console.log('ERROR IS: ' + JSON.stringify(e));
+            });
+        }}
       />
     </View>
   );
