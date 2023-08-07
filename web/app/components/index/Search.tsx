@@ -23,6 +23,7 @@ const MainSearch = () => {
       size="small"
       className="ml-4 mr-2 w-[100%] sm:w-[48.5%]"
       placeholder={"Пошук"}
+      autoComplete="off"
       inputProps={{ "aria-label": "search" }}
       onChange={onChange}
       value={seachValue}

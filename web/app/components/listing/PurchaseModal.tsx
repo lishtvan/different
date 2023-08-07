@@ -189,7 +189,7 @@ const PurchaseModal: FC<Props> = ({ isOpen, toggle }) => {
             startIcon={<img src={novaposhtaLogo} width={70} alt="novaposhta" />}
             className="w-full text-lg normal-case text-black"
           >
-            Safe Service
+            Сейф-сервіс
           </Button>
         </a>
         <Button

@@ -76,6 +76,7 @@ const CheckboxFilter: FC<Props> = ({ enableSearch, attribute, title }) => {
             <ListItem disablePadding className="mb-2 mt-2 px-1">
               <TextField
                 size="small"
+                autoComplete="off"
                 placeholder={"Пошук"}
                 className="w-full px-2"
                 inputProps={{ "aria-label": "search" }}
