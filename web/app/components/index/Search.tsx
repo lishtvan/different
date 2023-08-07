@@ -35,9 +35,9 @@ const MainSearch = () => {
                 <Clear />
               </IconButton>
             ) : (
-              // <IconButton size="small">
-              <Search />
-              // </IconButton>
+              <IconButton size="small">
+                <Search />
+              </IconButton>
             )}
           </InputAdornment>
         ),
