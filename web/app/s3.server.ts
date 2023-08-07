@@ -22,17 +22,6 @@ const convertToBuffer = async (a: AsyncIterable<Uint8Array>) => {
   return Buffer.concat(result);
 };
 
-const compress = (buffer: Buffer) =>
-  sharp(buffer)
-    .jpeg({ progressive: true, force: false })
-    .withMetadata()
-    .toBuffer();
-
-const getImageKey = async (buffer: Buffer) => {
-  const { width, height } = await sharp(buffer).metadata();
-  const imageKey = `${id()}:w=${width}&h=${height}`;
-  return imageKey;
-};
 const S3_URL = "https://s3.eu-central-1.amazonaws.com/different.dev";
 
 const uploadStreamToS3 = async (
@@ -41,10 +30,19 @@ const uploadStreamToS3 = async (
   contentType: string
 ) => {
   const buffer = await convertToBuffer(data);
-  const [imageKey, compressedImage] = await Promise.all([
-    getImageKey(buffer),
-    compress(buffer),
-  ]);
+  let imageKey;
+  const compressedImage = await sharp(buffer)
+    .metadata()
+    .then(({ width, height, orientation }) => {
+      if (orientation && orientation >= 5) {
+        imageKey = `${id()}:w=${height}&h=${width}`;
+      } else imageKey = `${id()}:w=${width}&h=${height}`;
+
+      return sharp(buffer)
+        .jpeg({ progressive: true, force: false })
+        .withMetadata()
+        .toBuffer();
+    });
 
   const params: PutObjectCommandInput = {
     Bucket: "different.dev",
