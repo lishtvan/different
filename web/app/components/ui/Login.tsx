@@ -2,8 +2,6 @@ import { Button, Dialog, DialogTitle, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { Link, useFetcher, useLocation, useNavigate } from "@remix-run/react";
 import GoogleIcon from "./../../assets/google.svg";
-import FacebookIcon from "./../../assets/facebook.svg";
-import TwitterIcon from "./../../assets/twitter.svg";
 import { useEffect, useState } from "react";
 
 const Login = () => {
@@ -63,18 +61,18 @@ const Login = () => {
       onClose={onClose}
       className="mx-auto flex items-center justify-center"
     >
-      <DialogTitle sx={{ marginLeft: "auto" }}>
+      <DialogTitle className="flex w-full items-center justify-between">
+        <div className="font-bold">Увійти за допомогою</div>
         <IconButton onClick={onClose}>
           <Close />
         </IconButton>
       </DialogTitle>
-      <div className="flex w-[400px] flex-col items-center justify-start">
-        <div className="text-3xl font-semibold">Увійти за допомогою:</div>
-        <div className="mt-10 flex w-72 flex-col">
+      <div className="flex w-[400px] flex-col items-center justify-start py-8">
+        <div className="flex w-80 flex-col">
           <Button
             color="inherit"
             onClick={() => redirect("google")}
-            sx={{ display: "flex", justifyContent: "center" }}
+            className="flex justify-center gap-x-4"
           >
             <img
               className="ml-4"
@@ -83,50 +81,12 @@ const Login = () => {
               src={GoogleIcon}
               alt="google"
             />
-            <div className="w-1/2">Google</div>
-          </Button>
-          <Button
-            color="inherit"
-            onClick={() => redirect("twitter")}
-            sx={{
-              display: "flex",
-              paddingTop: "10px",
-              paddingBottom: "10px",
-              marginTop: "10px",
-              justifyContent: "center",
-            }}
-          >
-            <img
-              className="ml-4"
-              width={44}
-              height={44}
-              src={TwitterIcon}
-              alt="twitter"
-            />
-            <div className="w-1/2">Twitter</div>
-          </Button>
-          <Button
-            onClick={() => redirect("facebook")}
-            color="inherit"
-            sx={{
-              display: "flex",
-              marginTop: "10px",
-              justifyContent: "center",
-            }}
-          >
-            <img
-              className="ml-4"
-              width={44}
-              height={44}
-              src={FacebookIcon}
-              alt="facebook"
-            />
-            <div className="w-1/2">Facebook</div>
+            <div className="ml-2 mr-4">Google</div>
           </Button>
         </div>
-        <div className="my-6 flex w-3/4 justify-center text-center">
+        <div className="my-6 flex justify-center text-center">
           <div>
-            Створюючи аккаунт, ви погоджуєтесь з нашою{" "}
+            Створюючи аккаунт, ви погоджуєтесь з <br />
             <Link
               target="_blank"
               className="text-blue-500 underline underline-offset-[4px]"
