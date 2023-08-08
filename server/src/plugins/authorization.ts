@@ -4,11 +4,7 @@ import { COOKIE_OPTIONS } from '../constants/auth';
 export default fp(async (fastify) => {
   const publicRoutes = [
     '/auth/google',
-    '/auth/facebook',
-    '/auth/twitter',
     '/auth/google/callback',
-    '/auth/facebook/callback',
-    '/auth/twitter/callback',
     '/user/get',
     '/listing/get',
     '/images/getAll/:s3DeleteKey',
