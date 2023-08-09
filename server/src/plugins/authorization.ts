@@ -5,6 +5,7 @@ export default fp(async (fastify) => {
   const publicRoutes = [
     '/auth/google',
     '/auth/google/callback',
+    '/auth/google/mobile',
     '/user/get',
     '/listing/get',
     '/images/getAll/:s3DeleteKey',
