@@ -1,10 +1,10 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {Button, Text, View} from 'react-native';
 import Listing from '../components/Listing';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 // @ts-ignore
 const HomeComponent = ({navigation}) => {

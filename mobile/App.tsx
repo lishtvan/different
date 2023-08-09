@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import * as React from 'react';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -9,10 +10,10 @@ import SellScreen from './src/screens/Sell';
 import OrdersScreen from './src/screens/Orders';
 import ProfileScreen from './src/screens/Profile';
 import {ColorValue, Text, View} from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 interface Tab {
   color?: number | ColorValue;

@@ -1127,6 +1127,14 @@ PODS:
     - React-jsi (= 0.72.3)
     - React-logger (= 0.72.3)
     - React-perflogger (= 0.72.3)
+  - RNGestureHandler (2.12.1):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - React-Codegen
+    - React-RCTFabric
+    - ReactCommon/turbomodule/core
   - RNGoogleSignin (10.0.1):
     - GoogleSignIn (~> 7.0)
     - React-Core
@@ -1221,6 +1229,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1334,6 +1343,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
   RNScreens:
@@ -1401,6 +1412,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 837c1bebd2f84572db17698cd702ceaf585b0d9a
   React-utils: bcb57da67eec2711f8b353f6e3d33bd8e4b2efa3
   ReactCommon: 3ccb8fb14e6b3277e38c73b0ff5e4a1b8db017a9
+  RNGestureHandler: 0f92ab218707c97810df75609886828ee1b7c5e3
   RNGoogleSignin: ccaa4a81582cf713eea562c5dd9dc1961a715fd0
   RNScreens: 95b62f9fb2aa427d7c1a2a2d127a72edb7450390
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
