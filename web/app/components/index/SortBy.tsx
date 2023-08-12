@@ -1,4 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useEffect } from "react";
 import { useSortBy } from "react-instantsearch-hooks-web";
 
 const SortByPrice = () => {
@@ -10,6 +11,10 @@ const SortByPrice = () => {
     ],
   });
 
+  useEffect(() => {
+    sort.refine("listings/sort/price:desc");
+  }, []);
+
   return (
     <div className="ml-auto">
       <FormControl sx={{ minWidth: 150 }} size="small">
@@ -18,9 +23,7 @@ const SortByPrice = () => {
           labelId="demo-select-small"
           id="demo-select-small"
           label={"Сортувати"}
-          MenuProps={{
-            disableScrollLock: true,
-          }}
+          MenuProps={{ disableScrollLock: true }}
           value={
             sort.currentRefinement === "listings" ? "" : sort.currentRefinement
           }
