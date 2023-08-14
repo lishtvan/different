@@ -3,11 +3,19 @@ import React from 'react';
 import {Button, Text, View} from 'react-native';
 import Listing from '../components/Listing';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {fetcher} from '../utils/fetchInstance';
+import {useQuery} from '@tanstack/react-query';
 
 const Stack = createStackNavigator();
 
 // @ts-ignore
 const HomeComponent = ({navigation}) => {
+  const {data} = useQuery({
+    queryKey: ['user'],
+    queryFn: () => fetcher({route: '/', method: 'GET'}),
+  });
+  if (data) console.log(data);
+
   const signIn = async () => {
     GoogleSignin.configure({
       iosClientId:

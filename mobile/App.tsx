@@ -11,6 +11,7 @@ import OrdersScreen from './src/screens/Orders';
 import ProfileScreen from './src/screens/Profile';
 import {ColorValue, Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -74,17 +75,21 @@ const theme = {
   },
 };
 
+const queryClient = new QueryClient();
+
 const App = () => {
   return (
     <NavigationContainer theme={theme}>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Home"
-          component={TabNavigator}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen name="Auth" component={Auth} />
-      </Stack.Navigator>
+      <QueryClientProvider client={queryClient}>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={TabNavigator}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name="Auth" component={Auth} />
+        </Stack.Navigator>
+      </QueryClientProvider>
     </NavigationContainer>
   );
 };
