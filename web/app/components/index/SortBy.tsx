@@ -1,5 +1,4 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useEffect } from "react";
 import { useSortBy } from "react-instantsearch-hooks-web";
 
 const SortByPrice = () => {
@@ -10,10 +9,6 @@ const SortByPrice = () => {
       { label: "Спочатку дорогі", value: "listings/sort/price:desc" },
     ],
   });
-
-  useEffect(() => {
-    sort.refine("listings/sort/price:desc");
-  }, []);
 
   return (
     <div className="ml-auto">

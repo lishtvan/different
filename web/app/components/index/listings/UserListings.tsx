@@ -56,9 +56,9 @@ const UserListings: FC<Props> = ({ userId, showSold }) => {
           {hits.map((listing) => (
             <Listing listing={listing} key={listing.objectID} />
           ))}
-          <div ref={sentinelRef} />
         </div>
       )}
+      <div id="sentinel" ref={sentinelRef} />
     </div>
   );
 };

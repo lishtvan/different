@@ -29,6 +29,7 @@ import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { config } from "./constants/config";
 import type { RootLoaderData } from "./types";
 import ErrorBoundaryComponent from "./components/platform/ErrorBoundary";
+import { useMediaQuery } from "@mui/material";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -104,6 +105,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function App() {
   const [searchParams] = useSearchParams();
   const { user, ENV } = useLoaderData<RootLoaderData>();
+  const matches = useMediaQuery("(min-width:600px)");
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     `${config[ENV].wsDomain}/chat/message`,
@@ -133,7 +135,15 @@ export default function App() {
           searchClient={searchClient}
         >
           <Header />
-          <Outlet context={{ sendMessage, lastMessage, readyState }} />
+          {matches ? (
+            <Outlet context={{ sendMessage, lastMessage, readyState }} />
+          ) : (
+            <div className="mt-10 text-lg">
+              На даний момент Different працює лише з ПК. Мобільний додаток для
+              IOS та Android з`явиться в найближчому майбутньому{" "}
+              <span className="text-xl"> &#128521;</span>
+            </div>
+          )}
           {searchParams.get("login") && <Login />}
         </InstantSearch>
         <ScrollRestoration />

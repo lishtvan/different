@@ -1,5 +1,5 @@
 import type { TooltipProps } from "@mui/material";
-import { Badge, IconButton } from "@mui/material";
+import { Badge, IconButton, useMediaQuery } from "@mui/material";
 import { Avatar } from "@mui/material";
 import { ListItemIcon } from "@mui/material";
 import {
@@ -41,6 +41,7 @@ const Header = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const matches = useMediaQuery("(min-width:600px)");
 
   const onMenuItemClick = (path: string) => {
     navigate(path);
@@ -61,7 +62,7 @@ const Header = () => {
           <img src={logo} width={170} height={60} alt="different" />
         </Link>
         <div className="flex w-full items-center justify-between">
-          {pathname === "/" && <MainSearch />}
+          {pathname === "/" && matches && <MainSearch />}
           <div className="ml-auto hidden items-center sm:flex">
             {user && (
               <>
