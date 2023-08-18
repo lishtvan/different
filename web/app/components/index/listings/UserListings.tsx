@@ -25,37 +25,41 @@ const UserListings: FC<Props> = ({ userId, showSold }) => {
     clear.refine();
     refineStatus(showSold ? "SOLD" : "AVAILABLE");
     refineSeller(userId.toString());
+  }, [userId, showSold]);
 
-    if (sentinelRef.current !== null) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !isLastPage) {
-            showMore();
-          }
-        });
+  useEffect(() => {
+    if (sentinelRef.current === null) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !isLastPage && window.scrollY !== 0) {
+          console.log(showMore);
+          showMore();
+        }
       });
+    });
 
-      observer.observe(sentinelRef.current);
+    observer.observe(sentinelRef.current);
 
-      return () => {
-        observer.disconnect();
-      };
-    }
-  }, [isLastPage, showMore, userId, showSold]);
+    return () => {
+      observer.disconnect();
+    };
+  }, [isLastPage, showMore]);
+
+  if (!results?.query) return null;
 
   return (
     <div className="mb-20 mt-10 w-full px-0 md:px-24">
-      {!results?.nbHits ? (
-        <div className="flex h-44 items-center justify-center text-2xl font-semibold">
-          <div>
-            {showSold ? "Ще немає проданих товарів" : "Оголошень ще немає"}
-          </div>
-        </div>
-      ) : (
+      {results?.nbHits ? (
         <div className="grid w-full grid-cols-2 gap-x-[1.125rem] gap-y-4 lg:grid-cols-3 xl:grid-cols-4">
           {hits.map((listing) => (
             <Listing listing={listing} key={listing.objectID} />
           ))}
+        </div>
+      ) : (
+        <div className="flex h-44 items-center justify-center text-2xl font-semibold">
+          <div>
+            {showSold ? "Ще немає проданих товарів" : "Оголошень ще немає"}
+          </div>
         </div>
       )}
       <div id="sentinel" ref={sentinelRef} />
