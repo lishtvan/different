@@ -16,6 +16,21 @@ export const action = () => {
   return null;
 };
 
+const monthNames = [
+  "Січня",
+  "Лютого",
+  "Березня",
+  "Квітня",
+  "Травня",
+  "Червня",
+  "Липня",
+  "Серпня",
+  "Вересня",
+  "Жовтня",
+  "Листопада",
+  "Грудня",
+];
+
 const IndexRoute = () => {
   const { chatId } = useParams();
   const fetcher = useFetcher();
@@ -67,6 +82,21 @@ const IndexRoute = () => {
     }
   }, [lastMessage]);
 
+  const shouldDisplayDate = (msg: Message, index: number) => {
+    const msgDate = new Date(msg.createdAt).toLocaleDateString();
+    const nextMsg = messages[index + 1];
+    if (!nextMsg) return true;
+    const nextMsgDate = new Date(nextMsg.createdAt).toLocaleDateString();
+    return nextMsg && msgDate !== nextMsgDate;
+  };
+
+  const getMessageDayAndMonth = (msg: Message) => {
+    const date = new Date(msg.createdAt);
+    const day = date.getDate();
+    const month = monthNames[date.getMonth()];
+    return `${day} ${month}`;
+  };
+
   return (
     <div className="flex w-[70%] flex-col justify-end">
       <Link
@@ -76,24 +106,45 @@ const IndexRoute = () => {
         {participants?.recipient.nickname}
       </Link>
       <div className="scrollbar-visible ml-4 flex flex-col-reverse gap-2 overflow-y-scroll py-3">
-        {messages.map((msg) => (
-          <div key={msg.id} className="flex items-center gap-2">
-            <Avatar
-              alt="avatar"
-              src={
-                (participants?.recipient.id === msg.senderId
-                  ? participants.recipient.avatarUrl
-                  : participants?.sender.avatarUrl) || ProfileImage
-              }
-            />
-            <div
-              className={`${
-                msg.senderId === participants?.sender.id
-                  ? "bg-main text-white"
-                  : "bg-[#efefef]"
-              }  w-fit max-w-[80%] select-text break-words rounded-xl px-3 py-1.5 text-lg lg:max-w-[50%]`}
-            >
-              {msg.text}
+        {messages.map((msg, i) => (
+          <div key={msg.id}>
+            {shouldDisplayDate(msg, i) && (
+              <div className="mb-2 flex justify-center ">
+                <div className="rounded-3xl bg-[#f4f4f5] px-3 py-1">
+                  {getMessageDayAndMonth(msg)}
+                </div>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <Avatar
+                alt="avatar"
+                src={
+                  (participants?.recipient.id === msg.senderId
+                    ? participants.recipient.avatarUrl
+                    : participants?.sender.avatarUrl) || ProfileImage
+                }
+              />
+              <div
+                className={`${
+                  msg.senderId === participants?.sender.id
+                    ? "bg-main text-white"
+                    : "bg-[#efefef]"
+                } flex max-w-[80%] select-text items-end break-words rounded-xl px-3 py-1.5 text-lg lg:max-w-[50%]`}
+              >
+                <div className="overflow-auto">{msg.text}</div>
+                <div
+                  className={`${
+                    msg.senderId === participants?.sender.id
+                      ? "text-gray-200"
+                      : "text-gray-400"
+                  }  ml-4 text-xs`}
+                >
+                  {new Date(msg.createdAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         ))}
