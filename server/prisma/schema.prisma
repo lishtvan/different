@@ -79,12 +79,14 @@ model Order {
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  Chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  chatId    String
-  text      String
-  senderId  Int
+  id                  Int      @id @default(autoincrement())
+  createdAt           DateTime @default(now())
+  Chat                Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chatId              String
+  text                String
+  senderId            Int
+  relatedListingId    String?
+  relatedListingTitle String?
 }
 
 model Chat {

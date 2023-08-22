@@ -182,7 +182,7 @@ const ListingRoute = () => {
                 </Button>
                 <Link
                   className="w-full min-w-fit"
-                  to={`/user/chat/new/${listing?.User.id}`}
+                  to={`/user/chat/new/${listing?.User.id}?relatedListingTitle=${listing.title}&relatedListingId=${listing.id}`}
                 >
                   <Button variant="outlined" className="w-full min-w-fit">
                     Повідомлення

@@ -16,7 +16,8 @@ export interface Message {
   text: string;
   id: number;
   senderId: number;
-  relatedListingId: number;
+  relatedListingId: string;
+  relatedListingTitle: string;
   createdAt: string;
 }
 

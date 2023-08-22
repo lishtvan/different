@@ -1,11 +1,12 @@
 import type { ChatContext, Message, Participants } from "~/types";
-import { Send } from "@mui/icons-material";
-import { Avatar, IconButton, TextField } from "@mui/material";
+import { Reply, Send } from "@mui/icons-material";
+import { Avatar, IconButton, TextField, Tooltip } from "@mui/material";
 import {
   Link,
   useFetcher,
   useOutletContext,
   useParams,
+  useSearchParams,
 } from "@remix-run/react";
 import type { KeyboardEvent } from "react";
 import { useEffect, useState } from "react";
@@ -36,7 +37,7 @@ const IndexRoute = () => {
   const fetcher = useFetcher();
   const { sendMessage, lastMessage, readyState } =
     useOutletContext<ChatContext>();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const [inputValue, setInputValue] = useState("");
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -47,7 +48,17 @@ const IndexRoute = () => {
       setInputValue("");
       return;
     }
-    sendMessage(JSON.stringify({ text: inputValue, chatId }));
+    const relatedListingId = searchParams.get("relatedListingId");
+    const relatedListingTitle = searchParams.get("relatedListingTitle");
+    sendMessage(
+      JSON.stringify({
+        text: inputValue,
+        chatId,
+        relatedListingTitle,
+        relatedListingId,
+      })
+    );
+    if (relatedListingId) setSearchParams("");
     setInputValue("");
   };
 
@@ -68,7 +79,7 @@ const IndexRoute = () => {
       setParticipants(msg.chat.Users);
       fetcher.submit(
         { route: location.pathname },
-        { method: "post", action: "/" }
+        { method: "post", replace: true }
       );
     }
     if (msg.text && msg.chatId === chatId) {
@@ -131,7 +142,27 @@ const IndexRoute = () => {
                     : "bg-[#efefef]"
                 } flex max-w-[80%] select-text items-end break-words rounded-xl px-3 py-1.5 text-lg lg:max-w-[50%]`}
               >
-                <div className="overflow-auto">{msg.text}</div>
+                <div className="overflow-auto">
+                  {msg.relatedListingId && (
+                    <Tooltip
+                      disableInteractive
+                      title={
+                        <p className="text-sm">
+                          Повідомлення стосується цього оголошення
+                        </p>
+                      }
+                    >
+                      <Link
+                        to={`/listing/${msg.relatedListingId}`}
+                        className="flex items-center gap-x-1 underline underline-offset-[4px]"
+                      >
+                        <Reply />
+                        {msg.relatedListingTitle}:
+                      </Link>
+                    </Tooltip>
+                  )}
+                  <div>{msg.text}</div>
+                </div>
                 <div
                   className={`${
                     msg.senderId === participants?.sender.id

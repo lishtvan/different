@@ -62,6 +62,8 @@ const root: FastifyPluginAsync = async (fastify) => {
           Messages: {
             create: {
               text: data.text,
+              relatedListingId: data.relatedListingId,
+              relatedListingTitle: data.relatedListingTitle,
               senderId: ownUserId,
             },
           },
