@@ -3,5 +3,6 @@ module.exports = {
   extends: '@react-native',
   rules: {
     curly: 'off',
+    bracketSpacing: 'always',
   },
 };
