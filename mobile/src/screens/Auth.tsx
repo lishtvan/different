@@ -20,7 +20,7 @@ const AuthScreen = ({ navigation }) => {
     onSuccess: async ({ token, userId }) => {
       await saveSession(token, userId);
       queryClient.invalidateQueries({ queryKey: ['user'] });
-      navigation.navigate('Home');
+      navigation.navigate('Main');
     },
   });
 
@@ -37,7 +37,7 @@ const AuthScreen = ({ navigation }) => {
   };
 
   return (
-    <View className="flex-1 justify-center items-center">
+    <View className="flex-1 justify-center items-center mb-20">
       <Text>Auth</Text>
       <Button title={'Sign in with Google'} onPress={signIn} />
     </View>

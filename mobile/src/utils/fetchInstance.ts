@@ -39,7 +39,9 @@ export const fetcher: Fetcher = async ({
     response = await fetch(`${domain}${route}`, { method, headers });
   }
 
-  if (response.status === 401) navigation.navigate('Auth');
+  if (response.status === 401 && route !== '/auth/check') {
+    navigation.navigate('Auth');
+  }
 
   const json = await response.json();
   return json;

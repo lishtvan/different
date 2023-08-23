@@ -1,6 +1,10 @@
 import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import {
+  DefaultTheme,
+  EventArg,
+  NavigationContainer,
+} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -15,9 +19,11 @@ import {
   QueryClient,
   QueryClientProvider,
   focusManager,
-  useQueryClient,
+  useQuery,
 } from '@tanstack/react-query';
 import AuthScreen from './src/screens/Auth';
+import { fetcher } from './src/utils/fetchInstance';
+import { destroySession } from './src/utils/secureStorage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -39,7 +45,15 @@ const ProfileTab: React.FC<Tab> = ({ color }) => (
   <MaterialIcons name="account-circle" color={color} size={36} />
 );
 
-const TabNavigator = () => {
+// @ts-ignore
+const TabNavigator = ({ navigation }) => {
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => fetcher({ route: '/auth/check', method: 'GET', navigation }),
+  });
+
+  if (isLoading) return null;
+
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen
@@ -51,13 +65,37 @@ const TabNavigator = () => {
         name="Sell"
         options={{ tabBarLabel: 'Продати', tabBarIcon: SellTab }}
         component={SellScreen}
+        listeners={({ navigation, route }) => ({
+          tabPress: (e) => {
+            if (user.error) {
+              e.preventDefault();
+              navigation.navigate('Auth');
+            }
+          },
+        })}
       />
       <Tab.Screen
         name="Orders"
         options={{ tabBarLabel: 'Замовлення', tabBarIcon: OrderTab }}
         component={OrdersScreen}
+        listeners={({ navigation, route }) => ({
+          tabPress: (e) => {
+            if (user.error) {
+              e.preventDefault();
+              navigation.navigate('Auth');
+            }
+          },
+        })}
       />
       <Tab.Screen
+        listeners={({ navigation, route }) => ({
+          tabPress: (e) => {
+            if (user.error) {
+              e.preventDefault();
+              navigation.navigate('Auth');
+            }
+          },
+        })}
         name="Profile"
         options={{ tabBarLabel: 'Профіль', tabBarIcon: ProfileTab }}
         component={ProfileScreen}
@@ -107,7 +145,11 @@ const App = () => {
           />
           <Stack.Screen
             name="Auth"
-            options={{ headerShown: false }}
+            options={{
+              headerBackTitleVisible: false,
+              headerTitle: '',
+              headerShadowVisible: false,
+            }}
             component={AuthScreen}
           />
         </Stack.Navigator>

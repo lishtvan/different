@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Text, View } from 'react-native';
 import Listing from '../components/Listing';
 
@@ -18,7 +18,8 @@ const ProfileComponent = ({ navigation }) => {
   );
 };
 
-const ProfileNavigator = () => {
+// @ts-ignore
+const ProfileNavigator = ({ route, navigation }) => {
   return (
     <Stack.Navigator
       screenOptions={{
