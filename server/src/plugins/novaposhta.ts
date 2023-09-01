@@ -256,19 +256,3 @@ declare module 'fastify' {
     };
   }
 }
-
-// { status: 'Відмова від отримання', statusCode: '102' } // Bodya refuse
-// { status: 'Покупка не підтверджена Покупцем', statusCode: '2' }, // EN Deleted
-// {
-//   status: 'Очікуємо на посилку від Відправника, щоб доставити її Одержувачу',
-//   statusCode: '1'
-// } // Payed
-// {
-//   status: 'Відправлення у м. Апостолове',
-//   statusCode: '4',
-//   trackingNumber: '20450739397986'
-// },
-// {
-//   status: 'Очікує на оплату доставки та сейф-сервісу',
-//   statusCode: '1'
-// }

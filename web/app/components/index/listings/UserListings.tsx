@@ -32,7 +32,6 @@ const UserListings: FC<Props> = ({ userId, showSold }) => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && !isLastPage && window.scrollY !== 0) {
-          console.log(showMore);
           showMore();
         }
       });
