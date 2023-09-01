@@ -19,6 +19,9 @@ const Tags = () => {
       <Autocomplete
         className="w-full"
         multiple
+        componentsProps={{
+          popper: { modifiers: [{ name: "flip", enabled: false }] },
+        }}
         options={tags.length === 3 ? [] : TAGS}
         freeSolo={tags.length < 3}
         disableCloseOnSelect
