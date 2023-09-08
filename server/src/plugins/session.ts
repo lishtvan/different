@@ -1,10 +1,17 @@
 import fp from 'fastify-plugin';
-import { SessionPlugin } from '../types/session';
+
+export interface Session {
+  start: (
+    userInfo: { providerId: string },
+    ip: string
+  ) => Promise<{ token: string; userId: string }>;
+  destroy: (token: string) => Promise<void>;
+}
 
 export default fp(async (fastify) => {
   const { TOKEN_SECRET, TOKEN_CHARACTERS } = process.env;
 
-  fastify.decorate<SessionPlugin>('session', {
+  fastify.decorate<Session>('session', {
     start: async (userInfo, ip) => {
       const token = fastify.generateToken(TOKEN_SECRET, TOKEN_CHARACTERS);
 
@@ -50,6 +57,6 @@ export default fp(async (fastify) => {
 
 declare module 'fastify' {
   interface FastifyInstance {
-    session: SessionPlugin;
+    session: Session;
   }
 }
