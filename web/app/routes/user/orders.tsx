@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { useEffect, type FC } from "react";
+import { type FC } from "react";
 import {
   Table,
   TableBody,
@@ -162,15 +162,6 @@ const BuyTable: FC<{ buyOrders: BuyOrder[] }> = ({ buyOrders }) => {
 const OrdersRoute = () => {
   const loaderData = useLoaderData<Orders>();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    const { buyOrders, sellOrders } = loaderData;
-    const currentTab = searchParams.get("q");
-    if (currentTab) return;
-    if (buyOrders.length > sellOrders.length) {
-      setSearchParams("?q=buy");
-    } else setSearchParams("q=sell");
-  }, [loaderData, searchParams]);
 
   return (
     <div className="mt-6 px-4 2xl:px-32">
