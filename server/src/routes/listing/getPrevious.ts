@@ -2,8 +2,10 @@ import { FastifyPluginAsync } from 'fastify';
 
 const getPreviousListing: FastifyPluginAsync = async (fastify) => {
   fastify.post('/getPrevious', async (req, reply) => {
+    const { userId } = req;
+
     const listings = await fastify.prisma.listing.findMany({
-      where: { userId: Number(req.cookies.userId) },
+      where: { userId },
       take: -1,
       select: { cardNumber: true, phone: true },
     });

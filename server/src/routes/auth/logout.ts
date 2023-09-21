@@ -8,10 +8,7 @@ const schema = {
 const logout: FastifyPluginAsync = async (fastify) => {
   fastify.post('/logout', { schema }, async (req, reply) => {
     await fastify.session.destroy(req.cookies.token!);
-    return reply
-      .clearCookie('token', COOKIE_OPTIONS)
-      .clearCookie('userId', COOKIE_OPTIONS)
-      .send();
+    return reply.clearCookie('token', COOKIE_OPTIONS).send();
   });
 };
 

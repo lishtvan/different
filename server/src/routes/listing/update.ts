@@ -87,6 +87,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const updateListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/update', { schema }, async (req, reply) => {
+    const { userId } = req;
     const {
       title,
       size,
@@ -108,7 +109,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
     }
 
     const listingToUpdate = await fastify.prisma.listing.findFirst({
-      where: { id: listingId, userId: Number(req.cookies.userId) },
+      where: { id: listingId, userId },
     });
 
     if (!listingToUpdate) throw fastify.httpErrors.unauthorized();

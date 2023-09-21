@@ -90,7 +90,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (!request.url.includes("auth")) {
       newHeaders.append(
         "set-cookie",
-        "token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT, userId=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+        "token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
       );
       return json({ user: null, ENV }, { headers: newHeaders });
     }

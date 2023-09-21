@@ -1,8 +1,7 @@
 import { FastifySchemaValidationError } from 'fastify/types/schema';
 
 export const schemaErrorFormatter = (errors: FastifySchemaValidationError[]) => {
-  // @ts-ignore
-  const formattedErrors: Record = {};
+  const formattedErrors: Record<string, unknown> = {};
   errors.forEach((e) => {
     const errMsg = e.message;
     if (e.instancePath) {
@@ -14,6 +13,5 @@ export const schemaErrorFormatter = (errors: FastifySchemaValidationError[]) => 
     const key = e.params.errors[0].params.missingProperty;
     formattedErrors[key] = errMsg;
   });
-  console.log(formattedErrors);
   return new Error(JSON.stringify(formattedErrors));
 };

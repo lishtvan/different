@@ -37,7 +37,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const createOrder: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
-    const { userId } = req.cookies;
+    const { userId } = req;
     const {
       listingId,
       RecipientsPhone,
@@ -69,7 +69,13 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
 
     await Promise.all([
       fastify.prisma.order.create({
-        data: { buyerId: Number(userId), listingId, trackingNumber, intDocRef },
+        data: {
+          buyerId: userId,
+          listingId,
+          trackingNumber,
+          intDocRef,
+          sellerId: listing.userId,
+        },
         select: { id: true },
       }),
       fastify.prisma.listing.update({
@@ -77,7 +83,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
         data: { status: 'ORDER' },
       }),
       fastify.prisma.user.update({
-        where: { id: Number(userId) },
+        where: { id: userId },
         data: { phone: RecipientsPhone },
       }),
     ]);

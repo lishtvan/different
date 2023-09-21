@@ -23,12 +23,12 @@ const googleAuth: FastifyPluginAsync = async (fastify) => {
       },
     }).then((res) => res.json());
 
-    const { token, userId } = await fastify.session.start(
+    const { token } = await fastify.session.start(
       { providerId: id },
       req.raw.socket.remoteAddress || ''
     );
 
-    reply.send({ token, userId });
+    reply.send({ token });
   });
 };
 

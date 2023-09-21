@@ -19,10 +19,11 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 const deleteListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/delete', { schema }, async (req, reply) => {
     const { listingId } = req.body;
+    const { userId } = req;
 
     try {
       const listingToDelete = await fastify.prisma.listing.findFirst({
-        where: { id: listingId, userId: Number(req.cookies.userId) },
+        where: { id: listingId, userId },
       });
 
       if (!listingToDelete) throw fastify.httpErrors.unauthorized();

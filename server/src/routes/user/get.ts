@@ -16,7 +16,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 const getUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/get', { schema }, async (req, reply) => {
     const { nickname } = req.body;
-    const ownUserId = Number(req.cookies.userId);
+    const { userId: ownUserId } = req;
 
     const [user, availableListingsCount, soldListingsCount] = await Promise.all([
       fastify.prisma.user.findUnique({
@@ -34,8 +34,8 @@ const getUser: FastifyPluginAsync = async (fastify) => {
     const isOwnAccount = user.id === ownUserId;
 
     return reply.send({
-      isOwnAccount,
       ...user,
+      isOwnAccount,
       availableListingsCount,
       soldListingsCount,
     });

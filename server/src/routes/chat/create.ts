@@ -17,7 +17,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 const createChat: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
     const { recipientId } = req.body;
-    const userId = Number(req.cookies.userId);
+    const { userId } = req;
     if (userId === recipientId) throw fastify.httpErrors.notFound();
     const chat = await fastify.prisma.chat.findFirst({
       where: { Users: { every: { id: { in: [recipientId, userId] } } } },

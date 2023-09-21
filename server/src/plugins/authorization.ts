@@ -12,28 +12,33 @@ export default fp(async (fastify) => {
     '/bill/webhook/:MNBNK_WEBHOOK_KEY',
   ];
 
+  fastify.decorateRequest('userId', 0);
+
   fastify.addHook('preHandler', async (req, reply) => {
     if (reply.statusCode === 404) return;
-    const { routerPath, cookies } = req;
-    const { token, userId } = cookies;
-
-    const isPublicRoute = publicRoutes.includes(routerPath);
+    const { routeOptions, cookies } = req;
+    const { token } = cookies;
+    const isPublicRoute = publicRoutes.includes(routeOptions.url);
     if (isPublicRoute) return;
 
-    if (!token || !userId) throw fastify.httpErrors.unauthorized();
+    if (!token) throw fastify.httpErrors.unauthorized();
     const session = await fastify.prisma.session.findFirst({
-      where: { token, userId: Number(userId) },
+      where: { token },
       select: { token: true, userId: true, User: { select: { isBill: true } } },
     });
     if (!session) throw fastify.httpErrors.unauthorized();
-
-    reply
-      .setCookie('token', session.token, COOKIE_OPTIONS)
-      .setCookie('userId', session.userId.toString(), COOKIE_OPTIONS);
+    req.userId = session.userId;
+    reply.setCookie('token', session.token, COOKIE_OPTIONS);
 
     if (session.User.isBill) {
       reply.header('bill', 'pay');
-      if (routerPath === '/auth/logout') return reply.send();
+      if (routeOptions.url === '/auth/logout') return reply.send();
     }
   });
 });
+
+declare module 'fastify' {
+  interface FastifyRequest {
+    userId: number;
+  }
+}

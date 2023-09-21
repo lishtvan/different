@@ -20,7 +20,8 @@ model User {
   Sessions   Session[]
   Listings   Listing[]
   Chats      Chat[]
-  Order      Order[]
+  buyOrders  Order[]   @relation("Seller")
+  sellOrders Order[]   @relation("Buyer")
 }
 
 model Session {
@@ -72,8 +73,10 @@ model Order {
   status         OrderStatus @default(PAYMENT)
   trackingNumber String      @unique
   intDocRef      String?     @unique
-  buyer          User        @relation(fields: [buyerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  buyer          User        @relation(name: "Buyer", fields: [buyerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   buyerId        Int
+  seller         User        @relation(name: "Seller", fields: [sellerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sellerId       Int
   Listing        Listing     @relation(fields: [listingId], references: [id])
   listingId      Int         @unique
 }

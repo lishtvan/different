@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 
 const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
   fastify.post('/getMany', async (req, reply) => {
-    const userId = Number(req.cookies.userId);
+    const { userId } = req;
 
     const user = await fastify.prisma.user.findUnique({
       where: { id: userId },

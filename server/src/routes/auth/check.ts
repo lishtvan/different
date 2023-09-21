@@ -6,10 +6,10 @@ const schema = {
 
 const authCheck: FastifyPluginAsync = async (fastify) => {
   fastify.get('/check', { schema }, async (req, res) => {
-    const ownUserId = Number(req.cookies.userId);
+    const { userId } = req;
 
     const user = await fastify.prisma.user.findUnique({
-      where: { id: ownUserId },
+      where: { id: userId },
       select: {
         id: true,
         nickname: true,
@@ -18,16 +18,16 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
         location: true,
         bio: true,
         Chats: {
-          where: { notification: true, Users: { some: { id: ownUserId } } },
+          where: { notification: true, Users: { some: { id: userId } } },
           select: { Messages: { select: { senderId: true }, take: -1 } },
         },
       },
     });
 
     const chatsWithNotification = user?.Chats.filter(
-      (chat) => chat.Messages[0].senderId !== ownUserId
+      (chat) => chat.Messages[0].senderId !== userId
     );
-    fastify.np.trackInternetDocuments(ownUserId);
+    fastify.np.trackInternetDocuments(userId);
 
     res.send({ ...user, chatNoficicationCount: chatsWithNotification?.length });
   });

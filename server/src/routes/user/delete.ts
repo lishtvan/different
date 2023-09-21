@@ -6,8 +6,10 @@ const schema = {
 
 const deleteUser: FastifyPluginAsync = async (fastify) => {
   fastify.post('/delete', { schema }, async (req, reply) => {
+    const { userId } = req;
+
     await fastify.prisma.user.delete({
-      where: { id: Number(req.cookies.userId) },
+      where: { id: userId },
     });
 
     return reply.send();

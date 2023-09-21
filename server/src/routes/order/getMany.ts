@@ -6,11 +6,11 @@ const schema = {
 
 const getOrders: FastifyPluginAsync = async (fastify) => {
   fastify.post('/getMany', { schema }, async (req, reply) => {
-    const { userId } = req.cookies;
+    const { userId } = req;
     const [sellOrders, buyOrders] = await Promise.all([
       fastify.prisma.order.findMany({
         where: {
-          Listing: { userId: Number(userId) },
+          sellerId: userId,
           NOT: { status: 'COMMISSION' },
           AND: { NOT: { status: 'FINISHED' } },
         },
@@ -26,7 +26,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
       }),
       await fastify.prisma.order.findMany({
         where: {
-          buyerId: Number(userId),
+          buyerId: userId,
           NOT: { status: 'COMMISSION' },
           AND: { NOT: { status: 'FINISHED' } },
         },

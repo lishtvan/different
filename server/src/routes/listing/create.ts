@@ -81,7 +81,7 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const createListing: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
-    const { userId } = req.cookies;
+    const { userId } = req;
     const {
       title,
       size,
@@ -128,14 +128,14 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         description,
         cardNumber,
         phone,
-        userId: Number(userId),
+        userId,
       },
     });
 
     await fastify.typesense
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
-      .create({ ...listing, id: listing.id.toString(), sellerId: userId });
+      .create({ ...listing, id: listing.id.toString(), sellerId: userId.toString() });
     return reply.send({ listingId: listing.id });
   });
 };

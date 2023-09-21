@@ -40,10 +40,12 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 const updateUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/update', { schema }, async (req, reply) => {
     const { nickname, bio, avatarUrl, location } = req.body;
+    const { userId } = req;
+
     try {
       await fastify.prisma.user.update({
         where: {
-          id: Number(req.cookies.userId),
+          id: userId,
         },
         data: {
           nickname,

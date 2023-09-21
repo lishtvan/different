@@ -8,7 +8,7 @@ const root: FastifyPluginAsync = async (fastify) => {
     const { socket } = connection;
     socket.on('message', async (message: object) => {
       const data = JSON.parse(message.toString());
-      const ownUserId = Number(req.cookies.userId);
+      const { userId: ownUserId } = req;
 
       let chat = chats.get(data.chatId);
       if (!chat) {

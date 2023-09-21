@@ -6,11 +6,11 @@ const schema = {
 
 const getBill: FastifyPluginAsync = async (fastify) => {
   fastify.post('/getPaymentLink', { schema }, async (req, reply) => {
-    const { userId } = req.cookies;
+    const { userId } = req;
     const { MNBNK_WEBHOOK_KEY, WEB_DOMAIN, API_DOMAIN, MNBNK_TOKEN } = process.env;
 
     const soldItems = await fastify.prisma.listing.findMany({
-      where: { userId: Number(userId), Order: { status: 'COMMISSION' } },
+      where: { userId, Order: { status: 'COMMISSION' } },
       select: { price: true, Order: { select: { id: true } } },
     });
 

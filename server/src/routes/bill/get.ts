@@ -6,16 +6,16 @@ const schema = {
 
 const getBill: FastifyPluginAsync = async (fastify) => {
   fastify.post('/get', { schema }, async (req, reply) => {
-    const { userId } = req.cookies;
+    const { userId } = req;
 
     const soldItems = await fastify.prisma.listing.findMany({
-      where: { userId: Number(userId), Order: { status: 'COMMISSION' } },
+      where: { userId, Order: { status: 'COMMISSION' } },
       select: { id: true, price: true, title: true },
     });
 
     if (soldItems.length === 0) {
       await fastify.prisma.user.update({
-        where: { id: Number(userId) },
+        where: { id: userId },
         data: { isBill: false },
       });
       throw fastify.httpErrors.badRequest();
