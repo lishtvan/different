@@ -18,8 +18,18 @@ export default fp(async (fastify) => {
     if (reply.statusCode === 404) return;
     const { routeOptions, cookies } = req;
     const { token } = cookies;
+
     const isPublicRoute = publicRoutes.includes(routeOptions.url);
-    if (isPublicRoute) return;
+    if (isPublicRoute) {
+      if (token) {
+        const session = await fastify.prisma.session.findFirst({
+          where: { token },
+          select: { userId: true },
+        });
+        if (session) req.userId = session?.userId;
+      }
+      return;
+    }
 
     if (!token) throw fastify.httpErrors.unauthorized();
     const session = await fastify.prisma.session.findFirst({

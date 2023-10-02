@@ -26,7 +26,7 @@ const schema = {
       },
       location: {
         type: 'string',
-        maxLength: 40,
+        maxLength: 32,
         errorMessage: {
           maxLength: 'Location length must not be longer than 40 characters ',
         },
@@ -63,7 +63,7 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
       throw e;
     }
 
-    return reply.send();
+    return reply.send({});
   });
 };
 
