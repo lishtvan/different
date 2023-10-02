@@ -118,7 +118,18 @@ export default function App() {
       additionalSearchParameters: { query_by: "title,designer" },
     });
   }, []);
-
+  // useEffect(() => {
+  //   const now = new Date().valueOf();
+  //   setTimeout(() => {
+  //     if (new Date().valueOf() - now > 100) return;
+  //     window.location.href = "different://";
+  //   }, 2);
+  //   try {
+  //     window.location.href = "differentwwq://";
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
   return (
     <html lang={"uk"}>
       <head>
