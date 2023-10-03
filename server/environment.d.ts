@@ -16,6 +16,8 @@ declare global {
       MNBNK_WEBHOOK_KEY: string;
       API_DOMAIN: string;
       MNBNK_TOKEN: string;
+      S3_ACCESS_KEY: string;
+      S3_SECRET_KEY: string;
     }
   }
 }
