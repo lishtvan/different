@@ -41,7 +41,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
               price: true,
               title: true,
               id: true,
-              phone: true,
+              // phone: true, TODO: fix this
               User: { select: { nickname: true } },
             },
           },

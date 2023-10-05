@@ -16,15 +16,13 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const googleAuth: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/google/mobile', { schema }, async (req, reply) => {
-    const { id } = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+    const { id, email } = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
       method: 'GET',
-      headers: {
-        authorization: 'Bearer' + req.body.accessToken,
-      },
+      headers: { authorization: 'Bearer' + req.body.accessToken },
     }).then((res) => res.json());
 
     const { token } = await fastify.session.start(
-      { providerId: id },
+      { providerId: id, email },
       req.raw.socket.remoteAddress || ''
     );
 

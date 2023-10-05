@@ -126,10 +126,12 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         price,
         imageUrls,
         description,
-        cardNumber,
-        phone,
         userId,
       },
+    });
+    await fastify.prisma.user.update({
+      where: { id: userId },
+      data: { phone, cardNumber },
     });
 
     await fastify.typesense

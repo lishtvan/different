@@ -11,11 +11,13 @@ model User {
   id         Int       @id @default(autoincrement())
   createdAt  DateTime  @default(now())
   providerId String    @unique
+  email      String?
   nickname   String?   @unique @db.VarChar(20)
   bio        String?
   avatarUrl  String?
   location   String?
   phone      String?
+  cardNumber String?
   isBill     Boolean?
   Sessions   Session[]
   Listings   Listing[]
@@ -42,7 +44,6 @@ model Listing {
   id          Int           @id @default(autoincrement())
   createdAt   DateTime      @default(now())
   price       Int
-  cardNumber  String
   title       String
   size        String
   designer    String
@@ -55,7 +56,6 @@ model Listing {
   status      ListingStatus @default(AVAILABLE)
   userId      Int
   Order       Order?
-  phone       String
 }
 
 enum OrderStatus {

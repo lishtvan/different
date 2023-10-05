@@ -56,12 +56,12 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
         CityRecipient,
         RecipientAddress,
         RecipientsPhone,
-        SendersPhone: listing.phone,
+        SendersPhone: '380965134969', // TODO: fix this
         Description: listing.title,
         Cost: listing.price,
         firstName,
         lastName,
-        cardNumber: listing.cardNumber.replace(/\s/g, ''),
+        cardNumber: '5168757427716644', // TODO: fix this
       });
     if (!success) {
       throw fastify.httpErrors.badRequest(`/np ${translatedErrors?.join(' ')} `);

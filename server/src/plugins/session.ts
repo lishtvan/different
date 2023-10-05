@@ -2,7 +2,7 @@ import fp from 'fastify-plugin';
 
 export interface Session {
   start: (
-    userInfo: { providerId: string },
+    userInfo: { providerId: string; email: string },
     ip: string
   ) => Promise<{ token: string; userId: string }>;
   destroy: (token: string) => Promise<void>;
@@ -26,10 +26,17 @@ export default fp(async (fastify) => {
           data: { token, ip, userId: user.id },
         });
         userId = user.id;
+        if (!user.email) {
+          await fastify.prisma.user.update({
+            where: { id: userId },
+            data: { email: userInfo.email },
+          }); // TODO: remove this when everyone will have email
+        }
       } else {
         const createdUser = await fastify.prisma.user.create({
           data: {
             providerId: userInfo.providerId,
+            email: userInfo.email,
             Sessions: {
               create: { token, ip },
             },
@@ -42,10 +49,7 @@ export default fp(async (fastify) => {
         userId = createdUser.id;
       }
 
-      return {
-        token,
-        userId: userId.toString(),
-      };
+      return { token, userId: userId.toString() };
     },
     destroy: async (token) => {
       await fastify.prisma.session.delete({
