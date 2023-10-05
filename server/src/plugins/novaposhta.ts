@@ -86,7 +86,6 @@ const createSafeDelivery: CreateSafeDelivery = async ({
     }
   ).then((res) => res.json());
 
-  const date = new Date();
   const {
     success,
     translatedErrors,
@@ -133,7 +132,6 @@ const createSafeDelivery: CreateSafeDelivery = async ({
         MarketplacePartnerToken: '005056887b8d-b5da-11e6-9f54-cea38574',
         AdditionalInformation: '',
         AccompanyingDocuments: '',
-        DateTime: `${date.getDate()}.0${date.getMonth() + 1}.${date.getFullYear()}`,
         SeatsAmount: '1',
         Weight: '2',
         VolumeGeneral: '',
