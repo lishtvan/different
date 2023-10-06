@@ -17,6 +17,9 @@ interface CategoriesFilter<T> {
 const CategoryFilter = () => {
   const { items } = useRefinementList({
     attribute: "category",
+    limit: 50,
+    showMore: true,
+    showMoreLimit: 200,
   });
 
   const [categories, setCategories] = useState<CategoriesFilter<typeof items>>({
@@ -38,6 +41,7 @@ const CategoryFilter = () => {
       Аксесуари: [],
     };
     items.forEach((item) => {
+      console.log(item);
       if (CATEGORIES.Верх.includes(item.label)) newCategories.Верх.push(item);
       else if (CATEGORIES.Низ.includes(item.label)) {
         newCategories.Низ.push(item);
@@ -73,10 +77,7 @@ const CategoryFilter = () => {
 
       <Collapse in={open} timeout="auto">
         <SubCategoryFilter subcategories={categories.Верх} category="Верх" />
-        <SubCategoryFilter
-          subcategories={categories.Низ}
-          category="Низ"
-        />
+        <SubCategoryFilter subcategories={categories.Низ} category="Низ" />
         <SubCategoryFilter
           subcategories={categories["Верхній одяг"]}
           category="Верхній одяг"
