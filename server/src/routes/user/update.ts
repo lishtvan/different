@@ -13,22 +13,22 @@ const schema = {
         minLength: 2,
         maxLength: 20,
         errorMessage: {
-          minLength: 'Nickname length must not be shorter than 2 characters ',
-          maxLength: 'Nickname length must not be longer than 20 characters ',
+          minLength: 'Nickname length must not be shorter than 2 characters',
+          maxLength: 'Nickname length must not be longer than 20 characters',
         },
       },
       bio: {
         type: 'string',
         maxLength: 150,
         errorMessage: {
-          maxLength: 'Bio length must not be longer than 150 characters ',
+          maxLength: 'Bio length must not be longer than 150 characters',
         },
       },
       location: {
         type: 'string',
         maxLength: 32,
         errorMessage: {
-          maxLength: 'Location length must not be longer than 40 characters ',
+          maxLength: 'Location length must not be longer than 40 characters',
         },
       },
     },
@@ -57,7 +57,7 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
     } catch (e) {
       if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
         throw fastify.httpErrors.badRequest(
-          'body/nickname User with such nickname already exists'
+          JSON.stringify({ nickname: 'Користувач з таким нікнеймом вже існує' })
         );
       }
       throw e;
