@@ -9,6 +9,10 @@ export const schemaErrorFormatter = (errors: FastifySchemaValidationError[]) => 
       formattedErrors[key] = errMsg;
       return;
     }
+    if (!e.params.errors && e.params.missingProperty) {
+      formattedErrors[e.params.missingProperty as string] = e.message;
+      return;
+    }
     // @ts-ignore
     const key = e.params.errors[0].params.missingProperty;
     formattedErrors[key] = errMsg;
