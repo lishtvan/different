@@ -22,17 +22,17 @@ export default fp(async (fastify) => {
     const isPublicRoute = publicRoutes.includes(routeOptions.url);
     if (isPublicRoute) {
       if (token) {
-        const session = await fastify.prisma.session.findFirst({
+        const session = await fastify.prisma.session.findUnique({
           where: { token },
           select: { userId: true },
         });
-        if (session) req.userId = session?.userId;
+        if (session) req.userId = session.userId;
       }
       return;
     }
 
     if (!token) throw fastify.httpErrors.unauthorized();
-    const session = await fastify.prisma.session.findFirst({
+    const session = await fastify.prisma.session.findUnique({
       where: { token },
       select: { token: true, userId: true, User: { select: { isBill: true } } },
     });

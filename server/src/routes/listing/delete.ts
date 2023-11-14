@@ -22,7 +22,7 @@ const deleteListing: FastifyPluginAsync = async (fastify) => {
     const { userId } = req;
 
     try {
-      const listingToDelete = await fastify.prisma.listing.findFirst({
+      const listingToDelete = await fastify.prisma.listing.findUnique({
         where: { id: listingId, userId },
       });
 

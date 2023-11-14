@@ -108,7 +108,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
       throw fastify.httpErrors.badRequest(`/cardNumber ${cardNumberError} `);
     }
 
-    const listingToUpdate = await fastify.prisma.listing.findFirst({
+    const listingToUpdate = await fastify.prisma.listing.findUnique({
       where: { id: listingId, userId },
     });
 
