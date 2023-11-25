@@ -68,7 +68,7 @@ const getBill: FastifyPluginAsync = async (fastify) => {
             await fastify.typesense
               .collections(LISTINGS_COLLECTION_NAME)
               .documents()
-              .update({ status: 'SOLD', id: order?.listingId.toString() });
+              .update({ status: 'SOLD', id: order?.listingId.toString() }, {});
           });
         return promise;
       });

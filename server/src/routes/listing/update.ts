@@ -150,7 +150,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
     await fastify.typesense
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
-      .update({ ...listing, id: listing.id.toString() });
+      .update({ ...listing, id: listing.id.toString() }, {});
 
     return reply.send();
   });

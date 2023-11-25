@@ -197,7 +197,7 @@ export default fp(async (fastify) => {
             await fastify.typesense
               .collections(LISTINGS_COLLECTION_NAME)
               .documents()
-              .update({ status: 'AVAILABLE', id: res.Listing.id.toString() });
+              .update({ status: 'AVAILABLE', id: res.Listing.id.toString() }, {});
           });
       }
       if (i.statusCode === '1' && i.status.includes('оплату')) {

@@ -91,7 +91,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
     await fastify.typesense
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
-      .update({ status: 'ORDER', id: listing.id.toString() });
+      .update({ status: 'ORDER', id: listing.id.toString() }, {});
 
     return reply.send();
   });
