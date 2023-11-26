@@ -15,7 +15,7 @@ export default fp(async (fastify) => {
   fastify.decorateRequest('userId', 0);
 
   fastify.addHook('preHandler', async (req, reply) => {
-    if (reply.statusCode === 404) return;
+    if (reply.statusCode === 404) return; // In case rate limiter throws 404
     const { routeOptions, cookies } = req;
     const { token } = cookies;
 
