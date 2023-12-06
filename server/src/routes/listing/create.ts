@@ -57,8 +57,12 @@ const schema = {
       imageUrls: {
         type: 'array',
         minItems: 1,
+        maxItems: 8,
         items: { type: 'string' },
-        errorMessage: { minItems: 'Необхідно додати мінімум одну фотографію' },
+        errorMessage: {
+          minItems: 'Необхідно додати мінімум одну фотографію',
+          maxItems: 'Можна завантажити максимум 8 фото',
+        },
       },
       price: {
         type: 'number',
@@ -71,7 +75,6 @@ const schema = {
       },
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
-      cardNumberError: { type: 'string' },
       phone: { type: 'string' },
     },
   } as const,
@@ -93,13 +96,8 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       cardNumber,
       category,
       imageUrls,
-      cardNumberError,
       phone,
     } = req.body;
-
-    if (cardNumberError) {
-      throw fastify.httpErrors.badRequest(`/cardNumber ${cardNumberError} `);
-    }
 
     const listing = await fastify.prisma.listing.create({
       select: {
