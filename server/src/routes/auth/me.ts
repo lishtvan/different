@@ -5,7 +5,7 @@ const schema = {
 };
 
 const authCheck: FastifyPluginAsync = async (fastify) => {
-  fastify.get('/check', { schema }, async (req, res) => {
+  fastify.get('/me', { schema }, async (req, res) => {
     const { userId } = req;
 
     const user = await fastify.prisma.user.findUnique({

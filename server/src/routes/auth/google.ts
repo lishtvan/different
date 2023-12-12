@@ -1,20 +1,24 @@
 import { FastifyPluginAsync } from 'fastify';
-import { COOKIE_OPTIONS } from '../../constants/auth';
+import { FromSchema } from 'json-schema-to-ts';
 
 const schema = {
   tags: ['Auth'],
+  body: {
+    type: 'object',
+    required: ['accessToken'],
+    properties: {
+      accessToken: { type: 'string' },
+    },
+  } as const,
 };
 
-const googleAuth: FastifyPluginAsync = async (fastify) => {
-  fastify.get('/google/callback', { schema }, async (req, reply) => {
-    const oauthToken =
-      await fastify.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
+type Schema = { Body: FromSchema<typeof schema.body> };
 
+const googleAuth: FastifyPluginAsync = async (fastify) => {
+  fastify.post<Schema>('/google/mobile', { schema }, async (req, reply) => {
     const { id, email } = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
       method: 'GET',
-      headers: {
-        authorization: 'Bearer' + oauthToken.token.access_token,
-      },
+      headers: { authorization: 'Bearer' + req.body.accessToken },
     }).then((res) => res.json());
 
     const { token } = await fastify.session.start(
@@ -22,9 +26,7 @@ const googleAuth: FastifyPluginAsync = async (fastify) => {
       req.raw.socket.remoteAddress || ''
     );
 
-    reply
-      .setCookie('token', token, COOKIE_OPTIONS)
-      .redirect(`${process.env.WEB_DOMAIN}/auth?token=${token}`);
+    return reply.send({ token });
   });
 };
 
