@@ -1,5 +1,4 @@
 import fp from 'fastify-plugin';
-import { COOKIE_OPTIONS } from '../constants/auth';
 
 export default fp(async (fastify) => {
   const publicRoutes = [
@@ -38,7 +37,6 @@ export default fp(async (fastify) => {
     });
     if (!session) throw fastify.httpErrors.unauthorized();
     req.userId = session.userId;
-    reply.setCookie('token', session.token, COOKIE_OPTIONS);
 
     if (session.User.isBill) {
       reply.header('bill', 'pay');
