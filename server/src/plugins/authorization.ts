@@ -18,7 +18,7 @@ export default fp(async (fastify) => {
     const { routeOptions, cookies } = req;
     const { token } = cookies;
 
-    const isPublicRoute = publicRoutes.includes(routeOptions.url);
+    const isPublicRoute = publicRoutes.includes(req.routeOptions.url!);
     if (isPublicRoute) {
       if (token) {
         const session = await fastify.prisma.session.findUnique({
