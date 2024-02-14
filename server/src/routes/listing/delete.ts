@@ -20,8 +20,10 @@ const deleteListing: FastifyPluginAsync = async (fastify) => {
     const { userId } = req;
 
     try {
-      await fastify.prisma.$transaction(async (t) => {
-        await t.listing.delete({ where: { id: listingId, userId, status: 'AVAILABLE' } });
+      await fastify.prisma.$transaction(async (tx) => {
+        await tx.listing.delete({
+          where: { id: listingId, userId, status: 'AVAILABLE' },
+        });
         await fastify.search.delete(listingId);
       });
     } catch (e: any) {
