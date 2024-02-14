@@ -1,7 +1,5 @@
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
-import { LISTINGS_COLLECTION_NAME } from '../../constants/typesense';
 
 const schema = {
   tags: ['Listing'],
@@ -22,22 +20,12 @@ const deleteListing: FastifyPluginAsync = async (fastify) => {
     const { userId } = req;
 
     try {
-      const listingToDelete = await fastify.prisma.listing.findUnique({
-        where: { id: listingId, userId },
+      await fastify.prisma.$transaction(async (t) => {
+        await t.listing.delete({ where: { id: listingId, userId, status: 'AVAILABLE' } });
+        await fastify.search.delete(listingId);
       });
-
-      if (!listingToDelete) throw fastify.httpErrors.unauthorized();
-      if (listingToDelete.status !== 'AVAILABLE') throw fastify.httpErrors.badRequest();
-
-      await fastify.prisma.listing.delete({ where: { id: listingId } });
-      await fastify.typesense
-        .collections(LISTINGS_COLLECTION_NAME)
-        .documents(listingId.toString())
-        .delete();
-    } catch (e) {
-      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2017') {
-        throw fastify.httpErrors.notFound();
-      }
+    } catch (e: any) {
+      if (e.code === 'P2025' || e.httpStatus === 404) throw fastify.httpErrors.notFound();
       throw e;
     }
 
