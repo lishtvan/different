@@ -38,6 +38,7 @@ export default fp(async (fastify) => {
     if (!session) throw fastify.httpErrors.unauthorized();
     req.userId = session.userId;
 
+    // TODO: remove
     if (session.User.isBill) {
       reply.header('bill', 'pay');
       if (routeOptions.url === '/auth/logout') return reply.send();

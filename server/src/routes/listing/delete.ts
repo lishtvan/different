@@ -31,7 +31,7 @@ const deleteListing: FastifyPluginAsync = async (fastify) => {
       throw e;
     }
 
-    return reply.send();
+    return reply.send({});
   });
 };
 

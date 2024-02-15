@@ -93,7 +93,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
       .documents()
       .update({ status: 'ORDER', id: listing.id.toString() }, {});
 
-    return reply.send();
+    return reply.send({});
   });
 };
 

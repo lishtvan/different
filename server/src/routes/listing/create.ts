@@ -132,6 +132,7 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       data: { phone, cardNumber },
     });
 
+    // TODO: refactor this and add transaction
     await fastify.typesense
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()

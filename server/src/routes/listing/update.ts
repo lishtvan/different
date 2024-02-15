@@ -146,13 +146,13 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
       where: { id: userId },
       data: { phone, cardNumber },
     });
-
+    // TODO: refactor this and add transaction
     await fastify.typesense
       .collections(LISTINGS_COLLECTION_NAME)
       .documents()
       .update({ ...listing, id: listing.id.toString() }, {});
 
-    return reply.send();
+    return reply.send({});
   });
 };
 
