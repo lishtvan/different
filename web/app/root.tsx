@@ -36,10 +36,15 @@ export const links: LinksFunction = () => [
 ];
 
 export const meta: MetaFunction = () => ({
-  charset: "utf-8",
   title: "Different",
-  descriptiom: "Second-hand marketplace",
-  viewport: "width=device-width,initial-scale=1,viewport-fit=cover",
+  descriptiom: "Маркетплейс для одягу, взуття та аксесуарів",
+  "og:url": "https://different.to",
+  "og:site_name": "Different",
+  "og:type": "website",
+  "og:title": "Different",
+  "og:description": "Маркетплейс для одягу, взуття та аксесуарів",
+  "og:image":
+    "https://s3.eu-central-1.amazonaws.com/different.dev/XplVixepTTe6VPJdvLqwpQ-0000000001:w=1200&h=704",
 });
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -133,6 +138,8 @@ export default function App() {
   return (
     <html lang={"uk"}>
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>

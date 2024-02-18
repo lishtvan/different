@@ -1,4 +1,9 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import type {
+  ActionFunction,
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import {
   Form,
@@ -34,6 +39,18 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   return response;
 };
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return {
+    "og:image": data.listing.imageUrls[0],
+    "og:url": `https://different.to/listing/${data.listing.id}`,
+    "og:type": "website",
+    "og:title": data.listing.title,
+    "og:description": data.listing.description,
+  };
+};
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: "213" }];
 
 export const action: ActionFunction = async ({ request, params }) => {
   const listingId = Number(params.listingId);
