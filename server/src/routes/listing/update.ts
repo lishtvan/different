@@ -1,7 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
 
-// TODO: recheck schema
 const schema = {
   tags: ['Listing'],
   body: {
@@ -38,21 +37,21 @@ const schema = {
         maxItems: 3,
         items: { type: 'string' },
         errorMessage: {
-          minItems: 'Ви можете обрати максимум 3 теги ',
+          minItems: 'Ви можете обрати максимум 3 теги',
         },
       },
       title: {
         type: 'string',
         maxLength: 80,
         errorMessage: {
-          maxLength: 'Заголовок має бути не довшим ніж 80 символів ',
+          maxLength: 'Заголовок має бути не довшим ніж 80 символів',
         },
       },
       description: {
         type: 'string',
         maxLength: 1000,
         errorMessage: {
-          maxLength: 'Опис має бути не довшим ніж 1000 символів ',
+          maxLength: 'Опис має бути не довшим ніж 1000 символів',
         },
       },
       size: { type: 'string' },
@@ -61,9 +60,11 @@ const schema = {
       imageUrls: {
         type: 'array',
         minItems: 1,
+        maxItems: 8,
         items: { type: 'string' },
         errorMessage: {
-          minItems: 'Необхідно додати мінімум одну фотографію ',
+          maxItems: 'Можна завантажити максимум 8 фото',
+          minItems: 'Необхідно додати мінімум одну фотографію',
         },
       },
       price: {
@@ -71,8 +72,8 @@ const schema = {
         maximum: 300000,
         minimum: 1,
         errorMessage: {
-          minimum: 'Ціна має бути більшою ніж 6 грн',
-          maximum: 'Contact us to sell such expensive item',
+          minimum: 'Ціна має бути більшою ніж 1 грн',
+          maximum: 'Ціна має бути меншою ніж 300000 грн',
         },
       },
       cardNumber: { type: 'string' },
