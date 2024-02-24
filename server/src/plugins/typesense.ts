@@ -1,6 +1,7 @@
 import fp from 'fastify-plugin';
 import Typesense, { Client } from 'typesense';
 import { LISTINGS_COLLECTION_NAME } from '../constants/typesense';
+import { ListingStatus } from '@prisma/client';
 
 export default fp(async (fastify) => {
   const typesense = new Typesense.Client({
@@ -20,15 +21,35 @@ export default fp(async (fastify) => {
         .collections(LISTINGS_COLLECTION_NAME)
         .documents(listingId.toString())
         .delete();
-    }
+    },
+    update: async (listing) => {
+      await typesense
+        .collections(LISTINGS_COLLECTION_NAME)
+        .documents()
+        .update({ ...listing, id: listing.id.toString() }, {});
+    },
   });
 });
+
+interface ListingSearch {
+  id: number;
+  title?: string;
+  size?: string;
+  designer?: string;
+  condition?: string;
+  tags?: string[];
+  category?: string;
+  price?: number;
+  imageUrls?: string[];
+  status?: ListingStatus;
+}
 
 declare module 'fastify' {
   interface FastifyInstance {
     typesense: Client;
     search: {
       delete: (listingId: number) => Promise<void>;
+      update: (listing: ListingSearch) => Promise<void>;
     };
   }
 }

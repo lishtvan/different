@@ -1,6 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
-import { LISTINGS_COLLECTION_NAME } from '../../constants/typesense';
 
 const schema = {
   tags: ['Listing'],
@@ -69,15 +68,14 @@ const schema = {
       price: {
         type: 'number',
         maximum: 300000,
-        minimum: 6,
+        minimum: 1,
         errorMessage: {
-          minimum: 'Ціна має бути більшою ніж 20 грн ',
-          maximum: 'Contact us to sell such expensive item ',
+          minimum: 'Ціна має бути більшою ніж 6 грн',
+          maximum: 'Contact us to sell such expensive item',
         },
       },
       cardNumber: { type: 'string' },
       designer: { type: 'string' },
-      cardNumberError: { type: 'string' },
       phone: { type: 'string' },
     },
   } as const,
@@ -100,57 +98,45 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
       category,
       imageUrls,
       listingId,
-      cardNumberError,
       phone,
     } = req.body;
 
-    if (cardNumberError) {
-      throw fastify.httpErrors.badRequest(`/cardNumber ${cardNumberError} `);
+    try {
+      const listing = await fastify.prisma.listing.update({
+        where: { id: listingId, userId, status: 'AVAILABLE' },
+        select: {
+          id: true,
+          title: true,
+          size: true,
+          designer: true,
+          condition: true,
+          tags: true,
+          category: true,
+          price: true,
+          imageUrls: true,
+          status: true,
+        },
+        data: {
+          title,
+          size,
+          designer,
+          condition,
+          tags,
+          category,
+          price,
+          imageUrls,
+          description,
+        },
+      });
+      await fastify.prisma.user.update({
+        where: { id: userId },
+        data: { phone, cardNumber },
+      });
+      await fastify.search.update(listing);
+    } catch (e: any) {
+      if (e.code === 'P2025' || e.httpStatus === 404) throw fastify.httpErrors.notFound();
+      throw e;
     }
-
-    const listingToUpdate = await fastify.prisma.listing.findUnique({
-      where: { id: listingId, userId },
-    });
-
-    if (!listingToUpdate) throw fastify.httpErrors.unauthorized();
-    if (listingToUpdate.status !== 'AVAILABLE') throw fastify.httpErrors.badRequest();
-
-    const listing = await fastify.prisma.listing.update({
-      where: { id: listingId },
-      select: {
-        id: true,
-        title: true,
-        size: true,
-        designer: true,
-        condition: true,
-        tags: true,
-        category: true,
-        price: true,
-        imageUrls: true,
-        status: true,
-      },
-      data: {
-        title,
-        size,
-        designer,
-        condition,
-        tags,
-        category,
-        price,
-        imageUrls,
-        description,
-      },
-    });
-
-    await fastify.prisma.user.update({
-      where: { id: userId },
-      data: { phone, cardNumber },
-    });
-    // TODO: refactor this and add transaction
-    await fastify.typesense
-      .collections(LISTINGS_COLLECTION_NAME)
-      .documents()
-      .update({ ...listing, id: listing.id.toString() }, {});
 
     return reply.send({});
   });
