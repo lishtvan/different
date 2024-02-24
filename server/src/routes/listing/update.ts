@@ -1,6 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
 
+// TODO: recheck schema
 const schema = {
   tags: ['Listing'],
   body: {

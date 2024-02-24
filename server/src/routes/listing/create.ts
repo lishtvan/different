@@ -2,6 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
 import { LISTINGS_COLLECTION_NAME } from '../../constants/typesense';
 
+// TODO: recheck schema
 const schema = {
   tags: ['Listing'],
   body: {
