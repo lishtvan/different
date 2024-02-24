@@ -104,37 +104,37 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
     } = req.body;
 
     try {
-      const listing = await fastify.prisma.listing.update({
-        where: { id: listingId, userId, status: 'AVAILABLE' },
-        select: {
-          id: true,
-          title: true,
-          size: true,
-          designer: true,
-          condition: true,
-          tags: true,
-          category: true,
-          price: true,
-          imageUrls: true,
-          status: true,
-        },
-        data: {
-          title,
-          size,
-          designer,
-          condition,
-          tags,
-          category,
-          price,
-          imageUrls,
-          description,
-        },
+      await fastify.prisma.$transaction(async (tx) => {
+        const listing = await tx.listing.update({
+          where: { id: listingId, userId, status: 'AVAILABLE' },
+          select: {
+            id: true,
+            title: true,
+            size: true,
+            designer: true,
+            condition: true,
+            tags: true,
+            category: true,
+            price: true,
+            imageUrls: true,
+            status: true,
+          },
+          data: {
+            title,
+            size,
+            designer,
+            condition,
+            tags,
+            category,
+            price,
+            imageUrls,
+            description,
+          },
+        });
+
+        await tx.user.update({ where: { id: userId }, data: { phone, cardNumber } });
+        await fastify.search.update(listing);
       });
-      await fastify.prisma.user.update({
-        where: { id: userId },
-        data: { phone, cardNumber },
-      });
-      await fastify.search.update(listing);
     } catch (e: any) {
       if (e.code === 'P2025' || e.httpStatus === 404) throw fastify.httpErrors.notFound();
       throw e;

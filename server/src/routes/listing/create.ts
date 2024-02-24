@@ -99,45 +99,49 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       phone,
     } = req.body;
 
-    const listing = await fastify.prisma.listing.create({
-      select: {
-        id: true,
-        description: true,
-        title: true,
-        size: true,
-        designer: true,
-        condition: true,
-        tags: true,
-        category: true,
-        price: true,
-        imageUrls: true,
-        status: true,
-      },
-      data: {
-        title,
-        size,
-        status: 'AVAILABLE',
-        designer,
-        condition,
-        tags,
-        category,
-        price,
-        imageUrls,
-        description,
-        userId,
-      },
-    });
-    await fastify.prisma.user.update({
-      where: { id: userId },
-      data: { phone, cardNumber },
+    const createdListingId = await fastify.prisma.$transaction(async (tx) => {
+      const listing = await tx.listing.create({
+        select: {
+          id: true,
+          description: true,
+          title: true,
+          size: true,
+          designer: true,
+          condition: true,
+          tags: true,
+          category: true,
+          price: true,
+          imageUrls: true,
+          status: true,
+        },
+        data: {
+          title,
+          size,
+          status: 'AVAILABLE',
+          designer,
+          condition,
+          tags,
+          category,
+          price,
+          imageUrls,
+          description,
+          userId,
+        },
+      });
+      await tx.user.update({
+        where: { id: userId },
+        data: { phone, cardNumber },
+      });
+
+      // TODO: refactor this
+      await fastify.typesense
+        .collections(LISTINGS_COLLECTION_NAME)
+        .documents()
+        .create({ ...listing, id: listing.id.toString(), sellerId: userId.toString() });
+      return listing.id;
     });
 
-    // TODO: refactor this and add transaction
-    await fastify.typesense
-      .collections(LISTINGS_COLLECTION_NAME)
-      .documents()
-      .create({ ...listing, id: listing.id.toString(), sellerId: userId.toString() });
-    return reply.send({ listingId: listing.id });
+    return reply.send({ listingId: createdListingId });
   });
 };
 
