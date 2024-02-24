@@ -1,6 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
-import { LISTINGS_COLLECTION_NAME } from '../../constants/typesense';
 
 const schema = {
   tags: ['Listing'],
@@ -133,11 +132,7 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         data: { phone, cardNumber },
       });
 
-      // TODO: refactor this
-      await fastify.typesense
-        .collections(LISTINGS_COLLECTION_NAME)
-        .documents()
-        .create({ ...listing, id: listing.id.toString(), sellerId: userId.toString() });
+      await fastify.search.create({ listing, sellerId: userId });
       return listing.id;
     });
 

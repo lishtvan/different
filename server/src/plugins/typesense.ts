@@ -28,6 +28,12 @@ export default fp(async (fastify) => {
         .documents()
         .update({ ...listing, id: listing.id.toString() }, {});
     },
+    create: async ({ listing, sellerId }) => {
+      await typesense
+        .collections(LISTINGS_COLLECTION_NAME)
+        .documents()
+        .create({ ...listing, id: listing.id.toString(), sellerId: sellerId.toString() });
+    },
   });
 });
 
@@ -44,12 +50,18 @@ interface ListingSearch {
   status?: ListingStatus;
 }
 
+interface CreateListingInput {
+  listing: Required<ListingSearch>;
+  sellerId: number;
+}
+
 declare module 'fastify' {
   interface FastifyInstance {
     typesense: Client;
     search: {
       delete: (listingId: number) => Promise<void>;
       update: (listing: ListingSearch) => Promise<void>;
+      create: (input: CreateListingInput) => Promise<void>;
     };
   }
 }
