@@ -10,6 +10,6 @@ export default fp(async (fastify) => {
         error: 'Internal Server Error',
         message: 'Something went wrong',
       });
-    } else throw error;
+    } else reply.send(error);
   });
 });
