@@ -13,7 +13,7 @@ import ProfileImage from "./../assets/profile.jpeg";
 import { InstantSearch } from "react-instantsearch-hooks-web";
 import { LISTINGS_COLLECTION_NAME } from "~/constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
-import UserListings from "~/components/index/listings/UserListings";
+import UserListings from "~/components/index/UserListings";
 import { useMemo } from "react";
 import { config } from "~/constants/config";
 import type { Env } from "~/types";

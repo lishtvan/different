@@ -10,7 +10,6 @@ export const config = {
       ],
       apiKey: "xyz",
     },
-    wsDomain: "ws://localhost:8000",
   },
   development: {
     typesense: {
@@ -23,7 +22,6 @@ export const config = {
       ],
       apiKey: "LStsJHZnSoNFwVXzyfJU3D9xxvvjQcyg",
     },
-    wsDomain: "wss://dev.api.different-marketplace.com",
   },
   production: {
     typesense: {
@@ -36,6 +34,5 @@ export const config = {
       ],
       apiKey: "LStsJHZnSoNFwVXzyfJU3D9xxvvjQcyg",
     },
-    wsDomain: "wss://api.different-marketplace.com",
   },
 };

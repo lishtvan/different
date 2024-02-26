@@ -1,11 +1,9 @@
 import type {
-  ActionFunction,
   LinksFunction,
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import type { ShouldRevalidateFunction } from "@remix-run/react";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -15,21 +13,16 @@ import {
   ScrollRestoration,
   useCatch,
   useLoaderData,
-  useSearchParams,
 } from "@remix-run/react";
 import { InstantSearch } from "react-instantsearch-hooks-web";
 import Header from "./components/ui/Header";
-import Login from "./components/ui/Login";
 import tailwindStylesUrl from "./styles/tailwind.css";
-import { fetcher } from "./fetcher.server";
 import { LISTINGS_COLLECTION_NAME } from "./constants/typesense";
 import TypesenseInstantsearchAdapter from "typesense-instantsearch-adapter";
 import { useMemo } from "react";
-import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { config } from "./constants/config";
 import type { RootLoaderData } from "./types";
 import ErrorBoundaryComponent from "./components/platform/ErrorBoundary";
-import { useMediaQuery } from "@mui/material";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesUrl },
@@ -42,75 +35,13 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1,viewport-fit=cover",
 });
 
-export const shouldRevalidate: ShouldRevalidateFunction = ({
-  currentUrl,
-  defaultShouldRevalidate,
-  formEncType,
-}) => {
-  if (
-    currentUrl.pathname === "/user/edit" &&
-    formEncType !== "multipart/form-data"
-  ) {
-    return false;
-  }
-  return defaultShouldRevalidate;
-};
-
-export const action: ActionFunction = async ({ request }) => {
-  const { API_DOMAIN } = process.env;
-  const cookie = request.headers.get("Cookie");
-  if (!cookie) return API_DOMAIN;
-  const tokenRow = cookie.split("; ").find((row) => row.startsWith("token"));
-  if (!tokenRow) return API_DOMAIN;
-  const response = await fetcher({
-    request,
-    method: "GET",
-    route: "/auth/check",
-  });
-
-  if (response.status !== 401) {
-    const formData = await request.formData();
-    const route = formData.get("route")?.toString();
-
-    return redirect(route!);
-  }
-  return API_DOMAIN;
-};
-
 export const loader: LoaderFunction = async ({ request }) => {
-  const response = await fetcher({
-    request,
-    method: "GET",
-    route: "/auth/check",
-  });
-  const user = await response.json();
   const ENV = process.env.ENVIRONMENT;
-  const newHeaders = new Headers();
-  if (user.statusCode === 401) {
-    if (!request.url.includes("auth")) {
-      newHeaders.append(
-        "set-cookie",
-        "token=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-      );
-      return json({ user: null, ENV }, { headers: newHeaders });
-    }
-    return json({ user: null, ENV });
-  }
-
-  const cookieHeader = response.headers.get("set-cookie");
-  newHeaders.append("set-cookie", cookieHeader!);
-  return json({ user, ENV }, { headers: newHeaders });
+  return json({ ENV });
 };
 
 export default function App() {
-  const [searchParams] = useSearchParams();
-  const { user, ENV } = useLoaderData<RootLoaderData>();
-  const matches = useMediaQuery("(min-width:600px)");
-
-  const { sendMessage, lastMessage, readyState } = useWebSocket(
-    `${config[ENV].wsDomain}/chat/message`,
-    { shouldReconnect: () => Boolean(user) }
-  );
+  const { ENV } = useLoaderData<RootLoaderData>();
 
   const { searchClient } = useMemo(() => {
     return new TypesenseInstantsearchAdapter({
@@ -136,26 +67,13 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body
-        className={`overflow-y-scroll px-3 ${
-          searchParams.get("login") && "scrollbar"
-        }`}
-      >
+      <body className="px-3">
         <InstantSearch
           indexName={LISTINGS_COLLECTION_NAME}
           searchClient={searchClient}
         >
           <Header />
-          {matches ? (
-            <Outlet context={{ sendMessage, lastMessage, readyState }} />
-          ) : (
-            <div className="mt-10 text-lg">
-              На даний момент Different працює лише з ПК. Мобільний додаток для
-              IOS та Android з`явиться в найближчому майбутньому{" "}
-              <span className="text-xl"> &#128521;</span>
-            </div>
-          )}
-          {searchParams.get("login") && <Login />}
+          <Outlet />
         </InstantSearch>
         <ScrollRestoration />
         <Scripts />
