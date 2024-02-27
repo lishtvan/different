@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import ios from "../assets/ios.png";
+import ios from "../assets/ios-screen.png";
 import android from "../assets/android.png";
 
 import { Button } from "~/components/ui/button";

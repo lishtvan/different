@@ -1,5 +1,5 @@
-import tg from "../assets/ig.png";
-import ig from "../assets/tg.png";
+import ig from "../assets/ig.png";
+import tg from "../assets/tg.png";
 import { Button } from "./ui/button";
 
 const Header = () => {
@@ -37,18 +37,32 @@ const Header = () => {
       </div>
       <div className="hidden sm:flex gap-x-1.5">
         <Button
+          asChild
           className="rounded-xl hover:bg-neutral-300"
           variant="ghost"
           size="icon"
         >
-          <img className="w-8 h-8" src={tg} alt="telegram" />
+          <a
+            target="_blank"
+            href="https://www.instagram.com/different_mrktplc"
+            rel="noreferrer"
+          >
+            <img className="w-8 h-8" src={ig} alt="instagram" />
+          </a>
         </Button>
         <Button
+          asChild
           className="rounded-xl hover:bg-neutral-300"
           variant="ghost"
           size="icon"
         >
-          <img className="w-8 h-8" src={ig} alt="instagram" />
+          <a
+            target="_blank"
+            href="https://t.me/DifferentMarketplace"
+            rel="noreferrer"
+          >
+            <img className="w-8 h-8" src={tg} alt="telegram" />
+          </a>
         </Button>
       </div>
     </header>
