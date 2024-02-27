@@ -30,11 +30,11 @@ const Header = () => {
 
   return (
     <header className="container absolute top-0 pt-3 flex w-full max-w-full justify-between">
-      <div className="flex gap-x-0.5">
+      <div className="flex gap-x-0.5  mx-auto sm:mx-0">
         <h1 className="font-[1000] text-4xl">different</h1>
         <div className="rounded-full w-3 h-3 mt-auto mb-1.5 bg-main"></div>
       </div>
-      <div className="flex gap-x-2">
+      <div className="hidden sm:flex gap-x-2">
         <img className="w-8 h-8" src={tg} alt="telegram" />
         <img className="w-8 h-8" src={ig} alt="instagram" />
       </div>
