@@ -9,6 +9,8 @@ import {
 } from "@remix-run/react";
 import "../public/fonts/GeistVariableVF.woff2";
 import styles from "./tailwind.css";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
@@ -21,8 +23,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="p-4">
+      <body className="min-h-screen">
+        <Header />
         <Outlet />
+        <Footer />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
