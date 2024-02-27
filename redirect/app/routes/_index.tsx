@@ -10,8 +10,8 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="container p-2">
-      <div>Click me</div>
+    <div>
+      <div>Home page</div>
       <Button>Click me</Button>
     </div>
   );

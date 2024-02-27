@@ -7,21 +7,21 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-
+import "../public/fonts/GeistVariableVF.woff2";
 import styles from "./tailwind.css";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export default function App() {
   return (
-    <html lang="en">
+    <html lang="en" className="font-sans">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="p-4">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
