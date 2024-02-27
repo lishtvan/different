@@ -1,5 +1,6 @@
 import tg from "../assets/ig.png";
 import ig from "../assets/tg.png";
+import { Button } from "./ui/button";
 
 const Header = () => {
   // function getOS() {
@@ -34,9 +35,21 @@ const Header = () => {
         <h1 className="font-[1000] text-4xl">different</h1>
         <div className="rounded-full w-3 h-3 mt-auto mb-1.5 bg-main"></div>
       </div>
-      <div className="hidden sm:flex gap-x-2">
-        <img className="w-8 h-8" src={tg} alt="telegram" />
-        <img className="w-8 h-8" src={ig} alt="instagram" />
+      <div className="hidden sm:flex gap-x-1.5">
+        <Button
+          className="rounded-xl hover:bg-neutral-300"
+          variant="ghost"
+          size="icon"
+        >
+          <img className="w-8 h-8" src={tg} alt="telegram" />
+        </Button>
+        <Button
+          className="rounded-xl hover:bg-neutral-300"
+          variant="ghost"
+          size="icon"
+        >
+          <img className="w-8 h-8" src={ig} alt="instagram" />
+        </Button>
       </div>
     </header>
   );
