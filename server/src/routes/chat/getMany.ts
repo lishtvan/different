@@ -17,7 +17,10 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
               select: { nickname: true, avatarUrl: true },
               where: { id: { not: userId } },
             },
-            Messages: { select: { text: true, senderId: true }, take: -1 },
+            Messages: {
+              select: { text: true, senderId: true, createdAt: true },
+              take: -1,
+            },
           },
         },
       },
