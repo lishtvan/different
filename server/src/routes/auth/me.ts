@@ -19,7 +19,11 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
         location: true,
         bio: true,
         Chats: {
-          where: { notification: true, Users: { some: { id: userId } } },
+          where: {
+            notification: true,
+            Users: { some: { id: userId } },
+            Messages: { some: {} },
+          },
           select: { Messages: { select: { senderId: true }, take: -1 } },
         },
       },
