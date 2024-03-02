@@ -9,6 +9,7 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
       select: {
         id: true,
         Chats: {
+          where: { Messages: { some: {} } },
           orderBy: { updatedAt: 'desc' },
           select: {
             id: true,
