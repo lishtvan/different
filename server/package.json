@@ -40,7 +40,6 @@
     "hyperid": "^3.2.0",
     "novaposhtajs": "^1.1.5",
     "sharp": "^0.33.2",
-    "twitter-api-sdk": "^1.2.1",
     "typesense": "^1.7.2"
   },
   "devDependencies": {
