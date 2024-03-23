@@ -47,21 +47,23 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
       lastName,
     } = req.body;
 
-    const listing = await fastify.prisma.listing.findUnique({ where: { id: listingId } });
-
-    if (!listing || listing.status !== 'AVAILABLE') throw fastify.httpErrors.notFound();
+    const listing = await fastify.prisma.listing.update({
+      include: { User: true },
+      where: { id: listingId, NOT: { status: 'AVAILABLE', userId } },
+      data: { status: 'ORDER' },
+    });
 
     const { trackingNumber, intDocRef, success, translatedErrors } =
       await fastify.np.createSafeDelivery({
         CityRecipient,
         RecipientAddress,
         RecipientsPhone,
-        SendersPhone: '380965134969', // TODO: fix this
+        SendersPhone: listing.User.phone!, // TODO: fix this
         Description: listing.title,
         Cost: listing.price,
         firstName,
         lastName,
-        cardNumber: '5168757427716644', // TODO: fix this
+        cardNumber: listing.User.cardNumber!, // TODO: fix this
       });
     if (!success) {
       throw fastify.httpErrors.badRequest(`/np ${translatedErrors?.join(' ')} `);
@@ -78,20 +80,15 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
         },
         select: { id: true },
       }),
-      fastify.prisma.listing.update({
-        where: { id: listingId },
-        data: { status: 'ORDER' },
-      }),
       fastify.prisma.user.update({
         where: { id: userId },
         data: { phone: RecipientsPhone },
       }),
+      fastify.typesense
+        .collections(LISTINGS_COLLECTION_NAME)
+        .documents()
+        .update({ status: 'ORDER', id: listingId.toString() }, {}),
     ]);
-
-    await fastify.typesense
-      .collections(LISTINGS_COLLECTION_NAME)
-      .documents()
-      .update({ status: 'ORDER', id: listing.id.toString() }, {});
 
     return reply.send({});
   });
