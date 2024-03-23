@@ -14,6 +14,7 @@ export default fp(async (fastify) => {
     ],
     apiKey: process.env.TYPESENSE_WRITE_API_KEY,
   });
+  // TODO: remove this
   fastify.decorate('typesense', typesense);
   fastify.decorate('search', {
     delete: async (listingId) => {
@@ -21,6 +22,12 @@ export default fp(async (fastify) => {
         .collections(LISTINGS_COLLECTION_NAME)
         .documents(listingId.toString())
         .delete();
+    },
+    deleteMany: async (filter) => {
+      await typesense
+        .collections(LISTINGS_COLLECTION_NAME)
+        .documents()
+        .delete({ filter_by: filter });
     },
     update: async (listing) => {
       await typesense
@@ -62,6 +69,7 @@ declare module 'fastify' {
       delete: (listingId: number) => Promise<void>;
       update: (listing: ListingSearch) => Promise<void>;
       create: (input: CreateListingInput) => Promise<void>;
+      deleteMany: (filter: string) => Promise<void>
     };
   }
 }
