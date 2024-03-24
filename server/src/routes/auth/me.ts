@@ -18,6 +18,12 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
         avatarUrl: true,
         location: true,
         bio: true,
+        npCityRef: true,
+        npCityName: true,
+        npDepartmentRef: true,
+        npDepartmentName: true,
+        firstName: true,
+        lastName: true,
         Chats: {
           where: {
             notification: true,
