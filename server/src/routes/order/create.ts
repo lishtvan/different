@@ -1,6 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
 import { FromSchema } from 'json-schema-to-ts';
-import { LISTINGS_COLLECTION_NAME } from '../../constants/typesense';
 
 const schema = {
   tags: ['Order'],
@@ -9,24 +8,28 @@ const schema = {
     required: [
       'listingId',
       'RecipientsPhone',
-      'CityRecipient',
-      'RecipientAddress',
+      'CityRecipientRef',
+      'RecipientDepartmentRef',
+      'CityRecipientName',
+      'RecipientDepartmentName',
       'firstName',
       'lastName',
     ],
     errorMessage: {
       required: {
-        CityRecipient: '/CityRecipient Населений пункт є обов`язковим ',
-        RecipientAddress: '/RecipientAddress Відділення є обов`язковим ',
-        firstName: '/firstName Ім`я є обов`язковим ',
-        lastName: '/lastName Фамілія є обов`язковою',
+        CityRecipientRef: 'Населений пункт є обов`язковим',
+        RecipientDepartmentRef: 'Відділення є обов`язковим',
+        firstName: 'Ім`я є обов`язковим ',
+        lastName: 'Фамілія є обов`язковою',
       },
     },
     properties: {
       listingId: { type: 'number' },
       RecipientsPhone: { type: 'string' },
-      CityRecipient: { type: 'string' },
-      RecipientAddress: { type: 'string' },
+      CityRecipientRef: { type: 'string' },
+      RecipientDepartmentRef: { type: 'string' },
+      CityRecipientName: { type: 'string' },
+      RecipientDepartmentName: { type: 'string' },
       firstName: { type: 'string' },
       lastName: { type: 'string' },
     },
@@ -41,8 +44,10 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
     const {
       listingId,
       RecipientsPhone,
-      CityRecipient,
-      RecipientAddress,
+      CityRecipientRef,
+      RecipientDepartmentRef,
+      CityRecipientName,
+      RecipientDepartmentName,
       firstName,
       lastName,
     } = req.body;
@@ -53,41 +58,46 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
       data: { status: 'ORDER' },
     });
 
-    const { trackingNumber, intDocRef, success, translatedErrors } =
-      await fastify.np.createSafeDelivery({
-        CityRecipient,
-        RecipientAddress,
-        RecipientsPhone,
-        SendersPhone: listing.User.phone!, // TODO: fix this
-        Description: listing.title,
-        Cost: listing.price,
-        firstName,
-        lastName,
-        cardNumber: listing.User.cardNumber!, // TODO: fix this
-      });
-    if (!success) {
-      throw fastify.httpErrors.badRequest(`/np ${translatedErrors?.join(' ')} `);
-    }
+    // const { trackingNumber, intDocRef, success, translatedErrors } =
+    //   await fastify.np.createSafeDelivery({
+    //     CityRecipient: CityRecipientRef,
+    //     RecipientAddress: RecipientDepartmentRef,
+    //     RecipientsPhone,
+    //     SendersPhone: listing.User.phone!, // TODO: fix this
+    //     Description: listing.title,
+    //     Cost: listing.price,
+    //     firstName,
+    //     lastName,
+    //     cardNumber: listing.User.cardNumber!, // TODO: fix this
+    //   });
+    // if (!success) {
+    //   throw fastify.httpErrors.badRequest(`/np ${translatedErrors?.join(' ')} `);
+    // }
 
     await Promise.all([
       fastify.prisma.order.create({
         data: {
           buyerId: userId,
           listingId,
-          trackingNumber,
-          intDocRef,
+          trackingNumber: 'some',
+          intDocRef: 'some',
           sellerId: listing.userId,
         },
         select: { id: true },
       }),
       fastify.prisma.user.update({
         where: { id: userId },
-        data: { phone: RecipientsPhone },
+        data: {
+          firstName,
+          lastName,
+          npCityName: CityRecipientName,
+          npCityRef: CityRecipientRef,
+          npDepartmentName: RecipientDepartmentName,
+          npDepartmentRef: RecipientDepartmentRef,
+          phone: RecipientsPhone,
+        },
       }),
-      fastify.typesense
-        .collections(LISTINGS_COLLECTION_NAME)
-        .documents()
-        .update({ status: 'ORDER', id: listingId.toString() }, {}),
+      fastify.search.update({ status: 'ORDER', id: listingId }),
     ]);
 
     return reply.send({});
