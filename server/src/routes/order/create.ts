@@ -38,6 +38,14 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
+const PRISMA_ERRORS: Record<string, string> = {
+  P2025: 'На оголошення вже створено замовлення або воно було видалено',
+};
+
+const createExpectedErr = (err: string) => {
+  return JSON.stringify({ expected: err });
+};
+
 const createOrder: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/create', { schema }, async (req, reply) => {
     const { userId } = req;
@@ -52,53 +60,66 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
       lastName,
     } = req.body;
 
-    const listing = await fastify.prisma.listing.update({
-      include: { User: true },
-      where: { id: listingId, NOT: { status: 'AVAILABLE', userId } },
-      data: { status: 'ORDER' },
-    });
+    try {
+      await fastify.prisma.$transaction(async (tx) => {
+        const listing = await tx.listing.update({
+          include: { User: true },
+          where: { id: listingId, status: 'AVAILABLE', NOT: { userId } },
+          data: { status: 'ORDER' },
+        });
 
-    // const { trackingNumber, intDocRef, success, translatedErrors } =
-    //   await fastify.np.createSafeDelivery({
-    //     CityRecipient: CityRecipientRef,
-    //     RecipientAddress: RecipientDepartmentRef,
-    //     RecipientsPhone,
-    //     SendersPhone: listing.User.phone!, // TODO: fix this
-    //     Description: listing.title,
-    //     Cost: listing.price,
-    //     firstName,
-    //     lastName,
-    //     cardNumber: listing.User.cardNumber!, // TODO: fix this
-    //   });
-    // if (!success) {
-    //   throw fastify.httpErrors.badRequest(`/np ${translatedErrors?.join(' ')} `);
-    // }
+        const { trackingNumber, intDocRef, success, translatedErrors } =
+          await fastify.np.createSafeDelivery({
+            CityRecipient: CityRecipientRef,
+            RecipientAddress: RecipientDepartmentRef,
+            RecipientsPhone,
+            SendersPhone: listing.User.phone!,
+            Description: listing.title,
+            Cost: listing.price,
+            firstName,
+            lastName,
+            cardNumber: listing.User.cardNumber!,
+          });
+        if (!success) {
+          throw fastify.httpErrors.badRequest(
+            createExpectedErr(`${translatedErrors?.join('. ')}`)
+          );
+        }
 
-    await Promise.all([
-      fastify.prisma.order.create({
-        data: {
-          buyerId: userId,
-          listingId,
-          trackingNumber: 'some',
-          intDocRef: 'some',
-          sellerId: listing.userId,
-        },
-        select: { id: true },
-      }),
-      fastify.prisma.user.update({
-        where: { id: userId },
-        data: {
-          firstName,
-          lastName,
-          npCityName: CityRecipientName,
-          npCityRef: CityRecipientRef,
-          npDepartmentName: RecipientDepartmentName,
-          npDepartmentRef: RecipientDepartmentRef,
-          phone: RecipientsPhone,
-        },
-      }),
-      fastify.search.update({ status: 'ORDER', id: listingId }),
-    ]);
+        // TEST THIS
+        await Promise.all([
+          tx.order.create({
+            data: {
+              buyerId: userId,
+              listingId,
+              trackingNumber,
+              intDocRef,
+              sellerId: listing.userId,
+            },
+            select: { id: true },
+          }),
+          tx.user.update({
+            where: { id: userId },
+            data: {
+              firstName,
+              lastName,
+              npCityName: CityRecipientName,
+              npCityRef: CityRecipientRef,
+              npDepartmentName: RecipientDepartmentName,
+              npDepartmentRef: RecipientDepartmentRef,
+              phone: RecipientsPhone,
+            },
+          }),
+          fastify.search.update({ status: 'ORDER', id: listingId }),
+        ]);
+      });
+    } catch (error: any) {
+      const prismaErr = PRISMA_ERRORS[error.code];
+      if (prismaErr) {
+        throw fastify.httpErrors.badRequest(createExpectedErr(prismaErr));
+      }
+      throw error;
+    }
 
     return reply.send({});
   });
