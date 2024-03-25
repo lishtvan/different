@@ -21,6 +21,7 @@ const schema = {
         RecipientDepartmentRef: 'Відділення є обов`язковим',
         firstName: 'Ім`я є обов`язковим ',
         lastName: 'Фамілія є обов`язковою',
+        RecipientsPhone: 'Номер телефону є обов`язковим',
       },
     },
     properties: {
@@ -60,6 +61,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
       lastName,
     } = req.body;
 
+    let createdOrderId;
     try {
       await fastify.prisma.$transaction(async (tx) => {
         const listing = await tx.listing.update({
@@ -67,6 +69,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
           where: { id: listingId, status: 'AVAILABLE', NOT: { userId } },
           data: { status: 'ORDER' },
         });
+        await fastify.search.update({ status: 'ORDER', id: listingId });
 
         const { trackingNumber, intDocRef, success, translatedErrors } =
           await fastify.np.createSafeDelivery({
@@ -86,8 +89,11 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
           );
         }
 
-        // TEST THIS
-        await Promise.all([
+        /*
+          should never fail, only possible case is trackingNumber, intDocRef
+          unique constraint
+        */
+        const [createdOrder] = await Promise.all([
           tx.order.create({
             data: {
               buyerId: userId,
@@ -110,10 +116,11 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
               phone: RecipientsPhone,
             },
           }),
-          fastify.search.update({ status: 'ORDER', id: listingId }),
         ]);
+        createdOrderId = createdOrder.id;
       });
     } catch (error: any) {
+      await fastify.search.update({ status: 'AVAILABLE', id: listingId });
       const prismaErr = PRISMA_ERRORS[error.code];
       if (prismaErr) {
         throw fastify.httpErrors.badRequest(createExpectedErr(prismaErr));
@@ -121,7 +128,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
       throw error;
     }
 
-    return reply.send({});
+    return reply.send({ orderId: createdOrderId });
   });
 };
 

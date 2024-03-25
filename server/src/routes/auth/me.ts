@@ -38,7 +38,8 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
     const chatsWithNotification = user?.Chats.filter(
       (chat) => chat.Messages[0].senderId !== userId
     );
-    fastify.np.trackInternetDocuments(userId);
+    // TODO: remove this
+    // fastify.np.trackInternetDocuments(userId);
 
     res.send({ ...user, chatNoficicationCount: chatsWithNotification?.length });
   });
