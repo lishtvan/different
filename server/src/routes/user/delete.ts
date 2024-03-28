@@ -8,13 +8,39 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
   fastify.post('/delete', { schema }, async (req, reply) => {
     const { userId: reqUserId } = req;
 
-    await fastify.prisma.user.delete({ where: { id: reqUserId } });
-    await fastify.prisma.chat.deleteMany({
-      where: { Users: { some: { id: reqUserId } } },
+    const chatIdsToDelete = await fastify.prisma.user
+      .findUnique({
+        where: { id: reqUserId },
+        select: { Chats: { select: { id: true } } },
+      })
+      .then((res) => res?.Chats.map((c) => c.id));
+
+    await fastify.prisma.$transaction(async (tx) => {
+      const deletedUser = await tx.user
+        .delete({
+          select: { Listings: { where: { status: 'AVAILABLE' } } },
+          where: {
+            id: reqUserId,
+            buyOrders: { every: { status: 'FINISHED' } },
+            sellOrders: { every: { status: 'FINISHED' } },
+          },
+        })
+        .catch(() => {
+          throw fastify.httpErrors.badRequest(
+            'Ви не можете видалити аккаунт поки у вас є активні замовлення'
+          );
+        });
+
+      if (chatIdsToDelete?.length) {
+        await tx.chat.deleteMany({ where: { id: { in: chatIdsToDelete } } });
+      }
+
+      // TODO: test this
+      if (deletedUser.Listings.length) {
+        await fastify.search.deleteMany(`sellerId:=${reqUserId} && status:=AVAILABLE`);
+      }
     });
 
-    await fastify.search.deleteMany(`sellerId:=${reqUserId} && status:=AVAILABLE`);
-    // TODO: test this
     return reply.send({});
   });
 };
