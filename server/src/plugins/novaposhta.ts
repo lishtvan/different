@@ -155,8 +155,7 @@ export default fp(async (fastify) => {
     const orders = await fastify.prisma.order.findMany({
       where: {
         OR: [{ Listing: { userId } }, { buyerId: userId }],
-        NOT: { status: 'COMMISSION' },
-        AND: { NOT: { status: 'FINISHED' } },
+        NOT: { status: 'FINISHED' },
       },
       select: {
         trackingNumber: true,
@@ -228,7 +227,7 @@ export default fp(async (fastify) => {
         return fastify.prisma.order
           .update({
             where: { trackingNumber: i.trackingNumber },
-            data: { status: 'COMMISSION' },
+            data: { status: 'FINISHED' },
             select: { Listing: { select: { userId: true } } },
           })
           .then(async (res) => {

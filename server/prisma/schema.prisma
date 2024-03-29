@@ -69,7 +69,6 @@ enum OrderStatus {
   PAYMENT
   HANDLING
   SHIPPING
-  COMMISSION
   FINISHED
 }
 
