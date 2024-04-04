@@ -22,7 +22,7 @@ export default app;
 export { app };
 
 exports.options = {
-  // logger: { level: 'error' },
+  logger: { level: 'error' },
   schemaErrorFormatter,
   ajv: { customOptions: { allErrors: true }, plugins: [ajvErrors] },
 };

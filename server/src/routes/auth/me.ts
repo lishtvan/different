@@ -25,23 +25,19 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
         firstName: true,
         lastName: true,
         Chats: {
-          where: {
-            notification: true,
-            Users: { some: { id: userId } },
-            Messages: { some: {} },
-          },
+          where: { notification: true, Messages: { some: {} } },
           select: { Messages: { select: { senderId: true }, take: -1 } },
         },
       },
     });
 
     const chatsWithNotification = user?.Chats.filter(
-      (chat) => chat.Messages[0].senderId !== userId
+      (c) => c.Messages[0].senderId !== userId
     );
     // TODO: remove this
     // fastify.np.trackInternetDocuments(userId);
 
-    res.send({ ...user, chatNoficicationCount: chatsWithNotification?.length });
+    res.send({ ...user, chatNotificationCount: chatsWithNotification?.length });
   });
 };
 
