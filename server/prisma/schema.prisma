@@ -70,6 +70,7 @@ enum OrderStatus {
   HANDLING
   SHIPPING
   FINISHED
+  CANCELED
 }
 
 model Order {
