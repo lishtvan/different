@@ -6,42 +6,23 @@ const schema = {
 
 const getOrders: FastifyPluginAsync = async (fastify) => {
   fastify.post('/getMany', { schema }, async (req, reply) => {
-    const { userId } = req;
-    const [sellOrders, buyOrders] = await Promise.all([
-      fastify.prisma.order.findMany({
-        where: { sellerId: userId, NOT: { status: 'FINISHED' } },
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          status: true,
-          createdAt: true,
-          trackingNumber: true,
-          buyer: { select: { nickname: true, phone: true } },
-          Listing: { select: { price: true, title: true, id: true } },
-        },
-      }),
-      await fastify.prisma.order.findMany({
-        where: { buyerId: userId, NOT: { status: 'FINISHED' } },
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          status: true,
-          createdAt: true,
-          trackingNumber: true,
-          Listing: {
-            select: {
-              price: true,
-              title: true,
-              id: true,
-              // phone: true, TODO: fix this
-              User: { select: { nickname: true } },
-            },
-          },
-        },
-      }),
-    ]);
+    const reqUserId = req.userId;
 
-    return reply.send({ sellOrders, buyOrders });
+    const select = {
+      id: true,
+      status: true,
+      Listing: { select: { price: true, title: true, imageUrls: true } },
+    };
+
+    const user = await fastify.prisma.user.findUnique({
+      where: { id: reqUserId },
+      select: {
+        sellOrders: { select, orderBy: { createdAt: 'desc' } },
+        buyOrders: { select, orderBy: { createdAt: 'desc' } },
+      },
+    });
+
+    return reply.send({ sellOrders: user?.sellOrders, buyOrders: user?.buyOrders });
   });
 };
 
