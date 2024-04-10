@@ -27,7 +27,16 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    return reply.send({ chats: user?.Chats, userId: user?.id });
+    if (!user) throw fastify.httpErrors.unauthorized();
+    const formattedChats: typeof user.Chats = [];
+    user?.Chats.forEach((c) => {
+      if (c.notification) {
+        c.notification = c.Messages[0]?.senderId !== userId;
+        formattedChats.push(c);
+      } else formattedChats.push(c);
+    });
+
+    return reply.send({ chats: formattedChats, userId: user?.id });
   });
 };
 
