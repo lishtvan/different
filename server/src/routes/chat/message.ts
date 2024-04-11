@@ -31,9 +31,8 @@ const root: FastifyPluginAsync = async (fastify) => {
         }
 
         if (data.messageSeen) {
-          await fastify.prisma.chat.update({
-            where: { id: data.chatId },
-            data: { notification: false },
+          await fastify.prisma.notification.deleteMany({
+            where: { chatId: data.chatId, userId: reqUserId },
           });
           socket.send(JSON.stringify({}));
           return;
@@ -50,19 +49,24 @@ const root: FastifyPluginAsync = async (fastify) => {
           const chat = await fastify.prisma.chat.findFirst({
             where: { id: data.chatId, Users: { some: { id: reqUserId } } },
             select: {
-              notification: true,
+              _count: {
+                select: {
+                  Notifications: { where: { userId: reqUserId } },
+                },
+              },
               Messages: { orderBy: { createdAt: 'desc' } },
               Users: { select: { id: true, nickname: true, avatarUrl: true } },
             },
           });
           if (!chat) return;
 
-          const recipient = chat?.Users.find((user) => user.id !== reqUserId);
-          const sender = chat?.Users.find((user) => user.id === reqUserId);
-          if (chat.notification && chat.Messages[0].senderId === recipient?.id) {
-            await fastify.prisma.chat.update({
-              where: { id: data.chatId },
-              data: { notification: false },
+          const u = chat.Users;
+          const isFirstUserSender = u[0].id === reqUserId;
+          const [recipient, sender] = isFirstUserSender ? [u[1], u[0]] : [u[0], u[1]];
+
+          if (chat._count.Notifications) {
+            await fastify.prisma.notification.deleteMany({
+              where: { chatId: data.chatId, userId: reqUserId },
             });
           }
 
@@ -73,30 +77,28 @@ const root: FastifyPluginAsync = async (fastify) => {
         }
 
         if (data.text) {
-          const { Messages } = await fastify.prisma.chat.update({
-            where: { id: data.chatId },
-            select: { Messages: { take: -1 } },
-            data: {
-              notification: true,
-              Messages: {
-                create: {
-                  text: data.text,
-                  relatedListingId: data.relatedListingId,
-                  relatedListingTitle: data.relatedListingTitle,
-                  senderId: reqUserId,
-                },
+          const [newMessage] = await Promise.all([
+            fastify.prisma.message.create({
+              data: {
+                chatId: data.chatId,
+                text: data.text,
+                relatedListingId: data.relatedListingId,
+                relatedListingTitle: data.relatedListingTitle,
+                senderId: reqUserId,
               },
-            },
-          });
-
-          const newMessage = Messages[0];
+            }),
+            fastify.prisma.notification.create({
+              data: { chatId: data.chatId, userId: data.receiverId },
+            }),
+          ]);
 
           for (const client of currentChat) {
             client.send(JSON.stringify(newMessage));
           }
         }
         return;
-      } catch {
+      } catch (e) {
+        fastify.log.error(e);
         return;
       }
     });

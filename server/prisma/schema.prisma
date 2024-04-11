@@ -26,11 +26,13 @@ model User {
   firstName        String?
   lastName         String?
 
-  Sessions   Session[]
-  Listings   Listing[]
-  Chats      Chat[]
-  buyOrders  Order[]   @relation("Seller")
-  sellOrders Order[]   @relation("Buyer")
+  Sessions      Session[]
+  Listings      Listing[]
+  Chats         Chat[]
+  buyOrders     Order[]        @relation("Seller")
+  sellOrders    Order[]        @relation("Buyer")
+  Messages      Message[]      @relation("Sender")
+  Notifications Notification[]
 }
 
 model Session {
@@ -94,16 +96,27 @@ model Message {
   Chat                Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   chatId              String
   text                String
+  Sender              User     @relation(name: "Sender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   senderId            Int
   relatedListingId    String?
   relatedListingTitle String?
 }
 
 model Chat {
-  id           String    @id @default(uuid())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now()) @updatedAt
-  notification Boolean   @default(false)
-  Users        User[]
-  Messages     Message[]
+  id            String         @id @default(uuid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  notification  Boolean        @default(false)
+  Users         User[]
+  Messages      Message[]
+  Notifications Notification[]
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    Int
+  Chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chatId    String
 }
