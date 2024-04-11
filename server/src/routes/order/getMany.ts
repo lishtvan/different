@@ -11,7 +11,7 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
     const select = {
       id: true,
       status: true,
-      Listing: { select: { price: true, title: true, imageUrls: true } },
+      Listing: { select: { price: true, title: true, imageUrls: true, designer: true } },
     };
 
     const user = await fastify.prisma.user.findUnique({
