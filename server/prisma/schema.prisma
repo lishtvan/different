@@ -29,8 +29,8 @@ model User {
   Sessions      Session[]
   Listings      Listing[]
   Chats         Chat[]
-  buyOrders     Order[]        @relation("Seller")
-  sellOrders    Order[]        @relation("Buyer")
+  buyOrders     Order[]        @relation("Buyer")
+  sellOrders    Order[]        @relation("Seller")
   Messages      Message[]      @relation("Sender")
   Notifications Notification[]
 }
