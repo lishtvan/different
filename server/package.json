@@ -23,7 +23,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.540.0",
+    "@aws-sdk/client-s3": "^3.554.0",
     "@fastify/autoload": "^5.8.0",
     "@fastify/cookie": "^9.3.1",
     "@fastify/multipart": "^8.2.0",
@@ -31,7 +31,7 @@
     "@fastify/sensible": "5.5.0",
     "@fastify/swagger": "^8.14.0",
     "@fastify/websocket": "^10.0.1",
-    "@prisma/client": "^5.11.0",
+    "@prisma/client": "^5.12.1",
     "ajv-errors": "^3.0.0",
     "fastify": "^4.26.2",
     "fastify-cli": "^6.1.1",
@@ -39,11 +39,11 @@
     "hyperid": "^3.2.0",
     "novaposhtajs": "^1.1.5",
     "sharp": "^0.33.3",
-    "typesense": "^1.7.2"
+    "typesense": "^1.8.2"
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.7",
     "@types/sharp": "^0.31.1",
     "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
@@ -53,8 +53,8 @@
     "fastify-tsconfig": "^2.0.0",
     "json-schema-to-ts": "^3.0.1",
     "prettier": "^3.2.5",
-    "prisma": "^5.11.0",
+    "prisma": "^5.12.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   }
 }
