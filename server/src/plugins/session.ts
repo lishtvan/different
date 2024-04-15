@@ -4,7 +4,7 @@ export interface Session {
   start: (
     userInfo: { providerId: string; email: string },
     ip: string
-  ) => Promise<{ token: string; userId: string }>;
+  ) => Promise<{ token: string }>;
   destroy: (token: string) => Promise<void>;
 }
 
@@ -19,16 +19,11 @@ export default fp(async (fastify) => {
         where: { providerId: userInfo.providerId },
       });
 
-      let userId;
-
       if (user) {
-        await fastify.prisma.session.create({
-          data: { token, ip, userId: user.id },
-        });
-        userId = user.id;
-        if (!user.email) {
+        await fastify.prisma.session.create({ data: { token, ip, userId: user.id } });
+        if (!user.email && userInfo.email) {
           await fastify.prisma.user.update({
-            where: { id: userId },
+            where: { id: user.id },
             data: { email: userInfo.email },
           }); // TODO: remove this when everyone will have email
         }
@@ -37,24 +32,19 @@ export default fp(async (fastify) => {
           data: {
             providerId: userInfo.providerId,
             email: userInfo.email,
-            Sessions: {
-              create: { token, ip },
-            },
+            Sessions: { create: { token, ip } },
           },
         });
         await fastify.prisma.user.update({
           where: { id: createdUser.id },
           data: { nickname: `different_user_${createdUser.id}` },
         });
-        userId = createdUser.id;
       }
 
-      return { token, userId: userId.toString() };
+      return { token };
     },
     destroy: async (token) => {
-      await fastify.prisma.session.delete({
-        where: { token },
-      });
+      await fastify.prisma.session.delete({ where: { token } });
     },
   });
 });
