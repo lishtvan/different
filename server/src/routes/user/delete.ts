@@ -21,8 +21,12 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
           select: { Listings: { where: { status: 'AVAILABLE' } } },
           where: {
             id: reqUserId,
-            buyOrders: { every: { status: 'FINISHED' } },
-            sellOrders: { every: { status: 'FINISHED' } },
+            buyOrders: {
+              every: { OR: [{ status: 'FINISHED' }, { status: 'CANCELED' }] },
+            },
+            sellOrders: {
+              every: { OR: [{ status: 'FINISHED' }, { status: 'CANCELED' }] },
+            },
           },
         })
         .catch(() => {
