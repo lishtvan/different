@@ -15,8 +15,7 @@ export default fp(async (fastify) => {
 
   fastify.addHook('preHandler', async (req, reply) => {
     if (reply.statusCode === 404) return; // In case rate limiter throws 404
-    const { routeOptions, cookies } = req;
-    const { token } = cookies;
+    const token = req.cookies.token;
 
     const isPublicRoute = publicRoutes.includes(req.routeOptions.url!);
     if (isPublicRoute) {
@@ -33,16 +32,10 @@ export default fp(async (fastify) => {
     if (!token) throw fastify.httpErrors.unauthorized();
     const session = await fastify.prisma.session.findUnique({
       where: { token },
-      select: { token: true, userId: true, User: { select: { isBill: true } } },
+      select: { token: true, userId: true },
     });
     if (!session) throw fastify.httpErrors.unauthorized();
     req.userId = session.userId;
-
-    // TODO: remove
-    if (session.User.isBill) {
-      reply.header('bill', 'pay');
-      if (routeOptions.url === '/auth/logout') return reply.send();
-    }
   });
 });
 
