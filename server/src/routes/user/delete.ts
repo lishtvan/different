@@ -6,7 +6,7 @@ const schema = {
 
 const updateUser: FastifyPluginAsync = async (fastify) => {
   fastify.post('/delete', { schema }, async (req, reply) => {
-    const { userId: reqUserId } = req;
+    const reqUserId = req.userId;
 
     const chatIdsToDelete = await fastify.prisma.user
       .findUnique({
@@ -31,7 +31,9 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
         })
         .catch(() => {
           throw fastify.httpErrors.badRequest(
-            'Ви не можете видалити аккаунт поки у вас є активні замовлення'
+            JSON.stringify({
+              message: 'Ви не можете видалити аккаунт поки у вас є активні замовлення',
+            })
           );
         });
 
