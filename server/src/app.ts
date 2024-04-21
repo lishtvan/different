@@ -1,12 +1,20 @@
 import { join } from 'path';
 import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload';
-import { FastifyPluginAsync } from 'fastify';
-import ajvErrors from 'ajv-errors';
+import { FastifyPluginAsync, FastifyServerOptions } from 'fastify';
 import { schemaErrorFormatter } from './utils/schemaErrorFormatter';
+import ajvErrors from 'ajv-errors';
 
-export type AppOptions = Partial<AutoloadPluginOptions>;
+export interface AppOptions
+  extends FastifyServerOptions,
+    Partial<AutoloadPluginOptions> {}
 
-const app: FastifyPluginAsync<AppOptions> = async (fastify, opts) => {
+const options: AppOptions = {
+  logger: { level: 'error' },
+  schemaErrorFormatter,
+  ajv: { customOptions: { allErrors: true }, plugins: [ajvErrors] },
+};
+
+const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void> => {
   void fastify.register(AutoLoad, {
     dir: join(__dirname, 'plugins'),
     options: opts,
@@ -19,10 +27,4 @@ const app: FastifyPluginAsync<AppOptions> = async (fastify, opts) => {
 };
 
 export default app;
-export { app };
-
-exports.options = {
-  logger: { level: 'error' },
-  schemaErrorFormatter,
-  ajv: { customOptions: { allErrors: true }, plugins: [ajvErrors] },
-};
+export { app, options };
