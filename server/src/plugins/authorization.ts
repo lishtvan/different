@@ -3,6 +3,7 @@ import fp from 'fastify-plugin';
 export default fp(async (fastify) => {
   const publicRoutes = [
     '/auth/google/mobile',
+    '/auth/apple',
     '/user/get',
     '/listing/get',
     '/images/getAll/:s3DeleteKey',
