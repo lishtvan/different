@@ -32,9 +32,6 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    // TODO: remove this
-    // fastify.np.trackInternetDocuments(userId);
-
     res.send(user);
   });
 };

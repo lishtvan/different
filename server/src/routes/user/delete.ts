@@ -41,7 +41,6 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
         await tx.chat.deleteMany({ where: { id: { in: chatIdsToDelete } } });
       }
 
-      // TODO: test this
       if (deletedUser.Listings.length) {
         await fastify.search.deleteMany(`sellerId:=${reqUserId} && status:=AVAILABLE`);
       }

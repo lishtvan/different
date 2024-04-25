@@ -25,7 +25,7 @@ export default fp(async (fastify) => {
           await fastify.prisma.user.update({
             where: { id: user.id },
             data: { email: userInfo.email },
-          }); // TODO: remove this when everyone will have email
+          });
         }
       } else {
         const createdUser = await fastify.prisma.user.create({
