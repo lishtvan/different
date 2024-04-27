@@ -7,7 +7,10 @@ export default fp(async (fastify) => {
   const typesense = new Typesense.Client({
     nodes: [
       {
-        host: process.env.TYPESENSE_HOST,
+        host:
+          process.env.NODE_ENV === 'local'
+            ? '127.0.0.1'
+            : 'o2by0uh958xjn1igp-1.a1.typesense.net',
         port: process.env.NODE_ENV === 'local' ? 8108 : 443,
         protocol: process.env.NODE_ENV === 'local' ? 'http' : 'https',
       },
@@ -69,7 +72,7 @@ declare module 'fastify' {
       delete: (listingId: number) => Promise<void>;
       update: (listing: ListingSearch) => Promise<void>;
       create: (input: CreateListingInput) => Promise<void>;
-      deleteMany: (filter: string) => Promise<void>
+      deleteMany: (filter: string) => Promise<void>;
     };
   }
 }

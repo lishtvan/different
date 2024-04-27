@@ -6,7 +6,6 @@ export default fp(async (fastify) => {
     '/auth/apple',
     '/user/get',
     '/listing/get',
-    '/images/getAll/:s3DeleteKey',
   ];
 
   fastify.decorateRequest('userId', 0);
