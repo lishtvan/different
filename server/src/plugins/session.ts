@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin';
-
+import crypto from 'crypto';
 export interface Session {
   start: (
     userInfo: { providerId: string; email: string },
@@ -9,11 +9,9 @@ export interface Session {
 }
 
 export default fp(async (fastify) => {
-  const { TOKEN_SECRET, TOKEN_CHARACTERS } = process.env;
-
   fastify.decorate<Session>('session', {
     start: async (userInfo, ip) => {
-      const token = fastify.generateToken(TOKEN_SECRET, TOKEN_CHARACTERS);
+      const token = crypto.randomBytes(48).toString('base64url');
 
       const user = await fastify.prisma.user.findUnique({
         where: { providerId: userInfo.providerId },
