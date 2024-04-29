@@ -1,3 +1,2 @@
-// TODO
-
-Update node version in Dockerfile
+npm i
+npm run dev
