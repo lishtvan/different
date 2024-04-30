@@ -8,8 +8,20 @@ export interface AppOptions
   extends FastifyServerOptions,
     Partial<AutoloadPluginOptions> {}
 
+const envToLogger = {
+  local: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        singleLine: true,
+      },
+    },
+  },
+  production: { level: 'error' },
+};
+
 const options: AppOptions = {
-  logger: { level: 'error' },
+  logger: envToLogger[process.env.NODE_ENV],
   schemaErrorFormatter,
   ajv: { customOptions: { allErrors: true }, plugins: [ajvErrors] },
 };

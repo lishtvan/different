@@ -2,7 +2,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       PORT: string;
-      NODE_ENV: 'local' | 'development' | 'production';
+      NODE_ENV: 'local' | 'production';
       DATABASE_URL: string;
       TYPESENSE_WRITE_API_KEY: string;
       NP_TOKEN: string;

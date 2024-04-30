@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build:ts": "tsc",
-    "start": "fastify start dist/app.js --options --log-level=info --pretty-logs=true",
+    "start": "fastify start dist/app.js --options",
     "lint": "eslint .",
     "build": "tsc",
     "format": "prettier --write .",
