@@ -5,6 +5,7 @@
 @font-face {
   font-family: "geist";
   src: url("../public/fonts/GeistVariableVF.woff2");
+  font-display: swap;
 }
 
 @layer base {

@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import ios from "../assets/ios-screen.png";
+import ios from "../assets/ios-screen.webp";
 
 import { Icons } from "~/components/ui/icons";
 
@@ -28,12 +28,15 @@ export default function Index() {
             <Icons.googlePlay className="max-w-full" />
           </div>
         </div>
-        <img
-          className="hidden sm:block sm:w-[220px] md:w-1/3 lg:w-[22%] xl:w-1/5"
-          src={ios}
-          loading="lazy"
-          alt="phone"
-        />
+        <div className="hidden sm:block sm:w-[220px] md:w-1/3 lg:w-[22%] xl:w-1/5">
+          <img
+            className="w-full"
+            src={ios}
+            width={300}
+            height={612}
+            alt="phone"
+          />
+        </div>
       </div>
     </div>
   );
