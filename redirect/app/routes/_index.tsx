@@ -1,8 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import ios from "../assets/ios-screen.png";
-import android from "../assets/android.png";
 
-import { Button } from "~/components/ui/button";
 import { Icons } from "~/components/ui/icons";
 
 export const meta: MetaFunction = () => {
@@ -25,24 +23,15 @@ export default function Index() {
             покупців та продавців. Гнучкі фільтри пошуку, чат, трекінг
             замовлення та багато іншого.
           </p>
-          <div className="flex items-center mt-10 gap-x-2 flex-col gap-y-5 sm:flex-row justify-center sm:justify-start">
-            <Button size="lg" className="w-fit">
-              Завантажити додаток
-            </Button>
-            <div className="flex items-center">
-              <Icons.apple className="h-8 w-8 min-h-8 min-w-8" />
-              <img
-                src={android}
-                className="w-11 h-11 ml-1 mt-0.5"
-                alt="android"
-              />
-            </div>
+          <div className="flex items-center mt-10 gap-x-3 flex-row justify-center sm:justify-start">
+            <Icons.appStore className="max-w-full" />
+            <Icons.googlePlay className="max-w-full" />
           </div>
         </div>
         <img
-          className="hidden sm:block sm:w-[220px] md:w-1/3 lg:w-1/4 xl:w-1/4"
-          width={330}
+          className="hidden sm:block sm:w-[220px] md:w-1/3 lg:w-[22%] xl:w-1/5"
           src={ios}
+          loading="lazy"
           alt="phone"
         />
       </div>
