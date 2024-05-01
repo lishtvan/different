@@ -1,6 +1,5 @@
 import { PutObjectCommand, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3';
 import { FastifyPluginAsync } from 'fastify';
-import { extname } from 'path';
 import sharp = require('sharp');
 
 const s3 = new S3Client({
@@ -17,22 +16,19 @@ const uploadImage: FastifyPluginAsync = async (fastify) => {
     const file = await req.file();
 
     if (!file) throw fastify.httpErrors.badRequest();
-    const ext = extname(file.filename);
-    const id = fastify.id();
-    const Key = `${id}${ext}`;
+
+    const Key = fastify.id();
 
     const buffer = await file.toBuffer();
-    const compressedImage = await sharp(buffer)
-      .jpeg({ progressive: true, force: false })
-      .withMetadata()
-      .toBuffer();
+    const compressedImage = await sharp(buffer).rotate().webp().toBuffer();
 
     const params: PutObjectCommandInput = {
       Bucket: 'different.dev',
       Key,
       Body: compressedImage,
-      ContentType: file.mimetype,
+      ContentType: 'image/webp',
     };
+
     await s3.send(new PutObjectCommand(params));
     return reply.send({ imageUrl: `${S3_URL}/${Key}` });
   });
