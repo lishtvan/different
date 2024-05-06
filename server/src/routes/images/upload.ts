@@ -9,7 +9,20 @@ const s3 = new S3Client({
     secretAccessKey: process.env.S3_SECRET_KEY,
   },
 });
-const S3_URL = 'https://s3.eu-central-1.amazonaws.com/different.dev';
+
+const IMAGE_CONFIG = {
+  local: {
+    ImageRootUrl: 'https://s3.eu-central-1.amazonaws.com/different.dev',
+    Bucket: 'different.dev',
+  },
+  production: {
+    ImageRootUrl: 'https://d3g9kgb9a5luhg.cloudfront.net',
+    Bucket: 'different.prod',
+  },
+};
+
+// // TODO: clear images in prod and change this before deploy
+const { ImageRootUrl, Bucket } = IMAGE_CONFIG.production;
 
 const uploadImage: FastifyPluginAsync = async (fastify) => {
   fastify.post('/upload', async (req, reply) => {
@@ -17,20 +30,20 @@ const uploadImage: FastifyPluginAsync = async (fastify) => {
 
     if (!file) throw fastify.httpErrors.badRequest();
 
-    const Key = fastify.id();
+    const Key = `${fastify.id()}.webp`;
 
     const buffer = await file.toBuffer();
-    const compressedImage = await sharp(buffer).rotate().webp().toBuffer();
+    const Body = await sharp(buffer).rotate().webp().toBuffer();
 
     const params: PutObjectCommandInput = {
-      Bucket: 'different.dev',
+      Bucket,
       Key,
-      Body: compressedImage,
+      Body,
       ContentType: 'image/webp',
     };
 
     await s3.send(new PutObjectCommand(params));
-    return reply.send({ imageUrl: `${S3_URL}/${Key}` });
+    return reply.send({ imageUrl: `${ImageRootUrl}/${Key}` });
   });
 };
 
