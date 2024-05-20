@@ -1,7 +1,6 @@
-/node_modules
-*.log
-.DS_Store
-.env
+node_modules
+
 /.cache
-/public/build
 /build
+/public/build
+.env
