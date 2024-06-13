@@ -26,6 +26,7 @@ model User {
   npDepartmentName String?
   firstName        String?
   lastName         String?
+  pushToken        String?
 
   Sessions      Session[]
   Listings      Listing[]
