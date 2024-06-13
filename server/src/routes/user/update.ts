@@ -31,6 +31,7 @@ const schema = {
           maxLength: 'Location length must not be longer than 40 characters',
         },
       },
+      pushToken: { type: 'string' },
     },
   } as const,
 };
@@ -39,8 +40,12 @@ type Schema = { Body: FromSchema<typeof schema.body> };
 
 const updateUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/update', { schema }, async (req, reply) => {
-    const { nickname, bio, avatarUrl, location } = req.body;
+    const { nickname, bio, avatarUrl, location, pushToken } = req.body;
     const { userId } = req;
+
+    if (pushToken && !fastify.notifications.isExpoPushToken(pushToken)) {
+      throw fastify.httpErrors.internalServerError();
+    }
 
     try {
       await fastify.prisma.user.update({
@@ -52,6 +57,7 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
           avatarUrl,
           bio,
           location,
+          pushToken,
         },
       });
     } catch (e) {
