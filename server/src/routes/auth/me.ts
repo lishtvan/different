@@ -24,6 +24,7 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
         npDepartmentName: true,
         firstName: true,
         lastName: true,
+        pushToken: true,
         _count: {
           select: {
             Notifications: true,
