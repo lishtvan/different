@@ -31,7 +31,7 @@ const root: FastifyPluginAsync = async (fastify) => {
         }
 
         if (data.messageSeen) {
-          await fastify.prisma.notification.deleteMany({
+          await fastify.prisma.chatNotification.deleteMany({
             where: { chatId: data.chatId, userId: reqUserId },
           });
           socket.send(JSON.stringify({}));
@@ -51,7 +51,7 @@ const root: FastifyPluginAsync = async (fastify) => {
             select: {
               _count: {
                 select: {
-                  Notifications: { where: { userId: reqUserId } },
+                  ChatNotification: { where: { userId: reqUserId } },
                 },
               },
               Messages: { orderBy: { createdAt: 'desc' } },
@@ -64,8 +64,8 @@ const root: FastifyPluginAsync = async (fastify) => {
           const isFirstUserSender = u[0].id === reqUserId;
           const [recipient, sender] = isFirstUserSender ? [u[1], u[0]] : [u[0], u[1]];
 
-          if (chat._count.Notifications) {
-            await fastify.prisma.notification.deleteMany({
+          if (chat._count.ChatNotification) {
+            await fastify.prisma.chatNotification.deleteMany({
               where: { chatId: data.chatId, userId: reqUserId },
             });
           }
@@ -87,7 +87,7 @@ const root: FastifyPluginAsync = async (fastify) => {
                 senderId: reqUserId,
               },
             }),
-            fastify.prisma.notification.create({
+            fastify.prisma.chatNotification.create({
               data: { chatId: data.chatId, userId: data.receiverId },
             }),
           ]);

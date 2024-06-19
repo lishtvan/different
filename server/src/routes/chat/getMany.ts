@@ -8,7 +8,7 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
       where: { Users: { some: { id: userId } } },
       orderBy: { updatedAt: 'desc' },
       select: {
-        _count: { select: { Notifications: { where: { userId } } } },
+        _count: { select: { ChatNotification: { where: { userId } } } },
         id: true,
         Users: {
           select: { nickname: true, avatarUrl: true },
