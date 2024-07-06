@@ -2,6 +2,15 @@ import { FastifyPluginAsync } from 'fastify';
 import { WebSocket } from 'ws';
 
 const chats = new Map<string, Set<WebSocket>>();
+const notificationTimeouts = new Map(); // Track timeouts for notifications
+
+const clearNotificationTimeout = (chatId: string, receiverId: number) => {
+  const timeout = notificationTimeouts.get(chatId);
+  if (timeout && timeout.receiverId === receiverId) {
+    clearTimeout(timeout.timeoutId);
+    notificationTimeouts.delete(chatId);
+  }
+};
 
 const root: FastifyPluginAsync = async (fastify) => {
   fastify.get('/message', { websocket: true }, (socket, req) => {
@@ -34,6 +43,7 @@ const root: FastifyPluginAsync = async (fastify) => {
           await fastify.prisma.chatNotification.deleteMany({
             where: { chatId: data.chatId, userId: reqUserId },
           });
+          clearNotificationTimeout(data.chatId, reqUserId);
           socket.send(JSON.stringify({}));
           return;
         }
@@ -59,6 +69,7 @@ const root: FastifyPluginAsync = async (fastify) => {
             },
           });
           if (!chat) return;
+          clearNotificationTimeout(data.chatId, reqUserId);
 
           const u = chat.Users;
           const isFirstUserSender = u[0].id === reqUserId;
@@ -91,6 +102,20 @@ const root: FastifyPluginAsync = async (fastify) => {
               data: { chatId: data.chatId, userId: data.receiverId },
             }),
           ]);
+
+          const timeoutId = setTimeout(() => {
+            fastify.notifications.sendChatNotification({
+              recipientId: data.receiverId,
+              text: data.text,
+              senderId: reqUserId,
+              chatId: data.chatId,
+            });
+            notificationTimeouts.delete(data.chatId);
+          }, 5000);
+          notificationTimeouts.set(data.chatId, {
+            timeoutId,
+            receiverId: data.receiverId,
+          });
 
           for (const client of currentChat) {
             client.send(JSON.stringify(newMessage));

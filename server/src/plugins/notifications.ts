@@ -12,7 +12,7 @@ interface SendNotificationOpts {
 interface SendChatNotificationOpts {
   recipientId: number;
   text: string;
-  senderUserName: string;
+  senderId: number;
   chatId: string;
 }
 
@@ -44,14 +44,25 @@ const notificationsPlugin = (instance: FastifyInstance) => {
     recipientId,
     text,
     chatId,
-    senderUserName,
+    senderId,
   }: SendChatNotificationOpts) => {
-    await sendNotification({
-      recipientId,
-      title: senderUserName,
-      body: text,
-      data: { type: 'msg', chatId, url: `/chatg/${chatId}` },
-    });
+    try {
+      const sender = await instance.prisma.user.findUnique({
+        where: { id: senderId },
+        select: { nickname: true },
+      });
+
+      if (!sender?.nickname) return;
+
+      await sendNotification({
+        recipientId,
+        title: sender.nickname,
+        body: text,
+        data: { type: 'msg', chatId, url: `different://chatf?chatId=${chatId}` },
+      });
+    } catch (error) {
+      instance.log.error('Send chat notification error', error);
+    }
   };
 
   return {
