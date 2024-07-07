@@ -26,6 +26,7 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
         lastName: true,
         _count: {
           select: {
+            OrderNotification: true,
             ChatNotification: true,
           },
         },

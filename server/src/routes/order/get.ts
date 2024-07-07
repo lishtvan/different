@@ -31,10 +31,16 @@ const getOrder: FastifyPluginAsync = async (fastify) => {
         },
         buyer: { select: { nickname: true, phone: true, avatarUrl: true, id: true } },
         seller: { select: { nickname: true, phone: true, avatarUrl: true, id: true } },
+        OrderNotification: { where: { orderId, userId: reqUserId } },
       },
     });
 
     if (!order) throw fastify.httpErrors.notFound();
+    if (order.OrderNotification.length) {
+      await fastify.prisma.orderNotification.delete({
+        where: { id: order.OrderNotification[0].id },
+      });
+    }
 
     const orderType = order.buyer.id === reqUserId ? 'buy' : 'sell';
     return reply.send({ order, orderType });

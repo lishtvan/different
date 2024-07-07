@@ -11,7 +11,10 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
     const select = {
       id: true,
       status: true,
-      Listing: { select: { price: true, title: true, imageUrls: true, designer: true } },
+      OrderNotification: { where: { userId: reqUserId } },
+      Listing: {
+        select: { price: true, title: true, imageUrls: true, designer: true },
+      },
     };
 
     const user = await fastify.prisma.user.findUnique({
@@ -21,8 +24,24 @@ const getOrders: FastifyPluginAsync = async (fastify) => {
         buyOrders: { select, orderBy: { createdAt: 'desc' } },
       },
     });
+    if (!user) throw fastify.httpErrors.notFound();
 
-    return reply.send({ sellOrders: user?.sellOrders, buyOrders: user?.buyOrders });
+    let sellNotificationCount = 0;
+    user.sellOrders.forEach((o) => {
+      if (o.OrderNotification.length) sellNotificationCount += 1;
+    });
+
+    let buyNotificationCount = 0;
+    user.buyOrders.forEach((o) => {
+      if (o.OrderNotification.length) buyNotificationCount += 1;
+    });
+
+    return reply.send({
+      sellOrders: user.sellOrders,
+      buyOrders: user.buyOrders,
+      sellNotificationCount,
+      buyNotificationCount,
+    });
   });
 };
 

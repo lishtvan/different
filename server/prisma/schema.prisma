@@ -28,13 +28,14 @@ model User {
   lastName         String?
   pushToken        String?
 
-  Sessions         Session[]
-  Listings         Listing[]
-  Chats            Chat[]
-  buyOrders        Order[]            @relation("Buyer")
-  sellOrders       Order[]            @relation("Seller")
-  Messages         Message[]          @relation("Sender")
-  ChatNotification ChatNotification[]
+  Sessions          Session[]
+  Listings          Listing[]
+  Chats             Chat[]
+  buyOrders         Order[]             @relation("Buyer")
+  sellOrders        Order[]             @relation("Seller")
+  Messages          Message[]           @relation("Sender")
+  ChatNotification  ChatNotification[]
+  OrderNotification OrderNotification[]
 }
 
 model Session {
@@ -79,18 +80,19 @@ enum OrderStatus {
 }
 
 model Order {
-  id             String      @id @default(uuid())
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @default(now()) @updatedAt
-  status         OrderStatus @default(PAYMENT)
-  trackingNumber String      @unique
-  intDocRef      String?     @unique
-  buyer          User        @relation(name: "Buyer", fields: [buyerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  buyerId        Int
-  seller         User        @relation(name: "Seller", fields: [sellerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  sellerId       Int
-  Listing        Listing     @relation(fields: [listingId], references: [id])
-  listingId      Int         @unique
+  id                String              @id @default(uuid())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt
+  status            OrderStatus         @default(PAYMENT)
+  trackingNumber    String              @unique
+  intDocRef         String?             @unique
+  buyer             User                @relation(name: "Buyer", fields: [buyerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  buyerId           Int
+  seller            User                @relation(name: "Seller", fields: [sellerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sellerId          Int
+  Listing           Listing             @relation(fields: [listingId], references: [id])
+  listingId         Int                 @unique
+  OrderNotification OrderNotification[]
 }
 
 model Message {
@@ -121,4 +123,12 @@ model ChatNotification {
   userId    Int
   Chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   chatId    String
+}
+
+model OrderNotification {
+  id      String @id @default(uuid())
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId  Int
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
 }
