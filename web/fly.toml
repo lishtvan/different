@@ -1,13 +1,10 @@
-# fly.toml app configuration file generated for different-api on 2024-07-30T16:35:54+03:00
+# fly.toml app configuration file generated for web-frosty-wave-2255 on 2024-07-30T14:45:05+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'different-api'
+app = 'web-frosty-wave-2255'
 primary_region = 'ams'
-
-[deploy]
-  release_command = "npx prisma migrate deploy"
 
 [build]
 
@@ -20,6 +17,6 @@ primary_region = 'ams'
   processes = ['app']
 
 [[vm]]
-  memory = '1gb'
+  memory = '512mb'
   cpu_kind = 'shared'
   cpus = 1

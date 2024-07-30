@@ -47,6 +47,7 @@
     "typesense": "^1.8.2"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.8",
     "@types/cookie": "^0.6.0",
     "@types/node": "^20.14.9",
     "@types/sharp": "^0.31.1",

@@ -21,8 +21,7 @@ const IMAGE_CONFIG = {
   },
 };
 
-// // TODO: clear images in prod and change this before deploy
-const { ImageRootUrl, Bucket } = IMAGE_CONFIG.production;
+const { ImageRootUrl, Bucket } = IMAGE_CONFIG[process.env.NODE_ENV];
 
 const uploadImage: FastifyPluginAsync = async (fastify) => {
   fastify.post('/upload', async (req, reply) => {

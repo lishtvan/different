@@ -13,6 +13,9 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        xs: "380px",
+      },
       colors: {
         main: "#168c94",
         dark: "#167994",
