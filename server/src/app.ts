@@ -36,7 +36,6 @@ const app: FastifyPluginAsync<AppOptions> = async (fastify, opts): Promise<void>
     dir: join(__dirname, 'routes'),
     options: opts,
   });
-  console.log({ dbURL: process.env.DATABASE_URL });
 };
 
 export default app;
