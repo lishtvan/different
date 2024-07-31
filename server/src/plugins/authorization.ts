@@ -12,6 +12,13 @@ export default fp(async (fastify) => {
 
   fastify.addHook('preHandler', async (req, reply) => {
     if (reply.statusCode === 404) return; // In case rate limiter throws 404
+
+    const isCronJob = req.routeOptions.url?.includes('/jobs');
+    if (isCronJob) {
+      if (req.headers['x-cloud-api-key'] === process.env.CLOUD_API_KEY) return;
+      else throw fastify.httpErrors.forbidden();
+    }
+
     const token = req.cookies.token;
 
     const isPublicRoute = publicRoutes.includes(req.routeOptions.url!);

@@ -9,6 +9,7 @@ declare global {
       NP_API_KEY: string;
       S3_ACCESS_KEY: string;
       S3_SECRET_KEY: string;
+      CLOUD_API_KEY: string;
     }
   }
 }
