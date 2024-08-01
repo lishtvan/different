@@ -67,6 +67,7 @@ const notificationsPlugin = (instance: FastifyInstance) => {
 
   return {
     sendChatNotification,
+    sendNotification,
   };
 };
 
@@ -75,6 +76,7 @@ export default fp(async (fastify) => {
   fastify.decorate('notifications', {
     sendChatNotification: notifications.sendChatNotification,
     isExpoPushToken: Expo.isExpoPushToken,
+    sendNotification: notifications.sendNotification,
   });
 });
 
@@ -85,6 +87,7 @@ declare module 'fastify' {
       sendChatNotification: ReturnType<
         typeof notificationsPlugin
       >['sendChatNotification'];
+      sendNotification: ReturnType<typeof notificationsPlugin>['sendNotification'];
     };
   }
 }
