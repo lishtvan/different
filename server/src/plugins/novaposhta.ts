@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
 import { initNovaPoshta } from 'novaposhtajs/build/NovaPoshta';
-import { LISTINGS_COLLECTION_NAME } from '../constants/typesense';
+import SchemaCallable from 'novaposhtajs/build/SchemaCallable';
 
 type CreateSafeDelivery = (props: {
   CityRecipient: string;
@@ -151,107 +151,16 @@ const createSafeDelivery: CreateSafeDelivery = async ({
 };
 
 export default fp(async (fastify) => {
-  const trackInternetDocuments = async (userId: number) => {
-    const orders = await fastify.prisma.order.findMany({
-      where: {
-        OR: [{ Listing: { userId } }, { buyerId: userId }],
-        NOT: { status: 'FINISHED' },
-      },
-      select: {
-        trackingNumber: true,
-        status: true,
-        createdAt: true,
-        intDocRef: true,
-      },
-    });
+  const client = initNovaPoshta(process.env.NP_API_KEY);
 
-    const documents = orders.map((order) => order.trackingNumber);
-
-    const np = initNovaPoshta(process.env.NP_API_KEY);
-    const internetDocuments = await np.trackingDocument.getStatusDocuments({
-      documents,
-    });
-    const trackings = internetDocuments.map((i) => ({
-      status: i.status,
-      statusCode: i.statusCode,
-      trackingNumber: i.number,
-    }));
-
-    const refusalStatusCodes = ['2', '3', '102', '103', '105', '111'];
-    const shippingStatusesCodes = ['4', '5', '6', '7', '101'];
-    const receivalStatusCodes = ['9', '10', '11'];
-
-    const statusUpdatePromises = trackings.map((i) => {
-      if (refusalStatusCodes.includes(i.statusCode)) {
-        return fastify.prisma.order
-          .delete({
-            where: { trackingNumber: i.trackingNumber },
-            select: { Listing: { select: { id: true } } },
-          })
-          .then(async (res) => {
-            await fastify.prisma.listing.update({
-              where: { id: res.Listing.id },
-              data: { status: 'AVAILABLE' },
-            });
-            await fastify.typesense
-              .collections(LISTINGS_COLLECTION_NAME)
-              .documents()
-              .update({ status: 'AVAILABLE', id: res.Listing.id.toString() }, {});
-          });
-      }
-      if (i.statusCode === '1' && i.status.includes('оплату')) {
-        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
-        const orderDueDate = new Date(order!.createdAt);
-        orderDueDate.setHours(orderDueDate.getHours() + 2);
-        const currentDate = new Date();
-        if (currentDate < orderDueDate) return;
-        return np.internetDocument.delete({ documentRefs: order!.intDocRef! });
-      }
-      if (i.statusCode === '1' && !i.status.includes('оплату')) {
-        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
-        if (order?.status === 'HANDLING') return;
-        return fastify.prisma.order.update({
-          where: { trackingNumber: i.trackingNumber },
-          data: { status: 'HANDLING' },
-        });
-      }
-      if (shippingStatusesCodes.includes(i.statusCode)) {
-        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
-        if (order?.status === 'SHIPPING') return;
-        return fastify.prisma.order.update({
-          where: { trackingNumber: i.trackingNumber },
-          data: { status: 'SHIPPING' },
-        });
-      }
-      if (receivalStatusCodes.includes(i.statusCode)) {
-        return fastify.prisma.order
-          .update({
-            where: { trackingNumber: i.trackingNumber },
-            data: { status: 'FINISHED' },
-            select: { Listing: { select: { userId: true } } },
-          })
-          .then(async (res) => {
-            await fastify.prisma.user.update({
-              where: { id: res.Listing.userId },
-              data: { isBill: true },
-            });
-          });
-      }
-    });
-    await Promise.all(statusUpdatePromises);
-  };
-
-  fastify.decorate('np', {
-    createSafeDelivery,
-    trackInternetDocuments,
-  });
+  fastify.decorate('np', { createSafeDelivery, client });
 });
 
 declare module 'fastify' {
   interface FastifyInstance {
     np: {
       createSafeDelivery: CreateSafeDelivery;
-      trackInternetDocuments: (userId: number) => Promise<void>;
+      client: SchemaCallable;
     };
   }
 }

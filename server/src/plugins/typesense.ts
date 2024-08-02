@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin';
-import Typesense, { Client } from 'typesense';
+import Typesense from 'typesense';
 import { LISTINGS_COLLECTION_NAME } from '../constants/typesense';
 import { ListingStatus } from '@prisma/client';
 
@@ -17,8 +17,7 @@ export default fp(async (fastify) => {
     ],
     apiKey: process.env.TYPESENSE_WRITE_API_KEY,
   });
-  // TODO: remove this
-  fastify.decorate('typesense', typesense);
+
   fastify.decorate('search', {
     delete: async (listingId) => {
       await typesense
@@ -67,7 +66,6 @@ interface CreateListingInput {
 
 declare module 'fastify' {
   interface FastifyInstance {
-    typesense: Client;
     search: {
       delete: (listingId: number) => Promise<void>;
       update: (listing: ListingSearch) => Promise<void>;
