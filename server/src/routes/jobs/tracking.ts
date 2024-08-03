@@ -30,6 +30,9 @@ const getOrder: FastifyPluginAsync = async (fastify) => {
     }));
 
     const statusUpdatePromises = trackings.map((i) => {
+      const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
+      if (!order) return;
+
       if (refusalStatusCodes.includes(i.statusCode)) {
         return fastify.prisma.order
           .update({
@@ -46,8 +49,7 @@ const getOrder: FastifyPluginAsync = async (fastify) => {
           });
       }
       if (i.statusCode === '1' && i.status.includes('оплату')) {
-        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
-        const orderDueDate = new Date(order!.createdAt);
+        const orderDueDate = new Date(order.createdAt);
         orderDueDate.setHours(orderDueDate.getHours() + 2);
         const currentDate = new Date();
         if (currentDate < orderDueDate) return;
@@ -56,8 +58,7 @@ const getOrder: FastifyPluginAsync = async (fastify) => {
         });
       }
       if (i.statusCode === '1' && !i.status.includes('оплату')) {
-        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
-        if (!order || order?.status === 'HANDLING') return;
+        if (order.status === 'HANDLING') return;
         return fastify.prisma.order
           .update({
             where: { trackingNumber: i.trackingNumber },
@@ -68,14 +69,19 @@ const getOrder: FastifyPluginAsync = async (fastify) => {
               recipientId: order.sellerId,
               title: order.Listing.title,
               // eslint-disable-next-line max-len
-              body: `Замовлення оплачено, відправте по номеру накладної ${formatTrackingNumber(order.trackingNumber)}`,
+              body: `Замовлення оплачено. Відправте по номеру накладної ${formatTrackingNumber(order.trackingNumber)}`,
+              data: { type: 'order', orderId: order.id, url: '_' },
+            });
+            await fastify.notifications.sendNotification({
+              recipientId: order.buyerId,
+              title: order.Listing.title,
+              body: 'Оплата прошла успішно. Очікуйте на відправлення протягом 2 днів.',
               data: { type: 'order', orderId: order.id, url: '_' },
             });
           });
       }
       if (shippingStatusesCodes.includes(i.statusCode)) {
-        const order = orders.find((order) => order.trackingNumber === i.trackingNumber);
-        if (!order || order?.status === 'SHIPPING') return;
+        if (order.status === 'SHIPPING') return;
         return fastify.prisma.order
           .update({
             where: { trackingNumber: i.trackingNumber },
@@ -85,7 +91,7 @@ const getOrder: FastifyPluginAsync = async (fastify) => {
             await fastify.notifications.sendNotification({
               recipientId: order.buyerId,
               title: order.Listing.title,
-              body: 'Продавець відправив товар, очікуйте на повідомлення від Нової Пошти',
+              body: 'Продавець відправив товар. Очікуйте на повідомлення від Нової Пошти',
               data: { type: 'order', orderId: order.id, url: '_' },
             });
           });
