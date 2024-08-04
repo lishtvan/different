@@ -14,14 +14,15 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className="h-screen container flex justify-center items-center ">
-      <p className="text-center text-muted-foreground text-xs xs:text-base sm:text-lg">
-        Веб версія припинила своє існування.
-        <br /> Мобільний додаток для IOS та Android.
-        <br />
-        <Badge className="mt-4 text-xs xs:text-sm sm:text-base">
+      <div className="flex flex-col justify-center items-center gap-y-3">
+        <p className="text-center text-muted-foreground text-xs xs:text-base sm:text-lg">
+          Веб версія припинила своє існування.
+          <br /> Мобільний додаток для IOS та Android.
+        </p>
+        <Badge className="text-xs xs:text-sm sm:text-base">
           Coming soon...
         </Badge>
-      </p>
+      </div>
     </div>
   );
 
