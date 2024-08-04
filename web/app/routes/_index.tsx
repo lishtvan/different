@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Badge } from "~/components/ui/badge";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,10 +14,13 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className="h-screen container flex justify-center items-center ">
-      <p className="text-center text-muted-foreground  text-xs xs:text-base sm:text-lg">
+      <p className="text-center text-muted-foreground text-xs xs:text-base sm:text-lg">
         Веб версія припинила своє існування.
         <br /> Мобільний додаток для IOS та Android.
-        <br /> Coming soon...
+        <br />
+        <Badge className="mt-4 text-xs xs:text-sm sm:text-base">
+          Coming soon...
+        </Badge>
       </p>
     </div>
   );
