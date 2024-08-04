@@ -4,10 +4,6 @@ const schema = {
   tags: ['Jobs'],
 };
 
-const formatTrackingNumber = (trackingNumber: string) => {
-  trackingNumber.replace(/(\d{2})(\d{4})(\d{4})(\d{4})/, '$1 $2 $3 $4');
-};
-
 const refusalStatusCodes = ['2', '3', '102', '103', '105', '111'];
 const shippingStatusesCodes = ['4', '5', '6', '7', '101'];
 const receivalStatusCodes = ['9', '10', '11'];
@@ -69,7 +65,7 @@ const getOrder: FastifyPluginAsync = async (fastify) => {
               recipientId: order.sellerId,
               title: order.Listing.title,
               // eslint-disable-next-line max-len
-              body: `Замовлення оплачено. Відправте по номеру накладної ${formatTrackingNumber(order.trackingNumber)}`,
+              body: `Замовлення оплачено. Відправте по номеру накладної ${fastify.np.formatTrackingNumber(order.trackingNumber)}`,
               data: { type: 'order', orderId: order.id, url: '_' },
             });
             await fastify.notifications.sendNotification({

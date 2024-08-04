@@ -152,8 +152,11 @@ const createSafeDelivery: CreateSafeDelivery = async ({
 
 export default fp(async (fastify) => {
   const client = initNovaPoshta(process.env.NP_API_KEY);
+  const formatTrackingNumber = (trackingNumber: string) => {
+    return trackingNumber.replace(/(\d{2})(\d{4})(\d{4})(\d{4})/, '$1 $2 $3 $4');
+  };
 
-  fastify.decorate('np', { createSafeDelivery, client });
+  fastify.decorate('np', { createSafeDelivery, client, formatTrackingNumber });
 });
 
 declare module 'fastify' {
@@ -161,6 +164,7 @@ declare module 'fastify' {
     np: {
       createSafeDelivery: CreateSafeDelivery;
       client: SchemaCallable;
+      formatTrackingNumber: (n: string) => string;
     };
   }
 }
