@@ -19,12 +19,6 @@ export default fp(async (fastify) => {
 
       if (user) {
         await fastify.prisma.session.create({ data: { token, ip, userId: user.id } });
-        if (!user.email && userInfo.email) {
-          await fastify.prisma.user.update({
-            where: { id: user.id },
-            data: { email: userInfo.email },
-          });
-        }
       } else {
         const createdUser = await fastify.prisma.user.create({
           data: {

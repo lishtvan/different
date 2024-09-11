@@ -58,7 +58,7 @@ const notificationsPlugin = (instance: FastifyInstance) => {
         recipientId,
         title: sender.nickname,
         body: text,
-        data: { type: 'msg', chatId, url: `different://chatf?chatId=${chatId}` },
+        data: { type: 'msg', chatId, url: `com.lishtvan.different://chatf?chatId=${chatId}` },
       });
     } catch (error) {
       instance.log.error('Send chat notification error', error);
