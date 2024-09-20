@@ -128,7 +128,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
             category,
             price,
             imageUrls,
-            description,
+            description: fastify.format.normalizeText(description),
           },
         });
 

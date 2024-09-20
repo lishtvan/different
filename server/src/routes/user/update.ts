@@ -55,8 +55,8 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
         data: {
           nickname,
           avatarUrl,
-          bio,
-          location,
+          bio: fastify.format.normalizeText(bio),
+          location: fastify.format.normalizeText(location),
           pushToken,
         },
       });
