@@ -2,7 +2,7 @@ import fp from 'fastify-plugin';
 
 const formattingPlugin = {
   normalizeText: (s?: string) => {
-    return s ? s.trim().replace(/\n+/g, '\n') : s;
+    return s ? s.trim().replace(/\n{3,}/g, '\n\n') : s;
   },
 };
 

@@ -28,10 +28,10 @@ const tracking: FastifyPluginAsync = async (fastify) => {
         if (refusalStatusCodes.includes(i.statusCode)) {
           return fastify.tracking.cancel(order);
         }
-        if (i.statusCode === '1' && i.status.includes('оплату')) {
+        if (i.statusCode === '1' && i.paymentStatus !== 'PAYED') {
           return fastify.tracking.paymentTimeExpired(order);
         }
-        if (i.statusCode === '1' && !i.status.includes('оплату')) {
+        if (i.statusCode === '1' && i.paymentStatus === 'PAYED') {
           return fastify.tracking.payed(order);
         }
         if (shippingStatusesCodes.includes(i.statusCode)) {
