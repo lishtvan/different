@@ -10,7 +10,6 @@ type OrderStatusUpdateHandler = (order: OrderWithListing) => void;
 
 const trackingPlugin = (app: FastifyInstance) => {
   const cancel: OrderStatusUpdateHandler = async (order) => {
-    const formattedTrackingNumber = app.np.formatTrackingNumber(order.trackingNumber);
     const orderRejectedString = 'Замовлення скасовано. Оголошення знову в наявності.';
 
     await Promise.all([
@@ -23,7 +22,7 @@ const trackingPlugin = (app: FastifyInstance) => {
       app.notifications.sendNotification({
         recipientId: order.sellerId,
         title: order.Listing.title,
-        body: `${orderRejectedString} ${formattedTrackingNumber}`,
+        body: orderRejectedString,
         data: { type: 'order', orderId: order.id, url: '_' },
       }),
     ]);
