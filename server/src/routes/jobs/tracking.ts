@@ -11,7 +11,7 @@ const receivalStatusCodes = ['9', '10', '11'];
 const tracking: FastifyPluginAsync = async (fastify) => {
   fastify.post('/tracking', { schema }, async (req, reply) => {
     const orders = await fastify.prisma.order.findMany({
-      where: { NOT: [{ status: 'CANCELED' }, { status: 'FINISHED' }] },
+      where: { NOT: { status: 'FINISHED' } },
       include: { Listing: true },
     });
     if (!orders.length) return reply.send();

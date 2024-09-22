@@ -10,16 +10,23 @@ type OrderStatusUpdateHandler = (order: OrderWithListing) => void;
 
 const trackingPlugin = (app: FastifyInstance) => {
   const cancel: OrderStatusUpdateHandler = async (order) => {
-    if (order.status === 'CANCELED') return;
+    const formattedTrackingNumber = app.np.formatTrackingNumber(order.trackingNumber);
+    const orderRejectedString = 'Замовлення скасовано. Оголошення знову в наявності.';
 
-    await app.prisma.order.update({
-      where: { trackingNumber: order.trackingNumber },
-      data: {
-        status: 'CANCELED',
-        Listing: { update: { status: 'AVAILABLE' } },
-      },
-    });
-    await app.search.update({ id: order.Listing.id, status: 'AVAILABLE' });
+    await Promise.all([
+      app.prisma.order.delete({ where: { trackingNumber: order.trackingNumber } }),
+      app.prisma.listing.update({
+        where: { id: order.listingId },
+        data: { status: 'AVAILABLE' },
+      }),
+      app.search.update({ id: order.listingId, status: 'AVAILABLE' }),
+      app.notifications.sendNotification({
+        recipientId: order.sellerId,
+        title: order.Listing.title,
+        body: `${orderRejectedString} ${formattedTrackingNumber}`,
+        data: { type: 'order', orderId: order.id, url: '_' },
+      }),
+    ]);
   };
 
   const paymentTimeExpired = (order: OrderWithListing) => {
@@ -81,7 +88,7 @@ const trackingPlugin = (app: FastifyInstance) => {
         Listing: { update: { status: 'SOLD' } },
       },
     });
-    await app.search.update({ id: order.Listing.id, status: 'SOLD' });
+    await app.search.update({ id: order.listingId, status: 'SOLD' });
   };
 
   return { cancel, paymentTimeExpired, payed, shipped, received };
