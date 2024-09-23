@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import ig from "../assets/ig.png";
 import tg from "../assets/tg.png";
 import { Button } from "./ui/button";
+import { Link } from "@remix-run/react";
 
 function getOS() {
   const userAgent = navigator.userAgent.toLowerCase();
@@ -26,15 +27,15 @@ function getOS() {
 
 const Header = () => {
   useEffect(() => {
-    console.log(getOS());
+    // console.log(getOS());
   }, []);
 
   return (
     <header className="container absolute top-0 pt-3 flex w-full max-w-full justify-between">
-      <div className="flex gap-x-0.5 mx-auto sm:mx-0">
+      <Link to="/" className="flex gap-x-0.5 mx-auto sm:mx-0">
         <h1 className="font-[1000] text-4xl">different</h1>
         <div className="rounded-full w-3 h-3 mt-auto mb-1.5 bg-main"></div>
-      </div>
+      </Link>
       <div className="hidden sm:flex">
         <Button
           asChild
