@@ -12,7 +12,7 @@ import { fetcher } from "~/lib/fetcher";
 
 export const meta: MetaFunction = (data) => {
   return [
-    { title: `Different - @${data.params.nickname} ` },
+    { title: `Different - @${data.params.nickname}` },
     {
       name: "description",
       content: "Маркетплейс для одягу, взуття та аксесуарів",
