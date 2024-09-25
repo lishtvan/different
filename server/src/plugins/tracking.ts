@@ -28,12 +28,12 @@ const trackingPlugin = (app: FastifyInstance) => {
     ]);
   };
 
-  const paymentTimeExpired = (order: OrderWithListing) => {
+  const paymentTimeExpired = async (order: OrderWithListing) => {
     const orderDueDate = new Date(order.createdAt);
     orderDueDate.setHours(orderDueDate.getHours() + 2);
     const currentDate = new Date();
     if (currentDate < orderDueDate) return;
-    return app.np.client.internetDocument.delete({
+    await app.np.client.internetDocument.delete({
       documentRefs: order.intDocRef!,
     });
   };
