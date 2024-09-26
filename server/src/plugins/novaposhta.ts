@@ -98,6 +98,7 @@ const createSafeDelivery: CreateSafeDelivery = async ({
       calledMethod: 'save',
       system: 'PA 3.0',
       methodProperties: {
+        RecipientType: 'PrivatePerson',
         ContactRecipient: contactRecipient.ref,
         CitySender: counterpartyContact.Addresses.WarehouseAddresses[0].CityRef,
         SenderAddress: counterpartyContact.Addresses.WarehouseAddresses[0].Ref,
