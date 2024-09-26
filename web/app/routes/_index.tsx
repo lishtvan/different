@@ -3,11 +3,25 @@ import { Icons } from "~/components/ui/icons";
 import ios from "~/assets/ios-screen.webp";
 
 export const meta: MetaFunction = () => {
+  const title = "Different - маркетплейс для одягу, взуття та аксесуарів";
+  const description = "Продається одяг - купується індивідуальність.";
+  const keywords = "одяг, взуття, вінтаж, маркетплейс, мода, стиль, Україна";
+
   return [
-    { title: "Different" },
+    { title },
+    { name: "description", content: description },
+    { name: "keywords", content: keywords },
+    { "http-equiv": "X-UA-Compatible", content: "IE=edge" },
+    { name: "robots", content: "index, follow" },
+    { name: "language", content: "uk" },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:type", content: "website" },
+    { property: "og:url", content: "https://different.to" }, // Replace with your actual URL
     {
-      name: "description",
-      content: "Маркетплейс для одягу, взуття та аксесуарів",
+      property: "og:image",
+      content:
+        "https://s3.eu-central-1.amazonaws.com/different.prod/-7KEwU25S5aqL3NP_n4uPw-0.webp",
     },
   ];
 };

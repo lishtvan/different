@@ -10,16 +10,6 @@ import {
 } from "~/components/ui/card";
 import { fetcher } from "~/lib/fetcher";
 
-export const meta: MetaFunction = (data) => {
-  return [
-    { title: `Different - @${data.params.nickname}` },
-    {
-      name: "description",
-      content: "Маркетплейс для одягу, взуття та аксесуарів",
-    },
-  ];
-};
-
 export const loader: LoaderFunction = async (data) => {
   const res = await fetcher({
     body: { nickname: data.params.nickname },
@@ -27,6 +17,29 @@ export const loader: LoaderFunction = async (data) => {
   });
 
   return res;
+};
+
+export const meta: MetaFunction<typeof loader> = (metaParams) => {
+  const title = `${metaParams.data.nickname} | Профіль користувача Different`;
+  const description = metaParams.data.bio;
+  const keywords = "одяг, взуття, вінтаж, маркетплейс, мода, стиль, Україна";
+
+  return [
+    { title },
+    { name: "description", content: description },
+    { property: "og:description", content: description },
+    { property: "og:image", content: metaParams.data.avatarUrl },
+    { name: "keywords", content: keywords },
+    { "http-equiv": "X-UA-Compatible", content: "IE=edge" },
+    { name: "robots", content: "index, follow" },
+    { name: "language", content: "uk" },
+    { property: "og:title", content: title },
+    { property: "og:type", content: "website" },
+    {
+      property: "og:url",
+      content: `https://different.to/user/${metaParams.data.nickname}`,
+    },
+  ];
 };
 
 const DEFAULT_AVATAR =

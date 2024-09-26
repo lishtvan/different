@@ -20,6 +20,13 @@ module.exports = {
     es6: true,
   },
 
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/no-unnecessary-condition': 'error',
+    '@typescript-eslint/no-unused-vars': 'warn',
+  },
+
   // Base config
   extends: ["eslint:recommended"],
 

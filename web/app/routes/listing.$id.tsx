@@ -14,9 +14,25 @@ export const loader: LoaderFunction = async (data) => {
 };
 
 export const meta: MetaFunction<typeof loader> = (metaParams) => {
+  const title = metaParams.data.listing.title;
+  const description = metaParams.data.listing.description;
+  const keywords = "одяг, взуття, вінтаж, маркетплейс, мода, стиль, Україна";
+
   return [
-    { title: "Different" },
-    { name: "description", content: metaParams.data.listing.title },
+    { title },
+    { name: "description", content: description },
+    { property: "og:description", content: description },
+    { property: "og:image", content: metaParams.data.listing.imageUrls[0] },
+    { name: "keywords", content: keywords },
+    { "http-equiv": "X-UA-Compatible", content: "IE=edge" },
+    { name: "robots", content: "index, follow" },
+    { name: "language", content: "uk" },
+    { property: "og:title", content: title },
+    { property: "og:type", content: "website" },
+    {
+      property: "og:url",
+      content: `https://different.to/listing/${metaParams.data.listing.id}`,
+    },
   ];
 };
 
