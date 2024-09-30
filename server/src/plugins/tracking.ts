@@ -42,7 +42,10 @@ const trackingPlugin = (app: FastifyInstance) => {
     if (order.status === 'HANDLING') return;
     await app.prisma.order.update({
       where: { trackingNumber: order.trackingNumber },
-      data: { status: 'HANDLING' },
+      data: {
+        status: 'HANDLING',
+        OrderNotification: { create: { userId: order.sellerId } },
+      },
     });
     const formattedTrackingNumber = app.np.formatTrackingNumber(order.trackingNumber);
     const orderPayedString = 'Замовлення оплачено. Відправте по номеру накладної';
@@ -67,7 +70,10 @@ const trackingPlugin = (app: FastifyInstance) => {
     if (order.status === 'SHIPPING') return;
     await app.prisma.order.update({
       where: { trackingNumber: order.trackingNumber },
-      data: { status: 'SHIPPING' },
+      data: {
+        status: 'SHIPPING',
+        OrderNotification: { create: { userId: order.buyerId } },
+      },
     });
     await app.notifications.sendNotification({
       recipientId: order.buyerId,
@@ -88,6 +94,12 @@ const trackingPlugin = (app: FastifyInstance) => {
       },
     });
     await app.search.update({ id: order.listingId, status: 'SOLD' });
+    await app.notifications.sendNotification({
+      recipientId: order.sellerId,
+      title: order.Listing.title,
+      body: 'Замовлення виконано. Очікуйте на грошовий переказ',
+      data: { type: 'order', orderId: order.id, url: '_' },
+    });
   };
 
   return { cancel, paymentTimeExpired, payed, shipped, received };
