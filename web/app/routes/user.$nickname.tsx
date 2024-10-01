@@ -1,5 +1,6 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
 import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
@@ -9,6 +10,7 @@ import {
   CardHeader,
 } from "~/components/ui/card";
 import { fetcher } from "~/lib/fetcher";
+import { openAppLink } from "~/lib/utils";
 
 export const loader: LoaderFunction = async (data) => {
   const res = await fetcher({
@@ -30,7 +32,7 @@ export const meta: MetaFunction<typeof loader> = (metaParams) => {
     { property: "og:description", content: description },
     { property: "og:image", content: metaParams.data.avatarUrl },
     { name: "keywords", content: keywords },
-    { "http-equiv": "X-UA-Compatible", content: "IE=edge" },
+    { httpEquiv: "X-UA-Compatible", content: "IE=edge" },
     { name: "robots", content: "index, follow" },
     { name: "language", content: "uk" },
     { property: "og:title", content: title },
@@ -48,8 +50,14 @@ const avatarFb = (url?: string) => url || DEFAULT_AVATAR;
 
 export default function User() {
   const data = useLoaderData<any>();
+
+  useEffect(() => {
+    if (!data.nickname) return;
+    openAppLink(`user/${data.nickname}`, true);
+  }, [data.nickname]);
+
   return (
-    <div className="h-screen container flex justify-center items-center">
+    <div className="h-dvh container flex justify-center items-center">
       <Card className=" bg-white px-4 sm:px-16">
         <CardContent>
           <CardHeader>
@@ -61,7 +69,12 @@ export default function User() {
             <div className="font-semibold text-xl">@{data.nickname}</div>
           </CardContent>
           <CardFooter className=" flex-col gap-y-2">
-            <Button className="w-full">Відкрити в додатку</Button>
+            <Button
+              onClick={() => openAppLink(`user/${data.nickname}`)}
+              className="w-full"
+            >
+              Відкрити в додатку
+            </Button>
           </CardFooter>
         </CardContent>
       </Card>

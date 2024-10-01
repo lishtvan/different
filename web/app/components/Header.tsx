@@ -1,45 +1,33 @@
-import { useEffect } from "react";
+import { ANDROID_STORE_URL, IOS_STORE_URL } from "~/constants";
 import ig from "../assets/ig.png";
 import tg from "../assets/tg.png";
 import { Button } from "./ui/button";
 import { Link } from "@remix-run/react";
 
-function getOS() {
-  const userAgent = navigator.userAgent.toLowerCase();
-  if (userAgent.includes("windows")) {
-    return "Windows";
-  } else if (userAgent.includes("macintosh") || userAgent.includes("mac os")) {
-    return "MacOS";
-  } else if (userAgent.includes("linux")) {
-    return "Linux";
-  } else if (
-    userAgent.includes("iphone") ||
-    userAgent.includes("ipad") ||
-    userAgent.includes("ipod")
-  ) {
-    return "iOS";
-  } else if (userAgent.includes("android")) {
-    return "Android";
-  } else {
-    return "Unknown";
-  }
-}
-
 const Header = () => {
-  useEffect(() => {
-    // console.log(getOS());
-  }, []);
-
   return (
-    <header className="container absolute top-0 pt-3 flex w-full max-w-full justify-between">
+    <header className="absolute top-0 pt-3 flex w-full max-w-full justify-between sm:container sm:absolute sm:top-0 sm:pt-3 sm:flex sm:w-full sm:max-w-full sm:justify-between">
       <Link
         unstable_viewTransition
         to="/"
-        className="flex gap-x-0.5 mx-auto sm:mx-0"
+        className="flex gap-x-0.5 pl-2 sm:pl-0"
       >
         <h1 className="font-[1000] text-4xl">different</h1>
         <div className="rounded-full w-3 h-3 mt-auto mb-1.5 bg-main"></div>
       </Link>
+      <Button
+        onClick={() => {
+          const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+          const isAndroid = /Android/.test(navigator.userAgent);
+
+          if (isiOS || isAndroid) {
+            window.location.href = isiOS ? IOS_STORE_URL : ANDROID_STORE_URL;
+          }
+        }}
+        className="block mr-2 sm:hidden"
+      >
+        Завантажити
+      </Button>
       <div className="hidden sm:flex">
         <Button
           asChild
