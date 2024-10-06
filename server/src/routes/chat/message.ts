@@ -14,30 +14,29 @@ const clearNotificationTimeout = (chatId: string, receiverId: number) => {
 
 const root: FastifyPluginAsync = async (fastify) => {
   fastify.get('/message', { websocket: true }, (socket, req) => {
+    const reqUserId = req.userId;
+
+    fastify.websocketServer.on('connection', async () => {
+      const chatIds = await fastify.prisma.user
+        .findUnique({
+          where: { id: reqUserId },
+          select: { Chats: { select: { id: true } } },
+        })
+        .then((res) => res?.Chats.map((c) => c.id));
+      if (!chatIds?.length) return;
+      for (const chatId of chatIds) {
+        let chat = chats.get(chatId);
+        if (!chat) {
+          chat = new Set();
+          chats.set(chatId, chat);
+        }
+        if (!chat.has(socket)) chat.add(socket);
+      }
+    });
+
     socket.on('message', async (message) => {
       try {
         const data = JSON.parse(message.toString());
-        const reqUserId = req.userId;
-
-        if (data.connect) {
-          const chatIds = await fastify.prisma.user
-            .findUnique({
-              where: { id: reqUserId },
-              select: { Chats: { select: { id: true } } },
-            })
-            .then((res) => res?.Chats.map((c) => c.id));
-
-          if (!chatIds?.length) return;
-          for (const chatId of chatIds) {
-            let chat = chats.get(chatId);
-            if (!chat) {
-              chat = new Set();
-              chats.set(chatId, chat);
-            }
-            if (!chat.has(socket)) chat.add(socket);
-          }
-          return;
-        }
 
         if (data.messageSeen) {
           await fastify.prisma.chatNotification.deleteMany({
