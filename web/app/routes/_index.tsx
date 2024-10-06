@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Icons } from "~/components/ui/icons";
-import ios from "~/assets/ios-screen.webp";
+import ios from "~/assets/screen.webp";
+
 import { useEffect } from "react";
 import { getPlatform } from "~/lib/utils";
 import { ANDROID_STORE_URL, IOS_STORE_URL } from "~/constants";
@@ -49,11 +50,11 @@ export default function Index() {
             замовлення та багато іншого.
           </p>
           <div className="flex items-center mt-10 gap-x-3 flex-row justify-center sm:justify-start">
-            <a href={IOS_STORE_URL}>
-              <Icons.appStore className="max-w-full" />
+            <a href={IOS_STORE_URL} aria-label="Download on the App Store">
+              <Icons.appStore className="max-w-full" aria-hidden="true" />
             </a>
-            <a href={ANDROID_STORE_URL}>
-              <Icons.googlePlay className="max-w-full" />
+            <a href={ANDROID_STORE_URL} aria-label="Get it on Google Play">
+              <Icons.googlePlay className="max-w-full" aria-hidden="true" />
             </a>
           </div>
         </div>
