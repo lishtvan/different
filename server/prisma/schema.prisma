@@ -19,7 +19,6 @@ model User {
   location         String?
   phone            String?
   cardNumber       String?
-  isBill           Boolean?
   npCityRef        String?
   npCityName       String?
   npDepartmentRef  String?
