@@ -71,7 +71,7 @@ const notificationsPlugin = (instance: FastifyInstance) => {
         },
       });
     } catch (error) {
-      instance.alert(`Send chat notification error \n${JSON.stringify(error)}`);
+      instance.alert(`Send chat notification error \n${error}`);
       instance.log.error('Send chat notification error', error);
     }
   };
