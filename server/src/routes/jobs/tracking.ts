@@ -45,8 +45,10 @@ const tracking: FastifyPluginAsync = async (fastify) => {
 
     const results = await Promise.allSettled(statusUpdatePromises);
     const errors = results.filter((i) => i.status === 'rejected');
-    fastify.log.error({ errors });
-
+    if (errors.length) {
+      fastify.log.error({ errors });
+      fastify.alert(`Tracking job failed \n${JSON.stringify({ errors })}`);
+    }
     return reply.send();
   });
 };

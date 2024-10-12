@@ -17,20 +17,26 @@ const root: FastifyPluginAsync = async (fastify) => {
     const reqUserId = req.userId;
 
     fastify.websocketServer.on('connection', async () => {
-      const chatIds = await fastify.prisma.user
-        .findUnique({
-          where: { id: reqUserId },
-          select: { Chats: { select: { id: true } } },
-        })
-        .then((res) => res?.Chats.map((c) => c.id));
-      if (!chatIds?.length) return;
-      for (const chatId of chatIds) {
-        let chat = chats.get(chatId);
-        if (!chat) {
-          chat = new Set();
-          chats.set(chatId, chat);
+      try {
+        const chatIds = await fastify.prisma.user
+          .findUnique({
+            where: { id: reqUserId },
+            select: { Chats: { select: { id: true } } },
+          })
+          .then((res) => res?.Chats.map((c) => c.id));
+        if (!chatIds?.length) return;
+        for (const chatId of chatIds) {
+          let chat = chats.get(chatId);
+          if (!chat) {
+            chat = new Set();
+            chats.set(chatId, chat);
+          }
+          if (!chat.has(socket)) chat.add(socket);
         }
-        if (!chat.has(socket)) chat.add(socket);
+      } catch (e) {
+        fastify.log.error(e);
+        fastify.alert(`Websocket connection error \n${e}`);
+        return;
       }
     });
 
@@ -123,6 +129,7 @@ const root: FastifyPluginAsync = async (fastify) => {
         return;
       } catch (e) {
         fastify.log.error(e);
+        fastify.alert(`Websocket message error \n${e}`);
         return;
       }
     });

@@ -37,6 +37,12 @@ const notificationsPlugin = (instance: FastifyInstance) => {
         ...ticket,
         recipientId,
       });
+      instance.alert(
+        `Error while sending push notification \n${JSON.stringify({
+          ...ticket,
+          recipientId,
+        })}`
+      );
     }
   };
 
@@ -58,9 +64,14 @@ const notificationsPlugin = (instance: FastifyInstance) => {
         recipientId,
         title: sender.nickname,
         body: text,
-        data: { type: 'msg', chatId, url: `com.lishtvan.different://chatf?chatId=${chatId}` },
+        data: {
+          type: 'msg',
+          chatId,
+          url: `com.lishtvan.different://chatf?chatId=${chatId}`,
+        },
       });
     } catch (error) {
+      instance.alert(`Send chat notification error \n${JSON.stringify(error)}`);
       instance.log.error('Send chat notification error', error);
     }
   };

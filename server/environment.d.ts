@@ -10,6 +10,7 @@ declare global {
       S3_ACCESS_KEY: string;
       S3_SECRET_KEY: string;
       CLOUD_API_KEY: string;
+      NOTIFICATION_TG_BOT_TOKEN: string;
     }
   }
 }
