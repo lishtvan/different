@@ -17,11 +17,22 @@ const getUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/get', { schema }, async (req, reply) => {
     const { nickname } = req.body;
     const { userId: ownUserId } = req;
-
     const [user, availableListingsCount, soldListingsCount] = await Promise.all([
       fastify.prisma.user.findUnique({
-        where: { nickname },
-        select: { id: true, nickname: true, bio: true, avatarUrl: true, location: true },
+        where: {
+          nickname,
+          BlockedUsers: { none: { blockedId: ownUserId } },
+          BlockedBy: { none: { blockerId: ownUserId } },
+        },
+        select: {
+          id: true,
+          nickname: true,
+          bio: true,
+          avatarUrl: true,
+          location: true,
+          BlockedBy: true,
+          BlockedUsers: true,
+        },
       }),
       fastify.prisma.listing.count({
         where: { status: 'AVAILABLE', User: { nickname } },
@@ -36,6 +47,7 @@ const getUser: FastifyPluginAsync = async (fastify) => {
     return reply.send({
       ...user,
       isOwnAccount,
+      ownUserId,
       availableListingsCount,
       soldListingsCount,
     });

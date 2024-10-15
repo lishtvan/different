@@ -30,6 +30,11 @@ const authCheck: FastifyPluginAsync = async (fastify) => {
             ChatNotification: true,
           },
         },
+        BlockedUsers: {
+          select: {
+            blockedId: true,
+          },
+        },
       },
     });
 

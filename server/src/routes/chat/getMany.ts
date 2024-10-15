@@ -10,7 +10,12 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
         _count: { select: { ChatNotification: { where: { userId } } } },
         id: true,
         Users: {
-          select: { nickname: true, avatarUrl: true },
+          select: {
+            nickname: true,
+            avatarUrl: true,
+            BlockedBy: true,
+            BlockedUsers: true,
+          },
           where: { id: { not: userId } },
         },
         Messages: {
@@ -21,7 +26,21 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
       },
     });
 
-    const sortedChats = chats.sort((a, b) => {
+    const filteredByBlock = chats.filter((i) => {
+      let remove = true;
+
+      i.Users[0].BlockedBy.forEach((i) => {
+        remove = i.blockerId !== userId;
+      });
+
+      i.Users[0].BlockedUsers.forEach((i) => {
+        remove = i.blockedId !== userId;
+      });
+
+      return remove;
+    });
+
+    const sortedChats = filteredByBlock.sort((a, b) => {
       const lastMessageA = a.Messages[0];
       const lastMessageB = b.Messages[0];
 
