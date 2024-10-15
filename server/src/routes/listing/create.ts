@@ -135,6 +135,7 @@ const createListing: FastifyPluginAsync = async (fastify) => {
       await fastify.search.create({ listing, sellerId: userId });
       return listing.id;
     });
+    fastify.alert(`New listing created, listingId: ${createdListingId}`);
 
     return reply.send({ listingId: createdListingId });
   });
