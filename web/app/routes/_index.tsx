@@ -21,11 +21,11 @@ export const meta: MetaFunction = () => {
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
-    { property: "og:url", content: "https://different.to" }, // Replace with your actual URL
+    { property: "og:url", content: "https://different.to" },
     {
       property: "og:image",
       content:
-        "https://s3.eu-central-1.amazonaws.com/different.prod/-7KEwU25S5aqL3NP_n4uPw-0.webp",
+        "https://d3g9kgb9a5luhg.cloudfront.net/qkUFUNAxR6mXP7swoXkcGw-1.webp",
     },
   ];
 };
