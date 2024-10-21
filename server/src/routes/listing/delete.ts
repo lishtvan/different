@@ -24,7 +24,7 @@ const deleteListing: FastifyPluginAsync = async (fastify) => {
         await tx.listing.delete({
           where: { id: listingId, userId, status: 'AVAILABLE' },
         });
-        await fastify.search.delete(listingId);
+        await fastify.typesense.delete(listingId);
       });
     } catch (e: any) {
       if (e.code === 'P2025' || e.httpStatus === 404) throw fastify.httpErrors.notFound();

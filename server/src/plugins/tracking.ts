@@ -18,7 +18,7 @@ const trackingPlugin = (app: FastifyInstance) => {
         where: { id: order.listingId },
         data: { status: 'AVAILABLE' },
       }),
-      app.search.update({ id: order.listingId, status: 'AVAILABLE' }),
+      app.typesense.update({ id: order.listingId, status: 'AVAILABLE' }),
       app.notifications.sendNotification({
         recipientId: order.sellerId,
         title: order.Listing.title,
@@ -93,7 +93,7 @@ const trackingPlugin = (app: FastifyInstance) => {
         Listing: { update: { status: 'SOLD' } },
       },
     });
-    await app.search.update({ id: order.listingId, status: 'SOLD' });
+    await app.typesense.update({ id: order.listingId, status: 'SOLD' });
     await app.notifications.sendNotification({
       recipientId: order.sellerId,
       title: order.Listing.title,

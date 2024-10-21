@@ -38,7 +38,7 @@ const updateUser: FastifyPluginAsync = async (fastify) => {
       }
 
       if (deletedUser.Listings.length) {
-        await fastify.search.deleteMany(`sellerId:=${reqUserId} && status:=AVAILABLE`);
+        await fastify.typesense.deleteMany(`sellerId:=${reqUserId} && status:=AVAILABLE`);
       }
     });
 

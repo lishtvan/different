@@ -69,7 +69,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
           where: { id: listingId, status: 'AVAILABLE', NOT: { userId } },
           data: { status: 'ORDER' },
         });
-        await fastify.search.update({ status: 'ORDER', id: listingId });
+        await fastify.typesense.update({ status: 'ORDER', id: listingId });
 
         const { trackingNumber, intDocRef, success, translatedErrors } =
           await fastify.np.createSafeDelivery({
@@ -120,7 +120,7 @@ const createOrder: FastifyPluginAsync = async (fastify) => {
         createdOrderId = createdOrder.id;
       });
     } catch (error: any) {
-      await fastify.search.update({ status: 'AVAILABLE', id: listingId });
+      await fastify.typesense.update({ status: 'AVAILABLE', id: listingId });
       const prismaErr = PRISMA_ERRORS[error.code];
       if (prismaErr) {
         throw fastify.httpErrors.badRequest(createExpectedErr(prismaErr));

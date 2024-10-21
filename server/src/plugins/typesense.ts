@@ -18,7 +18,7 @@ export default fp(async (fastify) => {
     apiKey: process.env.TYPESENSE_WRITE_API_KEY,
   });
 
-  fastify.decorate('search', {
+  fastify.decorate('typesense', {
     delete: async (listingId) => {
       await typesense
         .collections(LISTINGS_COLLECTION_NAME)
@@ -66,7 +66,7 @@ interface CreateListingInput {
 
 declare module 'fastify' {
   interface FastifyInstance {
-    search: {
+    typesense: {
       delete: (listingId: number) => Promise<void>;
       update: (listing: ListingSearch) => Promise<void>;
       create: (input: CreateListingInput) => Promise<void>;

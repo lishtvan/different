@@ -133,7 +133,7 @@ const updateListing: FastifyPluginAsync = async (fastify) => {
         });
 
         await tx.user.update({ where: { id: userId }, data: { phone, cardNumber } });
-        await fastify.search.update(listing);
+        await fastify.typesense.update(listing);
       });
     } catch (e: any) {
       if (e.code === 'P2025' || e.httpStatus === 404) throw fastify.httpErrors.notFound();

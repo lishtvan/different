@@ -132,7 +132,7 @@ const createListing: FastifyPluginAsync = async (fastify) => {
         data: { phone, cardNumber },
       });
 
-      await fastify.search.create({ listing, sellerId: userId });
+      await fastify.typesense.create({ listing, sellerId: userId });
       return listing.id;
     });
     fastify.alert(`New listing created, listingId: ${createdListingId}`);
