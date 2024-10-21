@@ -14,7 +14,7 @@ const schema = {
 
 type Schema = { Body: FromSchema<typeof schema.body> };
 
-const reportListing: FastifyPluginAsync = async (fastify) => {
+const blockUser: FastifyPluginAsync = async (fastify) => {
   fastify.post<Schema>('/block', { schema }, async (req, reply) => {
     const { userId } = req;
     const { userIdToBlock } = req.body;
@@ -26,4 +26,4 @@ const reportListing: FastifyPluginAsync = async (fastify) => {
   });
 };
 
-export default reportListing;
+export default blockUser;

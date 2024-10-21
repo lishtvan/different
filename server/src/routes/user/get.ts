@@ -30,8 +30,6 @@ const getUser: FastifyPluginAsync = async (fastify) => {
           bio: true,
           avatarUrl: true,
           location: true,
-          BlockedBy: true,
-          BlockedUsers: true,
         },
       }),
       fastify.prisma.listing.count({
