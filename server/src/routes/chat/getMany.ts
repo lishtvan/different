@@ -5,7 +5,7 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
     const { userId } = req;
 
     const chats = await fastify.prisma.chat.findMany({
-      where: { Users: { some: { id: userId } } },
+      where: { Users: { some: { id: userId } }, Messages: { some: {} } },
       select: {
         _count: { select: { ChatNotification: { where: { userId } } } },
         id: true,
@@ -43,9 +43,6 @@ const getChatsByUserId: FastifyPluginAsync = async (fastify) => {
     const sortedChats = filteredByBlock.sort((a, b) => {
       const lastMessageA = a.Messages[0];
       const lastMessageB = b.Messages[0];
-
-      if (!lastMessageA) return 1;
-      if (!lastMessageB) return -1;
 
       return (
         new Date(lastMessageB.createdAt).getTime() -
