@@ -8,7 +8,7 @@ export default fp(async (fastify) => {
     '/listing/get',
   ];
 
-  fastify.decorateRequest('userId', 0);
+  fastify.decorateRequest('userId');
 
   fastify.addHook('preHandler', async (req, reply) => {
     if (reply.statusCode === 404) return; // In case rate limiter throws 404
